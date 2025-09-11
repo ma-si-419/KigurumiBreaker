@@ -10,8 +10,16 @@ public class TitleSceneController : BaseSceneController
         base.Start();
     }
 
-    public void OnClick()
+    private void Update()
     {
-        ChangeScene("TestSceneTransition");
+        if(Input.GetMouseButtonDown(0))
+        {
+            OnClick();
+        }
+    }
+
+    private void OnClick()
+    {
+        ChangeScene("GameScene");
     }
 }
