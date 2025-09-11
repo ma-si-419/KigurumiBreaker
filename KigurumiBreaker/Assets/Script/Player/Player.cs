@@ -8,6 +8,8 @@ public class Player<T> : MonoBehaviour where T : Player<T>
     protected const float MOVE_INPUT_LENGTH = 0.1f;
     // ‰ñ”ğ‚ÌŠÔ
     protected const int DODGE_TIME = 40;
+    // —­‚ßUŒ‚‚ÉˆÚs‚·‚é‚Ü‚Å‚ÌŠÔ
+    protected const int CHARGE_ATTACK_TIME = 15;
 
 
     //‚Ğ‚Æ‚Â‘O‚Ìó‘Ô
