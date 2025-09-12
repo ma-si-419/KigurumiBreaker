@@ -115,6 +115,9 @@ public class PlayerState : Player<PlayerState>
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
 
+            // 現在の向きを保存
+            state._currentDirection = state.transform.forward;
+
         }
         public override void OnUpdate()
         {
@@ -317,6 +320,9 @@ public class PlayerState : Player<PlayerState>
             // 攻撃を出した後
             if (_currentFrame >= _currentAttackData.startFrame)
             {
+                // 移動ベクトルをリセット
+                state._rigidbody.velocity = Vector3.zero;
+
                 // 攻撃の入力を受け付ける
                 state._isAbleToAttack = true;
 
@@ -335,6 +341,10 @@ public class PlayerState : Player<PlayerState>
             {
                 // 攻撃の入力を無効化
                 state._isAbleToAttack = false;
+
+                // 向いている方向に進む
+                Vector3 attackVelocity = state._currentDirection * _currentAttackData.moveSpeed;
+                state._rigidbody.velocity = attackVelocity;
             }
 
             // 攻撃キャンセルフレームに達した時に攻撃入力があれば次の攻撃に遷移

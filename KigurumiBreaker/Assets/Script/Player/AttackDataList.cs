@@ -23,6 +23,8 @@ public class AttackData
     [SerializeField] private int CancelFrame;
     [Header("トータルフレーム")]
     [SerializeField] private int TotalFrame;
+    [Header("前に進む速度")]
+    [SerializeField] private float MoveSpeed;
     [Header("攻撃判定の大きさ")]
     [SerializeField] private float Scale;
     [Header("攻撃判定の持続時間")]
@@ -37,6 +39,7 @@ public class AttackData
     public int stunFrame => StunFrame;
     public int cancelFrame => CancelFrame;
     public int totalFrame => TotalFrame;
+    public float moveSpeed => MoveSpeed;
     public float scale => Scale;
     public int attackLifeTime => AttackLifeTime;
     public string nextAttackName => NextAttackName;
