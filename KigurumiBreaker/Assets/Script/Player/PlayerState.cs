@@ -27,6 +27,9 @@ public class PlayerState : Player<PlayerState>
     // 攻撃データ
     [SerializeField] private AttackDataList _attackData;
 
+    // プレイヤーが使用する定数データ
+    [SerializeField] private PlayerData _playerData;
+
     // 入力情報
     private GameInputs _input;
 
@@ -35,6 +38,12 @@ public class PlayerState : Player<PlayerState>
 
     // 移動入力
     private Vector2 _moveInput;
+
+    // 現在向いている方向
+    private Vector3 _currentDirection;
+
+    // リギッドボディ
+    private Rigidbody _rigidbody;
 
     // 現在回避できるかどうか
     private bool _isAbleToDodge;
@@ -59,6 +68,9 @@ public class PlayerState : Player<PlayerState>
     {
         // Animatorコンポーネントを取得
         _animator = GetComponent<Animator>();
+
+        // Rigidbodyコンポーネントを取得
+        _rigidbody = GetComponent<Rigidbody>();
 
         // PlayerInputコンポーネントを取得
         _input = new GameInputs();
@@ -99,6 +111,10 @@ public class PlayerState : Player<PlayerState>
 
             // 待機アニメーションを再生
             state._animator.SetBool("Idle", true);
+
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
+
         }
         public override void OnUpdate()
         {
@@ -112,7 +128,7 @@ public class PlayerState : Player<PlayerState>
 
             // 移動入力があれば移動状態に遷移
             float magnitude = state._moveInput.magnitude;
-            if (magnitude > MOVE_INPUT_LENGTH)
+            if (magnitude > state._playerData.MOVE_INPUT_LENGTH)
             {
                 state.ChangeState(new MoveState(state));
                 return;
@@ -144,6 +160,11 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動方向の計算
+            Vector3 moveDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+
+
+
             // 攻撃入力があれば近接攻撃状態に遷移
             if (state._isAttackInput)
             {
@@ -153,7 +174,7 @@ public class PlayerState : Player<PlayerState>
             }
             // 移動入力がなければ待機状態に遷移
             float magnitude = state._moveInput.magnitude;
-            if (magnitude <= MOVE_INPUT_LENGTH)
+            if (magnitude <= state._playerData.MOVE_INPUT_LENGTH)
             {
                 state.ChangeState(new IdleState(state));
             }
@@ -192,11 +213,11 @@ public class PlayerState : Player<PlayerState>
             dodgeTime++;
 
             // 一定時間経過したら待機状態に遷移
-            if (dodgeTime >= DODGE_TIME)
+            if (dodgeTime >= state._playerData.DODGE_TIME)
             {
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
                 float magnitude = state._moveInput.magnitude;
-                if (magnitude > MOVE_INPUT_LENGTH)
+                if (magnitude > state._playerData.MOVE_INPUT_LENGTH)
                 {
                     state.ChangeState(new MoveState(state));
                     return;
@@ -400,7 +421,7 @@ public class PlayerState : Player<PlayerState>
             {
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
                 float magnitude = state._moveInput.magnitude;
-                if (magnitude > MOVE_INPUT_LENGTH)
+                if (magnitude > state._playerData.MOVE_INPUT_LENGTH)
                 {
                     state.ChangeState(new MoveState(state));
                     return;
@@ -458,7 +479,7 @@ public class PlayerState : Player<PlayerState>
     private void ChargeAttack(InputAction.CallbackContext context)
     {
         // 一定時間以上チャージを行っていたらチャージ攻撃に移行
-        if (_normalChargeTime > CHARGE_ATTACK_TIME)
+        if (_normalChargeTime > _playerData.CHARGE_ATTACK_MIN_TIME)
         {
             ChangeState(new ChargeAttackState(this));
         }
@@ -477,7 +498,7 @@ public class PlayerState : Player<PlayerState>
 
             // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
             float magnitude = _moveInput.magnitude;
-            if (magnitude > MOVE_INPUT_LENGTH)
+            if (magnitude > _playerData.MOVE_INPUT_LENGTH)
             {
                 ChangeState(new MoveState(this));
                 return;
