@@ -1,5 +1,5 @@
 {
-    "name": "KigurumiBreaker",
+    "name": "GameInputs",
     "maps": [
         {
             "name": "Player",
@@ -18,6 +18,15 @@
                     "name": "MeleeAttack",
                     "type": "Button",
                     "id": "161df73c-88f9-40cf-9065-b174215fc78a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChargeAttack",
+                    "type": "Button",
+                    "id": "ebb56ad9-e318-41b7-bb44-b98920086641",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -220,11 +229,22 @@
                 {
                     "name": "",
                     "id": "0ff3fdc3-ac21-4bd5-954c-18fd65cba790",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "RangedAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e4656ca5-f46f-49ee-a868-782dedffbaaa",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChargeAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

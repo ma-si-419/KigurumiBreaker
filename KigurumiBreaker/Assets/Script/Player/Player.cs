@@ -8,8 +8,8 @@ public class Player<T> : MonoBehaviour where T : Player<T>
     protected const float MOVE_INPUT_LENGTH = 0.1f;
     // 回避の時間
     protected const int DODGE_TIME = 40;
-    // 溜め攻撃に移行するまでの時間
-    protected const int CHARGE_ATTACK_TIME = 15;
+    // 溜め攻撃を行えるようになる時間
+    protected const int CHARGE_ATTACK_TIME = 35;
 
 
     //ひとつ前の状態
@@ -55,6 +55,10 @@ public class Player<T> : MonoBehaviour where T : Player<T>
             //開始処理を行う
             _currentState.OnEnterState();
         }
+
+        // 現在のStateをDebugLogで表示
+        Debug.Log("Current State: " + (_currentState != null ? _currentState.GetType().Name : "None"));
+
 
         //現在の状態があれば更新処理
         if (_currentState != null)
