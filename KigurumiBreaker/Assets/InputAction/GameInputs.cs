@@ -46,6 +46,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ChargeAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""ebb56ad9-e318-41b7-bb44-b98920086641"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Special"",
                     ""type"": ""Button"",
                     ""id"": ""24a0548a-9698-44b7-ae55-54fbdaf4d680"",
@@ -242,11 +251,22 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0ff3fdc3-ac21-4bd5-954c-18fd65cba790"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RangedAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4656ca5-f46f-49ee-a868-782dedffbaaa"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChargeAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -320,6 +340,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_MeleeAttack = m_Player.FindAction("MeleeAttack", throwIfNotFound: true);
+        m_Player_ChargeAttack = m_Player.FindAction("ChargeAttack", throwIfNotFound: true);
         m_Player_Special = m_Player.FindAction("Special", throwIfNotFound: true);
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
         m_Player_RangedAttack = m_Player.FindAction("RangedAttack", throwIfNotFound: true);
@@ -386,6 +407,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_MeleeAttack;
+    private readonly InputAction m_Player_ChargeAttack;
     private readonly InputAction m_Player_Special;
     private readonly InputAction m_Player_Dodge;
     private readonly InputAction m_Player_RangedAttack;
@@ -395,6 +417,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public PlayerActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @MeleeAttack => m_Wrapper.m_Player_MeleeAttack;
+        public InputAction @ChargeAttack => m_Wrapper.m_Player_ChargeAttack;
         public InputAction @Special => m_Wrapper.m_Player_Special;
         public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
         public InputAction @RangedAttack => m_Wrapper.m_Player_RangedAttack;
@@ -413,6 +436,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @MeleeAttack.started += instance.OnMeleeAttack;
             @MeleeAttack.performed += instance.OnMeleeAttack;
             @MeleeAttack.canceled += instance.OnMeleeAttack;
+            @ChargeAttack.started += instance.OnChargeAttack;
+            @ChargeAttack.performed += instance.OnChargeAttack;
+            @ChargeAttack.canceled += instance.OnChargeAttack;
             @Special.started += instance.OnSpecial;
             @Special.performed += instance.OnSpecial;
             @Special.canceled += instance.OnSpecial;
@@ -432,6 +458,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @MeleeAttack.started -= instance.OnMeleeAttack;
             @MeleeAttack.performed -= instance.OnMeleeAttack;
             @MeleeAttack.canceled -= instance.OnMeleeAttack;
+            @ChargeAttack.started -= instance.OnChargeAttack;
+            @ChargeAttack.performed -= instance.OnChargeAttack;
+            @ChargeAttack.canceled -= instance.OnChargeAttack;
             @Special.started -= instance.OnSpecial;
             @Special.performed -= instance.OnSpecial;
             @Special.canceled -= instance.OnSpecial;
@@ -507,6 +536,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnMeleeAttack(InputAction.CallbackContext context);
+        void OnChargeAttack(InputAction.CallbackContext context);
         void OnSpecial(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
         void OnRangedAttack(InputAction.CallbackContext context);

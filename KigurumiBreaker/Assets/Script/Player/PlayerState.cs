@@ -18,7 +18,7 @@ public class PlayerState : Player<PlayerState>
         MELEEATTACK,    // 近接攻撃
         RANGEDATTACK,   // 遠距離攻撃
         CHARGE,         // チャージ
-        SUPERATTACK,    // チャージ攻撃
+        CHARGEATTACK,    // チャージ攻撃
         DAMAGE,         // ダメージ
         DEATH,          // 死亡
         CINEMATIC,      // 演出中
@@ -46,7 +46,10 @@ public class PlayerState : Player<PlayerState>
     private bool _isAttackInput;
 
     // 攻撃ボタンを長押ししている時間
-    private int _chargeTime;
+    private int _normalChargeTime;
+
+    // 特殊攻撃のチャージをしている場合trueにする
+    bool _isSpecialCharge;
 
     // アニメーター
     private Animator _animator;
@@ -65,8 +68,9 @@ public class PlayerState : Player<PlayerState>
         _input.Player.Move.performed += Move;
         _input.Player.Move.canceled += Move;
         _input.Player.Dodge.performed += Dodge;
-        _input.Player.MeleeAttack.performed += ChargeAttack;
-        _input.Player.MeleeAttack.canceled += LowAttack;
+        _input.Player.MeleeAttack.started += LowAttack;
+        _input.Player.ChargeAttack.started += NormalCharge;
+        _input.Player.ChargeAttack.canceled += ChargeAttack;
 
         // InputActionを有効化
         _input.Enable();
@@ -99,7 +103,7 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             // 攻撃入力があれば近接攻撃状態に遷移
-            if(state._isAttackInput)
+            if (state._isAttackInput)
             {
                 state._isAttackInput = false;
                 state.ChangeState(new MeleeAttackState(state));
@@ -220,18 +224,14 @@ public class PlayerState : Player<PlayerState>
             // 現在のStateKindを近接攻撃に設定
             state._stateKind = StateKind.MELEEATTACK;
 
-            Debug.Log("MeleeAttackStateに遷移");
+            // 最初の攻撃はLow1に設定
+            _currentAttackName = "Low1";
 
-            // チャージ時間が閾値を超えていない場合、弱攻撃を実行
-            if (state._chargeTime < CHARGE_ATTACK_TIME)
-            { 
-                _currentAttackName = "Low1";
+            // アニメーションを再生
+            state._animator.SetTrigger(_currentAttackName);
 
-                state._animator.SetTrigger(_currentAttackName);
-                
-                _currentAttackData = state.SearchAttackData(_currentAttackName);
-            }
-
+            // 攻撃の情報を設定
+            _currentAttackData = state.SearchAttackData(_currentAttackName);
 
         }
         public override void OnUpdate()
@@ -291,7 +291,123 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger(_currentAttackData.attackName);
 
             // チャージ時間をリセット
-            state._chargeTime = 0;
+            state._normalChargeTime = 0;
+        }
+    }
+
+    // チャージ状態
+    public class ChargeState : StateBase<PlayerState>
+    {
+        public ChargeState(PlayerState next) : base(next)
+        {
+        }
+        public override void OnEnterState()
+        {
+            // チャージ中は回避可能
+            state._isAbleToDodge = true;
+            // チャージ中は攻撃不可
+            state._isAbleToAttack = false;
+            // 状態をチャージに設定
+            state._stateKind = StateKind.CHARGE;
+            // 通常チャージと特殊チャージをここで分ける
+            if (state._isSpecialCharge)
+            {
+                // 特殊チャージアニメーションを再生
+                state._animator.SetTrigger("SpecialCharge");
+            }
+            else
+            {
+                // 通常チャージアニメーションを再生
+                state._animator.SetTrigger("NormalCharge");
+            }
+        }
+        public override void OnUpdate()
+        {
+            //特殊チャージの場合
+            if (state._isSpecialCharge)
+            {
+
+            }
+            // 通常チャージの場合
+            else
+            {
+                state._normalChargeTime++;
+            }
+        }
+        public override void OnExitState()
+        {
+            state._animator.ResetTrigger("NormalCharge");
+        }
+    }
+
+    // チャージ攻撃状態
+    public class ChargeAttackState : StateBase<PlayerState>
+    {
+        private string _currentAttackName;
+        private AttackData _currentAttackData;
+        private int _currentFrame;
+        public ChargeAttackState(PlayerState next) : base(next)
+        {
+        }
+        public override void OnEnterState()
+        {
+            // 回避不可能にする
+            state._isAbleToDodge = false;
+            // 攻撃の入力を無効化
+            state._isAbleToAttack = false;
+            // 現在のStateKindを近接攻撃に設定
+            state._stateKind = StateKind.CHARGEATTACK;
+
+            // 通常チャージ攻撃と特殊チャージ攻撃をここで分ける
+            if (state._isSpecialCharge)
+            {
+
+            }
+            else
+            {
+                // 最初の攻撃はChargeAttackに設定
+                _currentAttackName = "ChargeAttack";
+                // アニメーションを再生
+                state._animator.SetTrigger(_currentAttackName);
+                // 攻撃の情報を設定
+                _currentAttackData = state.SearchAttackData(_currentAttackName);
+            }
+            _currentFrame = 0;
+        }
+        public override void OnUpdate()
+        {
+            _currentFrame++;
+
+            // 攻撃のキャンセルフレームに達したときに回避でキャンセルできるようにする
+            if (_currentFrame >= _currentAttackData.cancelFrame)
+            {
+                // 回避可能にする
+                state._isAbleToDodge = true;
+            }
+
+            // 攻撃のトータルフレームに達したら
+            if (_currentFrame >= _currentAttackData.totalFrame)
+            {
+                // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
+                float magnitude = state._moveInput.magnitude;
+                if (magnitude > MOVE_INPUT_LENGTH)
+                {
+                    state.ChangeState(new MoveState(state));
+                    return;
+                }
+                else
+                {
+                    state.ChangeState(new IdleState(state));
+                    return;
+                }
+            }
+        }
+        public override void OnExitState()
+        {
+            // 攻撃アニメーションを停止
+            state._animator.ResetTrigger(_currentAttackData.attackName);
+            // チャージ時間をリセット
+            state._normalChargeTime = 0;
         }
     }
 
@@ -316,19 +432,23 @@ public class PlayerState : Player<PlayerState>
         }
     }
 
-    private void ChargeAttack(InputAction.CallbackContext context)
+    private void NormalCharge(InputAction.CallbackContext context)
     {
         if (_isAbleToAttack)
         {
-            _chargeTime++;
-            if (_chargeTime > CHARGE_ATTACK_TIME)
-            {
-                ChangeState(new MeleeAttackState(this));
-            }
+            _isSpecialCharge = false;
+            ChangeState(new ChargeState(this));
         }
     }
 
-
+    private void ChargeAttack(InputAction.CallbackContext context)
+    {
+        // 少しでもチャージを行っていたらチャージ攻撃に移行
+        if (_normalChargeTime > 0)
+        {
+            ChangeState(new ChargeAttackState(this));
+        }
+    }
 
     private AttackData SearchAttackData(string attackName)
     {
