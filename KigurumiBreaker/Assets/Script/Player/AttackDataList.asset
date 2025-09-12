@@ -13,35 +13,39 @@ MonoBehaviour:
   m_Name: AttackDataList
   m_EditorClassIdentifier: 
   attackDataList:
-  - attackName: Low1
-    damage: 12
-    startFrame: 10
-    cancelFrame: 20
-    totalFrame: 30
-    scale: 3
-    attackLifeTime: 3
-    nextAttackName: Low2
-  - attackName: Low2
-    damage: 12
-    startFrame: 12
-    cancelFrame: 25
-    totalFrame: 35
-    scale: 3
-    attackLifeTime: 3
-    nextAttackName: Low3
-  - attackName: Low3
-    damage: 24
-    startFrame: 18
-    cancelFrame: 36
-    totalFrame: 40
-    scale: 5
-    attackLifeTime: 3
-    nextAttackName: None
-  - attackName: ChargeAttack
-    damage: 32
-    startFrame: 10
-    cancelFrame: 23
-    totalFrame: 47
-    scale: 5
-    attackLifeTime: 3
-    nextAttackName: None
+  - AttackName: Low1
+    Damage: 12
+    StartFrame: 10
+    StunFrame: 13
+    CancelFrame: 20
+    TotalFrame: 30
+    Scale: 3
+    AttackLifeTime: 3
+    NextAttackName: Low2
+  - AttackName: Low2
+    Damage: 12
+    StartFrame: 12
+    StunFrame: 16
+    CancelFrame: 25
+    TotalFrame: 35
+    Scale: 3
+    AttackLifeTime: 3
+    NextAttackName: Low3
+  - AttackName: Low3
+    Damage: 24
+    StartFrame: 8
+    StunFrame: 15
+    CancelFrame: 20
+    TotalFrame: 32
+    Scale: 5
+    AttackLifeTime: 3
+    NextAttackName: None
+  - AttackName: ChargeAttack
+    Damage: 32
+    StartFrame: 10
+    StunFrame: 20
+    CancelFrame: 23
+    TotalFrame: 47
+    Scale: 5
+    AttackLifeTime: 3
+    NextAttackName: None
