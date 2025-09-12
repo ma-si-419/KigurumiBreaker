@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class Player<T> : MonoBehaviour where T : Player<T>
 {
-    // €Ъ“®“ь—Н‚Ми‡’l
-    protected const float MOVE_INPUT_LENGTH = 0.1f;
-    // ‰с”р‚МЋћЉФ
-    protected const int DODGE_TIME = 40;
-    // —­‚ЯЌUЊ‚‚рЌs‚¦‚й‚ж‚¤‚Й‚И‚йЋћЉФ
-    protected const int CHARGE_ATTACK_TIME = 35;
 
 
     //‚Р‚Ж‚В‘O‚МЏу‘Ф
