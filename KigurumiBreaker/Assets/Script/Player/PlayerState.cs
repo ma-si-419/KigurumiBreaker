@@ -128,7 +128,7 @@ public class PlayerState : Player<PlayerState>
 
             // 移動入力があれば移動状態に遷移
             float magnitude = state._moveInput.magnitude;
-            if (magnitude > state._playerData.MOVE_INPUT_LENGTH)
+            if (magnitude > state._playerData.moveInputLength)
             {
                 state.ChangeState(new MoveState(state));
                 return;
@@ -163,7 +163,18 @@ public class PlayerState : Player<PlayerState>
             // 移動方向の計算
             Vector3 moveDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
 
+            // 移動ベクトル
+            Vector3 moveVelocity = moveDirection * state._playerData.moveSpeed;
 
+            // 向きの更新
+            if (moveDirection != Vector3.zero)
+            {
+                state._currentDirection = moveDirection;
+                state.transform.forward = state._currentDirection;
+            }
+
+            // リジッドボディの速度を設定
+            state._rigidbody.velocity = moveVelocity;
 
             // 攻撃入力があれば近接攻撃状態に遷移
             if (state._isAttackInput)
@@ -174,7 +185,7 @@ public class PlayerState : Player<PlayerState>
             }
             // 移動入力がなければ待機状態に遷移
             float magnitude = state._moveInput.magnitude;
-            if (magnitude <= state._playerData.MOVE_INPUT_LENGTH)
+            if (magnitude <= state._playerData.moveInputLength)
             {
                 state.ChangeState(new IdleState(state));
             }
@@ -183,13 +194,20 @@ public class PlayerState : Player<PlayerState>
         {
             // 移動アニメーションを停止
             state._animator.SetBool("Move", false);
+
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
         }
     }
 
     // 回避状態
     public class DodgeState : StateBase<PlayerState>
     {
+        // 回避時間のカウント
         int dodgeTime;
+
+        // 回避方向
+        Vector3 dodgeDirection;
 
         public DodgeState(PlayerState next) : base(next)
         {
@@ -206,18 +224,44 @@ public class PlayerState : Player<PlayerState>
             state._animator.SetTrigger("Dodge");
             // 回避時間を設定
             dodgeTime = 0;
+
+            // 移動方向の計算
+            dodgeDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+            // 移動方向がない場合は現在の向きを使用
+            if (state._moveInput.magnitude < state._playerData.moveInputLength)
+            {
+                dodgeDirection = state._currentDirection;
+            }
+
         }
         public override void OnUpdate()
         {
             // 回避時間をカウント
             dodgeTime++;
 
+            // 回避方向に向ける
+            if (dodgeDirection != Vector3.zero)
+            {
+                state.transform.forward = dodgeDirection;
+            }
+
+            // 最初の数フレームは移動しない
+            if (dodgeTime < state._playerData.dodgeStartTime)
+            {
+                state._rigidbody.velocity = Vector3.zero;
+                return;
+            }
+
+            // 移動処理
+            Vector3 dodgeVelocity = dodgeDirection * state._playerData.dodgeSpeed;
+            state._rigidbody.velocity = dodgeVelocity;
+
             // 一定時間経過したら待機状態に遷移
-            if (dodgeTime >= state._playerData.DODGE_TIME)
+            if (dodgeTime >= state._playerData.dodgeTime)
             {
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
                 float magnitude = state._moveInput.magnitude;
-                if (magnitude > state._playerData.MOVE_INPUT_LENGTH)
+                if (magnitude > state._playerData.moveInputLength)
                 {
                     state.ChangeState(new MoveState(state));
                     return;
@@ -233,6 +277,8 @@ public class PlayerState : Player<PlayerState>
         {
             // 回避アニメーションを停止
             state._animator.ResetTrigger("Dodge");
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
         }
     }
 
@@ -248,7 +294,7 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 攻撃を出すまでは回避できるようにする
+            // 回避でキャンセル可能にする
             state._isAbleToDodge = true;
             // 攻撃の入力を一時的に無効化
             state._isAbleToAttack = false;
@@ -273,18 +319,23 @@ public class PlayerState : Player<PlayerState>
             {
                 // 攻撃の入力を受け付ける
                 state._isAbleToAttack = true;
-                // 回避の入力を無効化
-                state._isAbleToDodge = false;
+
+                // 硬直フレームの間は回避不可
+                if (_currentFrame <= _currentAttackData.stunFrame)
+                {
+                    state._isAbleToDodge = false;
+                }
+                else
+                {
+                    state._isAbleToDodge = true;
+                }
             }
             // 攻撃を出す前
             else
             {
                 // 攻撃の入力を無効化
                 state._isAbleToAttack = false;
-                // 回避の入力を有効化
-                state._isAbleToDodge = true;
             }
-
 
             // 攻撃キャンセルフレームに達した時に攻撃入力があれば次の攻撃に遷移
             if (_currentFrame >= _currentAttackData.cancelFrame)
@@ -421,7 +472,7 @@ public class PlayerState : Player<PlayerState>
             {
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
                 float magnitude = state._moveInput.magnitude;
-                if (magnitude > state._playerData.MOVE_INPUT_LENGTH)
+                if (magnitude > state._playerData.moveInputLength)
                 {
                     state.ChangeState(new MoveState(state));
                     return;
@@ -479,7 +530,7 @@ public class PlayerState : Player<PlayerState>
     private void ChargeAttack(InputAction.CallbackContext context)
     {
         // 一定時間以上チャージを行っていたらチャージ攻撃に移行
-        if (_normalChargeTime > _playerData.CHARGE_ATTACK_MIN_TIME)
+        if (_normalChargeTime > _playerData.chargeAttackTime)
         {
             ChangeState(new ChargeAttackState(this));
         }
@@ -498,7 +549,7 @@ public class PlayerState : Player<PlayerState>
 
             // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
             float magnitude = _moveInput.magnitude;
-            if (magnitude > _playerData.MOVE_INPUT_LENGTH)
+            if (magnitude > _playerData.moveInputLength)
             {
                 ChangeState(new MoveState(this));
                 return;

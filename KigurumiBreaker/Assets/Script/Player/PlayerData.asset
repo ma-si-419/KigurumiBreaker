@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b6114554185eaa458119ddda833348d, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  MOVE_SPEED: 5
-  DODGE_SPEED: 8
-  MOVE_INPUT_LENGTH: 0.1
-  DODGE_TIME: 40
-  DOGDE_COOLTIME: 10
-  MAX_HEALTH: 100
-  CHARGE_ATTACK_MIN_TIME: 35
+  MoveSpeed: 4.5
+  DodgeSpeed: 6.5
+  MoveInputLength: 0.1
+  DodgeStartTime: 3
+  DodgeTime: 31
+  DodgeCoolTime: 10
+  MaxHealth: 100
+  ChargeAttackTime: 35
