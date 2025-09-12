@@ -194,8 +194,18 @@ public class PlayerState : Player<PlayerState>
             // 一定時間経過したら待機状態に遷移
             if (dodgeTime >= DODGE_TIME)
             {
-                // 回避時間が経過したら待機状態に遷移
-                state.ChangeState(new IdleState(state));
+                // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
+                float magnitude = state._moveInput.magnitude;
+                if (magnitude > MOVE_INPUT_LENGTH)
+                {
+                    state.ChangeState(new MoveState(state));
+                    return;
+                }
+                else
+                {
+                    state.ChangeState(new IdleState(state));
+                    return;
+                }
             }
         }
         public override void OnExitState()
@@ -420,6 +430,10 @@ public class PlayerState : Player<PlayerState>
     {
         if (_isAbleToDodge)
         {
+            // チャージ時間をリセット
+            _normalChargeTime = 0;
+
+            // 回避状態に遷移
             ChangeState(new DodgeState(this));
         }
     }
@@ -443,10 +457,36 @@ public class PlayerState : Player<PlayerState>
 
     private void ChargeAttack(InputAction.CallbackContext context)
     {
-        // 少しでもチャージを行っていたらチャージ攻撃に移行
-        if (_normalChargeTime > 0)
+        // 一定時間以上チャージを行っていたらチャージ攻撃に移行
+        if (_normalChargeTime > CHARGE_ATTACK_TIME)
         {
             ChangeState(new ChargeAttackState(this));
+        }
+        // そうでなければ待機状態に戻る
+        else
+        {
+
+            // 回避中にキャンセルしちゃってるからしゃあなくif追加
+            if (_stateKind == StateKind.DODGE)
+            {
+                return;
+            }
+
+            //チャージ時間をリセット
+            _normalChargeTime = 0;
+
+            // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
+            float magnitude = _moveInput.magnitude;
+            if (magnitude > MOVE_INPUT_LENGTH)
+            {
+                ChangeState(new MoveState(this));
+                return;
+            }
+            else
+            {
+                ChangeState(new IdleState(this));
+                return;
+            }
         }
     }
 
