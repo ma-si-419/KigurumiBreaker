@@ -516,7 +516,7 @@ GameObject:
   - component: {fileID: 740681859}
   - component: {fileID: 740681860}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -647,8 +647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46a226665e371847a72bd255227939b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  hp: 100
+  Speed: 3
 --- !u!1 &777578443
 GameObject:
   m_ObjectHideFlags: 0
@@ -1148,7 +1147,7 @@ GameObject:
   - component: {fileID: 1992285112}
   - component: {fileID: 1992285111}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Player()
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
