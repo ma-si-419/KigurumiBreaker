@@ -128,6 +128,7 @@ public class PlayerState : Player<PlayerState>
             // 現在の向きを保存
             state._currentDirection = state.transform.forward;
 
+
         }
         public override void OnUpdate()
         {
@@ -174,7 +175,8 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             // 移動方向の計算
-            Vector3 moveDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+            Vector3 direction = new Vector3(state._moveInput.x,0,state._moveInput.y).normalized;
+            Vector3 moveDirection = state.CalculateMoveDirection(direction);
 
             // 移動ベクトル
             Vector3 moveVelocity = moveDirection * state._playerData.moveSpeed;
@@ -239,11 +241,16 @@ public class PlayerState : Player<PlayerState>
             dodgeTime = 0;
 
             // 移動方向の計算
-            dodgeDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+            
             // 移動方向がない場合は現在の向きを使用
             if (state._moveInput.magnitude < state._playerData.moveInputLength)
             {
                 dodgeDirection = state._currentDirection;
+            }
+            else
+            {
+                dodgeDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+                dodgeDirection = state.CalculateMoveDirection(dodgeDirection);
             }
 
         }
@@ -701,5 +708,15 @@ public class PlayerState : Player<PlayerState>
 
         // 攻撃オブジェクトを保存
         _currentAttack = attackObject;
+    }
+
+    private Vector3 CalculateMoveDirection(Vector3 direction)
+    {
+        Vector3 moveDirection = direction;
+
+        // 固定値分回転させる
+        moveDirection = Quaternion.Euler(0, _playerData.moveDirAngle, 0) * moveDirection;
+
+        return moveDirection;
     }
 }
