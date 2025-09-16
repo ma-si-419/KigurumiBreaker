@@ -18,11 +18,18 @@ public class PlayerData : ScriptableObject
     [Header("‰ñ”ðƒN[ƒ‹ƒ^ƒCƒ€")]
     [SerializeField] private int DodgeCoolTime;
     [Header("Å‘å‘Ì—Í")]
-    [SerializeField] private int MaxHealth;
+    [SerializeField] private int MaxHp;
     [Header("‚½‚ßUŒ‚‚Ì”­“®‚Ü‚Å‚ÌŽžŠÔ")]
     [SerializeField] private int ChargeAttackTime;
     [Header("ˆÚ“®ƒxƒNƒgƒ‹‚Ì‰ñ“]“x")]
     [SerializeField] private float MoveDirAngle;
+    [Header("ŽãUŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
+    [SerializeField] private int LowStanTime;
+    [Header("’†UŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
+    [SerializeField] private int MiddleStanTime;
+    [Header("‹­UŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
+    [SerializeField] private int HighStanTime;
+
 
 
     // “Ç‚ÝŽæ‚èê—p
@@ -32,8 +39,11 @@ public class PlayerData : ScriptableObject
     public float dodgeStartTime => DodgeStartTime;
     public int dodgeTime => DodgeTime;
     public int dodgeCoolTime => DodgeCoolTime;
-    public int maxHealth => MaxHealth;
+    public int maxHp => MaxHp;
     public int chargeAttackTime => ChargeAttackTime;
     public float moveDirAngle => MoveDirAngle;
+    public int lowStanTime => LowStanTime;
+    public int middleStanTime => MiddleStanTime;
+    public int highStanTime => HighStanTime;
 
 }

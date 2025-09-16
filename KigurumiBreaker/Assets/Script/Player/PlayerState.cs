@@ -24,6 +24,13 @@ public class PlayerState : Player<PlayerState>
         CINEMATIC,      // 演出中
     }
 
+    public enum DamageKind
+    {
+        LIGHT,
+        Middle,
+        High
+    }
+
     // 攻撃データ
     [SerializeField] private AttackDataList _attackData;
 
@@ -41,6 +48,9 @@ public class PlayerState : Player<PlayerState>
 
     // 現在の状態
     private StateKind _stateKind;
+
+    // プレイヤーの体力
+    private int _nowHp;
 
     // 移動入力
     private Vector2 _moveInput;
@@ -72,6 +82,12 @@ public class PlayerState : Player<PlayerState>
     // 出している攻撃オブジェクト
     private GameObject _currentAttack;
 
+    // 受けたダメージの種類
+    private DamageKind _damageKind;
+
+    // 攻撃を前から受けたかどうか
+    private bool _isFrontDamage;
+
 
     // Start is called before the first frame update
     void Start()
@@ -99,6 +115,9 @@ public class PlayerState : Player<PlayerState>
 
         // 初期状態は待機状態に設定
         ChangeState(new IdleState(this));
+
+        // 体力を最大体力に設定
+        _nowHp = _playerData.maxHp;
     }
 
     // 各Stateクラス
@@ -175,7 +194,7 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             // 移動方向の計算
-            Vector3 direction = new Vector3(state._moveInput.x,0,state._moveInput.y).normalized;
+            Vector3 direction = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
             Vector3 moveDirection = state.CalculateMoveDirection(direction);
 
             // 移動ベクトル
@@ -241,7 +260,7 @@ public class PlayerState : Player<PlayerState>
             dodgeTime = 0;
 
             // 移動方向の計算
-            
+
             // 移動方向がない場合は現在の向きを使用
             if (state._moveInput.magnitude < state._playerData.moveInputLength)
             {
@@ -555,6 +574,88 @@ public class PlayerState : Player<PlayerState>
         }
     }
 
+    // ダメージ状態
+    public class DamageState : StateBase<PlayerState>
+    {
+        int damageTime;
+
+        public DamageState(PlayerState next) : base(next)
+        {
+        }
+        public override void OnEnterState()
+        {
+            // ダメージの種類に応じて回避の先行入力を受け付ける
+            if (state._damageKind == DamageKind.LIGHT)
+            {
+                state._isAbleToDodge = true;
+            }
+            else
+            {
+                state._isAbleToDodge = false;
+            }
+
+            // ダメージ中は攻撃不可
+            state._isAbleToAttack = false;
+            // 状態をダメージに設定
+            state._stateKind = StateKind.DAMAGE;
+
+            // 前後ろでアニメーションを変更
+            if (state._isFrontDamage)
+            {
+                // 前から
+            }
+            else
+            {
+                // 後ろから
+            }
+
+            // ダメージの種類でスタン時間を変更
+            if (state._damageKind == DamageKind.LIGHT)
+            {
+                damageTime = state._playerData.lowStanTime;
+                Debug.Log("Light");
+            }
+            else if (state._damageKind == DamageKind.Middle)
+            {
+                damageTime = state._playerData.middleStanTime;
+                Debug.Log("Middle");
+            }
+            else if (state._damageKind == DamageKind.High)
+            {
+                damageTime = state._playerData.highStanTime;
+                Debug.Log("High");
+            }
+
+            // ダメージの種類によってアニメーションを変える
+
+        }
+        public override void OnUpdate()
+        {
+            // スタン時間をカウントダウン
+            damageTime--;
+            // スタン時間が終了したら待機状態に遷移
+            if (damageTime <= 0)
+            {
+                // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
+                float magnitude = state._moveInput.magnitude;
+                if (magnitude > state._playerData.moveInputLength)
+                {
+                    state.ChangeState(new MoveState(state));
+                    return;
+                }
+                else
+                {
+                    state.ChangeState(new IdleState(state));
+                    return;
+                }
+            }
+        }
+        public override void OnExitState()
+        {
+
+        }
+    }
+
     private void Move(InputAction.CallbackContext constext)
     {
         _moveInput = constext.ReadValue<Vector2>();
@@ -652,7 +753,7 @@ public class PlayerState : Player<PlayerState>
         string rigName = null;
 
         for (int i = 0; i < _attackPartData.attackDataList.Count; i++)
-        { 
+        {
             if (_attackPartData.attackDataList[i].attackPartName == partName)
             {
                 rigName = _attackPartData.attackDataList[i].objectRigName;
@@ -674,7 +775,7 @@ public class PlayerState : Player<PlayerState>
                 rigPos = t.position;
             }
         }
-       
+
         result = rigPos;
         return result;
     }
@@ -692,7 +793,7 @@ public class PlayerState : Player<PlayerState>
 
         // 攻撃の位置を設定
         Vector3 position = GetAttackPosition(data.attackPart);
-        
+
         // ずらす分を加算
         Vector3 shiftVec = transform.forward * data.shiftPosZ;
 
@@ -719,4 +820,41 @@ public class PlayerState : Player<PlayerState>
 
         return moveDirection;
     }
+
+
+    void OnTriggerEnter(Collider other)
+    {
+        // 敵の攻撃に当たったらダメージ状態に遷移
+        if (other.gameObject.CompareTag("EnemyAttack"))
+        {
+            // 回避中と被弾中はダメージを受けない
+            if (_stateKind == StateKind.DODGE ||
+                _stateKind == StateKind.DAMAGE)
+            {
+                return;
+            }
+
+            _nowHp -= other.gameObject.GetComponent<ZangiAttack>().GetDamage();
+
+            _damageKind = other.gameObject.GetComponent<ZangiAttack>().GetDamageKind();
+
+            // 攻撃を前から受けたかどうか
+            Vector3 toEnemy = other.transform.position - transform.position;
+            toEnemy.y = 0; // y成分を無視して水平面での方向を考える
+            toEnemy.Normalize();
+            float dot = Vector3.Dot(transform.forward, toEnemy);
+            if (dot > 0)
+            {
+                _isFrontDamage = true;
+            }
+            else
+            {
+                _isFrontDamage = false;
+            }
+
+            // ダメージ状態に遷移
+            ChangeState(new DamageState(this));
+        }
+    }
 }
+
