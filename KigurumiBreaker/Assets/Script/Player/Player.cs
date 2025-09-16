@@ -51,7 +51,7 @@ public class Player<T> : MonoBehaviour where T : Player<T>
         }
 
         // Œ»İ‚ÌState‚ğDebugLog‚Å•\¦
-        Debug.Log("Current State: " + (_currentState != null ? _currentState.GetType().Name : "None"));
+//        Debug.Log("Current State: " + (_currentState != null ? _currentState.GetType().Name : "None"));
 
 
         //Œ»İ‚Ìó‘Ô‚ª‚ ‚ê‚ÎXVˆ—

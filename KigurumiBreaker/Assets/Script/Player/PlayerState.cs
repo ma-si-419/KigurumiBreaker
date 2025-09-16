@@ -18,7 +18,7 @@ public class PlayerState : Player<PlayerState>
         MELEEATTACK,    // 近接攻撃
         RANGEDATTACK,   // 遠距離攻撃
         CHARGE,         // チャージ
-        CHARGEATTACK,    // チャージ攻撃
+        CHARGEATTACK,   // チャージ攻撃
         DAMAGE,         // ダメージ
         DEATH,          // 死亡
         CINEMATIC,      // 演出中
@@ -29,6 +29,9 @@ public class PlayerState : Player<PlayerState>
 
     // プレイヤーが使用する定数データ
     [SerializeField] private PlayerData _playerData;
+
+    // プレイヤーの攻撃部位
+    [SerializeField] private AttackPartList _attackPartData;
 
     // 入力情報
     private GameInputs _input;
@@ -62,6 +65,10 @@ public class PlayerState : Player<PlayerState>
 
     // アニメーター
     private Animator _animator;
+
+    // 出している攻撃オブジェクト
+    private GameObject _currentAttack;
+
 
     // Start is called before the first frame update
     void Start()
@@ -291,6 +298,8 @@ public class PlayerState : Player<PlayerState>
         private string _currentAttackName;
         private AttackData _currentAttackData;
         private int _currentFrame;
+        // 攻撃を出したかどうか
+        bool _isAttack;
         public MeleeAttackState(PlayerState next) : base(next)
         {
 
@@ -307,6 +316,8 @@ public class PlayerState : Player<PlayerState>
             // 最初の攻撃はLow1に設定
             _currentAttackName = "Low1";
 
+            _isAttack = false;
+
             // アニメーションを再生
             state._animator.SetTrigger(_currentAttackName);
 
@@ -317,9 +328,24 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             _currentFrame++;
-            // 攻撃を出した後
-            if (_currentFrame >= _currentAttackData.startFrame)
+
+            // 攻撃するフレームに達したら攻撃オブジェクトを生成
+            if (_currentFrame >= _currentAttackData.startFrame && !_isAttack)
             {
+                state.CreateAttack(_currentAttackData);
+                _isAttack = true;
+            }
+
+            // 攻撃を出した後
+            if (_currentFrame > _currentAttackData.startFrame)
+            {
+                // 攻撃オブジェクトが存在するなら攻撃オブジェクトの座標を更新
+                if (state._currentAttack != null)
+                {
+                    Vector3 position = state.GetAttackPosition(_currentAttackData.attackPart);
+                    state._currentAttack.transform.position = position;
+                }
+
                 // 移動ベクトルをリセット
                 state._rigidbody.velocity = Vector3.zero;
 
@@ -358,6 +384,13 @@ public class PlayerState : Player<PlayerState>
                     // 次の攻撃データを取得
                     string nextAttackName = _currentAttackData.nextAttackName;
                     AttackData nextAttackData = state.SearchAttackData(nextAttackName);
+
+                    // 現在の攻撃オブジェクトを削除
+                    if (state._currentAttack != null)
+                    {
+                        state._currentAttack = null;
+                    }
+
                     // 次の攻撃データが存在する場合、次の攻撃に遷移
                     if (nextAttackData != null)
                     {
@@ -366,6 +399,10 @@ public class PlayerState : Player<PlayerState>
                         _currentFrame = 0;
                         // 次の攻撃アニメーションを再生
                         state._animator.SetTrigger(_currentAttackName);
+
+                        // 攻撃オブジェクトを生成するフラグをリセット
+                        _isAttack = false;
+
                     }
                 }
             }
@@ -587,5 +624,71 @@ public class PlayerState : Player<PlayerState>
             }
         }
         return result;
+    }
+
+    private Vector3 GetAttackPosition(string partName)
+    {
+        Vector3 result = Vector3.zero;
+
+        // 早期リターン
+        if (partName == "None") return result;
+
+        // 攻撃部位のリグの名前を取得
+        string rigName = null;
+
+        for (int i = 0; i < _attackPartData.attackDataList.Count; i++)
+        {
+            if (_attackPartData.attackDataList[i].objectRigName == partName)
+            {
+                rigName = _attackPartData.attackDataList[i].objectRigName;
+                break;
+            }
+        }
+
+        // 早期リターン
+        if (rigName == null) return result;
+
+        // リグのTransformを取得
+        Transform rigTransform = transform.Find(rigName);
+
+        // 早期リターン
+        if (rigTransform == null) return result;
+
+        Debug.Log(rigTransform.position);
+
+        result = rigTransform.position;
+        return result;
+    }
+
+    private void CreateAttack(AttackData data)
+    {
+        GameObject attackObject = new GameObject("PlayerAttack");
+
+        // 球の当たり判定を追加
+        attackObject.AddComponent<SphereCollider>();
+        attackObject.GetComponent<SphereCollider>().isTrigger = true;
+        attackObject.GetComponent<SphereCollider>().radius = data.scale;
+
+        // 剛体追加
+        attackObject.AddComponent<Rigidbody>();
+        attackObject.GetComponent<Rigidbody>().useGravity = false;
+        attackObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+
+        // PlayerAttackスクリプトを追加し、攻撃データを設定
+        attackObject.AddComponent<PlayerAttack>();
+        attackObject.GetComponent<PlayerAttack>().SetAttackData(data);
+
+        // 攻撃の位置を設定
+        Vector3 position = GetAttackPosition(data.attackPart);
+        attackObject.transform.position = position;
+
+        // 攻撃の向きを設定
+        attackObject.transform.forward = transform.forward;
+
+        // タグを設定
+        attackObject.tag = "PlayerAttack";
+
+        // 攻撃オブジェクトを生成
+ //       _currentAttack = Instantiate(attackObject);
     }
 }

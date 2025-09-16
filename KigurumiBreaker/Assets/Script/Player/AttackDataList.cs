@@ -31,6 +31,8 @@ public class AttackData
     [SerializeField] private int AttackLifeTime;
     [Header("次に出てくる攻撃の名前(コンボ用)")]
     [SerializeField] private string NextAttackName;
+    [Header("攻撃を出す部位")]
+    [SerializeField] private string AttackPart; 
 
     // 読み取り専用プロパティ
     public string attackName => AttackName;
@@ -43,4 +45,5 @@ public class AttackData
     public float scale => Scale;
     public int attackLifeTime => AttackLifeTime;
     public string nextAttackName => NextAttackName;
+    public string attackPart => AttackPart;
 }
