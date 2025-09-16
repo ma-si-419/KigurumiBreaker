@@ -27,6 +27,9 @@ public class PlayerState : Player<PlayerState>
     // 攻撃データ
     [SerializeField] private AttackDataList _attackData;
 
+    // 攻撃オブジェクトの基本データ
+    [SerializeField] private GameObject _attackObjectPrefab;
+
     // プレイヤーが使用する定数データ
     [SerializeField] private PlayerData _playerData;
 
@@ -343,6 +346,11 @@ public class PlayerState : Player<PlayerState>
                 if (state._currentAttack != null)
                 {
                     Vector3 position = state.GetAttackPosition(_currentAttackData.attackPart);
+
+                    // ずらす分を加算
+                    Vector3 shiftVec = state.transform.forward * _currentAttackData.shiftPosZ;
+                    position += shiftVec;
+
                     state._currentAttack.transform.position = position;
                 }
 
@@ -637,8 +645,8 @@ public class PlayerState : Player<PlayerState>
         string rigName = null;
 
         for (int i = 0; i < _attackPartData.attackDataList.Count; i++)
-        {
-            if (_attackPartData.attackDataList[i].objectRigName == partName)
+        { 
+            if (_attackPartData.attackDataList[i].attackPartName == partName)
             {
                 rigName = _attackPartData.attackDataList[i].objectRigName;
                 break;
@@ -648,47 +656,50 @@ public class PlayerState : Player<PlayerState>
         // 早期リターン
         if (rigName == null) return result;
 
+        Vector3 rigPos = Vector3.zero;
+
         // リグのTransformを取得
-        Transform rigTransform = transform.Find(rigName);
-
-        // 早期リターン
-        if (rigTransform == null) return result;
-
-        Debug.Log(rigTransform.position);
-
-        result = rigTransform.position;
+        Transform[] allChildren = GetComponentsInChildren<Transform>();
+        foreach (Transform t in allChildren)
+        {
+            if (t.name == rigName) // モデルのボーン名
+            {
+                rigPos = t.position;
+            }
+        }
+       
+        result = rigPos;
         return result;
     }
 
     private void CreateAttack(AttackData data)
     {
-        GameObject attackObject = new GameObject("PlayerAttack");
+        // ゲームオブジェクトを生成
+        GameObject attackObject = Instantiate(_attackObjectPrefab);
 
-        // 球の当たり判定を追加
-        attackObject.AddComponent<SphereCollider>();
-        attackObject.GetComponent<SphereCollider>().isTrigger = true;
+        // 球の当たり判定を設定
         attackObject.GetComponent<SphereCollider>().radius = data.scale;
 
-        // 剛体追加
-        attackObject.AddComponent<Rigidbody>();
-        attackObject.GetComponent<Rigidbody>().useGravity = false;
-        attackObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-
-        // PlayerAttackスクリプトを追加し、攻撃データを設定
-        attackObject.AddComponent<PlayerAttack>();
+        // 攻撃の情報を設定
         attackObject.GetComponent<PlayerAttack>().SetAttackData(data);
 
         // 攻撃の位置を設定
         Vector3 position = GetAttackPosition(data.attackPart);
-        attackObject.transform.position = position;
+        
+        // ずらす分を加算
+        Vector3 shiftVec = transform.forward * data.shiftPosZ;
+
+        Debug.Log(transform.forward);
+        Debug.Log(shiftVec);
+
+        attackObject.transform.position = position + shiftVec;
+
+        Debug.Log(position);
 
         // 攻撃の向きを設定
         attackObject.transform.forward = transform.forward;
 
-        // タグを設定
-        attackObject.tag = "PlayerAttack";
-
-        // 攻撃オブジェクトを生成
- //       _currentAttack = Instantiate(attackObject);
+        // 攻撃オブジェクトを保存
+        _currentAttack = attackObject;
     }
 }

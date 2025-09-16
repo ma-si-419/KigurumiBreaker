@@ -27,6 +27,8 @@ public class AttackData
     [SerializeField] private float MoveSpeed;
     [Header("UŒ‚”»’è‚Ì‘å‚«‚³")]
     [SerializeField] private float Scale;
+    [Header("UŒ‚”»’è‚ð‘O•ûŒü‚É‚¸‚ç‚·‘å‚«‚³")]
+    [SerializeField] private float ShiftPosZ;
     [Header("UŒ‚”»’è‚ÌŽ‘±ŽžŠÔ")]
     [SerializeField] private int AttackLifeTime;
     [Header("ŽŸ‚Éo‚Ä‚­‚éUŒ‚‚Ì–¼‘O(ƒRƒ“ƒ{—p)")]
@@ -43,6 +45,7 @@ public class AttackData
     public int totalFrame => TotalFrame;
     public float moveSpeed => MoveSpeed;
     public float scale => Scale;
+    public float shiftPosZ => ShiftPosZ;
     public int attackLifeTime => AttackLifeTime;
     public string nextAttackName => NextAttackName;
     public string attackPart => AttackPart;

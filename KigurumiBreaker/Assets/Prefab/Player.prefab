@@ -1020,6 +1020,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackData: {fileID: 11400000, guid: 22d05d5473c5800488c3d906845f6053, type: 2}
+  _attackObjectPrefab: {fileID: 5175801939424532993, guid: 22781efec99b0064c9a1cf149a4d686a, type: 3}
+  _playerData: {fileID: 11400000, guid: 76566864eda5d52499ba49b5e2f733b8, type: 2}
+  _attackPartData: {fileID: 11400000, guid: 8d86e8929d23ed1428ed625aea9ee26d, type: 2}
 --- !u!54 &9066895370956956705
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1042,7 +1045,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112

@@ -9,13 +9,10 @@ public class PlayerAttack : MonoBehaviour
 
     int lifeTIme = 0;
 
-    public static int num = 0;
-
     // Start is called before the first frame update
     void Start()
     {
         lifeTIme = attackData.attackLifeTime;
-        Debug.Log(attackData);
     }
 
     // Update is called once per frame
@@ -34,5 +31,10 @@ public class PlayerAttack : MonoBehaviour
     public void SetAttackData(AttackData data)
     {
         this.attackData = data;
+    }
+
+    public int GetDamage()
+    {
+        return attackData.damage;
     }
 }
