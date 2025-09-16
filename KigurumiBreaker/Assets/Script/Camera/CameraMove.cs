@@ -11,10 +11,13 @@ public class CameraMove : MonoBehaviour
 
     [SerializeField] private BoxCollider _moveArea; // カメラの移動範囲を指定するBoxCollider
 
+
+    private Vector3 _initialRotation; // カメラの初期回転を保存する変数
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        transform.rotation = Quaternion.Euler(45.0f, -29.0f, -4.5f); // カメラの初期回転を設定
     }
 
     // Update is called once per frame
