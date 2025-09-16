@@ -16,48 +16,48 @@ MonoBehaviour:
   - AttackName: Low1
     Damage: 12
     StartFrame: 10
-    ActiveFrame: 3
     StunFrame: 13
     CancelFrame: 20
     TotalFrame: 30
     MoveSpeed: 2
-    Scale: 3
+    Scale: 1
+    ShiftPosZ: 1
     AttackLifeTime: 3
     NextAttackName: Low2
     AttackPart: "\u53F3\u8155"
   - AttackName: Low2
     Damage: 12
     StartFrame: 12
-    ActiveFrame: 3
     StunFrame: 16
     CancelFrame: 25
     TotalFrame: 35
     MoveSpeed: 2
-    Scale: 3
+    Scale: 1
+    ShiftPosZ: 1
     AttackLifeTime: 3
     NextAttackName: Low3
-    AttackPart: "\u5DE6\u4E0A"
+    AttackPart: "\u5DE6\u8155"
   - AttackName: Low3
     Damage: 24
     StartFrame: 10
-    ActiveFrame: 5
     StunFrame: 15
     CancelFrame: 20
     TotalFrame: 32
     MoveSpeed: 2.3
-    Scale: 5
+    Scale: 2
+    ShiftPosZ: 1.8
     AttackLifeTime: 6
     NextAttackName: None
     AttackPart: "\u53F3\u8DB3"
   - AttackName: ChargeAttack
     Damage: 32
     StartFrame: 10
-    ActiveFrame: 8
     StunFrame: 20
     CancelFrame: 23
     TotalFrame: 47
     MoveSpeed: 0
-    Scale: 5
+    Scale: 3
+    ShiftPosZ: 0
     AttackLifeTime: 8
     NextAttackName: None
     AttackPart: "\u982D"
