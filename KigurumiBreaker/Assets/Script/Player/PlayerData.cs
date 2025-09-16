@@ -21,6 +21,9 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int MaxHealth;
     [Header("ため攻撃の発動までの時間")]
     [SerializeField] private int ChargeAttackTime;
+    [Header("移動ベクトルの回転度")]
+    [SerializeField] private float MoveDirAngle;
+
 
     // 読み取り専用
     public float moveSpeed => MoveSpeed;
@@ -31,5 +34,6 @@ public class PlayerData : ScriptableObject
     public int dodgeCoolTime => DodgeCoolTime;
     public int maxHealth => MaxHealth;
     public int chargeAttackTime => ChargeAttackTime;
+    public float moveDirAngle => MoveDirAngle;
 
 }
