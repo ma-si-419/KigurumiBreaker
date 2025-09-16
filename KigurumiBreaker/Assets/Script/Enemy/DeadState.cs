@@ -1,33 +1,36 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-//public class DeadState : IState
-//{
-//    private EnemyBase _enemy;   //敵の参照
-//    private float _timer;   //タイマー
+public class DeadState : IState
+{
+    private Enemy _enemy;   //敵の参照
+    private float _timer;   //タイマー
 
-//    public DeadState(EnemyBase enemy) { _enemy = enemy; }   //コンストラクタでEnemyの参照を受け取る
+    public DeadState(Enemy enemy)
+    {
+        //コンストラクタでEnemyの参照を受け取る
+        _enemy = enemy; 
+    }   
 
-//    public void Init()
-//    {
-//        _timer = 0.0f;
-//        Debug.Log("AttackState: Enter");
-//    }
+    public void Init()
+    {
+        _timer = 0.0f;
+        Debug.Log("AttackState: Init");
+    }
 
-//    public void Update()
-//    {
-//        //タイマーを進める
-//        _timer += Time.deltaTime;
+    public void Update()
+    {
+        //タイマーを進める
+        _timer += Time.deltaTime;
+        Debug.Log("AttackState: Update");
 
-//        //死んだ処理書いとけ
+        //死んだ処理書いとけ
 
+    }
 
-//        Debug.Log("AttackState: Update");
-//    }
-
-//    public void End()
-//    {
-//        Debug.Log("AttackState: Exit");
-//    }
-//}
+    public void End()
+    {
+        Debug.Log("AttackState: End");
+    }
+}

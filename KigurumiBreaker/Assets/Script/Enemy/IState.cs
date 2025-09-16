@@ -1,5 +1,5 @@
 
-
+//状態のインターフェース
 public interface IState
 {
     //状態に入るときに呼び出す関数
