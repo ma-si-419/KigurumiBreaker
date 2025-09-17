@@ -577,8 +577,11 @@ public class PlayerState : Player<PlayerState>
     // ダメージ状態
     public class DamageState : StateBase<PlayerState>
     {
-        int damageTime;
-        string damageAnim;
+        private int _stateTime;
+        private int _stunDuration;
+        private int _knockbackTime;
+        private float _knockBackScale;
+        private string _damageAnim;
 
         public DamageState(PlayerState next) : base(next)
         {
@@ -597,50 +600,83 @@ public class PlayerState : Player<PlayerState>
             // 小ダメージ
             if (state._damageKind == DamageKind.LOW)
             {
-                damageTime = state._playerData.lowStanTime;
+                _stunDuration = state._playerData.lowStanTime;
+                _knockbackTime = 0;
+                _knockBackScale = 0;
 
                 // 軽ダメージアニメーションを再生
-                damageAnim = "LowHit";
+                _damageAnim = "LowHit";
             }
             // 中ダメージ
             else if (state._damageKind == DamageKind.Middle)
             {
-                damageTime = state._playerData.middleStanTime;
+                _stunDuration = state._playerData.middleStanTime;
+                _knockbackTime = state._playerData.middleKnockBackTime;
+                _knockBackScale = state._playerData.middleKnockBackScale;
 
                 // ダメージを前から受けたかどうかでアニメーションを変える
                 if (state._isFrontDamage)
                 {
-                    damageAnim = "FrontMiddleHit";
+                    _damageAnim = "FrontMiddleHit";
                 }
                 else
                 {
-                    damageAnim = "BackMiddleHit";
+                    _damageAnim = "BackMiddleHit";
                 }
             }
             // 大ダメージ
             else if (state._damageKind == DamageKind.HEAVY)
             {
-                damageTime = state._playerData.highStanTime;
+                _stunDuration = state._playerData.highStanTime;
+                _knockbackTime = state._playerData.highKnockBackTime;
+                _knockBackScale = state._playerData.highKnockBackScale;
 
                 // ダメージを前から受けたかどうかでアニメーションを変える
                 if (state._isFrontDamage)
                 {
-                    damageAnim = "FrontHeavyHit";
+                    _damageAnim = "FrontHeavyHit";
                 }
                 else
                 {
-                    damageAnim = "BackHeavyHit";
+                    _damageAnim = "BackHeavyHit";
                 }
             }
+            // 時間のカウントをリセット
+            _stateTime = 0;
 
-            state._animator.SetTrigger(damageAnim);
+            // ダメージアニメーションを再生
+            state._animator.SetTrigger(_damageAnim);
         }
         public override void OnUpdate()
         {
             // スタン時間をカウントダウン
-            damageTime--;
+            _stateTime++;
+
+            // ノックバック時間内ならノックバックさせる
+            if (_stateTime <= _knockbackTime)
+            {
+                // 前方向からの攻撃なら後ろにノックバック
+                if (state._isFrontDamage)
+                {
+                    Vector3 knockbackVelocity = -state.transform.forward * _knockBackScale;
+                    state._rigidbody.velocity = knockbackVelocity;
+                }
+                // 後ろからの攻撃なら前にノックバック
+                else
+                {
+                    Vector3 knockbackVelocity = state.transform.forward * state._playerData.highKnockBackScale;
+                    state._rigidbody.velocity = knockbackVelocity;
+                }
+            }
+            else
+            {
+                // ノックバック時間が終了したら移動ベクトルをリセット
+                state._rigidbody.velocity = Vector3.zero;
+            }
+
+
             // スタン時間が終了したら待機状態に遷移
-            if (damageTime <= 0)
+            if (_stateTime >= _stunDuration)
             {
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
                 float magnitude = state._moveInput.magnitude;
@@ -659,7 +695,7 @@ public class PlayerState : Player<PlayerState>
         public override void OnExitState()
         {
             // ダメージアニメーションを停止
-            state._animator.ResetTrigger(damageAnim);
+            state._animator.ResetTrigger(_damageAnim);
         }
     }
 
@@ -804,12 +840,7 @@ public class PlayerState : Player<PlayerState>
         // ずらす分を加算
         Vector3 shiftVec = transform.forward * data.shiftPosZ;
 
-        Debug.Log(transform.forward);
-        Debug.Log(shiftVec);
-
         attackObject.transform.position = position + shiftVec;
-
-        Debug.Log(position);
 
         // 攻撃の向きを設定
         attackObject.transform.forward = transform.forward;
@@ -853,10 +884,24 @@ public class PlayerState : Player<PlayerState>
             if (dot > 0)
             {
                 _isFrontDamage = true;
+
+                // もし攻撃がHeavyなら攻撃の方向を向く
+                if (_damageKind == DamageKind.HEAVY)
+                {
+                    transform.forward = toEnemy;
+                    _currentDirection = toEnemy;
+                }
             }
             else
             {
                 _isFrontDamage = false;
+
+                // もし攻撃がHeavyなら攻撃の方向と逆を向く
+                if (_damageKind == DamageKind.HEAVY)
+                {
+                    transform.forward = -toEnemy;
+                    _currentDirection = -toEnemy;
+                }
             }
 
             // ダメージ状態に遷移
