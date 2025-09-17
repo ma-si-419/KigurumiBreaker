@@ -7,6 +7,9 @@ public class ZangiAttack : MonoBehaviour
 
     private int damage = 10;
 
+    [Header("0~2")]
+    [SerializeField]private int damageKind = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +30,6 @@ public class ZangiAttack : MonoBehaviour
 
     public PlayerState.DamageKind GetDamageKind()
     {
-        int rand = Random.Range(0, 3);
-        return (PlayerState.DamageKind)rand;
+        return (PlayerState.DamageKind)damageKind;
     }
 }
