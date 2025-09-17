@@ -1,35 +1,109 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+//シーンの種類
+public enum SceneType
+{
+    //シーン名と合わせないとダメ
+    TitleScene,
+    GameScene,
+    ResultScene,
+    PauseScene,
+}
+
 public class BaseSceneController : MonoBehaviour
 {
-
-    protected enum SceneKinds
-    {
-        Title,
-        Game,
-        Win,
-        Lose,
-        MaxNum,
-    }
+    //シングルトン用の変数
+    public static BaseSceneController instance { get; private set; }
+    private bool _isPaused = false; //ポーズ中かどうか
+    private bool _isOption = false; //オプション中かどうか
 
     //フェード情報
+    [SerializeField] private CanvasGroup fadeCanvas;   //フェード用のUI
+    [SerializeField] private float _fadeSpeed = 0.5f;   //フェードの速度
 
-    //現在のシーンは何か
 
-
-    //最初に呼ばれる
-    protected virtual void Start()
+    //シーンの種類
+    private void Awake()
     {
-            
+        //すでにインスタンスが存在しているか確認する
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);    //重複している場合は破棄する
+            return;
+        }
+
+        //存在していなかったら登録する
+        instance = this;
+        //シーンを切り替えても破棄しない
+        DontDestroyOnLoad(gameObject);
+
+        //フェード用のCanvasが設定されていなかったら探す
+        if ( fadeCanvas != null)
+        {
+            DontDestroyOnLoad(fadeCanvas.gameObject);
+        }
     }
 
-    public void ChangeScene(string sceneName)
+    //フェードありでシーンを切り替える
+    public void ChangeScene(SceneType nextScene)
     {
-        SceneManager.LoadScene(sceneName);
+        //SceneManager.LoadScene(nextScene.ToString());
+        StartCoroutine(FadeSceneCoroutine(nextScene));
+    }
+
+    private IEnumerator FadeSceneCoroutine(SceneType nextScene)
+    {
+        //フェードアウト
+        yield return StartCoroutine(Fade(1f));
+
+        //シーン切り替え
+        SceneManager.LoadScene(nextScene.ToString());
+
+        //フェードイン
+        yield return null;
+    }
+
+    //フェード処理
+    private IEnumerator Fade(float targetAlpha)
+    {
+        //現在のアルファ値
+        float startAlpha = fadeCanvas.alpha;    //今のアルファ値を取得
+        float time = 0f;
+
+        while (time < _fadeSpeed)
+        {
+            time += Time.unscaledDeltaTime;     //ポーズ中でも進める
+            fadeCanvas.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / _fadeSpeed);
+            yield return null;
+        }
+
+        fadeCanvas.alpha = targetAlpha; //最後に目標のアルファ値にする
+    }
+
+    //ポーズのオンオフを切り替える
+    public void TogglePause()
+    {
+        if (_isPaused)
+        {
+            //ポーズ解除
+            SceneManager.UnloadSceneAsync(SceneType.PauseScene.ToString());
+            Time.timeScale = 1f; //時間を戻す
+            _isPaused = false;
+
+            Debug.Log("ポーズ終了");
+        }
+        else
+        {
+            //ポーズ開始
+            SceneManager.LoadScene(SceneType.PauseScene.ToString(), LoadSceneMode.Additive);
+            Time.timeScale = 0f; //時間を止める
+            _isPaused = true;
+
+            Debug.Log("ポーズ開始");
+        }
     }
 
 }
