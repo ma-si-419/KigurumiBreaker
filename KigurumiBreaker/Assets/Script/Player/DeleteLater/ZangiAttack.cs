@@ -20,7 +20,7 @@ public class ZangiAttack : MonoBehaviour
     void FixedUpdate()
     {
         // ‘OŒã‚ÉˆÚ“®(sin)
-        transform.position += new Vector3(Mathf.Sin(Time.time * 5) * 0.3f, 0, 0);
+        transform.position += new Vector3(Mathf.Sin(Time.time * 5) * 0.1f, 0, 0);
     }
 
     public int GetDamage()
