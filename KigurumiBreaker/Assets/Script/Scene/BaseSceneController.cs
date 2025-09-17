@@ -47,13 +47,13 @@ public class BaseSceneController : MonoBehaviour
         }
     }
 
-    //フェードありでシーンを切り替える
-    public void ChangeScene(SceneType nextScene)
+    //ロードなしのフェード高速切り替え
+    public void ChangeSceneWithFade(SceneType nextScene)
     {
-        //SceneManager.LoadScene(nextScene.ToString());
         StartCoroutine(FadeSceneCoroutine(nextScene));
     }
 
+    //シーン切り替えのコルーチン
     private IEnumerator FadeSceneCoroutine(SceneType nextScene)
     {
         //フェードアウト
@@ -62,11 +62,37 @@ public class BaseSceneController : MonoBehaviour
         //シーン切り替え
         SceneManager.LoadScene(nextScene.ToString());
 
-        //フェードイン
+        //シーン切り替え後1フレーム待つ
         yield return null;
+
+        //fadeCanvasを再取得
+        if(fadeCanvas == null)
+        {
+            fadeCanvas = FindObjectOfType<CanvasGroup>();
+        }
+
+        //フェードイン
+        if(fadeCanvas != null)
+        {
+            yield return StartCoroutine(Fade(0f));
+        }
     }
 
-    //フェード処理
+    //ロード画面付きの切り替え
+    //public void ChangeSceneWithLoading(SceneType nextScene)
+    //{
+    //    //StartCoroutine();
+    //}
+
+    //private IEnumerator LoadSceneCoroutine(SceneType nextType)
+    //{
+
+
+
+    //}
+
+
+    //共通フェード処理
     private IEnumerator Fade(float targetAlpha)
     {
         //現在のアルファ値

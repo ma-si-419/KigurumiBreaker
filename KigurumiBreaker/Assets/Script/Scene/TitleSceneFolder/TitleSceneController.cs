@@ -22,7 +22,7 @@ public class TitleSceneController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //ゲームシーンへ
-            BaseSceneController.instance.ChangeScene(SceneType.GameScene);
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
         }
         //右クリック
         if (Input.GetMouseButtonDown(1))
