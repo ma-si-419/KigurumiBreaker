@@ -26,9 +26,9 @@ public class PlayerState : Player<PlayerState>
 
     public enum DamageKind
     {
-        LIGHT,
+        LOW,
         Middle,
-        High
+        HEAVY
     }
 
     // 攻撃データ
@@ -578,56 +578,62 @@ public class PlayerState : Player<PlayerState>
     public class DamageState : StateBase<PlayerState>
     {
         int damageTime;
+        string damageAnim;
 
         public DamageState(PlayerState next) : base(next)
         {
         }
         public override void OnEnterState()
         {
-            // ダメージの種類に応じて回避の先行入力を受け付ける
-            if (state._damageKind == DamageKind.LIGHT)
-            {
-                state._isAbleToDodge = true;
-            }
-            else
-            {
-                state._isAbleToDodge = false;
-            }
-
+            // ダメージ中は回避不可
+            state._isAbleToDodge = false;
             // ダメージ中は攻撃不可
             state._isAbleToAttack = false;
             // 状態をダメージに設定
             state._stateKind = StateKind.DAMAGE;
 
-            // 前後ろでアニメーションを変更
-            if (state._isFrontDamage)
-            {
-                // 前から
-            }
-            else
-            {
-                // 後ろから
-            }
+            // ダメージの種類でスタン時間とアニメーションを変更
 
-            // ダメージの種類でスタン時間を変更
-            if (state._damageKind == DamageKind.LIGHT)
+            // 小ダメージ
+            if (state._damageKind == DamageKind.LOW)
             {
                 damageTime = state._playerData.lowStanTime;
-                Debug.Log("Light");
+
+                // 軽ダメージアニメーションを再生
+                damageAnim = "LowHit";
             }
+            // 中ダメージ
             else if (state._damageKind == DamageKind.Middle)
             {
                 damageTime = state._playerData.middleStanTime;
-                Debug.Log("Middle");
+
+                // ダメージを前から受けたかどうかでアニメーションを変える
+                if (state._isFrontDamage)
+                {
+                    damageAnim = "FrontMiddleHit";
+                }
+                else
+                {
+                    damageAnim = "BackMiddleHit";
+                }
             }
-            else if (state._damageKind == DamageKind.High)
+            // 大ダメージ
+            else if (state._damageKind == DamageKind.HEAVY)
             {
                 damageTime = state._playerData.highStanTime;
-                Debug.Log("High");
+
+                // ダメージを前から受けたかどうかでアニメーションを変える
+                if (state._isFrontDamage)
+                {
+                    damageAnim = "FrontHeavyHit";
+                }
+                else
+                {
+                    damageAnim = "BackHeavyHit";
+                }
             }
 
-            // ダメージの種類によってアニメーションを変える
-
+            state._animator.SetTrigger(damageAnim);
         }
         public override void OnUpdate()
         {
@@ -652,7 +658,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnExitState()
         {
-
+            // ダメージアニメーションを停止
+            state._animator.ResetTrigger(damageAnim);
         }
     }
 
