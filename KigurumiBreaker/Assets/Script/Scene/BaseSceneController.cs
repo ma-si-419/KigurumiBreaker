@@ -7,10 +7,12 @@ using UnityEngine.UI;
 public enum SceneType
 {
     //シーン名と合わせないとダメ
-    TitleScene,
-    GameScene,
-    ResultScene,
-    PauseScene,
+    TitleScene,     //タイトル
+    GameScene,      //ゲーム画面
+    ResultScene,    //リザルト
+    PauseScene,     //ポーズ
+    OptionScene,    //オプション
+    LoadingScene,   //非同期ロードシーン
 }
 
 public class BaseSceneController : MonoBehaviour
@@ -18,12 +20,11 @@ public class BaseSceneController : MonoBehaviour
     //シングルトン用の変数
     public static BaseSceneController instance { get; private set; }
     private bool _isPaused = false; //ポーズ中かどうか
-    private bool _isOption = false; //オプション中かどうか
+    //private bool _isOption = false; //オプション中かどうか
 
     //フェード情報
     [SerializeField] private CanvasGroup fadeCanvas;   //フェード用のUI
     [SerializeField] private float _fadeSpeed = 0.5f;   //フェードの速度
-
 
     //シーンの種類
     private void Awake()
@@ -50,7 +51,7 @@ public class BaseSceneController : MonoBehaviour
     //ロードなしのフェード高速切り替え
     public void ChangeSceneWithFade(SceneType nextScene)
     {
-        StartCoroutine(FadeSceneCoroutine(nextScene));
+        //StartCoroutine(FadeSceneCoroutine(nextScene));
     }
 
     //シーン切り替えのコルーチン
