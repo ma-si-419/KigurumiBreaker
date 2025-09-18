@@ -19,6 +19,7 @@ public class PlayerState : Player<PlayerState>
         RANGEDATTACK,   // 遠距離攻撃
         CHARGE,         // チャージ
         CHARGEATTACK,   // チャージ攻撃
+        SPECIALATTACK,  // 特殊攻撃
         DAMAGE,         // ダメージ
         DEATH,          // 死亡
         CINEMATIC,      // 演出中
@@ -27,7 +28,7 @@ public class PlayerState : Player<PlayerState>
     public enum DamageKind
     {
         LOW,
-        Middle,
+        MIDDLE,
         HEAVY
     }
 
@@ -69,6 +70,9 @@ public class PlayerState : Player<PlayerState>
 
     // 現在攻撃できるかどうか
     private bool _isAbleToAttack;
+
+    // 現在特殊攻撃ができるかどうか
+    private bool isAbleToSpecialAttack;
 
     // 攻撃入力がされたかどうか
     private bool _isAttackInput;
@@ -467,6 +471,7 @@ public class PlayerState : Player<PlayerState>
     // チャージ状態
     public class ChargeState : StateBase<PlayerState>
     {
+
         public ChargeState(PlayerState next) : base(next)
         {
         }
@@ -500,10 +505,9 @@ public class PlayerState : Player<PlayerState>
                 // 最大チャージ時間を超えたらアイドルに遷移
                 if (state._specialChargeTime >= state._playerData.maxSpecialChargeTime)
                 {
-                    state.ChangeState(new ChargeAttackState(state));
+                    state.ChangeState(new IdleState(state));
                     return;
                 }
-
             }
             // 通常チャージの場合
             else
@@ -513,7 +517,15 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnExitState()
         {
-            state._animator.ResetTrigger("NormalCharge");
+            if (state._isSpecialCharge)
+            {
+                state._animator.ResetTrigger("SpecialCharge");
+                state._isSpecialCharge = false;
+            }
+            else
+            {
+                state._animator.ResetTrigger("NormalCharge");
+            }
         }
     }
 
@@ -535,20 +547,13 @@ public class PlayerState : Player<PlayerState>
             // 現在のStateKindを近接攻撃に設定
             state._stateKind = StateKind.CHARGEATTACK;
 
-            // 通常チャージ攻撃と特殊チャージ攻撃をここで分ける
-            if (state._isSpecialCharge)
-            {
+            // 最初の攻撃はChargeAttackに設定
+            _currentAttackName = "ChargeAttack";
+            // アニメーションを再生
+            state._animator.SetTrigger(_currentAttackName);
+            // 攻撃の情報を設定
+            _currentAttackData = state.SearchAttackData(_currentAttackName);
 
-            }
-            else
-            {
-                // 最初の攻撃はChargeAttackに設定
-                _currentAttackName = "ChargeAttack";
-                // アニメーションを再生
-                state._animator.SetTrigger(_currentAttackName);
-                // 攻撃の情報を設定
-                _currentAttackData = state.SearchAttackData(_currentAttackName);
-            }
             _currentFrame = 0;
         }
         public override void OnUpdate()
@@ -588,6 +593,35 @@ public class PlayerState : Player<PlayerState>
         }
     }
 
+    // 特殊攻撃状態
+    public class SpecialAttackState : StateBase<PlayerState>
+    {
+        public SpecialAttackState(PlayerState next) : base(next)
+        {
+        }
+        public override void OnEnterState()
+        {
+            // 回避不可能にする
+            state._isAbleToDodge = false;
+            // 攻撃の入力を無効化
+            state._isAbleToAttack = false;
+            // 現在のStateKindを近接攻撃に設定
+            state._stateKind = StateKind.CHARGEATTACK;
+            // 特殊攻撃アニメーションを再生
+            state._animator.SetTrigger("SpecialAttack");
+        }
+        public override void OnUpdate()
+        {
+        }
+        public override void OnExitState()
+        {
+            // 攻撃アニメーションを停止
+            state._animator.ResetTrigger("SpecialAttack");
+            // チャージ時間をリセット
+            state._specialChargeTime = 0;
+        }
+    }
+
     // ダメージ状態
     public class DamageState : StateBase<PlayerState>
     {
@@ -622,7 +656,7 @@ public class PlayerState : Player<PlayerState>
                 _damageAnim = "LowHit";
             }
             // 中ダメージ
-            else if (state._damageKind == DamageKind.Middle)
+            else if (state._damageKind == DamageKind.MIDDLE)
             {
                 _stunDuration = state._damageData.middleStanTime;
                 _knockbackTime = state._damageData.middleKnockBackTime;
@@ -740,7 +774,7 @@ public class PlayerState : Player<PlayerState>
 
     private void NormalCharge(InputAction.CallbackContext context)
     {
-        if (_isAbleToAttack)
+        if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
         {
             _isSpecialCharge = false;
             ChangeState(new ChargeState(this));
@@ -778,6 +812,28 @@ public class PlayerState : Player<PlayerState>
             {
                 ChangeState(new IdleState(this));
                 return;
+            }
+        }
+    }
+
+    private void SpecialCharge(InputAction.CallbackContext context)
+    {
+        if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
+        {
+            _isSpecialCharge = true;
+            ChangeState(new ChargeState(this));
+        }
+    }
+
+    private void SpecialAttack(InputAction.CallbackContext context)
+    {
+        // 攻撃可能なら特殊攻撃に移行
+        if (_isAbleToAttack)
+        {
+            // 特殊チャージ中であるかゲージが最大まで溜まっているなら特殊攻撃に移行
+            if (_isSpecialCharge || _specialChargeTime == _playerData.maxSpecialChargeTime)
+            {
+                ChangeState(new ChargeAttackState(this));
             }
         }
     }
