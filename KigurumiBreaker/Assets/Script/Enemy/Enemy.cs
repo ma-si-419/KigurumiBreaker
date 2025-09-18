@@ -5,15 +5,17 @@ public class Enemy : MonoBehaviour
 {
     
     /* 変数 */
-    private IState _currentState;       // 現在のステート
-    [SerializeField] public NavMeshAgent agent; //NavMeshAgentの参照
-    [SerializeField] public GameObject player;  //プレイヤーの参照
-    public string targetTag = "Player"; // プレイヤーのタグ
-    
+    private IState _currentState;               // 現在のステート
+    [SerializeField] public NavMeshAgent agent; // NavMeshAgentの参照
+    [SerializeField] public GameObject player;  // プレイヤーの参照
+    public string targetTag = "Player";         // プレイヤーのタグ
+    public Transform target;         // プレイヤーのTransform
+
 
     private void Start()
     {
         ChangeState(new IdleState(this));
+        target = GameObject.FindGameObjectWithTag(targetTag).transform;
     }
 
     private void Update()
@@ -28,6 +30,7 @@ public class Enemy : MonoBehaviour
         _currentState = newState;
         _currentState.Init();   // 新しいステートに入る
     }
-}
 
+
+}
 

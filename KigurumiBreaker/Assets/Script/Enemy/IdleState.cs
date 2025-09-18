@@ -26,7 +26,7 @@ public class IdleState : IState
         Debug.Log("IdleState: Update");
 
         //プレイヤーを発見したら追跡状態へ
-        if(_timer > 5.0f)
+        if (_timer > 5.0f)
         {
             //状態を変更する
             Debug.Log("IdleState: Change to ChaseState");
