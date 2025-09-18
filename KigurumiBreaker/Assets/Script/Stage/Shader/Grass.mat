@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Grass
+  m_Shader: {fileID: 4800000, guid: 25a5b19a225fca04780f5a065212efe1, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _HeightMap:
+        m_Texture: {fileID: 2800000, guid: 446f8817e677c5d4aaed8542b98fdcc2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WidthMap:
+        m_Texture: {fileID: 2800000, guid: 3480bcaf1e9c0df4caf31e2ab712b556, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WindDistortionMap:
+        m_Texture: {fileID: 2800000, guid: 3480bcaf1e9c0df4caf31e2ab712b556, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Height: 10
+    - _Width: 1
+    - _WindFrequency: 0.05
+    - _WindPower: 2
+    m_Colors:
+    - _BottomColor: {r: 0, g: 1, b: 0.08776307, a: 1}
+    - _HeightRate: {r: 0.3, g: 0.4, b: 0.5, a: 0}
+    - _TopColor: {r: 0.09211465, g: 0.4339623, b: 0.23283434, a: 1}
+    - _WidthRate: {r: 0.5, g: 0.4, b: 0.25, a: 0}
+    - _WindPowerRate: {r: 0.3, g: 1, b: 2, a: 0}
+  m_BuildTextureStacks: []
