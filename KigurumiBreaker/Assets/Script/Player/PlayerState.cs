@@ -21,7 +21,7 @@ public class PlayerState : Player<PlayerState>
         CHARGEATTACK,   // チャージ攻撃
         SPECIALATTACK,  // 特殊攻撃
         DAMAGE,         // ダメージ
-        DEATH,          // 死亡
+        DEAD,           // 死亡
         CINEMATIC,      // 演出中
     }
 
@@ -119,6 +119,8 @@ public class PlayerState : Player<PlayerState>
         _input.Player.MeleeAttack.started += LowAttack;
         _input.Player.ChargeAttack.started += NormalCharge;
         _input.Player.ChargeAttack.canceled += ChargeAttack;
+        _input.Player.SpecialAttack.started += SpecialCharge;
+        _input.Player.SpecialAttack.started += SpecialAttack;
 
         // InputActionを有効化
         _input.Enable();
@@ -144,6 +146,8 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToDodge = true;
             // 待機状態では攻撃可能
             state._isAbleToAttack = true;
+            // 待機状態では特殊攻撃可能
+            state.isAbleToSpecialAttack = true;
 
             // 状態を待機に設定
             state._stateKind = StateKind.IDLE;
@@ -196,6 +200,8 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToDodge = true;
             // 移動状態では攻撃可能
             state._isAbleToAttack = true;
+            // 移動状態では特殊攻撃可能
+            state.isAbleToSpecialAttack = true;
             // 状態を移動に設定
             state._stateKind = StateKind.MOVE;
             // 移動アニメーションを再生
@@ -262,6 +268,8 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToDodge = false;
             // 回避中は攻撃不可
             state._isAbleToAttack = false;
+            // 回避中は特殊攻撃不可
+            state.isAbleToSpecialAttack = false;
             // 状態を回避に設定
             state._stateKind = StateKind.DODGE;
             // 回避アニメーションを再生
@@ -349,6 +357,8 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToDodge = true;
             // 攻撃の入力を一時的に無効化
             state._isAbleToAttack = false;
+            // 特殊攻撃を不可にする
+            state.isAbleToSpecialAttack = false;
             // 現在のStateKindを近接攻撃に設定
             state._stateKind = StateKind.MELEEATTACK;
 
@@ -481,6 +491,8 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToDodge = true;
             // チャージ中は攻撃不可
             state._isAbleToAttack = false;
+            // チャージ中は特殊攻撃不可
+            state.isAbleToSpecialAttack = false;
             // 状態をチャージに設定
             state._stateKind = StateKind.CHARGE;
             // 通常チャージと特殊チャージをここで分ける
@@ -500,11 +512,16 @@ public class PlayerState : Player<PlayerState>
             //特殊チャージの場合
             if (state._isSpecialCharge)
             {
+                // 特殊攻撃可能
+                state.isAbleToSpecialAttack = true;
+
                 state._specialChargeTime++;
 
                 // 最大チャージ時間を超えたらアイドルに遷移
                 if (state._specialChargeTime >= state._playerData.maxSpecialChargeTime)
                 {
+                    state._specialChargeTime = state._playerData.maxSpecialChargeTime;
+
                     state.ChangeState(new IdleState(state));
                     return;
                 }
@@ -544,6 +561,8 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToDodge = false;
             // 攻撃の入力を無効化
             state._isAbleToAttack = false;
+            // 特殊攻撃を不可にする
+            state.isAbleToSpecialAttack = false;
             // 現在のStateKindを近接攻撃に設定
             state._stateKind = StateKind.CHARGEATTACK;
 
@@ -596,6 +615,12 @@ public class PlayerState : Player<PlayerState>
     // 特殊攻撃状態
     public class SpecialAttackState : StateBase<PlayerState>
     {
+        private int _stateTime;
+
+        private string _currentAttackName;
+
+        private AttackData _currentAttackData;
+
         public SpecialAttackState(PlayerState next) : base(next)
         {
         }
@@ -605,18 +630,66 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToDodge = false;
             // 攻撃の入力を無効化
             state._isAbleToAttack = false;
+            // 特殊攻撃を不可にする
+            state.isAbleToSpecialAttack = false;
             // 現在のStateKindを近接攻撃に設定
-            state._stateKind = StateKind.CHARGEATTACK;
+            state._stateKind = StateKind.SPECIALATTACK;
+
+            _stateTime = 0;
+
+            // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
+            if (state._specialChargeTime == state._playerData.maxSpecialChargeTime)
+            {
+                _currentAttackName = "SpecialAttack";
+            }
+            else
+            {
+                _currentAttackName = "LowSpecialAttack";
+            }
+
+            Debug.Log(_currentAttackName);
+
             // 特殊攻撃アニメーションを再生
-            state._animator.SetTrigger("SpecialAttack");
+            state._animator.SetTrigger(_currentAttackName);
+            // 攻撃の情報を設定
+            _currentAttackData = state.SearchAttackData(_currentAttackName);
         }
         public override void OnUpdate()
         {
+            _stateTime++;
+
+            // 攻撃オブジェクトを生成するフレームに達したら攻撃オブジェクトを生成
+            if (_stateTime == _currentAttackData.startFrame)
+            {
+                state.CreateAttack(_currentAttackData);
+
+                // TODO : 弾を生成する
+
+                // チャージ時間をリセット
+                state._specialChargeTime = 0;
+
+            }
+            // 攻撃のトータルフレームに達した時
+            if (_stateTime >= _currentAttackData.totalFrame)
+            {
+                // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
+                float magnitude = state._moveInput.magnitude;
+                if (magnitude > state._playerData.moveInputLength)
+                {
+                    state.ChangeState(new MoveState(state));
+                    return;
+                }
+                else
+                {
+                    state.ChangeState(new IdleState(state));
+                    return;
+                }
+            }
         }
         public override void OnExitState()
         {
             // 攻撃アニメーションを停止
-            state._animator.ResetTrigger("SpecialAttack");
+            state._animator.ResetTrigger(_currentAttackName);
             // チャージ時間をリセット
             state._specialChargeTime = 0;
         }
@@ -747,6 +820,36 @@ public class PlayerState : Player<PlayerState>
         }
     }
 
+    // 死亡状態
+    public class DeadState : StateBase<PlayerState>
+    {
+        public DeadState(PlayerState next) : base(next)
+        {
+        }
+        public override void OnEnterState()
+        {
+            // 状態を死亡に設定
+            state._stateKind = StateKind.DEAD;
+            // 死亡アニメーションを再生
+            state._animator.SetTrigger("Dead");
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
+            // 回避不可にする
+            state._isAbleToDodge = false;
+            // 攻撃不可にする
+            state._isAbleToAttack = false;
+            // 特殊攻撃不可にする
+            state.isAbleToSpecialAttack = false;
+        }
+        public override void OnUpdate()
+        {
+        }
+        public override void OnExitState()
+        {
+        }
+    }
+
+
     private void Move(InputAction.CallbackContext constext)
     {
         _moveInput = constext.ReadValue<Vector2>();
@@ -827,14 +930,22 @@ public class PlayerState : Player<PlayerState>
 
     private void SpecialAttack(InputAction.CallbackContext context)
     {
-        // 攻撃可能なら特殊攻撃に移行
-        if (_isAbleToAttack)
+        // 特殊攻撃チャージ中なら特殊攻撃状態に遷移
+        if (_stateKind == StateKind.CHARGE && _isSpecialCharge)
         {
-            // 特殊チャージ中であるかゲージが最大まで溜まっているなら特殊攻撃に移行
-            if (_isSpecialCharge || _specialChargeTime == _playerData.maxSpecialChargeTime)
+            // アニメーションが特殊攻撃開始アニメであれば
+            if(_animator.GetCurrentAnimatorStateInfo(0).IsName("SpecialChargeStart"))
             {
-                ChangeState(new ChargeAttackState(this));
+                // 何もしない
+                return;
             }
+
+            ChangeState(new SpecialAttackState(this));
+        }
+        // 特殊ゲージが最大なら特殊攻撃状態に遷移
+        else if (isAbleToSpecialAttack && _specialChargeTime == _playerData.maxSpecialChargeTime)
+        {
+            ChangeState(new SpecialAttackState(this));
         }
     }
 
@@ -928,23 +1039,33 @@ public class PlayerState : Player<PlayerState>
 
         return moveDirection;
     }
-
-
+    public int GetMaxHp()
+    {
+        return _playerData.maxHp;
+    }
+    public  int GetNowHp()
+    {
+        return _nowHp;
+    }
+    public int GetMaxSpecialChargeTime()
+    {
+        return _playerData.maxSpecialChargeTime;
+    }
+    public int GetNowSpecialChargeTime()
+    {
+        return _specialChargeTime;
+    }
     void OnTriggerEnter(Collider other)
     {
         // 敵の攻撃に当たったらダメージ状態に遷移
         if (other.gameObject.CompareTag("EnemyAttack"))
         {
-            // 回避中と被弾中はダメージを受けない
-            if (_stateKind == StateKind.DODGE ||
-                _stateKind == StateKind.DAMAGE)
-            {
-                return;
-            }
-
-            _nowHp -= other.gameObject.GetComponent<ZangiAttack>().GetDamage();
-
-            _damageKind = other.gameObject.GetComponent<ZangiAttack>().GetDamageKind();
+            // 死亡時はダメージを受けない
+            if (_stateKind == StateKind.DEAD) return;
+            // 回避中はダメージを受けない
+            if (_stateKind == StateKind.DODGE) return;
+            // 被弾中はダメージを受けない
+            if (_stateKind == StateKind.DAMAGE) return;
 
             // 攻撃を前から受けたかどうか
             Vector3 toEnemy = other.transform.position - transform.position;
@@ -974,8 +1095,41 @@ public class PlayerState : Player<PlayerState>
                 }
             }
 
-            // ダメージ状態に遷移
-            ChangeState(new DamageState(this));
+            // 最大溜めの特殊攻撃を行っているときはダメージ状態に遷移しない
+            if (_stateKind == StateKind.SPECIALATTACK && _specialChargeTime == _playerData.maxSpecialChargeTime)
+            {
+                // ダメージをカットする
+                int damage = (int)((float)other.gameObject.GetComponent<ZangiAttack>().GetDamage() * _playerData.maxSpecialAttackDamegeCutRate);
+            
+                _nowHp -= damage;
+
+                // HPを1以下にしない
+                if (_nowHp <= 0)
+                {
+                    _nowHp = 1;
+                }
+
+            }
+            else
+            {
+                // HPを減らす
+                _nowHp -= other.gameObject.GetComponent<ZangiAttack>().GetDamage();
+
+                // ダメージの種類を取得
+                _damageKind = other.gameObject.GetComponent<ZangiAttack>().GetDamageKind();
+                // HPが0以下なら死亡状態に遷移
+                if (_nowHp <= 0)
+                {
+                    _nowHp = 0;
+                    ChangeState(new DeadState(this));
+                    return;
+                }
+                else
+                {
+                    // ダメージ状態に遷移
+                    ChangeState(new DamageState(this));
+                }
+            }
         }
     }
 }

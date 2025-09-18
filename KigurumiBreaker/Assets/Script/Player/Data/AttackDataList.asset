@@ -61,3 +61,27 @@ MonoBehaviour:
     AttackLifeTime: 8
     NextAttackName: None
     AttackPart: "\u982D"
+  - AttackName: LowSpecialAttack
+    Damage: 30
+    StartFrame: 38
+    StunFrame: 12
+    CancelFrame: 50
+    TotalFrame: 60
+    MoveSpeed: 0
+    Scale: 3
+    ShiftPosZ: 2
+    AttackLifeTime: 8
+    NextAttackName: None
+    AttackPart: "\u53F3\u8155"
+  - AttackName: SpecialAttack
+    Damage: 150
+    StartFrame: 85
+    StunFrame: 35
+    CancelFrame: 120
+    TotalFrame: 120
+    MoveSpeed: 0
+    Scale: 4
+    ShiftPosZ: 4
+    AttackLifeTime: 5
+    NextAttackName: None
+    AttackPart: "\u53F3\u8155"
