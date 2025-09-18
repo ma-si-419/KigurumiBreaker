@@ -23,20 +23,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int ChargeAttackTime;
     [Header("ˆÚ“®ƒxƒNƒgƒ‹‚Ì‰ñ“]“x")]
     [SerializeField] private float MoveDirAngle;
-    [Header("ŽãUŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
-    [SerializeField] private int LowStanTime;
-    [Header("’†UŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
-    [SerializeField] private int MiddleStanTime;
-    [Header("’†UŒ‚‚ðŽó‚¯‚½Žž‚ÌƒmƒbƒNƒoƒbƒN‚Ì‘å‚«‚³")]
-    [SerializeField] private int MiddleKnockBackScale;
-    [Header("’†UŒ‚‚ðŽó‚¯‚½‚ÉƒmƒbƒNƒoƒbƒN‚·‚éŽžŠÔ")]
-    [SerializeField] private int MiddleKnockBackTime;
-    [Header("‹­UŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
-    [SerializeField] private int HighStanTime;
-    [Header("‹­UŒ‚‚ðŽó‚¯‚½Žž‚ÌƒmƒbƒNƒoƒbƒN‚Ì‘å‚«‚³")]
-    [SerializeField] private int HighKnockBackScale;
-    [Header("‹­UŒ‚‚ðŽó‚¯‚½‚ÉƒmƒbƒNƒoƒbƒN‚·‚éŽžŠÔ")]
-    [SerializeField] private int HighKnockBackTime;
+    [Header("“ÁŽêUŒ‚‚ÌÅ‘å‚Ìƒ`ƒƒ[ƒWŽžŠÔ")]
+    [SerializeField] private int MaxSpecialChargeTime;
 
 
     // “Ç‚ÝŽæ‚èê—p
@@ -49,12 +37,6 @@ public class PlayerData : ScriptableObject
     public int maxHp => MaxHp;
     public int chargeAttackTime => ChargeAttackTime;
     public float moveDirAngle => MoveDirAngle;
-    public int lowStanTime => LowStanTime;
-    public int middleStanTime => MiddleStanTime;
-    public int middleKnockBackScale => MiddleKnockBackScale;
-    public int middleKnockBackTime => MiddleKnockBackTime;
-    public int highStanTime => HighStanTime;
-    public int highKnockBackScale => HighKnockBackScale;
-    public int highKnockBackTime => HighKnockBackTime;
+    public int maxSpecialChargeTime => MaxSpecialChargeTime;
 
 }

@@ -43,6 +43,9 @@ public class PlayerState : Player<PlayerState>
     // プレイヤーの攻撃部位
     [SerializeField] private AttackPartList _attackPartData;
 
+    // プレイヤーの被弾時のデータ
+    [SerializeField] private DamageData _damageData;
+
     // 入力情報
     private GameInputs _input;
 
@@ -75,6 +78,9 @@ public class PlayerState : Player<PlayerState>
 
     // 特殊攻撃のチャージをしている場合trueにする
     bool _isSpecialCharge;
+
+    // 特殊攻撃のチャージ時間
+    private int _specialChargeTime;
 
     // アニメーター
     private Animator _animator;
@@ -489,6 +495,14 @@ public class PlayerState : Player<PlayerState>
             //特殊チャージの場合
             if (state._isSpecialCharge)
             {
+                state._specialChargeTime++;
+
+                // 最大チャージ時間を超えたらアイドルに遷移
+                if (state._specialChargeTime >= state._playerData.maxSpecialChargeTime)
+                {
+                    state.ChangeState(new ChargeAttackState(state));
+                    return;
+                }
 
             }
             // 通常チャージの場合
@@ -600,7 +614,7 @@ public class PlayerState : Player<PlayerState>
             // 小ダメージ
             if (state._damageKind == DamageKind.LOW)
             {
-                _stunDuration = state._playerData.lowStanTime;
+                _stunDuration = state._damageData.lowStanTime;
                 _knockbackTime = 0;
                 _knockBackScale = 0;
 
@@ -610,9 +624,9 @@ public class PlayerState : Player<PlayerState>
             // 中ダメージ
             else if (state._damageKind == DamageKind.Middle)
             {
-                _stunDuration = state._playerData.middleStanTime;
-                _knockbackTime = state._playerData.middleKnockBackTime;
-                _knockBackScale = state._playerData.middleKnockBackScale;
+                _stunDuration = state._damageData.middleStanTime;
+                _knockbackTime = state._damageData.middleKnockBackTime;
+                _knockBackScale = state._damageData.middleKnockBackScale;
 
                 // ダメージを前から受けたかどうかでアニメーションを変える
                 if (state._isFrontDamage)
@@ -627,9 +641,9 @@ public class PlayerState : Player<PlayerState>
             // 大ダメージ
             else if (state._damageKind == DamageKind.HEAVY)
             {
-                _stunDuration = state._playerData.highStanTime;
-                _knockbackTime = state._playerData.highKnockBackTime;
-                _knockBackScale = state._playerData.highKnockBackScale;
+                _stunDuration = state._damageData.highStanTime;
+                _knockbackTime = state._damageData.highKnockBackTime;
+                _knockBackScale = state._damageData.highKnockBackScale;
 
                 // ダメージを前から受けたかどうかでアニメーションを変える
                 if (state._isFrontDamage)
@@ -664,7 +678,7 @@ public class PlayerState : Player<PlayerState>
                 // 後ろからの攻撃なら前にノックバック
                 else
                 {
-                    Vector3 knockbackVelocity = state.transform.forward * state._playerData.highKnockBackScale;
+                    Vector3 knockbackVelocity = state.transform.forward * _knockBackScale;
                     state._rigidbody.velocity = knockbackVelocity;
                 }
             }
