@@ -5,7 +5,7 @@ using UnityEngine;
 public class ZangiAttack : MonoBehaviour
 {
 
-    private int damage = 10;
+    public int damage = 10;
 
     [Header("0~2")]
     [SerializeField]private int damageKind = 0;

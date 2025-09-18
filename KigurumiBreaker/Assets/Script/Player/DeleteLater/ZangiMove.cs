@@ -5,11 +5,18 @@ using UnityEngine;
 public class ZangiMove : MonoBehaviour
 {
 
-    public int hp = 30;
+    public int maxHp = 30;
+    public int nowHp = 0;
 
     private bool isDamage = false;
 
     int time = 0;
+
+
+    void Start()
+    {
+        nowHp = maxHp;
+    }
 
     void FixedUpdate()
     {
@@ -36,7 +43,7 @@ public class ZangiMove : MonoBehaviour
         if (other.gameObject.tag == "PlayerAttack")
         {
 
-            hp -= other.gameObject.GetComponent<PlayerAttack>().GetDamage();
+            nowHp -= other.gameObject.GetComponent<PlayerAttack>().GetDamage();
 
             Debug.Log(other.gameObject.GetComponent<PlayerAttack>().GetDamage() + "ÇÃÉ_ÉÅÅ[ÉW");
 
@@ -46,7 +53,7 @@ public class ZangiMove : MonoBehaviour
 
             this.GetComponent<Renderer>().material.color = Color.red;
 
-            if (hp <= 0)
+            if (nowHp <= 0)
             {
                 Destroy(this.gameObject);
             }
