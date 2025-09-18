@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameSceneController : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        OnClick();
+    }
+
+    private void OnClick()
+    {
+        //左クリック
+        if (Input.GetMouseButtonDown(0))
+        {
+            //ゲームシーンへ
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
+        }
+        //右クリック
+        if (Input.GetMouseButtonDown(1))
+        {
+            BaseSceneController.instance.TogglePause();
+        }
+    }
+}

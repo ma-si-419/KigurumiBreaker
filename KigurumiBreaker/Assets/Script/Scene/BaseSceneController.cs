@@ -26,6 +26,8 @@ public class BaseSceneController : MonoBehaviour
     [SerializeField] private CanvasGroup fadeCanvas;   //フェード用のUI
     [SerializeField] private float _fadeSpeed = 0.5f;   //フェードの速度
 
+
+
     //シーンの種類
     private void Awake()
     {
@@ -42,16 +44,18 @@ public class BaseSceneController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         //フェード用のCanvasが設定されていなかったら探す
-        if ( fadeCanvas != null)
-        {
-            DontDestroyOnLoad(fadeCanvas.gameObject);
-        }
+        //子オブジェクトだったため要らないす
+        //if (fadeCanvas != null)
+        //{
+        //    DontDestroyOnLoad(fadeCanvas.gameObject);
+        //}
+
     }
 
     //ロードなしのフェード高速切り替え
     public void ChangeSceneWithFade(SceneType nextScene)
     {
-        //StartCoroutine(FadeSceneCoroutine(nextScene));
+        StartCoroutine(FadeSceneCoroutine(nextScene));
     }
 
     //シーン切り替えのコルーチン
