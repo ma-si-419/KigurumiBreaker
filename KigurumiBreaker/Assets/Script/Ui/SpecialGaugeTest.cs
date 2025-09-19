@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class SpecialGaugeTest : MonoBehaviour
 {
     [SerializeField] private Image _specialGaugeImage;           //ゲージ画像
-    //[SerializeField] private Image _auraImage;                   //オーラの画像
+    //[SerializeField] private Image _auraImage;                 //オーラの画像
     [SerializeField] private Color _normalColor = Color.yellow;  //通常時の色
     [SerializeField] private Color _maxColor = Color.red;        //マックス時の色
-    [SerializeField] private float _flashSpeed = 5f;             //点滅速度    
-    [SerializeField] private float _auraRotateSpeed = 50f;       //オーラの回転速度
+    [SerializeField] private float _flashSpeed;                  //点滅速度    
+    [SerializeField] private float _auraRotateSpeed;             //オーラの回転速度
 
 
     private float _current = 0f;    //現在のゲージ量
