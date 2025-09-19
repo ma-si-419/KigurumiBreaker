@@ -14,7 +14,9 @@ public class GameSceneController : MonoBehaviour
     void Update()
     {
         //ポーズ中は操作できないようにする
-        if (BaseSceneController.instance.isPaused) return;   
+        if (BaseSceneController.instance.isPaused) return;
+        //スキル選択中は操作できないようにする
+        if(BaseSceneController.instance.isSkillSelect) return;
 
         //決定(Aボタン)
         if (Input.GetButtonDown("Submit"))
