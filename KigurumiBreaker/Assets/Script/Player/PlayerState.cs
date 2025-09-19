@@ -378,7 +378,7 @@ public class PlayerState : Player<PlayerState>
             Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPart);
             // 座標を少しプレイヤーから離す
             Vector3 shiftVec = (effectPos - state.transform.position).normalized;
-            effectPos += shiftVec * _currentAttackData.shiftPosZ;
+            effectPos += shiftVec * 0.5f;
 
             _effectObject = Instantiate(_currentAttackData.attackEffect, effectPos, Quaternion.identity);
 
@@ -397,7 +397,7 @@ public class PlayerState : Player<PlayerState>
                 // Y座標を計算に入れない
                 shiftVec.y = 0;
 
-                effectPos += shiftVec * _currentAttackData.shiftPosZ;
+                effectPos += shiftVec * _currentAttackData.effectShiftScale;
                 _effectObject.transform.position = effectPos;
             }
 
@@ -417,7 +417,7 @@ public class PlayerState : Player<PlayerState>
                     Vector3 position = state.GetAttackPosition(_currentAttackData.attackPart);
 
                     // ずらす分を加算
-                    Vector3 shiftVec = state.transform.forward * _currentAttackData.shiftPosZ;
+                    Vector3 shiftVec = state.transform.forward * _currentAttackData.effectShiftScale;
                     // Y座標を計算に入れない
                     shiftVec.y = 0;
                     position += shiftVec;
@@ -581,6 +581,15 @@ public class PlayerState : Player<PlayerState>
             else
             {
                 state._normalChargeTime++;
+
+                // 最大チャージ時間を超えたらチャージ攻撃に遷移
+                if (state._normalChargeTime >= state._playerData.maxChargeAttackTime)
+                {
+                    state._normalChargeTime = state._playerData.maxChargeAttackTime;
+                    state.ChangeState(new ChargeAttackState(state));
+                    return;
+                }
+
             }
         }
         public override void OnExitState()
@@ -617,8 +626,16 @@ public class PlayerState : Player<PlayerState>
             // 現在のStateKindを近接攻撃に設定
             state._stateKind = StateKind.CHARGEATTACK;
 
-            // 最初の攻撃はChargeAttackに設定
-            _currentAttackName = "ChargeAttack";
+            // チャージ時間が50％以上なら強チャージ攻撃、そうでなければ弱チャージ攻撃に設定
+            if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
+            {
+                _currentAttackName = "ChargeAttack";
+            }
+            else
+            {
+                _currentAttackName = "LowChargeAttack";
+            }
+
             // アニメーションを再生
             state._animator.SetTrigger(_currentAttackName);
             // 攻撃の情報を設定
@@ -629,6 +646,14 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             _currentFrame++;
+
+            // 攻撃オブジェクトを生成するフレームに達したら攻撃オブジェクトを生成
+            if (_currentFrame == _currentAttackData.startFrame)
+            {
+                state.CreateAttack(_currentAttackData);
+                // チャージ時間をリセット
+                state._normalChargeTime = 0;
+            }
 
             // 攻撃のキャンセルフレームに達したときに回避でキャンセルできるようにする
             if (_currentFrame >= _currentAttackData.cancelFrame)
@@ -1171,6 +1196,13 @@ public class PlayerState : Player<PlayerState>
 
                 // ダメージの種類を取得
                 _damageKind = other.gameObject.GetComponent<ZangiAttack>().GetDamageKind();
+
+                // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
+                Vector3 hitPosition = other.ClosestPoint(transform.position);
+
+                // ダメージエフェクトを生成
+                Instantiate(other.gameObject.GetComponent<ZangiAttack>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
+
                 // HPが0以下なら死亡状態に遷移
                 if (_nowHp <= 0)
                 {

@@ -36,7 +36,9 @@ public class AttackData
     [Header("攻撃を出す部位")]
     [SerializeField] private string AttackPart;
     [Header("攻撃を出す部位に出すエフェクト")]
-    [SerializeField] private GameObject AttackEffect;    
+    [SerializeField] private GameObject AttackEffect;
+    [Header("エフェクトをプレイヤーから離す距離")]
+    [SerializeField] private float EffectShiftScale;
     [Header("攻撃があたった時に出すエフェクト")]
     [SerializeField] private GameObject HitEffect;
 
@@ -54,5 +56,6 @@ public class AttackData
     public string nextAttackName => NextAttackName;
     public string attackPart => AttackPart;
     public GameObject attackEffect => AttackEffect;
+    public float effectShiftScale => EffectShiftScale;
     public GameObject hitEffect => HitEffect;
 }

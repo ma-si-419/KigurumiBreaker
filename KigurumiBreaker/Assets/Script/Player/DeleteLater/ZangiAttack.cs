@@ -9,6 +9,7 @@ public class ZangiAttack : MonoBehaviour
 
     [Header("0~2")]
     [SerializeField]private int damageKind = 0;
+    [SerializeField]private GameObject hitEffectPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,10 @@ public class ZangiAttack : MonoBehaviour
     public int GetDamage()
     {
         return damage;
+    }
+    public GameObject GetHitEffectPrefab()
+    {
+        return hitEffectPrefab;
     }
 
     public PlayerState.DamageKind GetDamageKind()
