@@ -9,13 +9,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] public NavMeshAgent agent; // NavMeshAgentの参照
     [SerializeField] public GameObject player;  // プレイヤーの参照
     public string targetTag = "Player";         // プレイヤーのタグ
-    public Transform target;         // プレイヤーのTransform
+    public Transform playerTrans { get; private set; }                    // プレイヤーのTransform
 
 
     private void Start()
     {
+        playerTrans = GameObject.FindGameObjectWithTag(targetTag).transform;
         ChangeState(new IdleState(this));
-        target = GameObject.FindGameObjectWithTag(targetTag).transform;
     }
 
     private void Update()
@@ -31,6 +31,21 @@ public class Enemy : MonoBehaviour
         _currentState.Init();   // 新しいステートに入る
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            ChangeState(new ChaseState(this));
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            ChangeState(new IdleState(this));
+        }
+    }
 
 }
 
