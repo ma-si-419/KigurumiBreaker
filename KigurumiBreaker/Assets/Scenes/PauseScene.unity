@@ -457,7 +457,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 871802891}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2098016515}
+        m_TargetAssemblyTypeName: PauseSceneController, Assembly-CSharp
+        m_MethodName: OptionButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &871802891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,7 +590,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1421103285}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2098016515}
+        m_TargetAssemblyTypeName: PauseSceneController, Assembly-CSharp
+        m_MethodName: TitleButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1421103285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1271,7 +1295,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1979727691}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2098016515}
+        m_TargetAssemblyTypeName: PauseSceneController, Assembly-CSharp
+        m_MethodName: RestartButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1979727691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1310,6 +1346,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979727688}
   m_CullTransparentMesh: 1
+--- !u!1 &2098016514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2098016516}
+  - component: {fileID: 2098016515}
+  m_Layer: 0
+  m_Name: PauseSceneController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2098016515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098016514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c8feb9485561d84597b1261217ce657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button:
+  - {fileID: 1979727690}
+  - {fileID: 871802890}
+  - {fileID: 1421103284}
+--- !u!4 &2098016516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098016514}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.0183334, y: -15.429188, z: 26.777752}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1318,3 +1402,4 @@ SceneRoots:
   - {fileID: 682893095}
   - {fileID: 1559430334}
   - {fileID: 1888140070}
+  - {fileID: 2098016516}

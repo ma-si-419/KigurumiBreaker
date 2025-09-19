@@ -13,21 +13,20 @@ public class GameSceneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        OnClick();
-    }
+        //ポーズ中は操作できないようにする
+        if (BaseSceneController.instance.isPaused) return;   
 
-    private void OnClick()
-    {
-        //左クリック
-        if (Input.GetMouseButtonDown(0))
+        //決定(Aボタン)
+        if (Input.GetButtonDown("Submit"))
         {
-            //ゲームシーンへ
             BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
+            Debug.Log("Aボタンが押されました");
         }
-        //右クリック
-        if (Input.GetMouseButtonDown(1))
+
+        if(Input.GetButtonDown("Start"))
         {
             BaseSceneController.instance.TogglePause();
         }
     }
+
 }
