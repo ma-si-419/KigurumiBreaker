@@ -34,7 +34,11 @@ public class AttackData
     [Header("次に出てくる攻撃の名前(コンボ用)")]
     [SerializeField] private string NextAttackName;
     [Header("攻撃を出す部位")]
-    [SerializeField] private string AttackPart; 
+    [SerializeField] private string AttackPart;
+    [Header("攻撃を出す部位に出すエフェクト")]
+    [SerializeField] private GameObject AttackEffect;    
+    [Header("攻撃があたった時に出すエフェクト")]
+    [SerializeField] private GameObject HitEffect;
 
     // 読み取り専用プロパティ
     public string attackName => AttackName;
@@ -49,4 +53,6 @@ public class AttackData
     public int attackLifeTime => AttackLifeTime;
     public string nextAttackName => NextAttackName;
     public string attackPart => AttackPart;
+    public GameObject attackEffect => AttackEffect;
+    public GameObject hitEffect => HitEffect;
 }

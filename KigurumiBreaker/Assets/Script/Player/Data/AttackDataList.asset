@@ -25,6 +25,8 @@ MonoBehaviour:
     AttackLifeTime: 3
     NextAttackName: Low2
     AttackPart: "\u53F3\u8155"
+    AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
+    HitEffect: {fileID: 5195948674500491528, guid: 86f371e0510fda94091abf18bc30c420, type: 3}
   - AttackName: Low2
     Damage: 12
     StartFrame: 12
@@ -37,11 +39,13 @@ MonoBehaviour:
     AttackLifeTime: 3
     NextAttackName: Low3
     AttackPart: "\u5DE6\u8155"
+    AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
+    HitEffect: {fileID: 5195948674500491528, guid: 86f371e0510fda94091abf18bc30c420, type: 3}
   - AttackName: Low3
     Damage: 24
-    StartFrame: 10
-    StunFrame: 15
-    CancelFrame: 20
+    StartFrame: 15
+    StunFrame: 20
+    CancelFrame: 25
     TotalFrame: 32
     MoveSpeed: 2.3
     Scale: 2
@@ -49,6 +53,8 @@ MonoBehaviour:
     AttackLifeTime: 6
     NextAttackName: None
     AttackPart: "\u53F3\u8DB3"
+    AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
+    HitEffect: {fileID: 1368958316424924904, guid: c82c36512d3c35d4f84eb8d15687c655, type: 3}
   - AttackName: ChargeAttack
     Damage: 32
     StartFrame: 10
@@ -61,6 +67,8 @@ MonoBehaviour:
     AttackLifeTime: 8
     NextAttackName: None
     AttackPart: "\u982D"
+    AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
+    HitEffect: {fileID: 1368958316424924904, guid: c82c36512d3c35d4f84eb8d15687c655, type: 3}
   - AttackName: LowSpecialAttack
     Damage: 30
     StartFrame: 38
@@ -73,6 +81,8 @@ MonoBehaviour:
     AttackLifeTime: 8
     NextAttackName: None
     AttackPart: "\u53F3\u8155"
+    AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
+    HitEffect: {fileID: 1368958316424924904, guid: c82c36512d3c35d4f84eb8d15687c655, type: 3}
   - AttackName: SpecialAttack
     Damage: 150
     StartFrame: 85
@@ -85,3 +95,5 @@ MonoBehaviour:
     AttackLifeTime: 5
     NextAttackName: None
     AttackPart: "\u53F3\u8155"
+    AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
+    HitEffect: {fileID: 1368958316424924904, guid: c82c36512d3c35d4f84eb8d15687c655, type: 3}
