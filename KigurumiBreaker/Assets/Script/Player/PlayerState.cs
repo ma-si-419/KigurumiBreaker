@@ -345,6 +345,7 @@ public class PlayerState : Player<PlayerState>
         private string _currentAttackName;
         private AttackData _currentAttackData;
         private int _currentFrame;
+        private GameObject _effectObject;
         // 攻撃を出したかどうか
         bool _isAttack;
         public MeleeAttackState(PlayerState next) : base(next)
@@ -373,10 +374,32 @@ public class PlayerState : Player<PlayerState>
             // 攻撃の情報を設定
             _currentAttackData = state.SearchAttackData(_currentAttackName);
 
+            // 攻撃する部位にエフェクトを出す
+            Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPart);
+            // 座標を少しプレイヤーから離す
+            Vector3 shiftVec = (effectPos - state.transform.position).normalized;
+            effectPos += shiftVec * _currentAttackData.shiftPosZ;
+
+            _effectObject = Instantiate(_currentAttackData.attackEffect, effectPos, Quaternion.identity);
+
+            _currentFrame = 0;
         }
         public override void OnUpdate()
         {
             _currentFrame++;
+
+            // エフェクトの位置を更新
+            if (_effectObject)
+            {
+                Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPart);
+                // 座標を少しプレイヤーから離す
+                Vector3 shiftVec = (effectPos - state.transform.position).normalized;
+                // Y座標を計算に入れない
+                shiftVec.y = 0;
+
+                effectPos += shiftVec * _currentAttackData.shiftPosZ;
+                _effectObject.transform.position = effectPos;
+            }
 
             // 攻撃するフレームに達したら攻撃オブジェクトを生成
             if (_currentFrame >= _currentAttackData.startFrame && !_isAttack)
@@ -389,12 +412,14 @@ public class PlayerState : Player<PlayerState>
             if (_currentFrame > _currentAttackData.startFrame)
             {
                 // 攻撃オブジェクトが存在するなら攻撃オブジェクトの座標を更新
-                if (state._currentAttack != null)
+                if (state._currentAttack)
                 {
                     Vector3 position = state.GetAttackPosition(_currentAttackData.attackPart);
 
                     // ずらす分を加算
                     Vector3 shiftVec = state.transform.forward * _currentAttackData.shiftPosZ;
+                    // Y座標を計算に入れない
+                    shiftVec.y = 0;
                     position += shiftVec;
 
                     state._currentAttack.transform.position = position;
@@ -440,7 +465,7 @@ public class PlayerState : Player<PlayerState>
                     AttackData nextAttackData = state.SearchAttackData(nextAttackName);
 
                     // 現在の攻撃オブジェクトを削除
-                    if (state._currentAttack != null)
+                    if (state._currentAttack)
                     {
                         state._currentAttack = null;
                     }
@@ -451,6 +476,18 @@ public class PlayerState : Player<PlayerState>
                         _currentAttackName = nextAttackName;
                         _currentAttackData = nextAttackData;
                         _currentFrame = 0;
+
+                        // 既存のエフェクトを削除
+                        if (_effectObject)
+                        {
+                            Destroy(_effectObject);
+                            _effectObject = null;
+                        }
+
+                        // 攻撃する部位にエフェクトを出す
+                        Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPart);
+                        _effectObject = Instantiate(_currentAttackData.attackEffect, effectPos, Quaternion.identity);
+
                         // 次の攻撃アニメーションを再生
                         state._animator.SetTrigger(_currentAttackName);
 
@@ -465,6 +502,13 @@ public class PlayerState : Player<PlayerState>
             // 攻撃のトータルフレームに達したらアイドル状態に遷移
             if (_currentFrame >= _currentAttackData.totalFrame)
             {
+                // 既存のエフェクトを削除
+                if (_effectObject)
+                {
+                    Destroy(_effectObject);
+                    _effectObject = null;
+                }
+
                 state.ChangeState(new IdleState(state));
             }
         }
@@ -475,6 +519,13 @@ public class PlayerState : Player<PlayerState>
 
             // チャージ時間をリセット
             state._normalChargeTime = 0;
+
+            // 既存のエフェクトを削除
+            if (_effectObject)
+            {
+                Destroy(_effectObject);
+                _effectObject = null;
+            }
         }
     }
 
@@ -1017,6 +1068,9 @@ public class PlayerState : Player<PlayerState>
 
         // 攻撃の位置を設定
         Vector3 position = GetAttackPosition(data.attackPart);
+
+        // 攻撃の座標を設定
+        attackObject.GetComponent<PlayerAttack>().SetPlayerPos(position);
 
         // ずらす分を加算
         Vector3 shiftVec = transform.forward * data.shiftPosZ;
