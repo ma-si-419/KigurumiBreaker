@@ -7,20 +7,22 @@ using UnityEngine.UI;
 public enum SceneType
 {
     //シーン名と合わせないとダメ
-    TitleScene,     //タイトル
-    GameScene,      //ゲーム画面
-    ResultScene,    //リザルト
-    PauseScene,     //ポーズ
-    OptionScene,    //オプション
-    LoadingScene,   //非同期ロードシーン
+    TitleScene,         //タイトル
+    GameScene,          //ゲーム画面
+    SkillSelectScene,   //スキル選択
+    ResultScene,        //リザルト
+    PauseScene,         //ポーズ
+    OptionScene,        //オプション
+    LoadingScene,       //非同期ロードシーン
 }
 
 public class BaseSceneController : MonoBehaviour
 {
     //シングルトン用の変数
     public static BaseSceneController instance { get; private set; }
-    public bool isPaused = false; //ポーズ中かどうか
-    //private bool _isOption = false; //オプション中かどうか
+    public bool isPaused = false;       //ポーズ中かどうか
+    public bool isOption = false;       //オプション中かどうか
+    public bool isSkillSelect = false;  //スキル選択中かどうか
 
     //フェード情報
     [SerializeField] private CanvasGroup fadeCanvas;   //フェード用のUI
@@ -134,6 +136,49 @@ public class BaseSceneController : MonoBehaviour
             isPaused = true;
 
             Debug.Log("ポーズ開始");
+        }
+    }
+
+    //オプションのオンオフを切り替える
+    public void ToggleOption()
+    {
+        if (isOption)
+        {
+            //オプション解除
+            SceneManager.UnloadSceneAsync(SceneType.OptionScene.ToString());
+            isOption = false;
+
+            Debug.Log("オプション終了");
+        }
+        else
+        {
+            //オプション開始
+            SceneManager.LoadScene(SceneType.OptionScene.ToString(), LoadSceneMode.Additive);
+            isOption = true;
+
+            Debug.Log("オプション開始");
+        }
+
+    }
+
+    //スキル選択画面のオンオフを切り替える
+    public void ToggleSkillSelect()
+    {
+        if(isSkillSelect)
+        {
+            //スキル選択解除
+            SceneManager.UnloadSceneAsync(SceneType.SkillSelectScene.ToString());
+            isSkillSelect = false;
+
+            Debug.Log("スキル選択終了");
+        }
+        else
+        {
+            //スキル選択開始
+            SceneManager.LoadScene(SceneType.SkillSelectScene.ToString(), LoadSceneMode.Additive);
+            isSkillSelect = true;
+
+            Debug.Log("スキル選択開始");
         }
     }
 

@@ -6,8 +6,12 @@ using UnityEngine.UI;
 public class SpecialGaugeTest : MonoBehaviour
 {
     [SerializeField] private Image _specialGaugeImage;           //ゲージ画像
+    //[SerializeField] private Image _auraImage;                   //オーラの画像
     [SerializeField] private Color _normalColor = Color.yellow;  //通常時の色
     [SerializeField] private Color _maxColor = Color.red;        //マックス時の色
+    [SerializeField] private float _flashSpeed = 5f;             //点滅速度    
+    [SerializeField] private float _auraRotateSpeed = 50f;       //オーラの回転速度
+
 
     private float _current = 0f;    //現在のゲージ量
     private float _max = 100f;      //ゲージの最大量
@@ -33,7 +37,16 @@ public class SpecialGaugeTest : MonoBehaviour
         float ratio = _current / _max;
         _specialGaugeImage.fillAmount = ratio;
 
-        // 色切り替え
-        _specialGaugeImage.color = (ratio >= 1f) ? _maxColor : _normalColor;
+        //Max時判定
+        if(ratio >= 1f)
+        {
+            //点滅
+            float flash = (Mathf.Sin(Time.time * _flashSpeed) + 1f) / 2f; // 0~1の点滅値
+            _specialGaugeImage.color = Color.Lerp(_maxColor,Color.white, flash); // 点滅
+
+            //オーラを表示
+
+        }
+
     }
 }

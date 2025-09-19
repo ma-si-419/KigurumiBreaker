@@ -19,6 +19,9 @@ public class PauseSceneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //ポーズ中は操作できないようにする
+        if (BaseSceneController.instance.isOption) return;
+
         float vertical = Input.GetAxis("Vertical");
 
         //クールダウン処理
@@ -68,6 +71,8 @@ public class PauseSceneController : MonoBehaviour
 
     public void OptionButton()
     {
+        //オプション画面を開く
+        BaseSceneController.instance.ToggleOption();
         Debug.Log("オプション画面へ");
     }
 

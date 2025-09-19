@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResultSceneFolder : MonoBehaviour
+public class OptionSceneController : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -13,11 +13,14 @@ public class ResultSceneFolder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //決定(Aボタン)
-        if (Input.GetButtonDown("Submit"))
+        //戻る(ボタン)
+        if (Input.GetButtonDown("Cancel"))
         {
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.TitleScene);
+            BaseSceneController.instance.ToggleOption();
             Debug.Log("Aボタンが押されました");
         }
     }
+
+
+
 }
