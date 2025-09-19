@@ -1,38 +1,54 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
-public class SoundOption : MonoBehaviour
+public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private AudioMixer audioMixer; // MasterMixerをアサイン
-    [SerializeField] private Slider bgmSlider;
-    [SerializeField] private Slider seSlider;
+    [Header("Audio Mixer本体")]
+    public AudioMixer audioMixer; // UnityのAudioMixerをアタッチする
 
-    private void Start()
+    [Header("UIスライダー")]
+    public Slider bgmSlider; // BGM用のスライダー
+    public Slider seSlider;  // SE用のスライダー
+
+    void Start()
     {
-        // 初期値設定（保存している場合はPlayerPrefsから）
-        float bgmValue = PlayerPrefs.GetFloat("BGMVolume", 0f);
-        float seValue = PlayerPrefs.GetFloat("SEVolume", 0f);
+        // スライダーの初期値を0.5に設定
+        bgmSlider.value = 0.5f;
+        seSlider.value = 0.5f;
 
-        bgmSlider.value = bgmValue;
-        seSlider.value = seValue;
-
-        SetBGMVolume(bgmValue);
-        SetSEVolume(seValue);
-
+        // スライダーが動いた時に呼ばれる処理を登録
         bgmSlider.onValueChanged.AddListener(SetBGMVolume);
         seSlider.onValueChanged.AddListener(SetSEVolume);
+
+        // 起動時に初期音量を反映させる
+        SetBGMVolume(bgmSlider.value);
+        SetSEVolume(seSlider.value);
     }
 
+    // BGMの音量を設定する処理
     public void SetBGMVolume(float value)
     {
-        audioMixer.SetFloat("BGMVolume", value);
-        PlayerPrefs.SetFloat("BGMVolume", value);
+        // スライダーの値(0.0～1.0)をデシベルに変換
+        float volume = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+
+        // AudioMixerに適用 (Exposeして名前を "BGM" にすること)
+        audioMixer.SetFloat("BGM", volume);
+
+        // デバッグ用ログ
+        Debug.Log("BGM Volume: " + value);
     }
 
+    // SEの音量を設定する処理
     public void SetSEVolume(float value)
     {
-        audioMixer.SetFloat("SEVolume", value);
-        PlayerPrefs.SetFloat("SEVolume", value);
+        // スライダーの値(0.0～1.0)をデシベルに変換
+        float volume = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+
+        // AudioMixerに適用 (Exposeして名前を "SE" にすること)
+        audioMixer.SetFloat("SE", volume);
+
+        // デバッグ用ログ
+        Debug.Log("SE Volume: " + value);
     }
 }
