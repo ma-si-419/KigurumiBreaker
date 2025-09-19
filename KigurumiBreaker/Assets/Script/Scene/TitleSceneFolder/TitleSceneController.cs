@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class TitleSceneController : MonoBehaviour
 {
-    // 最初に選ばれるボタン
-    //[SerializeField] private Button _firstSelected;
-
     //最初に呼ばれる
     public void Start()
     {
@@ -31,17 +28,17 @@ public class TitleSceneController : MonoBehaviour
 
     private void OnClick()
     {
-        //左クリック
-        if (Input.GetMouseButtonDown(0))
-        {
-            //ゲームシーンへ
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
-        }
-        //右クリック
-        if (Input.GetMouseButtonDown(1))
-        {
-            BaseSceneController.instance.TogglePause();
-        }
+        ////左クリック
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    //ゲームシーンへ
+        //    BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
+        //}
+        ////右クリック
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    BaseSceneController.instance.TogglePause();
+        //}
 
 
     }

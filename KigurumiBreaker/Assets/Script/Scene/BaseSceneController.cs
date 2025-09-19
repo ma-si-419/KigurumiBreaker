@@ -19,7 +19,7 @@ public class BaseSceneController : MonoBehaviour
 {
     //シングルトン用の変数
     public static BaseSceneController instance { get; private set; }
-    private bool _isPaused = false; //ポーズ中かどうか
+    public bool isPaused = false; //ポーズ中かどうか
     //private bool _isOption = false; //オプション中かどうか
 
     //フェード情報
@@ -117,12 +117,12 @@ public class BaseSceneController : MonoBehaviour
     //ポーズのオンオフを切り替える
     public void TogglePause()
     {
-        if (_isPaused)
+        if (isPaused)
         {
             //ポーズ解除
             SceneManager.UnloadSceneAsync(SceneType.PauseScene.ToString());
             Time.timeScale = 1f; //時間を戻す
-            _isPaused = false;
+            isPaused = false;
 
             Debug.Log("ポーズ終了");
         }
@@ -131,7 +131,7 @@ public class BaseSceneController : MonoBehaviour
             //ポーズ開始
             SceneManager.LoadScene(SceneType.PauseScene.ToString(), LoadSceneMode.Additive);
             Time.timeScale = 0f; //時間を止める
-            _isPaused = true;
+            isPaused = true;
 
             Debug.Log("ポーズ開始");
         }
