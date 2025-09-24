@@ -35,6 +35,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float ForwardAngle;
     [Header("前方向の敵を認知する距離")]
     [SerializeField] private float ForwardDistance;
+    [Header("遠距離の弾の最大値")]
+    [SerializeField] private int MaxBulletNum;
 
     // 読み取り専用
     public float moveSpeed => MoveSpeed;
@@ -52,5 +54,6 @@ public class PlayerData : ScriptableObject
     public float maxSpecialAttackDamegeCutRate => MaxSpecialAttackDamegeCutRate;
     public float forwardAngle => ForwardAngle;
     public float forwardDistance => ForwardDistance;
+    public int maxBulletNum => MaxBulletNum;
 
 }

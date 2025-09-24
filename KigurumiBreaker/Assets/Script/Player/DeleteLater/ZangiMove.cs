@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ZangiMove : MonoBehaviour
 {
@@ -10,31 +11,75 @@ public class ZangiMove : MonoBehaviour
 
     [SerializeField] private BattleManager _battleManager;
 
-    private bool isDamage = false;
+    [SerializeField] private int _dropTime = 100;
 
-    int time = 0;
+    [SerializeField] private GameObject _dropBullet;
 
+    [SerializeField] private float _dropBulletForce = 5.0f;
 
+    [SerializeField] private float _dropPosShiftY = 1.0f;
+
+    private bool _isDamage = false;
+
+    private int _time = 0;
+
+    private List<int> _dropBullets;
     void Start()
     {
         nowHp = maxHp;
         _battleManager.AddEnemy(this.gameObject);
+
+        // ドロップする弾のリストを初期化する
+        _dropBullets = new List<int>();
     }
 
     void FixedUpdate()
     {
-        if (isDamage)
+        // 弾をドロップする
+        for(int i = 0;i < _dropBullets.Count; i++)
         {
-            time++;
-
-            if (time > 15)
+            if(_dropBullets[i] <= 0)
             {
-                isDamage = false;
+                // ドロップする座標を上側にずらす
+                Vector3 dropPos = this.transform.position;
+                dropPos.y += _dropPosShiftY;
+
+                // 弾をドロップする
+                GameObject bullet = Instantiate(_dropBullet, dropPos, Quaternion.identity);
+                Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+                // ランダムな方向に飛ばす
+                float xforce = Random.Range(-0.8f, 0.8f);
+                float zforce = Random.Range(-0.8f, 0.8f);
+
+                Vector3 forceDir = new Vector3(xforce, 1.0f, zforce).normalized;
+
+                rb.AddForce(forceDir * _dropBulletForce, ForceMode.Impulse);
+
+                // ドロップした弾をリストから削除する
+                _dropBullets.RemoveAt(i);
+                i--;
+            }
+            else
+            {
+                _dropBullets[i]--;
+            }
+        }
+
+
+        // ダメージを受けている間は赤くする
+        if (_isDamage)
+        {
+            _time++;
+
+            if (_time > 15)
+            {
+                _isDamage = false;
             }
         }
         else
         {
-            time = 0;
+            _time = 0;
             
             this.GetComponent<Renderer>().material.color = Color.white;
         }
@@ -54,9 +99,9 @@ public class ZangiMove : MonoBehaviour
 
             Debug.Log(other.gameObject.GetComponent<PlayerAttack>().GetDamage() + "のダメージ");
 
-            isDamage = true;
+            _isDamage = true;
 
-            time = 0;
+            _time = 0;
 
             this.GetComponent<Renderer>().material.color = Color.red;
 
@@ -72,9 +117,9 @@ public class ZangiMove : MonoBehaviour
             
             Debug.Log(other.gameObject.GetComponent<PlayerRangedAttack>().GetDamage() + "のダメージ");
          
-            isDamage = true;
+            _isDamage = true;
             
-            time = 0;
+            _time = 0;
             
             this.GetComponent<Renderer>().material.color = Color.red;
             
@@ -82,6 +127,10 @@ public class ZangiMove : MonoBehaviour
             {
                 Destroy(this.gameObject);
             }
+
+            // ドロップする弾を一つ増やす
+            _dropBullets.Add(_dropTime);
+
         }
     }
 }

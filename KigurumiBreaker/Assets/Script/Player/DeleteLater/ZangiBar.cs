@@ -9,25 +9,35 @@ public class ZangiBar : MonoBehaviour
 
     [SerializeField] private Slider _hpSlider;
     [SerializeField] private Slider _spSlider;
+    [SerializeField] private Slider _bulletSlider;
+
+    private PlayerState _playerState;
 
     void Start()
     {
-        //Sliderを満タンにする。
-        _hpSlider.value = 1;
+        // PlayerStateコンポーネントを取得
+        _playerState = _player.GetComponent<PlayerState>();
+
     }
 
     void Update()
     {
-        int maxHp = _player.GetComponent<PlayerState>().GetMaxHp();
-        int nowHp = _player.GetComponent<PlayerState>().GetNowHp();
+        int maxHp = _playerState.GetMaxHp();
+        int nowHp = _playerState.GetNowHp();
 
-        int maxSp = _player.GetComponent<PlayerState>().GetMaxSpecialChargeTime();
-        int nowSp = _player.GetComponent<PlayerState>().GetNowSpecialChargeTime();
+        int maxSp = _playerState.GetMaxSpecialChargeTime();
+        int nowSp = _playerState.GetNowSpecialChargeTime();
+
+        int maxBullet = _playerState.GetMaxBulletNum();
+        int nowBullet = _playerState.GetNowBulletNum();
 
         // スライダーに現在のSPを反映
         _spSlider.value = (float)nowSp / (float)maxSp;
 
         // スライダーに現在のHPを反映
         _hpSlider.value = (float)nowHp / (float)maxHp;
+
+        // スライダーに現在の弾数を反映
+        _bulletSlider.value = (float)nowBullet / (float)maxBullet;
     }
 }

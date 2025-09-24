@@ -63,6 +63,9 @@ public class PlayerState : Player<PlayerState>
     // プレイヤーの体力
     private int _nowHp;
 
+    // 現在持っている弾の数
+    private int _nowBulletNum;
+
     // 移動入力
     private Vector2 _moveInput;
 
@@ -138,6 +141,9 @@ public class PlayerState : Player<PlayerState>
 
         // 体力を最大体力に設定
         _nowHp = _playerData.maxHp;
+
+        // 弾の数を最大弾数に設定
+        _nowBulletNum = _playerData.maxBulletNum;
     }
 
     // 各Stateクラス
@@ -606,6 +612,8 @@ public class PlayerState : Player<PlayerState>
             {
                 GameObject bullet = state.CreateRangedAttack(_currentAttackData);
 
+                state._nowBulletNum--;
+
                 // 弾のスクリプトにターゲットを設定
                 PlayerRangedAttack rangedAttack = bullet.GetComponent<PlayerRangedAttack>();
                 
@@ -613,6 +621,8 @@ public class PlayerState : Player<PlayerState>
                 if (_target)
                 {
                     rangedAttack.SetTarget(_target);
+
+                    Debug.Log("ターゲットとの距離" + (_target.transform.position - state.transform.position).magnitude);
                 }
 
                 // 弾の向きと攻撃データを設定
@@ -644,7 +654,6 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger("RangedAttack");
         }
     }
-
 
     // チャージ状態
     public class ChargeState : StateBase<PlayerState>
@@ -1114,7 +1123,7 @@ public class PlayerState : Player<PlayerState>
 
     private void RangedAttack(InputAction.CallbackContext context)
     {
-        if (_isAbleToAttack)
+        if (_isAbleToAttack && _nowBulletNum > 0)
         {
             ChangeState(new RangedAttackState(this));
         }
@@ -1306,6 +1315,14 @@ public class PlayerState : Player<PlayerState>
     {
         return _nowHp;
     }
+    public int GetMaxBulletNum()
+    {
+        return _playerData.maxBulletNum;
+    }
+    public int GetNowBulletNum()
+    {
+        return _nowBulletNum;
+    }
     public int GetMaxSpecialChargeTime()
     {
         return _playerData.maxSpecialChargeTime;
@@ -1397,6 +1414,17 @@ public class PlayerState : Player<PlayerState>
                 }
             }
         }
+
+        // ドロップした弾にあたったら弾を補充
+        if(other.gameObject.CompareTag("DropBullet"))
+        {
+            // 弾を補充
+            _nowBulletNum++;
+            
+            // アイテムを親ごと消す
+            Destroy(other.transform.parent.gameObject);
+        }
+
     }
 }
 

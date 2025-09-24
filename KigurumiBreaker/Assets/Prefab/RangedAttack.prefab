@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3308976924760873119}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.30445072, z: -0, w: 0.9525281}
-  m_LocalPosition: {x: 1.9229639, y: 0.45619822, z: 4.89199}
+  m_LocalRotation: {x: 0, y: -0.23153831, z: -0, w: 0.9728258}
+  m_LocalPosition: {x: -0.40111578, y: 0.57904345, z: 4.594663}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4842,8 +4842,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81495fe6e588ea8408310eb5a38ed1fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dropBullet: {fileID: 3682041957359305794, guid: 34043e329935fd741abe96b1d2a82edf, type: 3}
   _rotateSpeed: 1
   _moveSpeed: 8
+  _dropBulletForce: 5
 --- !u!54 &9164358242937035804
 Rigidbody:
   m_ObjectHideFlags: 0
