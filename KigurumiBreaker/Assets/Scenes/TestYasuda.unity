@@ -1126,7 +1126,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1489784773}
   player: {fileID: 1992285110}
-  targetTag: Player
+  playerTrans: {fileID: 1992285115}
+  detectRange: 10
+  detectRangeSqr: 0
+  attackRange: 4
+  attackRangeSqr: 0
 --- !u!54 &1489784768
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1236,7 +1240,7 @@ Transform:
   m_GameObject: {fileID: 1489784766}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 43.21, y: 1.65, z: -42.1}
+  m_LocalPosition: {x: -0.1, y: 1.65, z: 23.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1283,7 +1287,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 15
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1490232646
 GameObject:

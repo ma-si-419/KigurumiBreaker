@@ -29,14 +29,18 @@ public class ChaseState : IState
 
         _enemy.agent.SetDestination(_enemy.player.transform.position); //プレイヤーの位置を目的地に設定
 
+        Vector3 diff = _enemy.playerTrans.position - _enemy.transform.position; //プレイヤーとの位置差を計算
+        //Debug.Log(diff);
+
         //攻撃圏内に入ると攻撃状態へ
-        if (_timer > 18.0f)
+        //プレイヤーが検知範囲内にいるかチェック
+        if (diff.sqrMagnitude < _enemy.attackRangeSqr && _timer > 3.0f)
         {
-            //状態を変更する
-            Debug.Log("ChaseState: Change to AttackState");
+            Debug.Log("IdleState: Change to ChaseState");
             _enemy.agent.isStopped = true; //追跡を停止
             _enemy.ChangeState(new AttackState(_enemy));
         }
+
     }
 
     public void End()

@@ -12,7 +12,6 @@ public class IdleState : IState
         _enemy = enemy; 
     }
 
-
     public void Init()
     {
         Debug.Log("IdleState: Init");
@@ -25,13 +24,16 @@ public class IdleState : IState
         _timer += Time.deltaTime;
         Debug.Log("IdleState: Update");
 
-        //プレイヤーを発見したら追跡状態へ
-        if (_timer > 5.0f)
+        Vector3 diff = _enemy.playerTrans.position - _enemy.transform.position; //プレイヤーとの位置差を計算
+        //Debug.Log(diff);
+
+        //プレイヤーが検知範囲内にいるかチェック
+        if (diff.sqrMagnitude < _enemy.detectRangeSqr && _timer > 3.0f)
         {
-            //状態を変更する
             Debug.Log("IdleState: Change to ChaseState");
             _enemy.ChangeState(new ChaseState(_enemy));
         }
+
     }
 
     public void End()
