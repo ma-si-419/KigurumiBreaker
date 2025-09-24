@@ -23,9 +23,13 @@ public class AttackState : IState
         _timer += Time.deltaTime;
         Debug.Log("AttackState: Update");
 
+        _enemy.Attack(); //攻撃処理
+
         //プレイヤーを攻撃したら待機状態へ
-        if (_timer > 10.0f)
+        if (_timer > 3.0f)
         {
+
+
             //状態を変更する
             Debug.Log("AttackState: Change to IdleState");
             _enemy.ChangeState(new IdleState(_enemy));
