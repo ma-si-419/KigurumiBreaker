@@ -11,6 +11,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float DodgeSpeed;
     [Header("移動入力感知の閾値")]
     [SerializeField] private float MoveInputLength;
+    [Header("1フレームで回転することができる角度")]
+    [SerializeField] private float RotateAngle;
     [Header("回避で移動し始めるまでの時間")]
     [SerializeField] private float DodgeStartTime;
     [Header("回避時間")]
@@ -29,12 +31,16 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int MaxSpecialChargeTime;
     [Header("特殊攻撃の最大溜め発動時のダメージカット率")]
     [SerializeField] private float MaxSpecialAttackDamegeCutRate;
-
+    [Header("前方向とする角度")]
+    [SerializeField] private float ForwardAngle;
+    [Header("前方向の敵を認知する距離")]
+    [SerializeField] private float ForwardDistance;
 
     // 読み取り専用
     public float moveSpeed => MoveSpeed;
     public float dodgeSpeed => DodgeSpeed;
     public float moveInputLength => MoveInputLength;
+    public float rotateAngle => RotateAngle;
     public float dodgeStartTime => DodgeStartTime;
     public int dodgeTime => DodgeTime;
     public int dodgeCoolTime => DodgeCoolTime;
@@ -44,5 +50,7 @@ public class PlayerData : ScriptableObject
     public float moveDirAngle => MoveDirAngle;
     public int maxSpecialChargeTime => MaxSpecialChargeTime;
     public float maxSpecialAttackDamegeCutRate => MaxSpecialAttackDamegeCutRate;
+    public float forwardAngle => ForwardAngle;
+    public float forwardDistance => ForwardDistance;
 
 }

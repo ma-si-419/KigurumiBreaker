@@ -9516,6 +9516,10 @@ PrefabInstance:
       propertyPath: maxHp
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: _battleManager
+      value: 
+      objectReference: {fileID: 1759240419}
     - target: {fileID: 3504199065376803036, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -18644,6 +18648,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: a0bd7523e1445f147886c60f88830141, type: 3}
   m_PrefabInstance: {fileID: 952867963}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1759240418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1759240420}
+  - component: {fileID: 1759240419}
+  m_Layer: 0
+  m_Name: BattleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1759240419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759240418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c67f1034a11ff48a10b289b9ce5d82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1759240420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759240418}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.034594, y: 2.4507942, z: 0.19782352}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1765410202
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23277,14 +23325,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1812459178166698982, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 60637335be5249745a40dae258370b4f, type: 2}
     - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
-      propertyPath: maxHp
-      value: 1000
-      objectReference: {fileID: 0}
+      propertyPath: _battleManager
+      value: 
+      objectReference: {fileID: 1759240419}
     - target: {fileID: 3504199065376803036, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -23318,6 +23362,18 @@ PrefabInstance:
       propertyPath: _damageData
       value: 
       objectReference: {fileID: 11400000, guid: 5dfba6b2f3d537140b485cdfc7dafed9, type: 2}
+    - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: _bulletPrefab
+      value: 
+      objectReference: {fileID: 3308976924760873119, guid: 7fea45659adf508429936af7309098f2, type: 3}
+    - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: _battleManager
+      value: 
+      objectReference: {fileID: 1759240419}
+    - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: _defaultRangedAttackBullet
+      value: 
+      objectReference: {fileID: 3308976924760873119, guid: 7fea45659adf508429936af7309098f2, type: 3}
     - target: {fileID: 3839374813110153823, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_Name
       value: Player
@@ -23394,3 +23450,4 @@ SceneRoots:
   - {fileID: 1296774344}
   - {fileID: 279646929}
   - {fileID: 1886795423}
+  - {fileID: 1759240420}

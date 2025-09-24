@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.EventSystems;
@@ -46,6 +47,12 @@ public class PlayerState : Player<PlayerState>
 
     // プレイヤーの被弾時のデータ
     [SerializeField] private DamageData _damageData;
+
+    // デフォルトの遠距離攻撃の弾
+    [SerializeField] private GameObject _bulletPrefab;
+
+    // バトルマネージャー
+    [SerializeField] private BattleManager _battleManager;
 
     // 入力情報
     private GameInputs _input;
@@ -117,6 +124,7 @@ public class PlayerState : Player<PlayerState>
         _input.Player.Move.canceled += Move;
         _input.Player.Dodge.performed += Dodge;
         _input.Player.MeleeAttack.started += LowAttack;
+        _input.Player.RangedAttack.started += RangedAttack;
         _input.Player.ChargeAttack.started += NormalCharge;
         _input.Player.ChargeAttack.canceled += ChargeAttack;
         _input.Player.SpecialAttack.started += SpecialCharge;
@@ -219,8 +227,10 @@ public class PlayerState : Player<PlayerState>
             // 向きの更新
             if (moveDirection != Vector3.zero)
             {
-                state._currentDirection = moveDirection;
-                state.transform.forward = state._currentDirection;
+                // 向きを徐々に変える
+                state.transform.forward = Vector3.Slerp(state.transform.forward, moveDirection, state._playerData.rotateAngle * Time.fixedDeltaTime);
+                // 現在の向きを保存
+                state._currentDirection = state.transform.forward;
             }
 
             // リジッドボディの速度を設定
@@ -362,6 +372,15 @@ public class PlayerState : Player<PlayerState>
             state.isAbleToSpecialAttack = false;
             // 現在のStateKindを近接攻撃に設定
             state._stateKind = StateKind.MELEEATTACK;
+
+            // 攻撃する方向をジョイスティックの方向に設定
+            if (state._moveInput.magnitude > state._playerData.moveInputLength)
+            {
+                Vector3 attackDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+                attackDirection = state.CalculateMoveDirection(attackDirection);
+                state.transform.forward = attackDirection;
+                state._currentDirection = attackDirection;
+            }
 
             // 最初の攻撃はLow1に設定
             _currentAttackName = "Low1";
@@ -528,6 +547,104 @@ public class PlayerState : Player<PlayerState>
             }
         }
     }
+
+    // 遠距離攻撃状態
+    public class RangedAttackState : StateBase<PlayerState>
+    {
+
+        int _currentFrame;
+
+        GameObject _target;
+
+        AttackData _currentAttackData;
+
+        public RangedAttackState(PlayerState next) : base(next)
+        {
+        }
+        public override void OnEnterState()
+        {
+            // 回避でキャンセル可能にする
+            state._isAbleToDodge = true;
+            // 攻撃の入力を一時的に無効化
+            state._isAbleToAttack = false;
+            // 特殊攻撃を不可にする
+            state.isAbleToSpecialAttack = false;
+            // 攻撃する方向をジョイスティックの方向に設定
+            if (state._moveInput.magnitude > state._playerData.moveInputLength)
+            {
+                Vector3 attackDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+                attackDirection = state.CalculateMoveDirection(attackDirection);
+                state.transform.forward = attackDirection;
+                state._currentDirection = attackDirection;
+            }
+            else
+            {
+                // 移動入力がない場合は現在の向きを使用
+                state.transform.forward = state._currentDirection;
+            }
+
+            // 前方向にいる敵を探す
+            _target = state.SearchTargetObject();
+
+            // 現在のStateKindを遠距離攻撃に設定
+            state._stateKind = StateKind.RANGEDATTACK;
+            // 遠距離攻撃アニメーションを再生
+            state._animator.SetTrigger("RangedAttack");
+            // 攻撃の情報を設定
+            _currentAttackData = state.SearchAttackData("RangedAttack");
+            // フレームカウントをリセット
+            _currentFrame = 0;
+        }
+
+        public override void OnUpdate()
+        {
+            _currentFrame++;
+
+
+            // 攻撃するフレームに達したら攻撃オブジェクトを生成
+            if (_currentFrame == _currentAttackData.startFrame)
+            {
+                GameObject bullet = state.CreateRangedAttack(_currentAttackData);
+
+                // 弾のスクリプトにターゲットを設定
+                PlayerRangedAttack rangedAttack = bullet.GetComponent<PlayerRangedAttack>();
+                
+                // ターゲットがいる場合
+                if (_target)
+                {
+                    rangedAttack.SetTarget(_target);
+                }
+
+                // 弾の向きと攻撃データを設定
+                rangedAttack.SetCurrentDir(state._currentDirection);
+                rangedAttack.SetAttackData(_currentAttackData);
+            }
+
+
+            // 攻撃のトータルフレームに達したらアイドル状態に遷移
+            if (_currentFrame >= _currentAttackData.totalFrame)
+            {
+                // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
+                float magnitude = state._moveInput.magnitude;
+                if (magnitude > state._playerData.moveInputLength)
+                {
+                    state.ChangeState(new MoveState(state));
+                    return;
+                }
+                else
+                {
+                    state.ChangeState(new IdleState(state));
+                    return;
+                }
+            }
+        }
+
+        public override void OnExitState()
+        {
+            state._animator.ResetTrigger("RangedAttack");
+        }
+    }
+
 
     // チャージ状態
     public class ChargeState : StateBase<PlayerState>
@@ -995,6 +1112,14 @@ public class PlayerState : Player<PlayerState>
         }
     }
 
+    private void RangedAttack(InputAction.CallbackContext context)
+    {
+        if (_isAbleToAttack)
+        {
+            ChangeState(new RangedAttackState(this));
+        }
+    }
+
     private void SpecialCharge(InputAction.CallbackContext context)
     {
         if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
@@ -1010,7 +1135,7 @@ public class PlayerState : Player<PlayerState>
         if (_stateKind == StateKind.CHARGE && _isSpecialCharge)
         {
             // アニメーションが特殊攻撃開始アニメであれば
-            if(_animator.GetCurrentAnimatorStateInfo(0).IsName("SpecialChargeStart"))
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("SpecialChargeStart"))
             {
                 // 何もしない
                 return;
@@ -1037,6 +1162,43 @@ public class PlayerState : Player<PlayerState>
             {
                 result = _attackData.attackDataList[i];
                 break;
+            }
+        }
+        return result;
+    }
+
+    private GameObject SearchTargetObject()
+    {
+        GameObject result = null;
+        // シーン内のEnemyを取得
+        List<GameObject> enemies = _battleManager.enemies;
+
+        // 探知範囲内にいる敵を取得
+        List<GameObject> forwardEnemies = new List<GameObject>();
+
+        // プレイヤーから前方の設定した角度内にいる敵を探す
+        foreach (GameObject enemy in enemies)
+        {
+            Vector3 toEnemy = enemy.transform.position - transform.position;
+            toEnemy.y = 0; // y成分を無視して水平面での方向を考える
+            toEnemy.Normalize();
+            float dot = Vector3.Dot(transform.forward, toEnemy);
+            float angle = Mathf.Acos(dot) * Mathf.Rad2Deg; // ラジアンを度に変換
+            if (angle <= _playerData.forwardAngle)
+            {
+                forwardEnemies.Add(enemy);
+            }
+        }
+
+        // 探知範囲内にいる敵の中で一番近い敵を取得
+        float minDistance = Mathf.Infinity;
+        foreach (GameObject enemy in forwardEnemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < minDistance && distance <= _playerData.forwardDistance)
+            {
+                minDistance = distance;
+                result = enemy;
             }
         }
         return result;
@@ -1109,6 +1271,24 @@ public class PlayerState : Player<PlayerState>
         _currentAttack = attackObject;
     }
 
+    /// <summary>
+    /// 遠距離攻撃オブジェクトを生成するときに使用
+    /// </summary>
+    /// <param name="attack">攻撃オブジェクト</param>
+    private GameObject CreateRangedAttack(AttackData data)
+    {
+        GameObject attack = _bulletPrefab;
+
+        // 攻撃の座標を設定
+        Vector3 position = GetAttackPosition(data.attackPart);
+        attack.transform.position = position;
+        // 攻撃の向きを設定
+        attack.transform.forward = transform.forward;
+
+        // 攻撃オブジェクトを生成
+        return Instantiate(attack);
+    }
+
     private Vector3 CalculateMoveDirection(Vector3 direction)
     {
         Vector3 moveDirection = direction;
@@ -1122,7 +1302,7 @@ public class PlayerState : Player<PlayerState>
     {
         return _playerData.maxHp;
     }
-    public  int GetNowHp()
+    public int GetNowHp()
     {
         return _nowHp;
     }
@@ -1179,7 +1359,7 @@ public class PlayerState : Player<PlayerState>
             {
                 // ダメージをカットする
                 int damage = (int)((float)other.gameObject.GetComponent<ZangiAttack>().GetDamage() * _playerData.maxSpecialAttackDamegeCutRate);
-            
+
                 _nowHp -= damage;
 
                 // HPを1以下にしない
