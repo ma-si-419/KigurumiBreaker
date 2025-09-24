@@ -63,7 +63,7 @@ MonoBehaviour:
     StartFrame: 10
     StunFrame: 20
     CancelFrame: 23
-    TotalFrame: 47
+    TotalFrame: 37
     MoveSpeed: 0
     Scale: 1.5
     ShiftPosZ: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
     StartFrame: 10
     StunFrame: 20
     CancelFrame: 23
-    TotalFrame: 47
+    TotalFrame: 37
     MoveSpeed: 0
     Scale: 3
     ShiftPosZ: 0
@@ -113,6 +113,21 @@ MonoBehaviour:
     Scale: 4
     ShiftPosZ: 4
     AttackLifeTime: 5
+    NextAttackName: None
+    AttackPart: "\u53F3\u8155"
+    AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
+    EffectShiftScale: 1
+    HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+  - AttackName: RangedAttack
+    Damage: 10
+    StartFrame: 10
+    StunFrame: 5
+    CancelFrame: 30
+    TotalFrame: 30
+    MoveSpeed: 0
+    Scale: 1
+    ShiftPosZ: 0
+    AttackLifeTime: 0
     NextAttackName: None
     AttackPart: "\u53F3\u8155"
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
