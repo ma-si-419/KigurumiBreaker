@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PunchEnemy : Enemy
 {
-    private float _punchTimer = 0.0f;   // タイマー
-    private bool _isAttacking = false;  // 攻撃中かどうかのフラグ
-    private bool _isDash = false;       // ダッシュ中かどうかのフラグ
+    //private float _punchTimer = 0.0f;   // タイマー
+    //private bool _isAttacking = false;  // 攻撃中かどうかのフラグ
+    //private bool _isDash = false;       // ダッシュ中かどうかのフラグ
 
     private Rigidbody _rigidbody;   // Rigidbody
 
@@ -16,7 +16,7 @@ public class PunchEnemy : Enemy
         
 
         // タイマーを更新
-        _punchTimer += Time.deltaTime;
+        //_punchTimer += Time.deltaTime;
         //Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward, 1f, LayerMask.GetMask("Player"));
 
            
