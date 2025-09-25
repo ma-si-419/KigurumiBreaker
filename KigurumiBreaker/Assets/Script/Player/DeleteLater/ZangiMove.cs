@@ -6,6 +6,15 @@ using UnityEngine.UI;
 public class ZangiMove : MonoBehaviour
 {
 
+    public enum EnemyDebuff
+    {
+        AtkDown,
+        DefDown,
+        SpeedDown,
+        Poison,
+        None
+    }
+
     public int maxHp = 30;
     public int nowHp = 0;
 
