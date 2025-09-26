@@ -6,14 +6,25 @@ public class Enemy : MonoBehaviour
     
     /* 変数 */
     private IState _currentState;               // 現在のステート
+
+    [Header("索敵距離")]
+    public float detectRange;             // プレイヤー検知範囲
+    public float detectRangeSqr;                // プレイヤー検知範囲の二乗
+    [Header("攻撃距離")]
+    public float attackRange;              // 攻撃範囲
+    public float attackRangeSqr;                // プレイヤー検知範囲の二乗
+
+    [Header("時間設定")]
+    public float idleTime;         // 待機時間
+    public float chaseTime;        // 追跡時間
+
+    [Header("コンポーネント")]
     [SerializeField] public NavMeshAgent agent; // NavMeshAgentの参照
     [SerializeField] public GameObject player;  // プレイヤーの参照
+    [SerializeField] public GameObject attackHitBox; // 攻撃判定のゲームオブジェクト
     public Transform playerTrans;               // プレイヤーのTransform
-    public float detectRange = 20f;             // プレイヤー検知範囲
-    public float detectRangeSqr;                // プレイヤー検知範囲の二乗
-    public float attackRange = 4f;              // 攻撃範囲
-    public float attackRangeSqr;                // プレイヤー検知範囲の二乗
-    private float _timer = 0.0f;                 // タイマー
+
+    private float _stateTimer = 0.0f;                 // 状態遷移するまでのタイマー
 
     private void Start()
     {
@@ -38,12 +49,12 @@ public class Enemy : MonoBehaviour
     //基本攻撃処理(オーバーライドで変更可)
     public virtual void Attack()
     {
-        _timer += Time.deltaTime;
+        _stateTimer += Time.deltaTime;
 
-        if (_timer > 2.0f)
+        if (_stateTimer > 2.0f)
         {
             // 1秒に1回しか攻撃しない
-            _timer = 0.0f;
+            _stateTimer = 0.0f;
             // 攻撃後、待機状態へ戻る
             ChangeState(new IdleState(this));
         }
@@ -53,11 +64,11 @@ public class Enemy : MonoBehaviour
 
 
         //プレイヤーを攻撃したら待機状態へ
-        if (_timer > 3.0f)
+        if (_stateTimer > 3.0f)
         {
             //状態を変更する
             Debug.Log("AttackState: Change to IdleState");
-            _timer = 0.0f;
+            _stateTimer = 0.0f;
             ChangeState(new IdleState(this));
         }
 
@@ -67,7 +78,7 @@ public class Enemy : MonoBehaviour
     public virtual void Move()
     {
         //タイマーを進める
-        _timer += Time.deltaTime;
+        _stateTimer += Time.deltaTime;
         Debug.Log("ChaseState: Update");
 
         agent.SetDestination(player.transform.position); //プレイヤーの位置を目的地に設定
@@ -76,13 +87,13 @@ public class Enemy : MonoBehaviour
 
         //攻撃圏内に入ると攻撃状態へ
         //プレイヤーが検知範囲内にいるかチェック
-        if (diff.sqrMagnitude < attackRangeSqr && _timer > 3.0f)
+        if (diff.sqrMagnitude < attackRangeSqr/* && _timer > chaseTime*/)
         {
             Debug.Log("IdleState: Change to ChaseState");
             agent.isStopped = true; //追跡を停止
 
             //攻撃状態へ
-            _timer = 0.0f;
+            _stateTimer = 0.0f;
             ChangeState(new AttackState(this));
         }
     }
@@ -91,18 +102,18 @@ public class Enemy : MonoBehaviour
     public virtual void Idle()
     {
         //タイマーを進める
-        _timer += Time.deltaTime;
+        _stateTimer += Time.deltaTime;
         Debug.Log("IdleState: Update");
 
         Vector3 diff = playerTrans.position - transform.position; //プレイヤーとの位置差を計算
 
         //プレイヤーが検知範囲内にいるかチェック
-        if (diff.sqrMagnitude < detectRangeSqr && _timer > 3.0f)
+        if (diff.sqrMagnitude < detectRangeSqr && _stateTimer > idleTime)
         {
             Debug.Log("IdleState: Change to ChaseState");
 
             //追跡状態へ
-            _timer = 0.0f;
+            _stateTimer = 0.0f;
             ChangeState(new ChaseState(this));
         }
 
