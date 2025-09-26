@@ -5,58 +5,92 @@ public class StageSpawner : MonoBehaviour
     [System.Serializable]
     public class StageSet
     {
-        public GameObject[] stagePrefabs; // このステージの候補群
+        public GameObject[] stagePrefabs; // この大ステージの候補群
     }
 
-    [SerializeField] private StageSet[] stageSets; // [0]=FirstStage, [1]=SecondStage, [2]=ThirdStage
-    private int currentStageIndex = 0;             // いまどのステージか
-    private GameObject currentStageInstance;       // いま生成中のステージ
+    [SerializeField] private StageSet[] stageSets; // [0]=First, [1]=Second, ...
+    [SerializeField] private Transform player;     // プレイヤーを指定
+
+    private int currentStageIndex = 0;             // 今どの大ステージか
+    private GameObject currentStageInstance;       // 生成中のステージ
 
     /// <summary>
-    /// ステージをランダム生成
+    /// 指定インデックスのステージセットからランダムに1つ生成
     /// </summary>
-    public void SpawnNextStage()
+    private void SpawnStage(int index)
     {
-        if (currentStageIndex >= stageSets.Length)
-        {
-            Debug.Log("全ステージクリア！");
-            return;
-        }
+        if (index < 0 || index >= stageSets.Length) return;
 
-        // 既存ステージを消す
+        // 既存ステージ削除
         if (currentStageInstance != null)
         {
             Destroy(currentStageInstance);
         }
 
-        // 候補からランダムで1つ選ぶ
-        var prefabs = stageSets[currentStageIndex].stagePrefabs;
+        // 候補からランダムに選択
+        var prefabs = stageSets[index].stagePrefabs;
         if (prefabs == null || prefabs.Length == 0)
         {
-            Debug.LogError("Stage " + currentStageIndex + " にプレハブが設定されていません");
+            Debug.LogError($"Stage {index} にプレハブが設定されていません");
             return;
         }
 
         int randomIndex = Random.Range(0, prefabs.Length);
-        currentStageInstance = Instantiate(prefabs[randomIndex], Vector3.zero, Quaternion.identity);
+        currentStageInstance = Instantiate(prefabs[randomIndex]);
 
-        Debug.Log($"Stage {currentStageIndex + 1} を生成: {prefabs[randomIndex].name}");
+        // SpawnPoint を探してプレイヤーを移動
+        Transform spawn = currentStageInstance.transform.Find("SpawnPoint");
+        if (spawn != null && player != null)
+        {
+            player.position = spawn.position;
+            player.rotation = spawn.rotation;
+        }
 
-        currentStageIndex++;
+        // GoalPoint を探して Collider を設定
+        foreach (Transform child in currentStageInstance.transform)
+        {
+            if (child.name.Contains("GoalPoint"))
+            {
+                Collider col = child.GetComponent<Collider>();
+                if (col == null) col = child.gameObject.AddComponent<BoxCollider>();
+                col.isTrigger = true;
+            }
+        }
+
+        currentStageIndex = index;
+        Debug.Log($"Stage {index + 1} を生成: {prefabs[randomIndex].name}");
     }
 
-    // 仮で Start 時に 1 ステージ目を生成
+    /// <summary>
+    /// 次の大ステージへ進む
+    /// </summary>
+    public void NextStage()
+    {
+        int nextIndex = currentStageIndex + 1;
+        if (nextIndex >= stageSets.Length)
+        {
+            Debug.Log("全ステージクリア！");
+            return;
+        }
+
+        SpawnStage(nextIndex);
+    }
+
     private void Start()
     {
-        SpawnNextStage();
+        // 起動時に First ステージを生成
+        SpawnStage(0);
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        // 仮でにスペースキーで次のステージを生成
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (other.CompareTag("Player"))
         {
-            SpawnNextStage();
+            // その GoalPoint が今のステージの子かチェック
+            if (currentStageInstance != null && other.transform.IsChildOf(currentStageInstance.transform))
+            {
+                NextStage();
+            }
         }
     }
 }
