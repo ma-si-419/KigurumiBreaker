@@ -28,6 +28,7 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.7
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 0
   - AttackName: Low2
     Damage: 12
     StartFrame: 12
@@ -43,6 +44,7 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.7
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 0
   - AttackName: Low3
     Damage: 24
     StartFrame: 15
@@ -58,6 +60,7 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.75
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 0
   - AttackName: LowChargeAttack
     Damage: 20
     StartFrame: 10
@@ -73,6 +76,7 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.5
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 1
   - AttackName: ChargeAttack
     Damage: 80
     StartFrame: 10
@@ -88,6 +92,7 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.5
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 1
   - AttackName: LowSpecialAttack
     Damage: 50
     StartFrame: 38
@@ -103,6 +108,7 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 1
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 3
   - AttackName: SpecialAttack
     Damage: 150
     StartFrame: 85
@@ -118,6 +124,7 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 1
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 3
   - AttackName: RangedAttack
     Damage: 10
     StartFrame: 10
@@ -133,3 +140,4 @@ MonoBehaviour:
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 1
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
+    AttackKind: 2

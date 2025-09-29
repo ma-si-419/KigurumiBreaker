@@ -11,6 +11,16 @@ public class AttackDataList : ScriptableObject
 [System.Serializable]
 public class AttackData
 {
+    public enum AttackType
+    {
+        LowAttack,      // ’ÊíUŒ‚
+        ChargeAttack,   // —­‚ßUŒ‚
+        RangedAttack,   // ‰“‹——£UŒ‚
+        SpecialAttack   // “ÁŽêUŒ‚
+    }
+
+
+
     [Header("–¼‘O")]
     [SerializeField] private string AttackName;
     [Header("ƒ_ƒ[ƒWŒW”")]
@@ -41,21 +51,25 @@ public class AttackData
     [SerializeField] private float EffectShiftScale;
     [Header("UŒ‚‚ª‚ ‚½‚Á‚½Žž‚Éo‚·ƒGƒtƒFƒNƒg")]
     [SerializeField] private GameObject HitEffect;
+    [Header("UŒ‚‚ÌŽí—Þ")]
+    [SerializeField] private AttackType AttackKind;
 
     // “Ç‚ÝŽæ‚èê—pƒvƒƒpƒeƒB
-    public string attackName => AttackName;
-    public int damage => Damage;
-    public int startFrame => StartFrame;
-    public int stunFrame => StunFrame;
-    public int cancelFrame => CancelFrame;
-    public int totalFrame => TotalFrame;
-    public float moveSpeed => MoveSpeed;
-    public float scale => Scale;
-    public float shiftPosZ => ShiftPosZ;
-    public int attackLifeTime => AttackLifeTime;
-    public string nextAttackName => NextAttackName;
-    public string attackPart => AttackPart;
-    public GameObject attackEffect => AttackEffect;
-    public float effectShiftScale => EffectShiftScale;
-    public GameObject hitEffect => HitEffect;
+
+    public string attackName { get; }
+    public int damage { get; set; }
+    public int startFrame { get; }
+    public int stunFrame { get; }
+    public int cancelFrame { get; }
+    public int totalFrame { get; }
+    public float moveSpeed { get; }
+    public float scale { get; set; }
+    public float shiftPosZ { get; }
+    public int attackLifeTime { get; }
+    public string nextAttackName { get; }
+    public string attackPart { get; }
+    public GameObject attackEffect { get; }
+    public float effectShiftScale { get; }
+    public GameObject hitEffect { get; set; }
+    public AttackType attackKind { get; }
 }

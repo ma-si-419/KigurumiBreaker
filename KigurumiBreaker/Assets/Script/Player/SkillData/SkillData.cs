@@ -15,9 +15,13 @@ public class SkillData : ScriptableObject
     [SerializeField] private RangedAttackSkillDataList RangedAttackSkill;
     [Header("ダッシュのスキルリスト")]
     [SerializeField] private DashSkillDataList DashSkill;
+    [Header("パッシブスキルリスト")]
+    [SerializeField] private PassiveSkillDataList PassiveSkill;
+
     public LowAttackSkillDataList lowAttackSkill => LowAttackSkill;
     public ChargeAttackSkillDataList chargeAttackSkill => ChargeAttackSkill;
     public SpecialChargeSkillDataList specialChargeSkill => SpecialChargeSkill;
     public RangedAttackSkillDataList rangedAttackSkill => RangedAttackSkill;
     public DashSkillDataList dashSkill => DashSkill;
+    public PassiveSkillDataList passiveSkill => PassiveSkill;
 }

@@ -33,6 +33,21 @@ public class PlayerState : Player<PlayerState>
         HEAVY
     }
 
+    public struct PlayerSkill
+    {
+        public LowAttackSkillData lowAttackSkillData;
+
+        public ChargeAttackSkillData chargeAttackSkillData;
+
+        public DashSkillData dashSkillData;
+
+        public RangedAttackSkillData rangedAttackSkillData;
+
+        public SpecialChargeSkillData specialChargeSkill;
+
+        public List<PassiveSkillData> passiveSkillDataList;
+    }
+
     // 攻撃データ
     [SerializeField] private AttackDataList _attackData;
 
@@ -53,6 +68,9 @@ public class PlayerState : Player<PlayerState>
 
     // バトルマネージャー
     [SerializeField] private BattleManager _battleManager;
+
+    // 現在持っているスキル
+    PlayerSkill _playerSkill;
 
     // 入力情報
     private GameInputs _input;
@@ -616,7 +634,7 @@ public class PlayerState : Player<PlayerState>
 
                 // 弾のスクリプトにターゲットを設定
                 PlayerRangedAttack rangedAttack = bullet.GetComponent<PlayerRangedAttack>();
-                
+
                 // ターゲットがいる場合
                 if (_target)
                 {
@@ -1259,6 +1277,44 @@ public class PlayerState : Player<PlayerState>
         // 球の当たり判定を設定
         attackObject.GetComponent<SphereCollider>().radius = data.scale;
 
+        // 攻撃のデータ
+        AttackData attackData = data;
+
+        // 攻撃のダメージにスキルを加算
+        switch (data.attackKind)
+        {
+            case AttackData.AttackType.LowAttack:
+                if (_playerSkill.lowAttackSkillData != null)
+                {
+                    attackData.damage *= (_playerSkill.lowAttackSkillData.damageAddRate / 100);
+                }
+                break;
+
+            case AttackData.AttackType.ChargeAttack:
+                if (_playerSkill.chargeAttackSkillData != null)
+                {
+                    attackData.damage *= (_playerSkill.chargeAttackSkillData.damageAddRate / 100);
+                }
+                break;
+
+                ////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////////
+        }
+
+
+
         // 攻撃の情報を設定
         attackObject.GetComponent<PlayerAttack>().SetAttackData(data);
 
@@ -1330,6 +1386,30 @@ public class PlayerState : Player<PlayerState>
     public int GetNowSpecialChargeTime()
     {
         return _specialChargeTime;
+    }
+    public void SetLowAttackSkill(LowAttackSkillData skill)
+    {
+        _playerSkill.lowAttackSkillData = skill;
+    }
+    public void SetChargeAttackSkill(ChargeAttackSkillData skill)
+    {
+        _playerSkill.chargeAttackSkillData = skill;
+    }
+    public void SetRangedAttackSkill(RangedAttackSkillData skill)
+    {
+        _playerSkill.rangedAttackSkillData = skill;
+    }
+    public void SetSpecialChargeSkill(SpecialChargeSkillData skill)
+    {
+        _playerSkill.specialChargeSkill = skill;
+    }
+    public void SetDashSkill(DashSkillData skill)
+    {
+        _playerSkill.dashSkillData = skill;
+    }
+    public void AddPassiveSkill(PassiveSkillData skill)
+    {
+        _playerSkill.passiveSkillDataList.Add(skill);
     }
     void OnTriggerEnter(Collider other)
     {
@@ -1416,11 +1496,11 @@ public class PlayerState : Player<PlayerState>
         }
 
         // ドロップした弾にあたったら弾を補充
-        if(other.gameObject.CompareTag("DropBullet"))
+        if (other.gameObject.CompareTag("DropBullet"))
         {
             // 弾を補充
             _nowBulletNum++;
-            
+
             // アイテムを親ごと消す
             Destroy(other.transform.parent.gameObject);
         }
