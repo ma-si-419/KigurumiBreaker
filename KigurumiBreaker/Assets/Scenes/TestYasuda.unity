@@ -185,16 +185,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b0c5e91ad9a304a8ab7e2d1aa55251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 0
-  detectRangeSqr: 0
-  attackRange: 0
-  attackRangeSqr: 0
-  idleTime: 5
-  chaseTime: 3
-  agent: {fileID: 2515657}
-  player: {fileID: 1992285110}
-  attackHitBox: {fileID: 0}
-  playerTrans: {fileID: 1992285115}
+  _currentStateData:
+    maxHp: 0
+    attackPower: 0
+    moveSpeed: 0
+    attackInterval: 0
+    detectionRange: 0
+    attackRange: 0
+  _idleWaitTime: 0
+  _chaseWaitTime: 0
+  _agent: {fileID: 0}
+  _player: {fileID: 0}
+  _attackHitBox: {fileID: 0}
   _chargeSpeed: 10
   _chargeTime: 0.5
 --- !u!54 &2515660
@@ -906,8 +908,8 @@ Transform:
   m_GameObject: {fileID: 963660378}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.18}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1489784772}
@@ -1108,7 +1110,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 9, y: 9, z: 9}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1489784772}
@@ -1293,6 +1295,124 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2038796451}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1281575898
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1281575899}
+  - component: {fileID: 1281575903}
+  - component: {fileID: 1281575902}
+  - component: {fileID: 1281575901}
+  - component: {fileID: 1281575900}
+  m_Layer: 0
+  m_Name: DirectionTest
+  m_TagString: EnemyAttack
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1281575899
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281575898}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.8, y: 0.5, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1489784772}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1281575900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281575898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f0b08aba0e81c40b9054d55d293ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!135 &1281575901
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281575898}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1281575902
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281575898}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1281575903
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281575898}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1317652286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1661,16 +1781,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46a226665e371847a72bd255227939b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 0
-  detectRangeSqr: 0
-  attackRange: 0
-  attackRangeSqr: 0
-  idleTime: 5
-  chaseTime: 3
-  agent: {fileID: 1489784773}
-  player: {fileID: 1992285110}
-  attackHitBox: {fileID: 0}
-  playerTrans: {fileID: 1992285115}
+  _currentStateData:
+    maxHp: 0
+    attackPower: 0
+    moveSpeed: 0
+    attackInterval: 0
+    detectionRange: 0
+    attackRange: 0
+  _idleWaitTime: 0
+  _chaseWaitTime: 0
+  _agent: {fileID: 0}
+  _player: {fileID: 0}
+  _attackHitBox: {fileID: 0}
 --- !u!54 &1489784768
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1696,7 +1818,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 94
   m_CollisionDetection: 0
 --- !u!136 &1489784769
 CapsuleCollider:
@@ -1780,10 +1902,11 @@ Transform:
   m_GameObject: {fileID: 1489784766}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: 1.65, z: 9.3}
+  m_LocalPosition: {x: -0.9, y: 1.65, z: 20.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1281575899}
   - {fileID: 1317652290}
   - {fileID: 1803012998}
   - {fileID: 1972706297}
@@ -1801,11 +1924,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 0
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 5
+  m_StoppingDistance: 3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1846,16 +1969,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185a98e336a53d0478c50171132b0872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 30
-  detectRangeSqr: 0
-  attackRange: 5
-  attackRangeSqr: 0
-  idleTime: 5
-  chaseTime: 3
-  agent: {fileID: 1489784773}
-  player: {fileID: 1992285110}
-  attackHitBox: {fileID: 0}
-  playerTrans: {fileID: 1992285115}
+  _currentStateData:
+    maxHp: 100
+    attackPower: 5
+    moveSpeed: 6
+    attackInterval: 5
+    detectionRange: 10
+    attackRange: 5
+  _idleWaitTime: 2
+  _chaseWaitTime: 2
+  _agent: {fileID: 1489784773}
+  _player: {fileID: 1992285110}
+  _attackHitBox: {fileID: 1317652286}
+  _dashSpeed: 2
+  _dashTime: 0.3
 --- !u!114 &1489784776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1868,16 +1995,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b0c5e91ad9a304a8ab7e2d1aa55251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 40
-  detectRangeSqr: 0
-  attackRange: 15
-  attackRangeSqr: 0
-  idleTime: 6
-  chaseTime: 3
-  agent: {fileID: 1489784773}
-  player: {fileID: 1992285110}
-  attackHitBox: {fileID: 0}
-  playerTrans: {fileID: 1992285115}
+  _currentStateData:
+    maxHp: 100
+    attackPower: 5
+    moveSpeed: 3
+    attackInterval: 5
+    detectionRange: 40
+    attackRange: 30
+  _idleWaitTime: 2
+  _chaseWaitTime: 1
+  _agent: {fileID: 1489784773}
+  _player: {fileID: 1992285110}
+  _attackHitBox: {fileID: 1803012997}
   _chargeSpeed: 10
   _chargeTime: 0.8
 --- !u!114 &1489784777
@@ -1892,39 +2021,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 866f7f4fb35631e4e80770c6036b0055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 0
-  detectRangeSqr: 0
-  attackRange: 0
-  attackRangeSqr: 0
-  idleTime: 5
-  chaseTime: 3
-  agent: {fileID: 1489784773}
-  player: {fileID: 1992285110}
-  attackHitBox: {fileID: 0}
-  playerTrans: {fileID: 1992285115}
+  _currentStateData:
+    maxHp: 100
+    attackPower: 5
+    moveSpeed: 3
+    attackInterval: 3
+    detectionRange: 30
+    attackRange: 5
+  _idleWaitTime: 3
+  _chaseWaitTime: 2
+  _agent: {fileID: 1489784773}
+  _player: {fileID: 1992285110}
+  _attackHitBox: {fileID: 963660378}
 --- !u!114 &1489784778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1489784766}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46b923e960e341e4d90561667b35d186, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectRange: 40
-  detectRangeSqr: 0
-  attackRange: 5
-  attackRangeSqr: 0
-  idleTime: 0
-  chaseTime: 0
-  agent: {fileID: 1489784773}
-  player: {fileID: 1992285110}
-  attackHitBox: {fileID: 0}
-  playerTrans: {fileID: 1992285115}
---- !u!114 &1489784779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1933,19 +2042,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 1489784766}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46b923e960e341e4d90561667b35d186, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentStateData:
+    maxHp: 100
+    attackPower: 5
+    moveSpeed: 8
+    attackInterval: 0
+    detectionRange: 30
+    attackRange: 3.5
+  _idleWaitTime: 4
+  _chaseWaitTime: 0
+  _agent: {fileID: 1489784773}
+  _player: {fileID: 1992285110}
+  _attackHitBox: {fileID: 1056194386}
+  _dashSpeed: 8
+  _dashTime: 0.5
+--- !u!114 &1489784779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489784766}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7c7b197ad03528428abdb51eaaf5465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 40
-  detectRangeSqr: 0
-  attackRange: 30
-  attackRangeSqr: 0
-  idleTime: 3
-  chaseTime: 3
-  agent: {fileID: 1489784773}
-  player: {fileID: 1992285110}
-  attackHitBox: {fileID: 7092413309690627160, guid: cc3e96374149d034e9b08d27e444f611, type: 3}
-  playerTrans: {fileID: 1992285115}
+  _currentStateData:
+    maxHp: 100
+    attackPower: 3
+    moveSpeed: 5
+    attackInterval: 0
+    detectionRange: 0
+    attackRange: 0
+  _idleWaitTime: 0
+  _chaseWaitTime: 0
+  _agent: {fileID: 0}
+  _player: {fileID: 0}
+  _attackHitBox: {fileID: 0}
   firePoint: {fileID: 1972706297}
   shootInterval: 2
 --- !u!1 &1490232646
@@ -2826,7 +2963,7 @@ Transform:
   m_GameObject: {fileID: 1992285110}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: 1.99, z: 45}
+  m_LocalPosition: {x: -0.93, y: 1.99, z: 36.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

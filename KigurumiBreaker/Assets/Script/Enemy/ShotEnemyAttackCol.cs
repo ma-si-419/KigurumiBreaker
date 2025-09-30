@@ -28,11 +28,11 @@ public class ShotEnemyAttackCol : MonoBehaviour
             Debug.Log("ƒvƒŒƒCƒ„[‚ÉUŒ‚‚µ‚½");
             Destroy(gameObject);    // ’e‚ğíœ
         }
-        //else if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
-        //{
-        //    // •Ç‚âáŠQ•¨‚É“–‚½‚Á‚½ê‡‚à’e‚ğíœ
-        //    Destroy(gameObject);
-        //}
+        else if (other.CompareTag("Wall"))
+        {
+            // •Ç‚âáŠQ•¨‚É“–‚½‚Á‚½ê‡‚à’e‚ğíœ
+            Destroy(gameObject);
+        }
 
     }
 
