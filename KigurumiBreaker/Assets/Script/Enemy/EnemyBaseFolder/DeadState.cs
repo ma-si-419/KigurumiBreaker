@@ -23,6 +23,7 @@ public class DeadState : IState
         Debug.Log("AttackState: Update");
 
         //€‚ñ‚¾ˆ—‘‚¢‚Æ‚¯
+        //_enemy.Die();
     }
 
     public void End()

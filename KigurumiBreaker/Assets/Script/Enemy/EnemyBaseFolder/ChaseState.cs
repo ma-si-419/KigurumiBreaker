@@ -11,7 +11,6 @@ public class ChaseState : IState
         //コンストラクタでEnemyの参照を受け取る
         _enemy = enemy;
         _enemy.agent.isStopped = false; //追跡を停止
-
     }
 
     public void Init()
@@ -22,7 +21,7 @@ public class ChaseState : IState
     public void Update()
     {
         //敵がプレイヤーを向いている方向を取得
-        Vector3 directionToPlayer = _enemy.playerTrans.position - _enemy.transform.position;
+        Vector3 directionToPlayer = _enemy.player.transform.position - _enemy.transform.position;
 
         _enemy.Move(); //基本移動処理
     }
