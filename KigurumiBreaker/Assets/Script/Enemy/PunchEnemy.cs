@@ -18,7 +18,6 @@ public class PunchEnemy : Enemy
         _punchTimer += Time.deltaTime;
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
 
-        
 
         StartCoroutine(DoAttack());
     }
