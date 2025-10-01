@@ -14,20 +14,26 @@ public class DeadState : IState
 
     public void Init()
     {
-        Debug.Log("AttackState: Init");
+        Debug.Log("DeadState: Init");
+        //死亡アニメーション開始
+
     }
 
     public void Update()
     {
         //タイマーを進める
-        Debug.Log("AttackState: Update");
+        Debug.Log("DeadState: Update");
+        Debug.Log("死んだ");
 
-        //死んだ処理書いとけ
-        //_enemy.Die();
+        //死亡アニメーションが終わったらオブジェクト削除
+        //オブジェクト削除
+        
     }
 
     public void End()
     {
-        Debug.Log("AttackState: End");
+        Debug.Log("DeadState: End");
+        //死亡アニメーション終了
+
     }
 }

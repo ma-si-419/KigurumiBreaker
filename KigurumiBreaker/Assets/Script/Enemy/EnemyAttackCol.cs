@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class EnemyAttackCol : MonoBehaviour
 {
-    //private bool _isAttackHit = false;
+    [Header("ヒットダメージ設定")]
+    [SerializeField]private int _damage;
+    [SerializeField]private int _damageKind;
+    //[SerializeField] private GameObject _hitEffectPrefab;
 
-    private void OnTriggerEnter(Collider other)
+    public int GetDamage()
     {
-        //if(_isAttackHit) return; // 既に攻撃がヒットしている場合は処理を行わない
-
-        if (other.CompareTag("Player"))
-        {
-            // プレイヤーにダメージを与える処理
-            Debug.Log("プレイヤーに攻撃した");
-            //_isAttackHit = true; // 攻撃がヒットしたことを記録
-            //Destroy(gameObject);    // 攻撃判定オブジェクトを削除
-        }
+        return _damage;
     }
+
+    public PlayerState.DamageKind GetDamageKind()
+    {
+        return (PlayerState.DamageKind)_damageKind;
+    }
+
+    //public GameObject GetHitEffectPrefab()
+    //{
+    //    return _hitEffectPrefab;
+    //}
+
+
+
 }
