@@ -23,9 +23,14 @@ public class DamageState : IState
     {
         //タイマーを進める
         Debug.Log("DamageState: Update");
+        Debug.Log("ノックバック！！");
+
+
+        //ダメージアニメーション終了を検知したらIdleStateに遷移
+        _enemy.ChangeState(new IdleState(_enemy));
 
         //プレイヤーの攻撃方向によってノックバックを挟む
-        //ノックバックが終わったらIdleStateに遷移
+
 
     }
 

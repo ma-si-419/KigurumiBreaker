@@ -21,9 +21,9 @@ public class CircleAttackEnemy : Enemy
         Debug.Log("パンチ");
 
         //アニメーションイベントで攻撃判定オブジェクトを生成したい(将来的に)
-        _attackHitBox.SetActive(true);          // 攻撃判定を有効化
+        _attackObjectPrefab.SetActive(true);          // 攻撃判定を有効化
         yield return new WaitForSeconds(0.3f); // 攻撃のタイミングを調整
-        _attackHitBox.SetActive(false);        // 攻撃判定を無効化
+        _attackObjectPrefab.SetActive(false);        // 攻撃判定を無効化
         _circleAttackTimer = 0.0f;
         ChangeState(new IdleState(this));
     }

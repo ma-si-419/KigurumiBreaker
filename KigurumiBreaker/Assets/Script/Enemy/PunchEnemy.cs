@@ -9,34 +9,21 @@ public class PunchEnemy : Enemy
 
     [SerializeField] private float _dashSpeed; // 前進速度
     [SerializeField] private float _dashTime; // 前進時間
+    [SerializeField] private float _attackDistance; // 攻撃判定の距離
 
     private bool _isDash = false; // 前進したかどうかのフラグ
-
 
     public override void Attack()
     {
         _punchTimer += Time.deltaTime;
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
 
-
-        StartCoroutine(DoAttack());
-    }
-
-    private IEnumerator DoAttack()
-    {
-        //攻撃を行い終えたら待機状態へ戻る
-        Debug.Log("パンチ");
-
         // 前進動作
         if(!_isDash) StartCoroutine(DoDash());
 
         //アニメーションイベントで攻撃判定オブジェクトを生成したい(将来的に)
 
-        _attackHitBox.SetActive(true);          // 攻撃判定を有効化
-        yield return new WaitForSeconds(0.3f); // 攻撃のタイミングを調整
-        _attackHitBox.SetActive(false);        // 攻撃判定を無効化
-        _punchTimer = 0.0f;
-        ChangeState(new IdleState(this));
+
     }
 
     private IEnumerator DoDash()
@@ -57,6 +44,30 @@ public class PunchEnemy : Enemy
 
         _isDash = false;
         _punchTimer = 0.0f;
+
+        //攻撃判定を一つ生成させる
+        if (!_isCreateAttack)
+        {
+            _isCreateAttack = true;
+            CreateAttack();
+        }
+    }
+
+    // 攻撃オブジェクトを生成する関数
+    private void CreateAttack()
+    {
+        // ゲームオブジェクト生成
+        GameObject attackObject = Instantiate(_attackObjectPrefab);
+
+        // 球の当たり判定設定
+        //attackObject.GetComponent<SphereCollider>().radius = _attackRadius;
+
+        // 攻撃オブジェクトの位置を調整
+        attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;
+
+        //攻撃フラグをリセット
+        _isCreateAttack = false;
+        ChangeState(new IdleState(this));
     }
 
 }

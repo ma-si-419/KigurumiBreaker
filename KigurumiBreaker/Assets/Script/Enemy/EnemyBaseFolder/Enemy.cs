@@ -27,6 +27,10 @@ public class Enemy : MonoBehaviour
     protected int _currentTrunk; // 現在の耐久力
     protected int _currentEnemyType;    // 敵の種類
 
+    [Header("攻撃判定の設定")]
+    //[SerializeField] protected float _attackRadius; // 攻撃判定の半径
+
+
     protected float _detectRangeSqr; // プレイヤー検知範囲の二乗
     protected float _attackRangeSqr; // プレイヤー攻撃範囲の二乗
 
@@ -37,12 +41,16 @@ public class Enemy : MonoBehaviour
     [Header("コンポーネント")]
     [SerializeField] protected NavMeshAgent _agent; // NavMeshAgentの参照
     [SerializeField] protected GameObject _player; // プレイヤーの参照
-    [SerializeField] protected GameObject _attackHitBox; // 攻撃判定のゲームオブジェクト
+    [SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
 
     private float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
     private float _rotationSpeed = 5.0f; // プレイヤーの方向を向く速度
     private bool _isDetectPlayer = false; // プレイヤーを検知したかどうかのフラグ
     protected Vector3 _direction; // 移動方向
+    protected bool _isCreateAttack = false; // 攻撃オブジェクトを生成したかどうかのフラグ
+    protected bool _isDamage = false; // ダメージを受けたかどうかのフラグ
+
+    private int _damageTime = 0; // ダメージを受けてからの時間
 
     public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
     public GameObject player => _player; // プレイヤーのゲッター
@@ -73,6 +81,24 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         Debug.Log(_currentHp);
+
+        if(_isDamage)
+        {
+            _damageTime++;
+
+            if (_damageTime > 15)
+            {
+                _isDamage = false;
+                _damageTime = 0;
+            }
+
+        }
+        else
+        {
+            _damageTime = 0;
+
+            this.GetComponent<Renderer>().material.color = Color.white;
+        }
 
         // 現在のステートを更新
         _currentState?.Update();
@@ -188,14 +214,21 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            //敵が死んでたらダメージを受けない
-            if (_currentState is DeadState) return; 
+            //ダメージを受けたフラグを立てる
+            _isDamage = true;
+
+            //ダメージを受けたら赤くする(デバッグ)
+            this.GetComponent<Renderer>().material.color = Color.red;
 
             // プレイヤーにダメージを与える処理
-            Debug.Log("プレイヤーに攻撃した");
+            Debug.Log("プレイヤーに攻撃された");
 
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
-            _currentHp = other.GetComponent<PlayerAttack>().GetDamage();
+            _currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
+            //_currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+
+            // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
+            //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
 
             // ダメージエフェクトを生成する
             //Instantiate(_damageEffect, transform.position, Quaternion.identity);
@@ -204,7 +237,11 @@ public class Enemy : MonoBehaviour
             if (_currentHp <= 0)
             {
                 _currentHp = 0;
-                ChangeState(new DeadState(this));
+                // すでに死亡状態なら変更しない
+                if (!(_currentState is DeadState))
+                {
+                    ChangeState(new DeadState(this));
+                }
             }
             else
             {
@@ -212,10 +249,42 @@ public class Enemy : MonoBehaviour
 
                 //ダメージ状態に遷移
                 ChangeState(new DamageState(this));
-                Destroy(other.gameObject); // 攻撃判定を消す
             }
 
+            //攻撃はいったら攻撃判定を速攻消す
+            //Destroy(other.gameObject);
         }
+
+        if (other.gameObject.CompareTag("PlayerRangedAttack"))
+        {
+            //ダメージを受けたフラグを立てる
+            _isDamage = true;
+
+            //ダメージを受けたら赤くする(デバッグ)
+            this.GetComponent<Renderer>().material.color = Color.red;
+
+            // プレイヤーにダメージを与える処理
+            _currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
+            //_currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+
+            // Hpが0以下なら死亡処理に遷移
+            if (_currentHp <= 0)
+            {
+                _currentHp = 0;
+                // すでに死亡状態なら変更しない
+                if (!(_currentState is DeadState))
+                {
+                    ChangeState(new DeadState(this));
+                }
+            }
+            else
+            {
+                if (_currentEnemyType == 1) return; // でかい敵はダメージ状態に遷移しない
+                //ダメージ状態に遷移
+                ChangeState(new DamageState(this));
+            }
+        }
+
     }
 
     // Getterメソッド

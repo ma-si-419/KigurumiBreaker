@@ -10,6 +10,7 @@ public class SuicideEnemy : Enemy
     [Header("自爆敵の変数")]
     [SerializeField] private float _dashSpeed; // 突進速度
     [SerializeField] private float _dashTime; // 突進時間
+    [SerializeField] private float _attackDistance; // 攻撃判定の距離
 
     private bool _isDash = false; // 突進中かどうかのフラグ
 
@@ -61,9 +62,9 @@ public class SuicideEnemy : Enemy
         //攻撃を行い終えたら待機状態へ戻る
         Debug.Log("爆破!!");
 
-        _attackHitBox.SetActive(true); // 攻撃判定を有効化
+        _attackObjectPrefab.SetActive(true); // 攻撃判定を有効化
         yield return new WaitForSeconds(0.9f); // 攻撃のタイミングを調整
-        _attackHitBox.SetActive(false); // 攻撃判定を無効化
+        _attackObjectPrefab.SetActive(false); // 攻撃判定を無効化
         _suicideTimer = 0.0f;
         ChangeState(new IdleState(this));
     }
@@ -85,6 +86,23 @@ public class SuicideEnemy : Enemy
         }
 
         _isDash = false;
+    }
+
+    // 攻撃オブジェクトを生成する関数
+    private void CreateAttack()
+    {
+        // ゲームオブジェクト生成
+        GameObject attackObject = Instantiate(_attackObjectPrefab);
+
+        // 球の当たり判定設定
+        //attackObject.GetComponent<SphereCollider>().radius = _attackRadius;
+
+        // 攻撃オブジェクトの位置を調整
+        attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;
+
+        //攻撃フラグをリセット
+        _isCreateAttack = false;
+        ChangeState(new IdleState(this));
     }
 
 }
