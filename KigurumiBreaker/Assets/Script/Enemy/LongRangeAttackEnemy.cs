@@ -40,7 +40,7 @@ public class LongRangeAttackEnemy : Enemy
     private void Shoot()
     {
         //’e‚ğ¶¬
-        GameObject bullet = Instantiate(_attackHitBox, firePoint.position, firePoint.rotation);
+        GameObject bullet = Instantiate(_attackObjectPrefab, firePoint.position, firePoint.rotation);
         Debug.Log("’e‚ğ”­Ë!!");
     }
 

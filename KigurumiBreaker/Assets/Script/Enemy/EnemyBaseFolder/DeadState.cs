@@ -27,7 +27,8 @@ public class DeadState : IState
 
         //死亡アニメーションが終わったらオブジェクト削除
         //オブジェクト削除
-        
+        Object.Destroy(_enemy.gameObject);
+
     }
 
     public void End()
