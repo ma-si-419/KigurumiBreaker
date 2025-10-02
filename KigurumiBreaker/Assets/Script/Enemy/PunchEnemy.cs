@@ -18,8 +18,10 @@ public class PunchEnemy : Enemy
         _punchTimer += Time.deltaTime;
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
 
+        base.Attack();
+
         // 前進動作
-        if(!_isDash) StartCoroutine(DoDash());
+        if (!_isDash) StartCoroutine(DoDash());
 
         //アニメーションイベントで攻撃判定オブジェクトを生成したい(将来的に)
 
@@ -33,6 +35,7 @@ public class PunchEnemy : Enemy
 
         while (timer < _dashTime && _isDash)
         {
+
             // 前進方向を計算
             Vector3 dir = (transform.forward).normalized;
 
@@ -61,6 +64,7 @@ public class PunchEnemy : Enemy
 
         // 球の当たり判定設定
         //attackObject.GetComponent<SphereCollider>().radius = _attackRadius;
+
 
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;

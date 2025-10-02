@@ -73,6 +73,7 @@ public class Enemy : MonoBehaviour
         if (_agent != null)
         {
             _agent.speed = _currentStateData.moveSpeed;  // 移動速度を設定
+            _agent.stoppingDistance = _currentStateData.attackRange; // 攻撃範囲を設定
         }
 
         // プレイヤー参照が空なら自動で探す
@@ -106,12 +107,11 @@ public class Enemy : MonoBehaviour
                 _damageTime = 0;
             }
 
+            this.GetComponent<Renderer>().material.color = Color.red;
         }
         else
         {
             _damageTime = 0;
-
-            this.GetComponent<Renderer>().material.color = Color.white;
         }
 
         // 現在のステートを更新
@@ -127,11 +127,15 @@ public class Enemy : MonoBehaviour
     }
 
     //基本攻撃処理(オーバーライドで変更可)
-    public virtual void Attack() { }
+    public virtual void Attack() 
+    {
+        this.GetComponent<Renderer>().material.color = Color.cyan;
+    }
 
     //基本移動処理(オーバーライドで変更可)
     public virtual void Move()
     {
+        this.GetComponent<Renderer>().material.color = Color.yellow;
         Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
 
         Debug.Log("ChaseState: Update");
@@ -155,7 +159,6 @@ public class Enemy : MonoBehaviour
 
             Debug.Log("攻撃範囲内に入った！");
 
-
             if (_stateTimer > _chaseWaitTime)
             {
                 _agent.isStopped = true; //追跡を停止
@@ -174,6 +177,7 @@ public class Enemy : MonoBehaviour
     public virtual void Idle()
     {
         Debug.DrawLine(transform.position, player.transform.position, Color.green);
+        this.GetComponent<Renderer>().material.color = Color.white;
 
         //タイマーを進める
         Debug.Log("IdleState: Update");
@@ -183,6 +187,8 @@ public class Enemy : MonoBehaviour
         //プレイヤーが検知範囲内にいるかチェック
         if (diff.sqrMagnitude < _detectRangeSqr || _isDetectPlayer)
         {
+            this.GetComponent<Renderer>().material.color = Color.green;
+
             //一度でも攻撃範囲内に入ったらフラグを立て続ける
             _isDetectPlayer = true;
             //プレイヤーの方向を向き続ける

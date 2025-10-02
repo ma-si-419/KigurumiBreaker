@@ -8,6 +8,7 @@ public class SuicideEnemy : Enemy
     public override void Attack()
     {
         //_suicideTimer += Time.deltaTime;
+        base.Attack();
 
         //UŒ‚”»’è‚ğˆê‚Â¶¬‚³‚¹‚é
         if (!_isCreateAttack)
