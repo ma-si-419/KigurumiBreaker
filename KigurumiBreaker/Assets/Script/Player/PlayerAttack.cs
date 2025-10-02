@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
+    public struct PlayerAttackData
+    {
+        public int damage;
+        public float knockBackPower;
+        public int attackLifeTime;
+        public GameObject hitEffect;
+        public GameObject chaseAttack;
+        public ZangiMove.EnemyDebuff debuffType;
+        public bool isReflect;
+    }
 
-    private AttackData _attackData;
+    private PlayerAttackData _attackData;
+
     private Vector3 _playerPos;
 
     int _lifeTIme = 0;
@@ -36,7 +47,7 @@ public class PlayerAttack : MonoBehaviour
         _playerPos = pos;
     }
 
-    public void SetAttackData(AttackData data)
+    public void SetAttackData(PlayerAttackData data)
     {
         this._attackData = data;
     }

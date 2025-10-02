@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class PlayerRangedAttack : MonoBehaviour
 {
-    private AttackData _attackData;
+
+    public struct RangedAttackData
+    {
+        public int damage;
+        public bool isHoming;
+        public ZangiMove.EnemyDebuff debuffType;
+        public bool isKnockBack;
+        public float speedRate;
+        public GameObject chaseAttack;
+        public GameObject hitEffect;
+        public float effectShiftScale;
+    }
+
+    private RangedAttackData _attackData;
 
     private GameObject _target;
 
@@ -37,10 +50,10 @@ public class PlayerRangedAttack : MonoBehaviour
         }
 
         // Œü‚¢‚Ä‚¢‚é•ûŒü‚Éi‚Ş
-        transform.position += _currentDir * _moveSpeed * Time.fixedDeltaTime;
+        transform.position += _currentDir * (_moveSpeed) * Time.fixedDeltaTime;
     }
 
-    public void SetAttackData(AttackData data)
+    public void SetAttackData(RangedAttackData data)
     {
         this._attackData = data;
     }
