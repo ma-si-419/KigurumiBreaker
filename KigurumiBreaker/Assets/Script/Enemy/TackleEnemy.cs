@@ -12,6 +12,9 @@ public class TackleEnemy : Enemy
     private bool _isCharge = false; // 突進中かどうかのフラグ
     private bool _isAttackEnd = false; // 攻撃が終了したかどうかのフラグ
     private float _tackleTime = 0.0f; // タイマー
+    private GameObject _attackObject; // 攻撃オブジェクト
+
+
 
     public override void Attack()
     {
@@ -27,6 +30,12 @@ public class TackleEnemy : Enemy
             {
                 _isCreateAttack = true;
                 CreateAttack();
+            }
+
+            if (_attackObject != null)
+            {
+                // 破棄されていない場合のみ位置を更新
+                _attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;
             }
 
             // 突進中でなければ突進を開始
@@ -57,6 +66,8 @@ public class TackleEnemy : Enemy
 
         _isAttackEnd = true;
 
+        //攻撃フラグをリセット
+        _isCreateAttack = false;
 
         ChangeState(new IdleState(this));
     }
@@ -65,13 +76,7 @@ public class TackleEnemy : Enemy
     private void CreateAttack()
     {
         // ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(_attackObjectPrefab);
-
-        // 攻撃オブジェクトの位置を調整
-        attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;
-
-        //攻撃フラグをリセット
-        _isCreateAttack = false;
+        _attackObject = Instantiate(_attackObjectPrefab);
     }
 
 }
