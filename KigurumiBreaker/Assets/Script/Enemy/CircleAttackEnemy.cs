@@ -12,19 +12,25 @@ public class CircleAttackEnemy : Enemy
         _circleAttackTimer += Time.deltaTime;
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
 
-        StartCoroutine(DoAttack());
+        //攻撃判定を一つ生成させる
+        if (!_isCreateAttack)
+        {
+            _isCreateAttack = true;
+            CreateAttack();
+        }
     }
 
-    private IEnumerator DoAttack()
+    // 攻撃オブジェクトを生成する関数
+    private void CreateAttack()
     {
-        //攻撃を行い終えたら待機状態へ戻る
-        Debug.Log("パンチ");
+        // ゲームオブジェクト生成
+        GameObject attackObject = Instantiate(_attackObjectPrefab);
 
-        //アニメーションイベントで攻撃判定オブジェクトを生成したい(将来的に)
-        _attackObjectPrefab.SetActive(true);          // 攻撃判定を有効化
-        yield return new WaitForSeconds(0.3f); // 攻撃のタイミングを調整
-        _attackObjectPrefab.SetActive(false);        // 攻撃判定を無効化
-        _circleAttackTimer = 0.0f;
+        // 攻撃オブジェクトの位置を調整
+        attackObject.transform.position = this.transform.position;
+
+        //攻撃フラグをリセット
+        _isCreateAttack = false;
         ChangeState(new IdleState(this));
     }
 
