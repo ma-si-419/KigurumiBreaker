@@ -7,15 +7,57 @@ public class LongRangeAttackEnemy : Enemy
 {
     // 攻撃に関する変数
     private float _longRangeTimer = 0.0f;   // タイマー
-    public Transform firePoint;
-    public float shootInterval = 0.5f; // 射撃間隔
+    [SerializeField] public float shootInterval = 0.5f; // 射撃間隔
 
-    [SerializeField] private float fleeDistance; // 逃げる距離
+    [SerializeField] private float _fleeDistance; // 逃げる距離
+    [SerializeField] private float _shootCount;  // 弾を撃つ回数
+
+    [SerializeField] private float _maxChaseRange; // 追跡の上限距離
+    private float _maxChaseRangeSqr; // 追跡の上限距離の二乗
+
+    public override void Move()
+    {
+        //逃げる処理
+        Nav();
+
+        _maxChaseRangeSqr = _maxChaseRange * _maxChaseRange;
+
+        this.GetComponent<Renderer>().material.color = Color.yellow;
+        Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
+
+        //タイマーを進める
+        _longRangeTimer += Time.deltaTime;
+
+
+        if (_longRangeTimer > _chaseWaitTime)
+        {
+            Debug.Log("IdleState: Change to ChaseState");
+
+            _agent.isStopped = true; //追跡を停止
+
+            //攻撃状態へ
+            _longRangeTimer = 0.0f;
+            ChangeState(new AttackState(this));
+        }
+
+        //プレイヤーとの上限距離を計算
+        Vector3 diff = _player.transform.position - transform.position;
+
+        if (diff.sqrMagnitude > _maxChaseRangeSqr)
+        {
+            _agent.isStopped = true; //追跡を停止
+            //視界外に出たのでIdle状態へ
+            ChangeState(new AttackState(this));
+        }
+
+
+    }
 
     public override void Attack()
     {
         _longRangeTimer += Time.deltaTime;
 
+        //プレイヤーの方向を向き続ける
         LookAtPlayer();
 
         base.Attack();
@@ -28,14 +70,15 @@ public class LongRangeAttackEnemy : Enemy
 
             // タイマーをリセット
             _longRangeTimer = 0.0f;
+            _shootCount += 1;
+
         }
 
-    }
-
-    public override void Move()
-    {
-        //逃げる処理
-        Nav();
+        if (_shootCount >= 3)
+        {
+            _shootCount = 0;
+            ChangeState(new IdleState(this));
+        }
 
     }
 
@@ -43,7 +86,7 @@ public class LongRangeAttackEnemy : Enemy
     private void Shoot()
     {
         //弾を生成
-        GameObject bullet = Instantiate(_attackObjectPrefab, firePoint.position, firePoint.rotation);
+        GameObject bullet = Instantiate(_attackObjectPrefab, this.transform.position, this.transform.rotation);
         Debug.Log("弾を発射!!");
     }
 
@@ -57,10 +100,10 @@ public class LongRangeAttackEnemy : Enemy
         Vector3 fleeDir = dirTarget.normalized;
 
         //一定距離先を目標に設定
-        Vector3 fleePos = transform.position + fleeDir * fleeDistance;
+        Vector3 fleePos = transform.position + fleeDir * _fleeDistance;
 
         NavMeshHit hit;
-        if(NavMesh.SamplePosition(fleePos, out hit, 1.0f, NavMesh.AllAreas))
+        if(NavMesh.SamplePosition(fleePos, out hit, 20.0f, NavMesh.AllAreas))
         {
             _agent.SetDestination(hit.position);
         }

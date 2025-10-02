@@ -96,8 +96,9 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         Debug.Log(_currentHp);
+        Debug.Log($"speed={_agent.speed}, isStopped={_agent.isStopped}, hasPath={_agent.hasPath}");
 
-        if(_isDamage)
+        if (_isDamage)
         {
             _damageTime++;
 
