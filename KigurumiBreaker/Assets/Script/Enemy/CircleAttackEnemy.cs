@@ -11,6 +11,7 @@ public class CircleAttackEnemy : Enemy
     {
         _circleAttackTimer += Time.deltaTime;
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
+        base.Attack();
 
         //攻撃判定を一つ生成させる
         if (!_isCreateAttack)

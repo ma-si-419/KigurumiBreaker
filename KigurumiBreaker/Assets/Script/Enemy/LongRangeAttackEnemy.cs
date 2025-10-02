@@ -18,6 +18,9 @@ public class LongRangeAttackEnemy : Enemy
 
         LookAtPlayer();
 
+        base.Attack();
+
+
         // ˆê’èŽžŠÔ‚²‚Æ‚É’e‚ð”­ŽË(3”­˜AŽË‚·‚é‚Ý‚½‚¢‚ÈŠÔŠu‚É‚µ‚½‚¢)
         if (_longRangeTimer > shootInterval)
         {

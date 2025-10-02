@@ -10,6 +10,7 @@ public class TackleEnemy : Enemy
     [SerializeField] private float _attackDistance; // 攻撃判定の距離
 
     private bool _isCharge = false; // 突進中かどうかのフラグ
+    private bool _isAttackEnd = false; // 攻撃が終了したかどうかのフラグ
     private float _tackleTime = 0.0f; // タイマー
 
     public override void Attack()
@@ -17,10 +18,16 @@ public class TackleEnemy : Enemy
         // ここにタックル攻撃の具体的な処理を追加
         Debug.Log("タックルアタック！");
         _tackleTime += Time.deltaTime;
+        base.Attack();
 
-        if(_tackleTime > 1.0f)
+        if (_tackleTime > 1.0f)
         {
-            _attackObjectPrefab.SetActive(true); // 攻撃判定を有効化
+            //攻撃判定を一つ生成させる
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                CreateAttack();
+            }
 
             // 突進中でなければ突進を開始
             if (!_isCharge) StartCoroutine(DoCharge());
@@ -48,10 +55,10 @@ public class TackleEnemy : Enemy
         _isCharge = false;
         _tackleTime = 0.0f;
 
-        // 突進終了後、待機状態へ戻る
-        _attackObjectPrefab.SetActive(false); // 攻撃判定を無効化
-        ChangeState(new IdleState(this));
+        _isAttackEnd = true;
 
+
+        ChangeState(new IdleState(this));
     }
 
     // 攻撃オブジェクトを生成する関数
@@ -60,15 +67,11 @@ public class TackleEnemy : Enemy
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(_attackObjectPrefab);
 
-        // 球の当たり判定設定
-        //attackObject.GetComponent<SphereCollider>().radius = _attackRadius;
-
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;
 
         //攻撃フラグをリセット
         _isCreateAttack = false;
-        ChangeState(new IdleState(this));
     }
 
 }
