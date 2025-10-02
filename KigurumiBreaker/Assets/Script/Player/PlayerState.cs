@@ -645,7 +645,6 @@ public class PlayerState : Player<PlayerState>
 
                 // 弾の向きと攻撃データを設定
                 rangedAttack.SetCurrentDir(state._currentDirection);
-                rangedAttack.SetAttackData(_currentAttackData);
             }
 
 
@@ -1274,49 +1273,73 @@ public class PlayerState : Player<PlayerState>
         // ゲームオブジェクトを生成
         GameObject attackObject = Instantiate(_attackObjectPrefab);
 
-        // 球の当たり判定を設定
-        attackObject.GetComponent<SphereCollider>().radius = data.scale;
+        // 当たり判定のサイズ
+        float scale = data.scale;
 
         // 攻撃のデータ
-        AttackData attackData = data;
+        PlayerAttack.PlayerAttackData attackData = new PlayerAttack.PlayerAttackData();
 
-        // 攻撃のダメージにスキルを加算
+        // 攻撃にスキルの効果を乗せる
         switch (data.attackKind)
         {
             case AttackData.AttackType.LowAttack:
                 if (_playerSkill.lowAttackSkillData != null)
                 {
-                    attackData.damage *= (_playerSkill.lowAttackSkillData.damageAddRate / 100);
+                    // ダメージにスキルのダメージ加算率を加算
+                    attackData.damage = data.damage + (data.damage * (_playerSkill.lowAttackSkillData.damageAddRate / 100));
+
+                    // ノックバックを追加
+                    attackData.knockBackPower = _playerSkill.lowAttackSkillData.addKnockBackPower;
+
+                    // 当たり判定のサイズを変更
+                    scale = data.scale * (_playerSkill.lowAttackSkillData.attackRangeAddRate / 100);
+
+                    // デバフを追加
+                    attackData.debuffType = _playerSkill.lowAttackSkillData.debuffType;
+
+                    // 追撃を追加
+                    attackData.chaseAttack = _playerSkill.lowAttackSkillData.chaseAttack;
                 }
-                break;
+                // ない場合は通常攻撃のデータをそのまま使用
+                else
+                {
+                    attackData.damage = data.damage;
+                }
+                    break;
 
             case AttackData.AttackType.ChargeAttack:
                 if (_playerSkill.chargeAttackSkillData != null)
                 {
-                    attackData.damage *= (_playerSkill.chargeAttackSkillData.damageAddRate / 100);
+                    // ダメージにスキルのダメージ加算率を加算
+                    attackData.damage = data.damage + (data.damage * (_playerSkill.chargeAttackSkillData.damageAddRate / 100));
+
+                    // ノックバックを追加
+                    attackData.knockBackPower = _playerSkill.chargeAttackSkillData.addKnockBackPower;
+
+                    // 当たり判定のサイズを変更
+                    scale = data.scale * (_playerSkill.chargeAttackSkillData.attackRangeAddRate / 100);
+
+                    // デバフを追加
+                    attackData.debuffType = _playerSkill.chargeAttackSkillData.debuffType;
+
+                    // 追撃を追加
+                    attackData.chaseAttack = _playerSkill.chargeAttackSkillData.chaseAttack;
+
+                    // 跳ね返すかどうかを追加
+                    attackData.isReflect = _playerSkill.chargeAttackSkillData.isReflect;
+                }
+                // ない場合は通常の攻撃のデータをそのまま使用
+                else
+                {
+                    attackData.damage = data.damage;
                 }
                 break;
-
-                ////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////////
         }
-
-
+        // 当たり判定のサイズを設定
+        attackObject.GetComponent<SphereCollider>().radius = scale;
 
         // 攻撃の情報を設定
-        attackObject.GetComponent<PlayerAttack>().SetAttackData(data);
+        attackObject.GetComponent<PlayerAttack>().SetAttackData(attackData);
 
         // 攻撃の位置を設定
         Vector3 position = GetAttackPosition(data.attackPart);
@@ -1344,11 +1367,39 @@ public class PlayerState : Player<PlayerState>
     {
         GameObject attack = _bulletPrefab;
 
+        PlayerRangedAttack.RangedAttackData attackData = new PlayerRangedAttack.RangedAttackData();
+
         // 攻撃の座標を設定
         Vector3 position = GetAttackPosition(data.attackPart);
         attack.transform.position = position;
         // 攻撃の向きを設定
         attack.transform.forward = transform.forward;
+
+        // 攻撃の情報を設定
+
+        // スキルがある場合
+        if(_playerSkill.rangedAttackSkillData != null)
+        {
+            // ダメージにスキルのダメージ加算率を加算
+            attackData.damage = data.damage + (data.damage * (_playerSkill.rangedAttackSkillData.damageAddRate / 100));
+            // 弾速を変更
+            attackData.speedRate = _playerSkill.rangedAttackSkillData.speedRate;
+            // デバフを追加
+            attackData.debuffType = _playerSkill.rangedAttackSkillData.debuffType;
+            // 追撃を追加
+            attackData.chaseAttack = _playerSkill.rangedAttackSkillData.chaseAttack;
+        }
+        // ない場合は通常の攻撃のデータをそのまま使用
+        else
+        {
+            attackData.damage = data.damage;
+            attackData.speedRate = 1.0f;
+            Debug.Log("弾速" + attackData.speedRate);
+        }
+
+        // 攻撃の情報をオブジェクトに入れる
+        attack.GetComponent<PlayerRangedAttack>().SetAttackData(attackData);
+
 
         // 攻撃オブジェクトを生成
         return Instantiate(attack);
