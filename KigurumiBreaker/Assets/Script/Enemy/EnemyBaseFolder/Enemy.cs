@@ -264,8 +264,8 @@ public class Enemy : MonoBehaviour
             this.GetComponent<Renderer>().material.color = Color.red;
 
             // プレイヤーにダメージを与える処理
-            _currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
-            //_currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+            //_currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
+            _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
