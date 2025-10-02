@@ -50,12 +50,12 @@ public class PlayerRangedAttack : MonoBehaviour
         }
 
         // Œü‚¢‚Ä‚¢‚é•ûŒü‚Éi‚Ş
-        transform.position += _currentDir * (_moveSpeed) * Time.fixedDeltaTime;
+        transform.position += _currentDir * (_moveSpeed * _attackData.speedRate) * Time.fixedDeltaTime;
     }
 
-    public void SetAttackData(RangedAttackData data)
+    public void SetRangedAttackData(RangedAttackData data)
     {
-        this._attackData = data;
+        _attackData = data;
     }
     public void SetTarget(GameObject target)
     {

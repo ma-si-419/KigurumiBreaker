@@ -324,6 +324,12 @@ public class PlayerState : Player<PlayerState>
                 dodgeDirection = state.CalculateMoveDirection(dodgeDirection);
             }
 
+            if(state._playerSkill.dashSkillData != null)
+            {
+                // ダッシュ開始時に出すスキルを出す
+                Instantiate(state._playerSkill.dashSkillData.startAttack, state.transform.position, Quaternion.identity);
+            }
+
         }
         public override void OnUpdate()
         {
@@ -347,9 +353,26 @@ public class PlayerState : Player<PlayerState>
             Vector3 dodgeVelocity = dodgeDirection * state._playerData.dodgeSpeed;
             state._rigidbody.velocity = dodgeVelocity;
 
+            // スキル処理
+            if(state._playerSkill.dashSkillData != null)
+            {
+                // 回避中に出すスキルを出す
+                if(state._playerSkill.dashSkillData.onDashAttack != null)
+                {
+                    Instantiate(state._playerSkill.dashSkillData.onDashAttack, state.transform.position, Quaternion.identity);
+                }
+            }
+
+
             // 一定時間経過したら待機状態に遷移
             if (dodgeTime >= state._playerData.dodgeTime)
             {
+                // 回避終了時に出すスキルを出す
+                if (state._playerSkill.dashSkillData != null && state._playerSkill.dashSkillData.endAttack != null)
+                {
+                    Instantiate(state._playerSkill.dashSkillData.endAttack, state.transform.position, Quaternion.identity);
+                }
+
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
                 float magnitude = state._moveInput.magnitude;
                 if (magnitude > state._playerData.moveInputLength)
@@ -1394,15 +1417,15 @@ public class PlayerState : Player<PlayerState>
         {
             attackData.damage = data.damage;
             attackData.speedRate = 1.0f;
-            Debug.Log("弾速" + attackData.speedRate);
         }
 
         // 攻撃の情報をオブジェクトに入れる
-        attack.GetComponent<PlayerRangedAttack>().SetAttackData(attackData);
+        GameObject bullet = Instantiate(attack);
 
+        bullet.GetComponent<PlayerRangedAttack>().SetRangedAttackData(attackData);
 
-        // 攻撃オブジェクトを生成
-        return Instantiate(attack);
+        return bullet;
+
     }
 
     private Vector3 CalculateMoveDirection(Vector3 direction)

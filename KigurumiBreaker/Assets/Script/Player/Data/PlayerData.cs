@@ -19,6 +19,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int DodgeTime;
     [Header("回避クールタイム")]
     [SerializeField] private int DodgeCoolTime;
+    [Header("回避中のスキルを出す間隔")]
+    [SerializeField] private int DodgeSkillInterval;
     [Header("最大体力")]
     [SerializeField] private int MaxHp;
     [Header("ため攻撃の発動までの時間")]
@@ -45,6 +47,7 @@ public class PlayerData : ScriptableObject
     public float rotateAngle => RotateAngle;
     public float dodgeStartTime => DodgeStartTime;
     public int dodgeTime => DodgeTime;
+    public int dodgeSkillInterval => DodgeSkillInterval;
     public int dodgeCoolTime => DodgeCoolTime;
     public int maxHp => MaxHp;
     public int chargeAttackTime => ChargeAttackTime;
