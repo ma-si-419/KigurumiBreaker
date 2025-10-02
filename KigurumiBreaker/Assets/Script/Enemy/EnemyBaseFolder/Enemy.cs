@@ -75,6 +75,20 @@ public class Enemy : MonoBehaviour
             _agent.speed = _currentStateData.moveSpeed;  // 移動速度を設定
         }
 
+        // プレイヤー参照が空なら自動で探す
+        if (_player == null)
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+            {
+                _player = playerObj;
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
+            }
+        }
+
         ChangeState(new IdleState(this));
     }
 
@@ -224,8 +238,8 @@ public class Enemy : MonoBehaviour
             Debug.Log("プレイヤーに攻撃された");
 
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
-            _currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
-            //_currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+            //_currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
+            _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
             // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
             //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();

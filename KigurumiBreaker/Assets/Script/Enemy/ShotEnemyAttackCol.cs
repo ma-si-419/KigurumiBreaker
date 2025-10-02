@@ -8,6 +8,18 @@ public class ShotEnemyAttackCol : MonoBehaviour
     [SerializeField] public float speed;   // 弾の速度
     [SerializeField] public float lifeTime; // 弾の寿命
 
+
+    // 弾を撃ったオブジェクト
+    public Enemy owner { get; private set; }
+
+    public void SetOwner(Enemy enemy)
+    {
+        owner = enemy;
+    }
+
+
+    //弾を反射するために必要になる誰が撃ったかの情報
+
     void Start()
     {
         Destroy(gameObject, lifeTime); // 一定時間後に弾を破壊
