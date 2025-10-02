@@ -112,7 +112,7 @@ public class PlayerState : Player<PlayerState>
     bool _isSpecialCharge;
 
     // 特殊攻撃のチャージ時間
-    private int _specialChargeTime;
+    private float _specialChargeTime;
 
     // アニメーター
     private Animator _animator;
@@ -324,7 +324,7 @@ public class PlayerState : Player<PlayerState>
                 dodgeDirection = state.CalculateMoveDirection(dodgeDirection);
             }
 
-            if(state._playerSkill.dashSkillData != null)
+            if (state._playerSkill.dashSkillData.startAttack != null)
             {
                 // ダッシュ開始時に出すスキルを出す
                 Instantiate(state._playerSkill.dashSkillData.startAttack, state.transform.position, Quaternion.identity);
@@ -354,10 +354,10 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = dodgeVelocity;
 
             // スキル処理
-            if(state._playerSkill.dashSkillData != null)
+            if (state._playerSkill.dashSkillData != null)
             {
                 // 回避中に出すスキルを出す
-                if(state._playerSkill.dashSkillData.onDashAttack != null)
+                if (state._playerSkill.dashSkillData.onDashAttack != null)
                 {
                     Instantiate(state._playerSkill.dashSkillData.onDashAttack, state.transform.position, Quaternion.identity);
                 }
@@ -368,7 +368,7 @@ public class PlayerState : Player<PlayerState>
             if (dodgeTime >= state._playerData.dodgeTime)
             {
                 // 回避終了時に出すスキルを出す
-                if (state._playerSkill.dashSkillData != null && state._playerSkill.dashSkillData.endAttack != null)
+                if (state._playerSkill.dashSkillData.endAttack != null)
                 {
                     Instantiate(state._playerSkill.dashSkillData.endAttack, state.transform.position, Quaternion.identity);
                 }
@@ -732,7 +732,22 @@ public class PlayerState : Player<PlayerState>
                 // 特殊攻撃可能
                 state.isAbleToSpecialAttack = true;
 
-                state._specialChargeTime++;
+
+                if (state._playerSkill.specialChargeSkill != null)
+                {
+                    // 溜め速度が早くなっている場合チャージを早める
+                    state._specialChargeTime += state._playerSkill.specialChargeSkill.chargeSpeedRate;
+
+                    // チャージ中に出すスキルを出す
+                    if (state._playerSkill.specialChargeSkill.chargingAttackObject != null)
+                    {
+                        Instantiate(state._playerSkill.specialChargeSkill.chargingAttackObject, state.transform.position, Quaternion.identity);
+                    }
+                }
+                else
+                {
+                    state._specialChargeTime++;
+                }
 
                 // 最大チャージ時間を超えたらアイドルに遷移
                 if (state._specialChargeTime >= state._playerData.maxSpecialChargeTime)
@@ -1309,13 +1324,14 @@ public class PlayerState : Player<PlayerState>
                 if (_playerSkill.lowAttackSkillData != null)
                 {
                     // ダメージにスキルのダメージ加算率を加算
-                    attackData.damage = data.damage + (data.damage * (_playerSkill.lowAttackSkillData.damageAddRate / 100));
+                    attackData.damage = data.damage + (int)(data.damage * (_playerSkill.lowAttackSkillData.damageAddRate / 100));
+
 
                     // ノックバックを追加
                     attackData.knockBackPower = _playerSkill.lowAttackSkillData.addKnockBackPower;
 
                     // 当たり判定のサイズを変更
-                    scale = data.scale * (_playerSkill.lowAttackSkillData.attackRangeAddRate / 100);
+                    scale = data.scale + data.scale * (_playerSkill.lowAttackSkillData.attackRangeAddRate / 100);
 
                     // デバフを追加
                     attackData.debuffType = _playerSkill.lowAttackSkillData.debuffType;
@@ -1328,7 +1344,7 @@ public class PlayerState : Player<PlayerState>
                 {
                     attackData.damage = data.damage;
                 }
-                    break;
+                break;
 
             case AttackData.AttackType.ChargeAttack:
                 if (_playerSkill.chargeAttackSkillData != null)
@@ -1401,7 +1417,7 @@ public class PlayerState : Player<PlayerState>
         // 攻撃の情報を設定
 
         // スキルがある場合
-        if(_playerSkill.rangedAttackSkillData != null)
+        if (_playerSkill.rangedAttackSkillData != null)
         {
             // ダメージにスキルのダメージ加算率を加算
             attackData.damage = data.damage + (data.damage * (_playerSkill.rangedAttackSkillData.damageAddRate / 100));
@@ -1453,11 +1469,11 @@ public class PlayerState : Player<PlayerState>
     {
         return _nowBulletNum;
     }
-    public int GetMaxSpecialChargeTime()
+    public float GetMaxSpecialChargeTime()
     {
         return _playerData.maxSpecialChargeTime;
     }
-    public int GetNowSpecialChargeTime()
+    public float GetNowSpecialChargeTime()
     {
         return _specialChargeTime;
     }

@@ -25,14 +25,14 @@ public class ZangiBar : MonoBehaviour
         int maxHp = _playerState.GetMaxHp();
         int nowHp = _playerState.GetNowHp();
 
-        int maxSp = _playerState.GetMaxSpecialChargeTime();
-        int nowSp = _playerState.GetNowSpecialChargeTime();
+        float maxSp = _playerState.GetMaxSpecialChargeTime();
+        float nowSp = _playerState.GetNowSpecialChargeTime();
 
         int maxBullet = _playerState.GetMaxBulletNum();
         int nowBullet = _playerState.GetNowBulletNum();
 
         // スライダーに現在のSPを反映
-        _spSlider.value = (float)nowSp / (float)maxSp;
+        _spSlider.value = nowSp / maxSp;
 
         // スライダーに現在のHPを反映
         _hpSlider.value = (float)nowHp / (float)maxHp;

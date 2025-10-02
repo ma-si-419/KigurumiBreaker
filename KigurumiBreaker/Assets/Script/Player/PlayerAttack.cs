@@ -49,7 +49,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void SetAttackData(PlayerAttackData data)
     {
-        this._attackData = data;
+        _attackData = data;
     }
 
     public int GetDamage()

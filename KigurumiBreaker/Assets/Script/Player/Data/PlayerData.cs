@@ -30,7 +30,7 @@ public class PlayerData : ScriptableObject
     [Header("移動ベクトルの回転度")]
     [SerializeField] private float MoveDirAngle;
     [Header("特殊攻撃の最大のチャージ時間")]
-    [SerializeField] private int MaxSpecialChargeTime;
+    [SerializeField] private float MaxSpecialChargeTime;
     [Header("特殊攻撃の最大溜め発動時のダメージカット率")]
     [SerializeField] private float MaxSpecialAttackDamegeCutRate;
     [Header("前方向とする角度")]
@@ -53,7 +53,7 @@ public class PlayerData : ScriptableObject
     public int chargeAttackTime => ChargeAttackTime;
     public int maxChargeAttackTime => MaxChargeAttackTime;
     public float moveDirAngle => MoveDirAngle;
-    public int maxSpecialChargeTime => MaxSpecialChargeTime;
+    public float maxSpecialChargeTime => MaxSpecialChargeTime;
     public float maxSpecialAttackDamegeCutRate => MaxSpecialAttackDamegeCutRate;
     public float forwardAngle => ForwardAngle;
     public float forwardDistance => ForwardDistance;
