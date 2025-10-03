@@ -5487,7 +5487,7 @@ MonoBehaviour:
   skillData: {fileID: 11400000, guid: cfa155911c56b7f4ea5f5f701e6290c3, type: 2}
   _player: {fileID: 1813502021}
   lowAttackSkillName: Thunder
-  chargeAttackSkillName: Thunder
+  chargeAttackSkillName: Wind
   specialChargeSkillName: Thunder
   rangedAttackSkillName: Thunder
   dashSkillName: Thunder
@@ -5930,6 +5930,7 @@ MonoBehaviour:
   damage: 50
   damageKind: 2
   hitEffectPrefab: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+  lifeTime: 180
 --- !u!135 &581154405
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9568,9 +9569,21 @@ PrefabInstance:
       value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: _rangedAttack
+      value: 
+      objectReference: {fileID: 3379700725155421037, guid: 72b7555e24df99d48a19a1f978975045, type: 3}
+    - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
       propertyPath: _battleManager
       value: 
       objectReference: {fileID: 1759240419}
+    - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: _rangedAttackSpeed
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: _rangedAttackInterval
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 3504199065376803036, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -13337,6 +13350,7 @@ MonoBehaviour:
   damage: 30
   damageKind: 1
   hitEffectPrefab: {fileID: 1368958316424924904, guid: 3e6c92a664796ed4d858cdc90f01f6ab, type: 3}
+  lifeTime: 180
 --- !u!135 &1216188114
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -14093,6 +14107,7 @@ MonoBehaviour:
   damage: 10
   damageKind: 0
   hitEffectPrefab: {fileID: 1368958316424924904, guid: c441043a92fff5444b26788cdd821f49, type: 3}
+  lifeTime: 180
 --- !u!135 &1296774341
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -23598,6 +23613,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 337774017670987841, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1715512238954766742, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.610043
@@ -23639,9 +23658,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: _rangedAttack
+      value: 
+      objectReference: {fileID: 3379700725155421037, guid: 72b7555e24df99d48a19a1f978975045, type: 3}
+    - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
       propertyPath: _battleManager
       value: 
       objectReference: {fileID: 1759240419}
+    - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: _rangedAttackSpeed
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3462612924774536134, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
+      propertyPath: _rangedAttackInterval
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 3504199065376803036, guid: 775f550e1734fbe44aa3e26d98311ebb, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
