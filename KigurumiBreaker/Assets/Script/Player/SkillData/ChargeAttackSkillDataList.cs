@@ -21,7 +21,7 @@ public class ChargeAttackSkillData
     [Header("ノックバック力")]
     [SerializeField] private float AddKnockBackPower;
     [Header("相手に与えるデバフの種類")]
-    [SerializeField] private ZangiMove.EnemyDebuff DebuffType;
+    [SerializeField] private Enemy.EnemyDebuff DebuffType;
     [Header("追撃の攻撃プレハブ")]
     [SerializeField] private GameObject ChaseAttack;
     [Header("攻撃を跳ね返すかどうか")]
@@ -31,7 +31,7 @@ public class ChargeAttackSkillData
     public int damageAddRate => DamageAddRate;
     public int attackRangeAddRate => AttackRangeAddRate;
     public float addKnockBackPower => AddKnockBackPower;
-    public ZangiMove.EnemyDebuff debuffType => DebuffType;
+    public Enemy.EnemyDebuff debuffType => DebuffType;
     public GameObject chaseAttack => ChaseAttack;
     public float chargeSpeedRate => ChargeSpeedRate;
     public bool isReflect => IsReflect;

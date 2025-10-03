@@ -55,7 +55,14 @@ public class Enemy : MonoBehaviour
     /* 定数 */
     private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
 
-
+    public enum EnemyDebuff
+    {
+        AtkDown,
+        DefDown,
+        SpeedDown,
+        Poison,
+        None
+    }
 
     public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
     public GameObject player => _player; // プレイヤーのゲッター
