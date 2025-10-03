@@ -4,8 +4,8 @@ using UnityEngine.AI;
 [System.Serializable]
 public class EnemyStateData
 {
-    public int maxHp;             // 最大体力
-    public int maxTrunk;          // 最大耐久力
+    public float maxHp;             // 最大体力
+    public float maxTrunk;          // 最大耐久力
     public int enemyType;         // 敵の種類（例：0=チビ、1=デカなど）
     public int attackPower;       // 攻撃力
     public float moveSpeed;       // 移動速度
@@ -23,8 +23,8 @@ public class Enemy : MonoBehaviour
 
     [Header("ステータス")]
     [SerializeField] protected EnemyStateData _currentStateData; // 現在のステータスデータ
-    protected int _currentHp;    // 現在の体力
-    protected int _currentTrunk; // 現在の耐久力
+    protected float _currentHp;    // 現在の体力
+    protected float _currentTrunk; // 現在の耐久力
     protected int _currentEnemyType;    // 敵の種類
 
     [Header("攻撃判定の設定")]
@@ -317,19 +317,19 @@ public class Enemy : MonoBehaviour
     }
 
     // Getterメソッド
-    public int GetMaxHp()
+    public float GetMaxHp()
     {
         return _currentStateData.maxHp;
     }
-    public int GetCurrentHp()
+    public float GetCurrentHp()
     {
         return _currentHp;
     }
-    public int GetMaxTrunk()
+    public float GetMaxTrunk()
     {
         return _currentStateData.maxTrunk;
     }
-    public int GetCurrentTrunk()
+    public float GetCurrentTrunk()
     {
         return _currentTrunk;
     }
