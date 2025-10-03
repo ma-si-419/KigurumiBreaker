@@ -1551,7 +1551,7 @@ public class PlayerState : Player<PlayerState>
             if (_stateKind == StateKind.SPECIALATTACK && _specialChargeTime == _playerData.maxSpecialChargeTime)
             {
                 // ダメージをカットする
-                int damage = (int)((float)other.gameObject.GetComponent<ZangiAttack>().GetDamage() * _playerData.maxSpecialAttackDamegeCutRate);
+                int damage = (int)((float)other.gameObject.GetComponent<EnemyAttackCol>().GetDamage() * _playerData.maxSpecialAttackDamegeCutRate);
 
                 _nowHp -= damage;
 
@@ -1565,10 +1565,10 @@ public class PlayerState : Player<PlayerState>
             else
             {
                 // HPを減らす
-                _nowHp -= (int)other.gameObject.GetComponent<ZangiAttack>().GetDamage();
+                _nowHp -= other.gameObject.GetComponent<EnemyAttackCol>().GetDamage();
 
                 // ダメージの種類を取得
-                _damageKind = other.gameObject.GetComponent<ZangiAttack>().GetDamageKind();
+                _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
 
                 // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
                 Vector3 hitPosition = other.ClosestPoint(transform.position);
