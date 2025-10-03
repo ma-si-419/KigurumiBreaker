@@ -15,6 +15,10 @@ public class LongRangeAttackEnemy : Enemy
     [SerializeField] private float _maxChaseRange; // ’ÇÕ‚ÌãŒÀ‹——£
     private float _maxChaseRangeSqr; // ’ÇÕ‚ÌãŒÀ‹——£‚Ì“ñæ
 
+    /* ’è” */
+    private const int MAX_SHOOT_COUNT = 3; // ’e‚ðŒ‚‚ÂÅ‘å‰ñ”
+    private const float MIN_FLEE_DISTANCE = 20.0f; // “¦‚°‚é‹——£‚ÌÅ¬’l
+
     public override void Move()
     {
         //“¦‚°‚éˆ—
@@ -74,7 +78,7 @@ public class LongRangeAttackEnemy : Enemy
 
         }
 
-        if (_shootCount >= 3)
+        if (_shootCount >= MAX_SHOOT_COUNT)
         {
             _shootCount = 0;
             ChangeState(new IdleState(this));
@@ -103,7 +107,7 @@ public class LongRangeAttackEnemy : Enemy
         Vector3 fleePos = transform.position + fleeDir * _fleeDistance;
 
         NavMeshHit hit;
-        if(NavMesh.SamplePosition(fleePos, out hit, 20.0f, NavMesh.AllAreas))
+        if(NavMesh.SamplePosition(fleePos, out hit, MIN_FLEE_DISTANCE, NavMesh.AllAreas))
         {
             _agent.SetDestination(hit.position);
         }
