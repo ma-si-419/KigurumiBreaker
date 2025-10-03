@@ -323,11 +323,13 @@ public class PlayerState : Player<PlayerState>
                 dodgeDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
                 dodgeDirection = state.CalculateMoveDirection(dodgeDirection);
             }
-
-            if (state._playerSkill.dashSkillData.startAttack != null)
+            if (state._playerSkill.dashSkillData != null)
             {
-                // ダッシュ開始時に出すスキルを出す
-                Instantiate(state._playerSkill.dashSkillData.startAttack, state.transform.position, Quaternion.identity);
+                if (state._playerSkill.dashSkillData.startAttack != null)
+                {
+                    // ダッシュ開始時に出すスキルを出す
+                    Instantiate(state._playerSkill.dashSkillData.startAttack, state.transform.position, Quaternion.identity);
+                }
             }
 
         }
@@ -367,10 +369,13 @@ public class PlayerState : Player<PlayerState>
             // 一定時間経過したら待機状態に遷移
             if (dodgeTime >= state._playerData.dodgeTime)
             {
-                // 回避終了時に出すスキルを出す
-                if (state._playerSkill.dashSkillData.endAttack != null)
+                if (state._playerSkill.dashSkillData != null)
                 {
-                    Instantiate(state._playerSkill.dashSkillData.endAttack, state.transform.position, Quaternion.identity);
+                    // 回避終了時に出すスキルを出す
+                    if (state._playerSkill.dashSkillData.endAttack != null)
+                    {
+                        Instantiate(state._playerSkill.dashSkillData.endAttack, state.transform.position, Quaternion.identity);
+                    }
                 }
 
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
@@ -1504,7 +1509,7 @@ public class PlayerState : Player<PlayerState>
     void OnTriggerEnter(Collider other)
     {
         // 敵の攻撃に当たったらダメージ状態に遷移
-        if (other.gameObject.CompareTag("EnemyAttack")||
+        if (other.gameObject.CompareTag("EnemyAttack") ||
             other.gameObject.CompareTag("EnemyRangedAttack"))
         {
             // 死亡時はダメージを受けない
