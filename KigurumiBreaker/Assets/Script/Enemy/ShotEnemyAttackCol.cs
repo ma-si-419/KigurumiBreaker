@@ -11,7 +11,7 @@ public class ShotEnemyAttackCol : MonoBehaviour
     [SerializeField] public float lifeTime; // 弾の寿命
 
     [Header("ヒットダメージ設定")]
-    [SerializeField]private int _damage;            // ヒットダメージ
+    [SerializeField]private float _damage;            // ヒットダメージ
     [SerializeField] private int _damageKind;        // 0:通常 1:火炎 2:氷結
     [SerializeField] private int _lifeTime;         // 攻撃判定の寿命（フレーム数）
 
@@ -53,7 +53,7 @@ public class ShotEnemyAttackCol : MonoBehaviour
 
     }
 
-    public int GetDamage()
+    public float GetDamage()
     {
         return _damage;
     }

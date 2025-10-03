@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SaitoAttackCol : MonoBehaviour
 {
-    [SerializeField] private int damage;
+    [SerializeField] private float damage;
     //[SerializeField] private int damageKind;
     //[SerializeField] private GameObject hitEffectPrefab;
 
@@ -20,7 +20,7 @@ public class SaitoAttackCol : MonoBehaviour
         
     }
 
-    public int GetDamage()
+    public float GetDamage()
     {
         return damage;
     }
