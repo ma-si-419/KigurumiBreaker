@@ -35,7 +35,6 @@ public class PunchEnemy : Enemy
 
         while (timer < _dashTime && _isDash)
         {
-
             // 前進方向を計算
             Vector3 dir = (transform.forward).normalized;
 
@@ -61,10 +60,6 @@ public class PunchEnemy : Enemy
     {
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(_attackObjectPrefab);
-
-        // 球の当たり判定設定
-        //attackObject.GetComponent<SphereCollider>().radius = _attackRadius;
-
 
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;

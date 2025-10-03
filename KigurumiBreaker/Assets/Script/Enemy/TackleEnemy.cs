@@ -10,11 +10,11 @@ public class TackleEnemy : Enemy
     [SerializeField] private float _attackDistance; // 攻撃判定の距離
 
     private bool _isCharge = false; // 突進中かどうかのフラグ
-    private bool _isAttackEnd = false; // 攻撃が終了したかどうかのフラグ
     private float _tackleTime = 0.0f; // タイマー
     private GameObject _attackObject; // 攻撃オブジェクト
 
-
+    /* 定数 */
+    private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
 
     public override void Attack()
     {
@@ -23,7 +23,7 @@ public class TackleEnemy : Enemy
         _tackleTime += Time.deltaTime;
         base.Attack();
 
-        if (_tackleTime > 1.0f)
+        if (_tackleTime > TACKLE_COUNTDOWN)
         {
             //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
@@ -42,7 +42,6 @@ public class TackleEnemy : Enemy
             if (!_isCharge) StartCoroutine(DoCharge());
         }
 
-
     }
 
     private IEnumerator DoCharge()
@@ -55,7 +54,6 @@ public class TackleEnemy : Enemy
             // 前進方向を計算
             Vector3 dir = (transform.forward).normalized;
 
-            // Rigidbodyを使って突進
             transform.position += dir * _chargeSpeed * Time.deltaTime;
             timer += Time.deltaTime;
             yield return null;
@@ -63,8 +61,6 @@ public class TackleEnemy : Enemy
 
         _isCharge = false;
         _tackleTime = 0.0f;
-
-        _isAttackEnd = true;
 
         //攻撃フラグをリセット
         _isCreateAttack = false;

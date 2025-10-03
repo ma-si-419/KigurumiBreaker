@@ -52,6 +52,11 @@ public class Enemy : MonoBehaviour
 
     private int _damageTime = 0; // ダメージを受けてからの時間
 
+    /* 定数 */
+    private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
+
+
+
     public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
     public GameObject player => _player; // プレイヤーのゲッター
 
@@ -102,7 +107,7 @@ public class Enemy : MonoBehaviour
         {
             _damageTime++;
 
-            if (_damageTime > 15)
+            if (_damageTime > MAX_DAMAGE_TIME)
             {
                 _isDamage = false;
                 _damageTime = 0;
@@ -273,7 +278,7 @@ public class Enemy : MonoBehaviour
             }
 
             //攻撃はいったら攻撃判定を速攻消す
-            //Destroy(other.gameObject);
+            Destroy(other.gameObject);
         }
 
         if (other.gameObject.CompareTag("PlayerRangedAttack"))
@@ -304,6 +309,9 @@ public class Enemy : MonoBehaviour
                 //ダメージ状態に遷移
                 ChangeState(new DamageState(this));
             }
+
+            //攻撃はいったら攻撃判定を速攻消す
+            Destroy(other.gameObject);
         }
 
     }
