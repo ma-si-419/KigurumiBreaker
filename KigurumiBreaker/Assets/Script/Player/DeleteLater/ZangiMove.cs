@@ -28,9 +28,19 @@ public class ZangiMove : MonoBehaviour
 
     [SerializeField] private float _dropPosShiftY = 1.0f;
 
+    [SerializeField] private GameObject _rangedAttack;
+
+    [SerializeField] private int _rangedAttackInterval = 120;
+
+    [SerializeField] private float _rangedAttackDamage = 30;
+
+    [SerializeField] private float _rangedAttackSpeed = 0.2f;
+
     private bool _isDamage = false;
 
     private int _time = 0;
+
+    private int _attackTime = 0;
 
     private List<int> _dropBullets;
     void Start()
@@ -40,12 +50,18 @@ public class ZangiMove : MonoBehaviour
 
         // ドロップする弾のリストを初期化する
         _dropBullets = new List<int>();
+
+        // 前方向を向く
+        Vector3 forward = new Vector3(0,0,-1);
+
+        this.transform.forward = forward;
+
     }
 
     void FixedUpdate()
     {
         // 弾をドロップする
-        for(int i = 0;i < _dropBullets.Count; i++)
+        for (int i = 0;i < _dropBullets.Count; i++)
         {
             if(_dropBullets[i] <= 0)
             {
@@ -94,8 +110,37 @@ public class ZangiMove : MonoBehaviour
         }
 
         // 前後にsin波を描く
-        float z = Mathf.Sin(Time.time * 5.0f) * 0.1f;
+        float z = Mathf.Sin(Time.time * 2.5f) * 0.1f;
         this.transform.position = new Vector3(this.transform.position.x + z, this.transform.position.y, this.transform.position.z);
+
+        _attackTime++;
+
+        // 一定時間ごとに遠距離攻撃を行う
+        if (_attackTime > _rangedAttackInterval)
+        {
+            _attackTime = 0;
+
+            if (_rangedAttack != null)
+            {
+                // 弾を生成する
+                GameObject attack = Instantiate(_rangedAttack, this.transform.position, Quaternion.identity);
+                // 攻撃スクリプトに情報を渡す
+                ZangiAttack attackScript = attack.GetComponent<ZangiAttack>();
+                if(attackScript != null)
+                {
+                    // 前方向に飛ばす
+                    Vector3 forward = this.transform.forward;
+                    forward.y = 0;
+                    forward.Normalize();
+                    forward *= _rangedAttackSpeed; 
+                
+                    attackScript.SetMoveVec(forward);
+                    attackScript.SetAttackEnemy(this.gameObject);
+                    attackScript.damage = _rangedAttackDamage;     
+                }
+            }
+        }
+
 
     }
 
@@ -104,7 +149,7 @@ public class ZangiMove : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PlayerAttack"))
         {
-            nowHp -= other.gameObject.GetComponent<PlayerAttack>().GetDamage();
+            nowHp -= (int)other.gameObject.GetComponent<PlayerAttack>().GetDamage();
 
             Debug.Log(other.gameObject.GetComponent<PlayerAttack>().GetDamage() + "のダメージ");
 

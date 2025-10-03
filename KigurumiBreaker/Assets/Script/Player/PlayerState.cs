@@ -1356,7 +1356,7 @@ public class PlayerState : Player<PlayerState>
                     attackData.knockBackPower = _playerSkill.chargeAttackSkillData.addKnockBackPower;
 
                     // 当たり判定のサイズを変更
-                    scale = data.scale * (_playerSkill.chargeAttackSkillData.attackRangeAddRate / 100);
+                    scale = data.scale + data.scale * (_playerSkill.chargeAttackSkillData.attackRangeAddRate / 100);
 
                     // デバフを追加
                     attackData.debuffType = _playerSkill.chargeAttackSkillData.debuffType;
@@ -1378,7 +1378,7 @@ public class PlayerState : Player<PlayerState>
         attackObject.GetComponent<SphereCollider>().radius = scale;
 
         // 攻撃の情報を設定
-        attackObject.GetComponent<PlayerAttack>().SetAttackData(attackData);
+        attackObject.GetComponent<PlayerAttack>().SetPlayerAttackData(attackData);
 
         // 攻撃の位置を設定
         Vector3 position = GetAttackPosition(data.attackPart);
@@ -1504,7 +1504,8 @@ public class PlayerState : Player<PlayerState>
     void OnTriggerEnter(Collider other)
     {
         // 敵の攻撃に当たったらダメージ状態に遷移
-        if (other.gameObject.CompareTag("EnemyAttack"))
+        if (other.gameObject.CompareTag("EnemyAttack")||
+            other.gameObject.CompareTag("EnemyRangedAttack"))
         {
             // 死亡時はダメージを受けない
             if (_stateKind == StateKind.DEAD) return;
@@ -1559,7 +1560,7 @@ public class PlayerState : Player<PlayerState>
             else
             {
                 // HPを減らす
-                _nowHp -= other.gameObject.GetComponent<ZangiAttack>().GetDamage();
+                _nowHp -= (int)other.gameObject.GetComponent<ZangiAttack>().GetDamage();
 
                 // ダメージの種類を取得
                 _damageKind = other.gameObject.GetComponent<ZangiAttack>().GetDamageKind();
