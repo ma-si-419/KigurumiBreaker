@@ -9,7 +9,7 @@ public class PlayerRangedAttack : MonoBehaviour
     {
         public int damage;
         public bool isHoming;
-        public ZangiMove.EnemyDebuff debuffType;
+        public Enemy.EnemyDebuff debuffType;
         public bool isKnockBack;
         public float speedRate;
         public GameObject chaseAttack;

@@ -1565,7 +1565,7 @@ public class PlayerState : Player<PlayerState>
             else
             {
                 // HPを減らす
-                _nowHp -= other.gameObject.GetComponent<EnemyAttackCol>().GetDamage();
+                _nowHp -= (int)other.gameObject.GetComponent<EnemyAttackCol>().GetDamage();
 
                 // ダメージの種類を取得
                 _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
@@ -1574,7 +1574,7 @@ public class PlayerState : Player<PlayerState>
                 Vector3 hitPosition = other.ClosestPoint(transform.position);
 
                 // ダメージエフェクトを生成
-                Instantiate(other.gameObject.GetComponent<ZangiAttack>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
+                Instantiate(other.gameObject.GetComponent<EnemyAttackCol>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
 
                 // HPが0以下なら死亡状態に遷移
                 if (_nowHp <= 0)

@@ -19,7 +19,7 @@ public class LowAttackSkillData
     [Header("ノックバック力")]
     [SerializeField] private float AddKnockBackPower;
     [Header("相手に与えるデバフの種類")]
-    [SerializeField] private ZangiMove.EnemyDebuff DebuffType;
+    [SerializeField] private Enemy.EnemyDebuff DebuffType;
     [Header("追撃の攻撃プレハブ")]
     [SerializeField] private GameObject ChaseAttack;
 
@@ -27,6 +27,6 @@ public class LowAttackSkillData
     public float damageAddRate => DamageAddRate;
     public float attackRangeAddRate => AttackRangeAddRate;
     public float addKnockBackPower => AddKnockBackPower;
-    public ZangiMove.EnemyDebuff debuffType => DebuffType;
+    public Enemy.EnemyDebuff debuffType => DebuffType;
     public GameObject chaseAttack => ChaseAttack;
 }

@@ -18,7 +18,7 @@ public class PlayerAttack : MonoBehaviour
         public int attackLifeTime;
         public GameObject hitEffect;
         public GameObject chaseAttack;
-        public ZangiMove.EnemyDebuff debuffType;
+        public Enemy.EnemyDebuff debuffType;
         public bool isReflect;
     }
 
@@ -107,7 +107,7 @@ public class PlayerAttack : MonoBehaviour
                 other.tag = "PlayerAttack";
 
                 // 敵の攻撃スクリプトを取得
-                ZangiAttack enemyAttack = other.GetComponent<ZangiAttack>();
+                EnemyAttackCol enemyAttack = other.GetComponent<EnemyAttackCol>();
                 // プレイヤーの攻撃データを設定
                 PlayerAttack playerAttack = other.AddComponent<PlayerAttack>();
 
@@ -119,7 +119,7 @@ public class PlayerAttack : MonoBehaviour
                 data.hitEffect = enemyAttack.GetHitEffectPrefab();
                 data.knockBackPower = 0.0f;
                 data.chaseAttack = null;
-                data.debuffType = ZangiMove.EnemyDebuff.None;
+                data.debuffType = Enemy.EnemyDebuff.None;
                 data.isReflect = false;
                 
                 Vector3 reflectVec = (enemyAttack.GetEnemyPos() - this.transform.position).normalized;

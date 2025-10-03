@@ -23,7 +23,7 @@ public class RangedAttackSkillData
     [Header("追撃攻撃オブジェクト")]
     [SerializeField] private GameObject ChaseAttack;
     [Header("相手にかけるデバフの種類")]
-    [SerializeField] private ZangiMove.EnemyDebuff DebuffType;
+    [SerializeField] private Enemy.EnemyDebuff DebuffType;
 
     public string skillName => SkillName;
     public int damageAddRate => DamageAddRate;
@@ -31,6 +31,6 @@ public class RangedAttackSkillData
     public bool isKnockBack => IsKnockBack;
     public bool isHoming => IsHoming;
     public GameObject chaseAttack => ChaseAttack;
-    public ZangiMove.EnemyDebuff debuffType => DebuffType;
+    public Enemy.EnemyDebuff debuffType => DebuffType;
 
 }
