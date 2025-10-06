@@ -52456,6 +52456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2593340325872842118}
   - component: {fileID: 5189397451757403068}
+  - component: {fileID: 2049974637482684102}
   m_Layer: 0
   m_Name: SecondStage3
   m_TagString: Untagged
@@ -52530,6 +52531,37 @@ MonoBehaviour:
   - {fileID: 784641345403866207}
   - {fileID: 6558924786563624073}
   - {fileID: 6136722122833758511}
+--- !u!114 &2049974637482684102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4307074512751786253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 2
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: e6575b01df1bb3849bb2f8b0f7c3f123, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &4309180043400451912
 GameObject:
   m_ObjectHideFlags: 0
