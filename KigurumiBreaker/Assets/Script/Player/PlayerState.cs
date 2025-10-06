@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using JetBrains.Annotations;
+using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.EventSystems;
@@ -48,6 +50,30 @@ public class PlayerState : Player<PlayerState>
         public List<PassiveSkillData> passiveSkillDataList;
     }
 
+    private struct PassiveStatus
+    {
+        // パッシブスキルによるステータス上昇値
+
+        // 最大体力上昇値
+        public int maxHpAddNum;
+        // 通常攻撃のダメージ上昇率(%)
+        public int lowAttackDamageAddRate;
+        // チャージ攻撃のダメージ上昇率(%)
+        public int chargeAttackDamageAddRate;
+        // 遠距離攻撃のダメージ上昇率(%)
+        public int rangedAttackDamageAddRate;
+        // 遠距離攻撃の弾数増加数(個)
+        public int rangedAttackBulletAddNum;
+        // 移動速度上昇率(%)
+        public int moveSpeedAddRate;
+        // 回避可能回数増加数(回)
+        public int dashCountAddNum;
+        // 被ダメージ軽減率(%)
+        public int damageCutRateAddRate;
+        // 回避率上昇率(%)
+        public int dodgeRateAddRate;
+    }
+
     // 攻撃データ
     [SerializeField] private AttackDataList _attackData;
 
@@ -71,6 +97,9 @@ public class PlayerState : Player<PlayerState>
 
     // 現在持っているスキル
     PlayerSkill _playerSkill;
+
+    // パッシブスキルによるステータス上昇値
+    PassiveStatus _passiveStatus;
 
     // 入力情報
     private GameInputs _input;
@@ -1105,6 +1134,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動ベクトルをリセットし続ける
+            state._rigidbody.velocity = Vector3.zero;
         }
         public override void OnExitState()
         {
@@ -1148,6 +1179,12 @@ public class PlayerState : Player<PlayerState>
 
     private void ChargeAttack(InputAction.CallbackContext context)
     {
+
+        // チャージ状態以外では何もしない
+        if (_stateKind != StateKind.CHARGE) return;
+
+        if (_isSpecialCharge) return;
+
         // 一定時間以上チャージを行っていたらチャージ攻撃に移行
         if (_normalChargeTime > _playerData.chargeAttackTime)
         {
@@ -1156,13 +1193,7 @@ public class PlayerState : Player<PlayerState>
         // そうでなければ待機状態に戻る
         else
         {
-
-            // 回避中にキャンセルしちゃってるからしゃあなくif追加
-            if (_stateKind == StateKind.DODGE)
-            {
-                return;
-            }
-
+            
             //チャージ時間をリセット
             _normalChargeTime = 0;
 
@@ -1502,9 +1533,25 @@ public class PlayerState : Player<PlayerState>
     {
         _playerSkill.dashSkillData = skill;
     }
-    public void AddPassiveSkill(PassiveSkillData skill)
+    public void SetPassiveSkills(List<PassiveSkillData> passiveSkillDatas)
     {
-        _playerSkill.passiveSkillDataList.Add(skill);
+        _playerSkill.passiveSkillDataList = passiveSkillDatas;
+
+        // パッシブスキルの効果を適用
+        foreach (PassiveSkillData skill in _playerSkill.passiveSkillDataList)
+        {
+            // ステータスに効果を加算
+
+            _passiveStatus.lowAttackDamageAddRate    += skill.lowAttackDamageAddRate;              // 通常攻撃のダメージ加算率
+            _passiveStatus.chargeAttackDamageAddRate += skill.chargeAttackDamageAddRate;        // チャージ攻撃のダメージ加算率
+            _passiveStatus.rangedAttackDamageAddRate += skill.rangedAttackDamageAddRate;        // 遠距離攻撃のダメージ加算率
+            _passiveStatus.damageCutRateAddRate      += skill.damageCutRateAddRate;                  // 被ダメージカット率加算率
+            _passiveStatus.maxHpAddNum               += skill.maxHpAddNum;                                    // 最大HP加算
+            _passiveStatus.rangedAttackBulletAddNum  += skill.rangedAttackBulletAddNum;          // 遠距離攻撃の弾数加算
+            _passiveStatus.dashCountAddNum           += skill.dashCountAddNum;                            // ダッシュ回数加算
+            _passiveStatus.moveSpeedAddRate          += skill.moveSpeedAddRate;                          // 移動速度加算率
+        }
+
     }
     void OnTriggerEnter(Collider other)
     {
@@ -1518,6 +1565,10 @@ public class PlayerState : Player<PlayerState>
             if (_stateKind == StateKind.DODGE) return;
             // 被弾中はダメージを受けない
             if (_stateKind == StateKind.DAMAGE) return;
+
+            // 回避率を計算して回避できたらダメージを受けない
+            int randNum = Random.Range(0, 100);
+            if (randNum < _passiveStatus.dodgeRateAddRate) return;
 
             // 攻撃を前から受けたかどうか
             Vector3 toEnemy = other.transform.position - transform.position;
@@ -1546,6 +1597,9 @@ public class PlayerState : Player<PlayerState>
                     _currentDirection = -toEnemy;
                 }
             }
+
+            // 攻撃オブジェクトを削除する
+            Destroy(other.gameObject);
 
             // 最大溜めの特殊攻撃を行っているときはダメージ状態に遷移しない
             if (_stateKind == StateKind.SPECIALATTACK && _specialChargeTime == _playerData.maxSpecialChargeTime)

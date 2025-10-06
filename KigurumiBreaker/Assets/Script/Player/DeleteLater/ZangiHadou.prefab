@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3303954387490254454}
   - component: {fileID: 3665122213970201529}
   - component: {fileID: 6573439513287461351}
-  - component: {fileID: 8799257400739792818}
+  - component: {fileID: 6962879734188904014}
   - component: {fileID: 7977954469802638211}
   - component: {fileID: 4044622777970088198}
   m_Layer: 0
@@ -4830,7 +4830,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &8799257400739792818
+--- !u!114 &6962879734188904014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4839,13 +4839,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3379700725155421037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcbbd5154f120324791370036f091549, type: 3}
+  m_Script: {fileID: 11500000, guid: 55f0b08aba0e81c40b9054d55d293ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  damageKind: 1
-  hitEffectPrefab: {fileID: 1368958316424924904, guid: 3e6c92a664796ed4d858cdc90f01f6ab, type: 3}
-  lifeTime: 180
+  _shootSpeed: 1.5
+  _shotLifeTime: 180
+  _damage: 10
+  _damageKind: 1
+  _hitEffectPrefab: {fileID: 1368958316424924904, guid: 3e6c92a664796ed4d858cdc90f01f6ab, type: 3}
+  _lifeTime: 180
 --- !u!54 &7977954469802638211
 Rigidbody:
   m_ObjectHideFlags: 0
