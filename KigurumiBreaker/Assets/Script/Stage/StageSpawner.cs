@@ -1,3 +1,4 @@
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class StageSpawner : MonoBehaviour
@@ -37,6 +38,13 @@ public class StageSpawner : MonoBehaviour
 
         int randomIndex = Random.Range(0, prefabs.Length);
         currentStageInstance = Instantiate(prefabs[randomIndex]);
+
+        var surface = currentStageInstance.GetComponent<NavMeshSurface>();
+        if (surface != null)
+        {
+            surface.BuildNavMesh();
+        }
+
 
         // SpawnPoint ‚ğ’T‚µ‚ÄƒvƒŒƒCƒ„[‚ğˆÚ“®
         Transform spawn = currentStageInstance.transform.Find("SpawnPoint");
