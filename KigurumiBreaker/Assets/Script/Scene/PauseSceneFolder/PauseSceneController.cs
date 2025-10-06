@@ -49,6 +49,7 @@ public class PauseSceneController : MonoBehaviour
             _button[_currnetIndex].onClick.Invoke();
             Debug.Log("Aボタンが押されました");
         }
+
     }
 
     //選択中のボタンをハイライト表示(仮)
