@@ -32,8 +32,6 @@ public class ZangiMove : MonoBehaviour
 
     [SerializeField] private int _rangedAttackInterval = 120;
 
-    [SerializeField] private float _rangedAttackDamage = 30;
-
     [SerializeField] private float _rangedAttackSpeed = 0.2f;
 
     private bool _isDamage = false;
@@ -125,7 +123,7 @@ public class ZangiMove : MonoBehaviour
                 // 弾を生成する
                 GameObject attack = Instantiate(_rangedAttack, this.transform.position, Quaternion.identity);
                 // 攻撃スクリプトに情報を渡す
-                ZangiAttack attackScript = attack.GetComponent<ZangiAttack>();
+                EnemyAttackCol attackScript = attack.GetComponent<EnemyAttackCol>();
                 if(attackScript != null)
                 {
                     // 前方向に飛ばす
@@ -134,9 +132,8 @@ public class ZangiMove : MonoBehaviour
                     forward.Normalize();
                     forward *= _rangedAttackSpeed; 
                 
-                    attackScript.SetMoveVec(forward);
+                    attackScript.SetMoveDir(forward);
                     attackScript.SetAttackEnemy(this.gameObject);
-                    attackScript.damage = _rangedAttackDamage;     
                 }
             }
         }

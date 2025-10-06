@@ -25,7 +25,7 @@ public class EnemyAttackCol : MonoBehaviour
 
     private GameObject _attackEnemy;    // 攻撃を行った敵
 
-    private Vector3 _moveVec = Vector3.zero; // 移動ベクトル
+    private Vector3 _moveDir = new Vector3(0.0f,0.0f,1.0f); // 移動方向ベクトル(仮で前方向を入れておく)
 
 
     private void Start()
@@ -53,7 +53,7 @@ public class EnemyAttackCol : MonoBehaviour
         if(CompareTag("EnemyRangedAttack"))
         {
             // 弾を前方に移動
-            transform.Translate(Vector3.forward * _shootSpeed * Time.deltaTime);
+            transform.Translate(_moveDir * _shootSpeed * Time.deltaTime);
         }
 
     }
@@ -73,9 +73,11 @@ public class EnemyAttackCol : MonoBehaviour
         return _hitEffectPrefab;
     }
 
-    public void SetMoveVec(Vector3 vec)
+    public void SetMoveDir(Vector3 dir)
     {
-        _moveVec = vec;
+        // 一応正規化しておく
+        dir = dir.normalized;
+        _moveDir = dir;
     }
 
     public void SetAttackEnemy(GameObject enemy)
@@ -96,15 +98,9 @@ public class EnemyAttackCol : MonoBehaviour
     {
         if (CompareTag("EnemyRangedAttack"))
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Wall"))
             {
-                // プレイヤーにダメージを与える処理
-                Debug.Log("プレイヤーに攻撃した");
-                Destroy(gameObject);    // 弾を削除
-            }
-            else if (other.CompareTag("Wall"))
-            {
-                // 壁や障害物に当たった場合も弾を削除
+                // 壁や障害物に当たった場合弾を削除
                 Destroy(gameObject);
             }
         }

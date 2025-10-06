@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PassiveSkillDataList
   m_EditorClassIdentifier: 
   passiveSkillDataList:
-  - SkillName: AtkUp
+  - SkillName: LowAtkUp
     LowAttackDamageAddRate: 100
     ChargeAttackDamageAddRate: 0
     RangedAttackDamageAddRate: 0
@@ -21,3 +21,27 @@ MonoBehaviour:
     DashCountAddNum: 0
     DamageCutRateAddRate: 0
     DodgeRateAddRate: 0
+  - SkillName: DefUp
+    LowAttackDamageAddRate: 0
+    ChargeAttackDamageAddRate: 0
+    RangedAttackDamageAddRate: 0
+    MoveSpeedAddRate: 0
+    DashCountAddNum: 0
+    DamageCutRateAddRate: 50
+    DodgeRateAddRate: 0
+  - SkillName: SpdUp
+    LowAttackDamageAddRate: 0
+    ChargeAttackDamageAddRate: 0
+    RangedAttackDamageAddRate: 0
+    MoveSpeedAddRate: 100
+    DashCountAddNum: 0
+    DamageCutRateAddRate: 0
+    DodgeRateAddRate: 0
+  - SkillName: DodgeUp
+    LowAttackDamageAddRate: 0
+    ChargeAttackDamageAddRate: 0
+    RangedAttackDamageAddRate: 0
+    MoveSpeedAddRate: 0
+    DashCountAddNum: 0
+    DamageCutRateAddRate: 0
+    DodgeRateAddRate: 50
