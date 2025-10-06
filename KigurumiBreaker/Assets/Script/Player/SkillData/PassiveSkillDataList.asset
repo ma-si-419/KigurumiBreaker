@@ -14,33 +14,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   passiveSkillDataList:
   - SkillName: LowAtkUp
+    MaxHpAddNum: 0
     LowAttackDamageAddRate: 100
     ChargeAttackDamageAddRate: 0
     RangedAttackDamageAddRate: 0
+    RangedAttackBulletAddNum: 0
+    MoveSpeedAddRate: 0
+    DashCountAddNum: 0
+    DamageCutRateAddRate: 0
+    DodgeRateAddRate: 0
+  - SkillName: ChargeAtkUp
+    MaxHpAddNum: 0
+    LowAttackDamageAddRate: 0
+    ChargeAttackDamageAddRate: 200
+    RangedAttackDamageAddRate: 0
+    RangedAttackBulletAddNum: 0
+    MoveSpeedAddRate: 0
+    DashCountAddNum: 0
+    DamageCutRateAddRate: 0
+    DodgeRateAddRate: 50
+  - SkillName: RangeAtkUp
+    MaxHpAddNum: 0
+    LowAttackDamageAddRate: 0
+    ChargeAttackDamageAddRate: 0
+    RangedAttackDamageAddRate: 100
+    RangedAttackBulletAddNum: 0
     MoveSpeedAddRate: 0
     DashCountAddNum: 0
     DamageCutRateAddRate: 0
     DodgeRateAddRate: 0
   - SkillName: DefUp
+    MaxHpAddNum: 0
     LowAttackDamageAddRate: 0
     ChargeAttackDamageAddRate: 0
     RangedAttackDamageAddRate: 0
+    RangedAttackBulletAddNum: 0
     MoveSpeedAddRate: 0
     DashCountAddNum: 0
     DamageCutRateAddRate: 50
     DodgeRateAddRate: 0
   - SkillName: SpdUp
+    MaxHpAddNum: 0
     LowAttackDamageAddRate: 0
     ChargeAttackDamageAddRate: 0
     RangedAttackDamageAddRate: 0
+    RangedAttackBulletAddNum: 0
     MoveSpeedAddRate: 100
     DashCountAddNum: 0
     DamageCutRateAddRate: 0
     DodgeRateAddRate: 0
   - SkillName: DodgeUp
+    MaxHpAddNum: 0
     LowAttackDamageAddRate: 0
     ChargeAttackDamageAddRate: 0
     RangedAttackDamageAddRate: 0
+    RangedAttackBulletAddNum: 0
+    MoveSpeedAddRate: 0
+    DashCountAddNum: 0
+    DamageCutRateAddRate: 0
+    DodgeRateAddRate: 50
+  - SkillName: HpUp
+    MaxHpAddNum: 100
+    LowAttackDamageAddRate: 0
+    ChargeAttackDamageAddRate: 0
+    RangedAttackDamageAddRate: 0
+    RangedAttackBulletAddNum: 0
     MoveSpeedAddRate: 0
     DashCountAddNum: 0
     DamageCutRateAddRate: 0
