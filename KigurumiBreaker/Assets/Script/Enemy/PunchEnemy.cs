@@ -13,6 +13,13 @@ public class PunchEnemy : Enemy
 
     private bool _isDash = false; // 前進したかどうかのフラグ
 
+    protected override void Start()
+    {
+        // 初期化処理
+        base.Start();
+        StopMovement();
+    }
+
     public override void Attack()
     {
         _punchTimer += Time.deltaTime;
@@ -61,8 +68,11 @@ public class PunchEnemy : Enemy
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(_attackObjectPrefab);
 
-        // 攻撃オブジェクトの位置を調整
-        attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance;
+        float yOffset = 1.0f; // Y軸のオフセット値（必要に応じて調整）
+
+        // 攻撃オブジェクトの位置を調整(Y軸を調整したい)
+        attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance + Vector3.up * yOffset;
+
 
         //攻撃フラグをリセット
         _isCreateAttack = false;
