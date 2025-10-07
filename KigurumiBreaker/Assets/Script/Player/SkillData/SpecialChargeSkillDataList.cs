@@ -18,8 +18,8 @@ public class SpecialChargeSkillData
     [SerializeField] private int DamageReductionRate;
     [Header("ダメージをくらったときノックバックしないならtrue")]
     [SerializeField] private bool IsNotKnockBack;
-    [Header("溜めている最中敵の弾を跳ね返すかどうか")]
-    [SerializeField] private bool IsReflect;
+    [Header("何フレームごとに攻撃を出すか")]
+    [SerializeField] private int AttackIntervalFrame;
     [Header("溜め速度倍率")]
     [SerializeField] private float ChargeSpeedRate;
 
@@ -27,7 +27,7 @@ public class SpecialChargeSkillData
     public GameObject chargingAttackObject => ChargingAttackObject;
     public int damageReductionRate => DamageReductionRate;
     public bool isNotKnockBack => IsNotKnockBack;
-    public bool isReflect => IsReflect;
+    public int attackIntervalFrame => AttackIntervalFrame;
     public float chargeSpeedRate => ChargeSpeedRate;
 
 }

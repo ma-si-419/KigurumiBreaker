@@ -9,7 +9,8 @@ public class PlayerAttack : MonoBehaviour
 
     const float ATTACK_MOVE_SPEED = 1.5f;
 
-    const int ATTACK_LIFE_TIME = 180;
+    [SerializeField] private int _attackLifeTime = 180;
+    [SerializeField] private float _damage = 3.0f; 
 
     public struct PlayerAttackData
     {
@@ -28,14 +29,13 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 _moveVec = Vector3.zero;
 
-    int _lifeTIme = 0;
-
-    [SerializeField] private float effectShiftScale= 0.5f;
+    [SerializeField] private float effectShiftScale = 0.5f;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        _lifeTIme = _attackData.attackLifeTime;
+        _attackData.damage = _damage;
+        _attackData.attackLifeTime = _attackLifeTime;
     }
 
     // Update is called once per frame
@@ -47,9 +47,9 @@ public class PlayerAttack : MonoBehaviour
             transform.position += _moveVec;
         }
 
-        _lifeTIme--;
+        _attackLifeTime--;
 
-        if(_lifeTIme <= 0)
+        if (_attackLifeTime <= 0)
         {
             //攻撃判定の寿命が来たら消す
             Destroy(this.gameObject);
@@ -69,6 +69,8 @@ public class PlayerAttack : MonoBehaviour
     public void SetPlayerAttackData(PlayerAttackData data)
     {
         _attackData = data;
+        _attackLifeTime = _attackData.attackLifeTime;
+        _damage = _attackData.damage;
     }
 
     public float GetDamage()
@@ -78,12 +80,10 @@ public class PlayerAttack : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("攻撃あたった:" + other.name);
-
         if (other.CompareTag("Enemy"))
         {
             //エフェクトを出す
-            if(_attackData.hitEffect != null)
+            if (_attackData.hitEffect != null)
             {
                 // ヒットする位置を計算
                 Vector3 hitPos = other.ClosestPoint(this.transform.position);
@@ -95,14 +95,10 @@ public class PlayerAttack : MonoBehaviour
                 Instantiate(_attackData.hitEffect, hitPos, Quaternion.identity);
             }
         }
-        else if(other.CompareTag("EnemyRangedAttack"))
+        else if (other.CompareTag("EnemyRangedAttack"))
         {
-            Debug.Log("Hit EnemyRangedAttack");
-
             if (_attackData.isReflect)
             {
-                Debug.Log("Reflect!");
-
                 // タグをプレイヤーの攻撃に変更
                 other.tag = "PlayerAttack";
 
@@ -115,13 +111,13 @@ public class PlayerAttack : MonoBehaviour
 
                 // 後で調整
                 data.damage = enemyAttack.GetDamage() * REFLECT_DAMAGE_RATE;
-                data.attackLifeTime = ATTACK_LIFE_TIME;
+                data.attackLifeTime = _attackLifeTime;
                 data.hitEffect = enemyAttack.GetHitEffectPrefab();
                 data.knockBackPower = 0.0f;
                 data.chaseAttack = null;
                 data.debuffType = Enemy.EnemyDebuff.None;
                 data.isReflect = false;
-                
+
                 Vector3 reflectVec = (enemyAttack.GetEnemyPos() - this.transform.position).normalized;
                 reflectVec *= ATTACK_MOVE_SPEED;
 

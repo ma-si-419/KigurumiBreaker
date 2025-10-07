@@ -10,35 +10,51 @@ public class PassiveSkillDataList : ScriptableObject
 [System.Serializable]
 public class PassiveSkillData
 {
+    public enum PassiveStatusKind
+    {
+        MaxHp,
+        LowAttackDamage,
+        ChargeAttackDamage,
+        RangedAttackDamage,
+        RangedAttackBullet,
+        MoveSpeed,
+        DashCount,
+        DamageCutRate,
+        DodgeRate
+    }
+
+    public enum GameObjectPopTiming
+    {
+        None,
+        Damage,
+        Dodge,
+        Attack
+    }
+
+
+    [System.Serializable]
+    public class UpStatus
+    {
+        public PassiveStatusKind statusKind;
+        public float addNum;
+    }
+
+    [System.Serializable]
+    public class PassiveObject
+    {
+        public GameObjectPopTiming popTiming;
+        public GameObject gameObject;
+    }
+
     [Header("名前")]
     [SerializeField] private string SkillName;
-    [Header("最大体力増加値")]
-    [SerializeField] private int MaxHpAddNum;
-    [Header("通常攻撃のダメージ上昇量(%)")]
-    [SerializeField] private float LowAttackDamageAddRate;
-    [Header("溜め攻撃のダメージ上昇量(%)")]
-    [SerializeField] private float ChargeAttackDamageAddRate;
-    [Header("遠距離攻撃のダメージ上昇量(%)")]
-    [SerializeField] private float RangedAttackDamageAddRate;
-    [Header("遠距離攻撃の弾数増加量(個数)")]
-    [SerializeField] private int RangedAttackBulletAddNum;
-    [Header("移動速度上昇量(%)")]
-    [SerializeField] private float MoveSpeedAddRate;
-    [Header("ダッシュ回数増加量(回数)")]
-    [SerializeField] private int DashCountAddNum;
-    [Header("ダメージカット率上昇量(%)")]
-    [SerializeField] private float DamageCutRateAddRate;
-    [Header("回避率上昇量(%)")]
-    [SerializeField] private float DodgeRateAddRate;
+    [Header("ステータス上昇情報")]
+    [SerializeField] private List<UpStatus> UpStatuses;
+    [Header("ゲームオブジェクトが出るパッシブ情報")]
+    [SerializeField] private List<PassiveObject> passiveObjects;
+
 
     public string skillName => SkillName;
-    public int maxHpAddNum => MaxHpAddNum;
-    public float lowAttackDamageAddRate => LowAttackDamageAddRate;
-    public float chargeAttackDamageAddRate => ChargeAttackDamageAddRate;
-    public float rangedAttackDamageAddRate => RangedAttackDamageAddRate;
-    public int rangedAttackBulletAddNum => RangedAttackBulletAddNum;
-    public float moveSpeedAddRate => MoveSpeedAddRate;
-    public int dashCountAddNum => DashCountAddNum;
-    public float damageCutRateAddRate => DamageCutRateAddRate;
-    public float dodgeRateAddRate => DodgeRateAddRate;
+    public List<UpStatus> upStatuses => UpStatuses;
+    public List<PassiveObject> PassiveObjects => passiveObjects;
 }

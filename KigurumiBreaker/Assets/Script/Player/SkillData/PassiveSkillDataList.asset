@@ -14,72 +14,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   passiveSkillDataList:
   - SkillName: LowAtkUp
-    MaxHpAddNum: 0
-    LowAttackDamageAddRate: 100
-    ChargeAttackDamageAddRate: 0
-    RangedAttackDamageAddRate: 0
-    RangedAttackBulletAddNum: 0
-    MoveSpeedAddRate: 0
-    DashCountAddNum: 0
-    DamageCutRateAddRate: 0
-    DodgeRateAddRate: 0
+    UpStatuses:
+    - statusKind: 1
+      addNum: 100
+    passiveObjects: []
   - SkillName: ChargeAtkUp
-    MaxHpAddNum: 0
-    LowAttackDamageAddRate: 0
-    ChargeAttackDamageAddRate: 200
-    RangedAttackDamageAddRate: 0
-    RangedAttackBulletAddNum: 0
-    MoveSpeedAddRate: 0
-    DashCountAddNum: 0
-    DamageCutRateAddRate: 0
-    DodgeRateAddRate: 50
+    UpStatuses:
+    - statusKind: 2
+      addNum: 100
+    passiveObjects: []
   - SkillName: RangeAtkUp
-    MaxHpAddNum: 0
-    LowAttackDamageAddRate: 0
-    ChargeAttackDamageAddRate: 0
-    RangedAttackDamageAddRate: 100
-    RangedAttackBulletAddNum: 0
-    MoveSpeedAddRate: 0
-    DashCountAddNum: 0
-    DamageCutRateAddRate: 0
-    DodgeRateAddRate: 0
+    UpStatuses:
+    - statusKind: 3
+      addNum: 100
+    passiveObjects: []
   - SkillName: DefUp
-    MaxHpAddNum: 0
-    LowAttackDamageAddRate: 0
-    ChargeAttackDamageAddRate: 0
-    RangedAttackDamageAddRate: 0
-    RangedAttackBulletAddNum: 0
-    MoveSpeedAddRate: 0
-    DashCountAddNum: 0
-    DamageCutRateAddRate: 50
-    DodgeRateAddRate: 0
+    UpStatuses:
+    - statusKind: 7
+      addNum: 50
+    passiveObjects: []
   - SkillName: SpdUp
-    MaxHpAddNum: 0
-    LowAttackDamageAddRate: 0
-    ChargeAttackDamageAddRate: 0
-    RangedAttackDamageAddRate: 0
-    RangedAttackBulletAddNum: 0
-    MoveSpeedAddRate: 100
-    DashCountAddNum: 0
-    DamageCutRateAddRate: 0
-    DodgeRateAddRate: 0
+    UpStatuses:
+    - statusKind: 5
+      addNum: 50
+    passiveObjects: []
   - SkillName: DodgeUp
-    MaxHpAddNum: 0
-    LowAttackDamageAddRate: 0
-    ChargeAttackDamageAddRate: 0
-    RangedAttackDamageAddRate: 0
-    RangedAttackBulletAddNum: 0
-    MoveSpeedAddRate: 0
-    DashCountAddNum: 0
-    DamageCutRateAddRate: 0
-    DodgeRateAddRate: 50
+    UpStatuses:
+    - statusKind: 8
+      addNum: 50
+    passiveObjects: []
   - SkillName: HpUp
-    MaxHpAddNum: 100
-    LowAttackDamageAddRate: 0
-    ChargeAttackDamageAddRate: 0
-    RangedAttackDamageAddRate: 0
-    RangedAttackBulletAddNum: 0
-    MoveSpeedAddRate: 0
-    DashCountAddNum: 0
-    DamageCutRateAddRate: 0
-    DodgeRateAddRate: 50
+    UpStatuses:
+    - statusKind: 0
+      addNum: 100
+    passiveObjects: []
+  - SkillName: CounterThunder
+    UpStatuses:
+    - statusKind: 8
+      addNum: 30
+    passiveObjects:
+    - popTiming: 2
+      gameObject: {fileID: 556962290782182867, guid: 2c2e32960eb31cf46aa773bf9ee9a177, type: 3}
