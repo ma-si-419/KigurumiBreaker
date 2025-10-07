@@ -151,7 +151,7 @@ public class Enemy : MonoBehaviour
         this.GetComponent<Renderer>().material.color = Color.yellow;
         Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
 
-        Debug.Log("ChaseState: Update");
+        //Debug.Log("ChaseState: Update");
 
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position); 
@@ -170,14 +170,10 @@ public class Enemy : MonoBehaviour
             //タイマーを進める
             _stateTimer += Time.deltaTime;
 
-            Debug.Log("攻撃範囲内に入った！");
 
             if (_stateTimer > _chaseWaitTime)
             {
                 _agent.isStopped = true; //追跡を停止
-
-
-                Debug.Log("IdleState: Change to ChaseState");
 
                 //攻撃状態へ
                 _stateTimer = 0.0f;
@@ -192,8 +188,6 @@ public class Enemy : MonoBehaviour
         Debug.DrawLine(transform.position, player.transform.position, Color.green);
         this.GetComponent<Renderer>().material.color = Color.white;
 
-        //タイマーを進める
-        Debug.Log("IdleState: Update");
 
         Vector3 diff = _player.transform.position - transform.position; //プレイヤーとの位置差を計算
 
@@ -207,12 +201,10 @@ public class Enemy : MonoBehaviour
             //プレイヤーの方向を向き続ける
             LookAtPlayer();
 
-            Debug.Log("見つけた！");
             _stateTimer += Time.deltaTime;
 
             if (_stateTimer > _idleWaitTime)
             {
-                Debug.Log("IdleState: Change to ChaseState");
 
                 //追跡状態へ
                 _stateTimer = 0.0f;
@@ -252,9 +244,6 @@ public class Enemy : MonoBehaviour
 
             //ダメージを受けたら赤くする(デバッグ)
             this.GetComponent<Renderer>().material.color = Color.red;
-
-            // プレイヤーにダメージを与える処理
-            Debug.Log("プレイヤーに攻撃された");
 
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
             //_currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();

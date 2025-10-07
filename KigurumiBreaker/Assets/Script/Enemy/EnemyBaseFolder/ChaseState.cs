@@ -15,7 +15,7 @@ public class ChaseState : IState
 
     public void Init()
     {
-        Debug.Log("ChaseState: Init");
+        //Debug.Log("ChaseState: Init");
     }
 
     public void Update()
@@ -28,7 +28,7 @@ public class ChaseState : IState
 
     public void End()
     {
-        Debug.Log("ChaseState: End");
+        //Debug.Log("ChaseState: End");
     }
 
 }

@@ -12,19 +12,19 @@ public class AttackState : IState
 
     public void Init()
     {
-        Debug.Log("AttackState: Init");
+        //Debug.Log("AttackState: Init");
     }
 
     public void Update()
     {
         Debug.DrawLine(_enemy.transform.position, _enemy.player.transform.position, Color.green);
-        Debug.Log("AttackState: Update");
+        //Debug.Log("AttackState: Update");
         _enemy.Attack(); //çUåÇèàóù
     }
 
     public void End()
     {
-        Debug.Log("AttackState: End");
+        //Debug.Log("AttackState: End");
     }
 
 }

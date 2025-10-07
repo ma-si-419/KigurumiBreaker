@@ -14,7 +14,7 @@ public class DeadState : IState
 
     public void Init()
     {
-        Debug.Log("DeadState: Init");
+        //Debug.Log("DeadState: Init");
         //死亡アニメーション開始
 
     }
@@ -22,8 +22,8 @@ public class DeadState : IState
     public void Update()
     {
         //タイマーを進める
-        Debug.Log("DeadState: Update");
-        Debug.Log("死んだ");
+        //Debug.Log("DeadState: Update");
+        //Debug.Log("死んだ");
 
         //死亡アニメーションが終わったらオブジェクト削除
         //オブジェクト削除
@@ -33,7 +33,7 @@ public class DeadState : IState
 
     public void End()
     {
-        Debug.Log("DeadState: End");
+        //Debug.Log("DeadState: End");
         //死亡アニメーション終了
 
     }
