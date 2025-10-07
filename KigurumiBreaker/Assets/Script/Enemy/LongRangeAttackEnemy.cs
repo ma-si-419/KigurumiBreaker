@@ -19,7 +19,7 @@ public class LongRangeAttackEnemy : Enemy
     private const int MAX_SHOOT_COUNT = 3; // ’e‚ğŒ‚‚ÂÅ‘å‰ñ”
     private const float MIN_FLEE_DISTANCE = 20.0f; // “¦‚°‚é‹——£‚ÌÅ¬’l
 
-    public override void Move()
+    public override void Chase()
     {
         //“¦‚°‚éˆ—
         Nav();
