@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -50,6 +51,12 @@ public class PlayerState : Player<PlayerState>
         public List<PassiveSkillData> passiveSkillDataList;
     }
 
+    private struct PassiveGameObject
+    {
+        public PassiveSkillData.GameObjectPopTiming popTiming;
+        public GameObject gameObject;
+    }
+
     private struct PassiveStatus
     {
         // パッシブスキルによるステータス上昇値
@@ -72,6 +79,9 @@ public class PlayerState : Player<PlayerState>
         public float damageCutRateAddRate;
         // 回避率上昇率(%)
         public int dodgeRateAddRate;
+
+        // パッシブスキルで出すゲームオブジェクト
+        public List<PassiveGameObject> passiveGameObjects;
     }
 
     // 攻撃データ
@@ -98,7 +108,7 @@ public class PlayerState : Player<PlayerState>
     // 現在持っているスキル
     PlayerSkill _playerSkill;
 
-    // パッシブスキルによるステータス上昇値
+    // パッシブスキルによるステータス
     PassiveStatus _passiveStatus;
 
     // 一つ前のパッシブスキルのステータス上昇値
@@ -1203,7 +1213,7 @@ public class PlayerState : Player<PlayerState>
         // そうでなければ待機状態に戻る
         else
         {
-            
+
             //チャージ時間をリセット
             _normalChargeTime = 0;
 
@@ -1395,7 +1405,7 @@ public class PlayerState : Player<PlayerState>
 
                 // 通常攻撃ダメージ増加率分の効果を追加
                 attackData.damage = attackData.damage + (int)(data.damage * (_passiveStatus.lowAttackDamageAddRate / 100));
-               
+
                 break;
 
             case AttackData.AttackType.ChargeAttack:
@@ -1430,6 +1440,11 @@ public class PlayerState : Player<PlayerState>
                 // チャージ攻撃ダメージ増加率分の効果を追加
                 attackData.damage = attackData.damage + (int)(data.damage * (_passiveStatus.chargeAttackDamageAddRate / 100));
 
+                break;
+
+            case AttackData.AttackType.SpecialAttack:
+                // 特殊攻撃はスキルの効果を乗せない
+                attackData.damage = data.damage;
                 break;
         }
         // 当たり判定のサイズを設定
@@ -1565,34 +1580,84 @@ public class PlayerState : Player<PlayerState>
         _playerSkill.passiveSkillDataList = passiveSkillDatas;
 
         _passiveStatus = new PassiveStatus();
+        _passiveStatus.passiveGameObjects = new List<PassiveGameObject>();
 
         // パッシブスキルの効果を適用
         foreach (PassiveSkillData skill in _playerSkill.passiveSkillDataList)
         {
-            // ステータスに効果を加算
+            if (skill.upStatuses != null)
+            {
+                // ステータスに効果を加算
+                foreach (PassiveSkillData.UpStatus status in skill.upStatuses)
+                {
+                    switch (status.statusKind)
+                    {
+                        // 最大体力
+                        case PassiveSkillData.PassiveStatusKind.MaxHp:
+                            _passiveStatus.maxHpAddNum += (int)status.addNum;
+                            break;
+                        // 通常攻撃ダメージ
+                        case PassiveSkillData.PassiveStatusKind.LowAttackDamage:
+                            _passiveStatus.lowAttackDamageAddRate += status.addNum;
+                            break;
+                        // チャージ攻撃ダメージ
+                        case PassiveSkillData.PassiveStatusKind.ChargeAttackDamage:
+                            _passiveStatus.chargeAttackDamageAddRate += status.addNum;
+                            break;
+                        // 遠距離攻撃ダメージ
+                        case PassiveSkillData.PassiveStatusKind.RangedAttackDamage:
+                            _passiveStatus.rangedAttackDamageAddRate += status.addNum;
+                            break;
+                        // 被ダメージカット率
+                        case PassiveSkillData.PassiveStatusKind.DamageCutRate:
+                            _passiveStatus.damageCutRateAddRate += status.addNum;
+                            break;
+                        // 弾数
+                        case PassiveSkillData.PassiveStatusKind.RangedAttackBullet:
+                            _passiveStatus.rangedAttackBulletAddNum += (int)status.addNum;
+                            break;
+                        // ダッシュ回数
+                        case PassiveSkillData.PassiveStatusKind.DashCount:
+                            _passiveStatus.dashCountAddNum += (int)status.addNum;
+                            break;
+                        // 移動速度
+                        case PassiveSkillData.PassiveStatusKind.MoveSpeed:
+                            _passiveStatus.moveSpeedAddRate += status.addNum;
+                            break;
+                        // 回避率
+                        case PassiveSkillData.PassiveStatusKind.DodgeRate:
+                            _passiveStatus.dodgeRateAddRate += (int)status.addNum;
+                            break;
+                    }
+                }
+            }
 
-            _passiveStatus.lowAttackDamageAddRate    += skill.lowAttackDamageAddRate;               // 通常攻撃のダメージ加算率
-            _passiveStatus.chargeAttackDamageAddRate += skill.chargeAttackDamageAddRate;            // チャージ攻撃のダメージ加算率
-            _passiveStatus.rangedAttackDamageAddRate += skill.rangedAttackDamageAddRate;            // 遠距離攻撃のダメージ加算率
-            _passiveStatus.damageCutRateAddRate      += skill.damageCutRateAddRate;                 // 被ダメージカット率加算率
-            _passiveStatus.maxHpAddNum               += skill.maxHpAddNum;                          // 最大HP加算
-            _passiveStatus.rangedAttackBulletAddNum  += skill.rangedAttackBulletAddNum;             // 遠距離攻撃の弾数加算
-            _passiveStatus.dashCountAddNum           += skill.dashCountAddNum;                      // ダッシュ回数加算
-            _passiveStatus.moveSpeedAddRate          += skill.moveSpeedAddRate;                     // 移動速度加算率
+            if (skill.PassiveObjects != null)
+            {
+                // ゲームオブジェクトを出すパッシブスキルを適用
+                foreach (PassiveSkillData.PassiveObject obj in skill.PassiveObjects)
+                {
+                    PassiveGameObject passiveObj = new PassiveGameObject();
+                    passiveObj.popTiming = obj.popTiming;
+                    passiveObj.gameObject = obj.gameObject;
+
+                    _passiveStatus.passiveGameObjects.Add(passiveObj);
+                }
+            }
         }
 
         // 体力の最大値が増えていたらその分体力を回復する
-        if(_passiveStatus.maxHpAddNum > _lastPassiveStatus.maxHpAddNum)
+        if (_passiveStatus.maxHpAddNum > _lastPassiveStatus.maxHpAddNum)
         {
             _nowHp = _nowHp + (_passiveStatus.maxHpAddNum - _lastPassiveStatus.maxHpAddNum);
         }
 
         // 弾数の最大値が増えていたらその分弾を補充する
-        if(_passiveStatus.rangedAttackBulletAddNum > _lastPassiveStatus.rangedAttackBulletAddNum)
+        if (_passiveStatus.rangedAttackBulletAddNum > _lastPassiveStatus.rangedAttackBulletAddNum)
         {
             _nowBulletNum = _nowBulletNum + (_passiveStatus.rangedAttackBulletAddNum - _lastPassiveStatus.rangedAttackBulletAddNum);
             // 最大値を超えないようにする
-            if(_nowBulletNum > GetMaxBulletNum())
+            if (_nowBulletNum > GetMaxBulletNum())
             {
                 _nowBulletNum = GetMaxBulletNum();
             }
@@ -1616,7 +1681,19 @@ public class PlayerState : Player<PlayerState>
 
             // 回避率を計算して回避できたらダメージを受けない
             int randNum = Random.Range(0, 100);
-            if (randNum < _passiveStatus.dodgeRateAddRate) return;
+            if (randNum < _passiveStatus.dodgeRateAddRate)
+            {
+
+                foreach (PassiveGameObject obj in _passiveStatus.passiveGameObjects)
+                {
+                    if (obj.popTiming == PassiveSkillData.GameObjectPopTiming.Dodge)
+                    {
+                        Instantiate(obj.gameObject, transform.position, Quaternion.identity);
+                    }
+                }
+
+                return;
+            }
 
             // 攻撃を前から受けたかどうか
             Vector3 toEnemy = other.transform.position - transform.position;
