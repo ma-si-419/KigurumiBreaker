@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected GameObject _player; // プレイヤーの参照
     [SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
 
-    private Animator _animator; // アニメーターの参照
+    public Animator _animator; // アニメーターの参照
     private Rigidbody _rigidbody; // Rigidbodyの参照
 
     private float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
@@ -83,6 +83,9 @@ public class Enemy : MonoBehaviour
 
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();
+        // animatorコンポーネントを取得
+        _animator = GetComponent<Animator>();
+        // Rigidbodyコンポーネントを取得
         _rigidbody = GetComponent<Rigidbody>();
 
         //_agent.updatePosition = false; // NavMeshAgentに位置を更新させない
@@ -152,7 +155,7 @@ public class Enemy : MonoBehaviour
     }
 
     //基本移動処理(オーバーライドで変更可)
-    public virtual void Move()
+    public virtual void Chase()
     {
         this.GetComponent<Renderer>().material.color = Color.yellow;
         Debug.DrawLine(transform.position, player.transform.position, Color.yellow);

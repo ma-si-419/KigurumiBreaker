@@ -18,6 +18,7 @@ public class PunchEnemy : Enemy
         // 初期化処理
         base.Start();
         StopMovement();
+
     }
 
     public override void Attack()
@@ -25,6 +26,7 @@ public class PunchEnemy : Enemy
         _punchTimer += Time.deltaTime;
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
 
+        
         base.Attack();
 
         // 前進動作
