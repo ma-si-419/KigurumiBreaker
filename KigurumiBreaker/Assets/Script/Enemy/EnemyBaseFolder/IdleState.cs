@@ -13,7 +13,6 @@ public class IdleState : IState
 
     public void Init()
     {
-        Debug.Log("IdleState: Init");
         //待機アニメーション開始
 
     }
@@ -25,7 +24,6 @@ public class IdleState : IState
 
     public void End()
     {
-        Debug.Log("IdleState: End");
         //待機アニメーション終了
 
     }

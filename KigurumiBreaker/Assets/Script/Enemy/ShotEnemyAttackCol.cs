@@ -42,7 +42,6 @@ public class ShotEnemyAttackCol : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // プレイヤーにダメージを与える処理
-            Debug.Log("プレイヤーに攻撃した");
             Destroy(gameObject);    // 弾を削除
         }
         else if (other.CompareTag("Wall"))

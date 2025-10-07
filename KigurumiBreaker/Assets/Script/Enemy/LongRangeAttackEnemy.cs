@@ -35,8 +35,6 @@ public class LongRangeAttackEnemy : Enemy
 
         if (_longRangeTimer > _chaseWaitTime)
         {
-            Debug.Log("IdleState: Change to ChaseState");
-
             _agent.isStopped = true; //追跡を停止
 
             //攻撃状態へ
@@ -91,7 +89,6 @@ public class LongRangeAttackEnemy : Enemy
     {
         //弾を生成
         GameObject bullet = Instantiate(_attackObjectPrefab, this.transform.position, this.transform.rotation);
-        Debug.Log("弾を発射!!");
     }
 
     //ナビメッシュエージェントでターゲットから逃げる処理

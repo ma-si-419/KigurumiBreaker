@@ -19,7 +19,6 @@ public class TackleEnemy : Enemy
     public override void Attack()
     {
         // ここにタックル攻撃の具体的な処理を追加
-        Debug.Log("タックルアタック！");
         _tackleTime += Time.deltaTime;
         base.Attack();
 

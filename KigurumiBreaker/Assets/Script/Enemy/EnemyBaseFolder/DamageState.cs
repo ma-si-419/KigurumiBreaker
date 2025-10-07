@@ -14,7 +14,7 @@ public class DamageState : IState
 
     public void Init()
     {
-        Debug.Log("DamageState: Init");
+        //Debug.Log("DamageState: Init");
         //ダメージアニメーション開始
 
     }
@@ -22,8 +22,8 @@ public class DamageState : IState
     public void Update()
     {
         //タイマーを進める
-        Debug.Log("DamageState: Update");
-        Debug.Log("ノックバック！！");
+        //Debug.Log("DamageState: Update");
+        //Debug.Log("ノックバック！！");
 
 
         //ダメージアニメーション終了を検知したらIdleStateに遷移
@@ -36,7 +36,7 @@ public class DamageState : IState
 
     public void End()
     {
-        Debug.Log("DamageState: End");
+        //Debug.Log("DamageState: End");
         //ダメージアニメーション終了
 
     }
