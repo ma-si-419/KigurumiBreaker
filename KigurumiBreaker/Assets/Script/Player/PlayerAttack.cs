@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour
     const float ATTACK_MOVE_SPEED = 1.5f;
 
     [SerializeField] private int _attackLifeTime = 180;
-    [SerializeField] private float _damage = 3.0f; 
+    [SerializeField] private float _damage = 3.0f;
 
     public struct PlayerAttackData
     {
@@ -21,7 +21,10 @@ public class PlayerAttack : MonoBehaviour
         public GameObject chaseAttack;
         public Enemy.EnemyDebuff debuffType;
         public bool isReflect;
+        public CameraMove.ShakeKind shakeKind;
     }
+
+    private GameObject _camera; // カメラオブジェクトの参照
 
     private PlayerAttackData _attackData;
 
@@ -61,6 +64,11 @@ public class PlayerAttack : MonoBehaviour
         _playerPos = pos;
     }
 
+    public void SetCamera(GameObject camera)
+    {
+        _camera = camera;
+    }
+
     public void SetMoveVec(Vector3 vec)
     {
         _moveVec = vec;
@@ -92,7 +100,16 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 shiftVec = (_playerPos - hitPos).normalized;
                 hitPos += shiftVec * effectShiftScale;
 
+
                 Instantiate(_attackData.hitEffect, hitPos, Quaternion.identity);
+            }
+
+            // カメラを揺らす
+            if (_camera != null)
+            {
+                CameraMove cameraMove = _camera.GetComponent<CameraMove>();
+
+                cameraMove.SetShakeData(_attackData.shakeKind);
             }
         }
         else if (other.CompareTag("EnemyRangedAttack"))

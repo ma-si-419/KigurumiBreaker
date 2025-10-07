@@ -105,6 +105,9 @@ public class PlayerState : Player<PlayerState>
     // バトルマネージャー
     [SerializeField] private BattleManager _battleManager;
 
+    // カメラ
+    [SerializeField] private GameObject _camera;
+
     // 現在持っているスキル
     PlayerSkill _playerSkill;
 
@@ -1454,8 +1457,16 @@ public class PlayerState : Player<PlayerState>
         // 当たり判定のサイズを設定
         attackObject.GetComponent<SphereCollider>().radius = scale;
 
+        // カメラを揺らす種類を設定
+        attackData.shakeKind = data.cameraShakeKind;
+
+        PlayerAttack playerAttack = attackObject.GetComponent<PlayerAttack>();
+
+        // カメラを設定
+        playerAttack.SetCamera(_camera);
+
         // 攻撃の情報を設定
-        attackObject.GetComponent<PlayerAttack>().SetPlayerAttackData(attackData);
+        playerAttack.SetPlayerAttackData(attackData);
 
         // 攻撃の位置を設定
         Vector3 position = GetAttackPosition(data.attackPart);
