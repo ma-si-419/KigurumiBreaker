@@ -752,7 +752,7 @@ public class PlayerState : Player<PlayerState>
     // チャージ状態
     public class ChargeState : StateBase<PlayerState>
     {
-
+        int stateTime;
         public ChargeState(PlayerState next) : base(next)
         {
         }
@@ -777,9 +777,13 @@ public class PlayerState : Player<PlayerState>
                 // 通常チャージアニメーションを再生
                 state._animator.SetTrigger("NormalCharge");
             }
+
+            stateTime = 0;
         }
         public override void OnUpdate()
         {
+            stateTime++;
+
             //特殊チャージの場合
             if (state._isSpecialCharge)
             {
@@ -793,7 +797,8 @@ public class PlayerState : Player<PlayerState>
                     state._specialChargeTime += state._playerSkill.specialChargeSkill.chargeSpeedRate;
 
                     // チャージ中に出すスキルを出す
-                    if (state._playerSkill.specialChargeSkill.chargingAttackObject != null)
+                    if (state._playerSkill.specialChargeSkill.chargingAttackObject != null &&
+                        stateTime % state._playerSkill.specialChargeSkill.attackIntervalFrame == 0)
                     {
                         Instantiate(state._playerSkill.specialChargeSkill.chargingAttackObject, state.transform.position, Quaternion.identity);
                     }
@@ -1381,7 +1386,6 @@ public class PlayerState : Player<PlayerState>
                 {
                     // ダメージにスキルのダメージ加算率を加算
                     attackData.damage = data.damage + (int)(data.damage * (_playerSkill.lowAttackSkillData.damageAddRate / 100));
-
 
                     // ノックバックを追加
                     attackData.knockBackPower = _playerSkill.lowAttackSkillData.addKnockBackPower;

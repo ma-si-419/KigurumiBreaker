@@ -29,15 +29,13 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 _moveVec = Vector3.zero;
 
-    int _lifeTIme = 0;
-
     [SerializeField] private float effectShiftScale = 0.5f;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _attackData.damage = _damage;
-        _lifeTIme = _attackData.attackLifeTime;
+        _attackData.attackLifeTime = _attackLifeTime;
     }
 
     // Update is called once per frame
@@ -49,9 +47,9 @@ public class PlayerAttack : MonoBehaviour
             transform.position += _moveVec;
         }
 
-        _lifeTIme--;
+        _attackLifeTime--;
 
-        if (_lifeTIme <= 0)
+        if (_attackLifeTime <= 0)
         {
             //攻撃判定の寿命が来たら消す
             Destroy(this.gameObject);
@@ -71,7 +69,7 @@ public class PlayerAttack : MonoBehaviour
     public void SetPlayerAttackData(PlayerAttackData data)
     {
         _attackData = data;
-        _lifeTIme = _attackData.attackLifeTime;
+        _attackLifeTime = _attackData.attackLifeTime;
         _damage = _attackData.damage;
     }
 
@@ -82,8 +80,6 @@ public class PlayerAttack : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("攻撃あたった:" + other.name);
-
         if (other.CompareTag("Enemy"))
         {
             //エフェクトを出す
@@ -101,12 +97,8 @@ public class PlayerAttack : MonoBehaviour
         }
         else if (other.CompareTag("EnemyRangedAttack"))
         {
-            Debug.Log("Hit EnemyRangedAttack");
-
             if (_attackData.isReflect)
             {
-                Debug.Log("Reflect!");
-
                 // タグをプレイヤーの攻撃に変更
                 other.tag = "PlayerAttack";
 
