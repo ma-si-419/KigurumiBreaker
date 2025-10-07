@@ -9,15 +9,20 @@ public class SpecialGaugeTest : MonoBehaviour
     [SerializeField] private GameObject _player;               //プレイヤーオブジェクト
 
     [SerializeField] private Image _specialGaugeImage;           //ゲージ画像
+    [SerializeField] private Image _auraImage;                  //オーラの画像
+    [SerializeField] private Image _auraImage2;                  //オーラの画像
     [SerializeField] private Image _hpGaugeImage;                //ゲージ画像
 
-    //[SerializeField] private Image _auraImage;                 //オーラの画像
     [SerializeField] private Color _normalColor = Color.yellow;  //通常時の色
     [SerializeField] private Color _maxColor = Color.red;        //マックス時の色
+
     [SerializeField] private float _flashSpeed;                  //点滅速度    
     [SerializeField] private float _auraRotateSpeed;             //オーラの回転速度
 
-    [SerializeField] private TMP_Text _shootText;               //弾の数表示用テキスト
+    [SerializeField] private TMP_Text _shootNumText;               //弾の数表示用テキスト
+    [SerializeField] private TMP_Text _shootNumMaxText;               //弾の数表示用テキスト
+    [SerializeField] private TMP_Text _hpText;               //弾の数表示用テキスト
+    [SerializeField] private TMP_Text _hpMaxText;               //弾の数表示用テキスト
 
     private float _current = 0f;    //現在のゲージ量
     private float _currentHp = 0f;    //現在のゲージ量
@@ -39,6 +44,9 @@ public class SpecialGaugeTest : MonoBehaviour
         //_current = _player.GetComponent<PlayerState>().GetNowSpecialGauge();
         //プレイヤーの現在のHPを取得
         //_currentHp = _player.GetComponent<PlayerState>().GetNowHp();
+
+        _auraImage.gameObject.SetActive(false); //オーラを非表示
+        _auraImage2.gameObject.SetActive(false); //オーラを非表示
     }
 
     // Update is called once per frame
@@ -83,19 +91,45 @@ public class SpecialGaugeTest : MonoBehaviour
             _specialGaugeImage.color = Color.Lerp(_maxColor,Color.white, flash); // 点滅
 
             //オーラを表示
+            if(!_auraImage.gameObject.activeSelf)
+            {
+                _auraImage.gameObject.SetActive(true);
+                _auraImage2.gameObject.SetActive(true);
+            }
+
+            //オーラを回転
+            _auraImage.transform.Rotate(Vector3.forward * _auraRotateSpeed * Time.deltaTime);
+            //逆回転
+            _auraImage2.transform.Rotate(Vector3.forward * -_auraRotateSpeed * Time.deltaTime);
 
         }
         else
         {
             //通常色
             _specialGaugeImage.color = _normalColor;
-
             //オーラを非表示
+            _auraImage.gameObject.SetActive(false);
+            _auraImage2.gameObject.SetActive(false);
 
         }
 
-        //弾数を表示
-        _shootText.text = _shootNum.ToString() + " / " + _shootMaxNum.ToString();
+        //Hpゲージが20%以下なら赤くする
+        if (ratio2 <= 0.2f)
+        {
+            _hpGaugeImage.color = Color.red;
+        }
+        else
+        {
+            _hpGaugeImage.color = Color.green;
+        }
+
+            //弾数を表示
+            _shootNumText.text = _shootNum.ToString();
+        _shootNumMaxText.text = _shootMaxNum.ToString();
+
+        //HPを表示
+        _hpText.text = ((int)_currentHp).ToString();
+        _hpMaxText.text = ((int)_maxHp).ToString();
 
     }
 }
