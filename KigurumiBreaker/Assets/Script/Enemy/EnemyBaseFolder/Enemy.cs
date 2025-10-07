@@ -43,6 +43,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected GameObject _player; // プレイヤーの参照
     [SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
 
+    private Animator _animator; // アニメーターの参照
+    private Rigidbody _rigidbody; // Rigidbodyの参照
+
     private float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
     private float _rotationSpeed = 5.0f; // プレイヤーの方向を向く速度
     private bool _isDetectPlayer = false; // プレイヤーを検知したかどうかのフラグ
@@ -67,7 +70,7 @@ public class Enemy : MonoBehaviour
     public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
     public GameObject player => _player; // プレイヤーのゲッター
 
-    private void Start()
+    protected virtual void Start()
     {
         _detectRangeSqr = _currentStateData.detectionRange * _currentStateData.detectionRange;    // 検知範囲の二乗を計算して保存
         _attackRangeSqr = _currentStateData.attackRange * _currentStateData.attackRange;    // 攻撃範囲の二乗を計算して保存
@@ -79,7 +82,10 @@ public class Enemy : MonoBehaviour
 
 
         // NavMeshAgentコンポーネントを取得
-        _agent = GetComponent<NavMeshAgent>(); 
+        _agent = GetComponent<NavMeshAgent>();
+        _rigidbody = GetComponent<Rigidbody>();
+
+        //_agent.updatePosition = false; // NavMeshAgentに位置を更新させない
 
         //ステータスからNavMeshAgentの速度を設定
         if (_agent != null)
@@ -107,8 +113,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(_currentHp);
-        Debug.Log($"speed={_agent.speed}, isStopped={_agent.isStopped}, hasPath={_agent.hasPath}");
+        //Debug.Log(_currentHp);
+        //Debug.Log($"speed={_agent.speed}, isStopped={_agent.isStopped}, hasPath={_agent.hasPath}");
 
         if (_isDamage)
         {
@@ -151,10 +157,12 @@ public class Enemy : MonoBehaviour
         this.GetComponent<Renderer>().material.color = Color.yellow;
         Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
 
-        //Debug.Log("ChaseState: Update");
-
         //プレイヤーの位置を目的地に設定
-        _agent.SetDestination(_player.transform.position); 
+        _agent.isStopped = false; // 追跡を再開
+        _agent.SetDestination(_player.transform.position);
+
+        StopMovement(); // 移動を停止
+
 
         //プレイヤーとの位置差を計算
         Vector3 diff = _player.transform.position - transform.position;
@@ -188,6 +196,7 @@ public class Enemy : MonoBehaviour
         Debug.DrawLine(transform.position, player.transform.position, Color.green);
         this.GetComponent<Renderer>().material.color = Color.white;
 
+        StopMovement(); // 移動を停止
 
         Vector3 diff = _player.transform.position - transform.position; //プレイヤーとの位置差を計算
 
@@ -205,7 +214,6 @@ public class Enemy : MonoBehaviour
 
             if (_stateTimer > _idleWaitTime)
             {
-
                 //追跡状態へ
                 _stateTimer = 0.0f;
                 ChangeState(new ChaseState(this));
@@ -329,5 +337,16 @@ public class Enemy : MonoBehaviour
     {
         return _currentTrunk;
     }
+
+    //オブジェクトの移動力をゼロにする
+    public void StopMovement()
+    {
+        if (_rigidbody != null)
+        {
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
+    }
+
 }
 
