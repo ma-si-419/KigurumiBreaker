@@ -8,11 +8,11 @@ public class CameraMove : MonoBehaviour
 
     [SerializeField] private GameObject _player; // プレイヤーオブジェクトの参照
 
-    [SerializeField] private Vector3 _offset; // カメラとプレイヤーの相対位置
-
     [SerializeField] private BoxCollider _moveArea; // カメラの移動範囲を指定するBoxCollider
 
     [SerializeField] private CameraShakeData _shakeData; // カメラの揺れデータ
+
+    [SerializeField] private CameraData _cameraData; // カメラの位置、回転データ
 
     [SerializeField] private SpecialAttackCameraMoveData _specialAttackCameraMoveData; // 必殺技中のカメラ移動データ
 
@@ -43,14 +43,14 @@ public class CameraMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.rotation = Quaternion.Euler(45.0f, -29.0f, -4.5f); // カメラの初期回転を設定
+        transform.rotation = Quaternion.Euler(_cameraData.cameraRotation); // カメラの初期回転を設定
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         // プレイヤーの位置にオフセットを加えた位置にカメラを移動
-        transform.position = _player.transform.position + _offset;
+        transform.position = _player.transform.position + _cameraData.cameraPosition;
 
         // カメラの位置が移動範囲を超えないように制限
         Vector3 clampedPosition = transform.position;
@@ -59,7 +59,7 @@ public class CameraMove : MonoBehaviour
         clampedPosition.z = Mathf.Clamp(clampedPosition.z, _moveArea.bounds.min.z, _moveArea.bounds.max.z);
         transform.position = clampedPosition;
 
-        transform.rotation = Quaternion.Euler(45.0f, -29.0f, -4.5f); // カメラの初期回転を設定
+        transform.rotation = Quaternion.Euler(_cameraData.cameraRotation); // カメラの初期回転を設定
 
         if (_shakeTime > 0)
         {
@@ -69,8 +69,10 @@ public class CameraMove : MonoBehaviour
             float shakeX = Random.Range(-_shakePower, _shakePower);
             float shakeY = Random.Range(-_shakePower, _shakePower);
             float shakeZ = Random.Range(-_shakePower, _shakePower);
-            transform.rotation = Quaternion.Euler(45.0f + shakeX, -29.0f + shakeY, -4.5f + shakeZ);
 
+            Vector3 rota = new Vector3(shakeX,shakeY,shakeZ);
+
+            transform.rotation = Quaternion.Euler(_cameraData.cameraRotation + rota);
         }
 
 
@@ -78,8 +80,6 @@ public class CameraMove : MonoBehaviour
         {
             // 必殺技を行っているフレーム数
             _specialAttackFrame++;
-
-            Debug.Log(_specialAttackFrame);
 
             // データを参照して、次に移動するフレームと距離を取得
             foreach (var data in _specialAttackCameraMoveData.specialMoveDatas)
@@ -105,33 +105,26 @@ public class CameraMove : MonoBehaviour
                 _specialAttackShiftVec += _frameMoveVec;
                 transform.position += _specialAttackShiftVec;
             }
-            else
-            {
-                // 移動フレームの最後の値が終わった後は何もしない
-                // transform.position += _specialAttackShiftVec;
-            }
         }
         else
         {
-            //// 必殺技終了後、10フレームかけて元の位置に戻る
-            //_returnFrame++;
+            // 必殺技終了後、数フレームかけて元の位置に戻る
+            _returnFrame++;
 
-            //if (_returnFrame <= 10)
-            //{
-            //    Vector3 moveVec = _specialAttackShiftVec;
+            if (_returnFrame <= _specialAttackCameraMoveData.returnFrame)
+            {
+                Vector3 moveVec = _specialAttackShiftVec;
 
-            //    moveVec /= 10.0f;
+                moveVec /= _specialAttackCameraMoveData.returnFrame;
 
-            //    moveVec *= (10 - _returnFrame);
+                moveVec *= (_specialAttackCameraMoveData.returnFrame - _returnFrame);
 
-            //    Debug.Log(10 - _returnFrame);
-
-            //    transform.position += moveVec;
-            //}
-            //else
-            //{
-            //    _specialAttackShiftVec = Vector3.zero;
-            //}
+                transform.position += moveVec;
+            }
+            else
+            {
+                _specialAttackShiftVec = Vector3.zero;
+            }
         }
 
     }

@@ -16,4 +16,9 @@ public class BattleManager : MonoBehaviour
         _enemies.Add(enemy);
     }
 
+    public void RemoveEnemy(GameObject enemy) 
+    {
+        _enemies.Remove(enemy);
+    }
+
 }
