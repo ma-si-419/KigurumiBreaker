@@ -15,7 +15,6 @@ public class ChaseState : IState
 
     public void Init()
     {
-        //Debug.Log("ChaseState: Init");
         //追跡アニメーション開始
         _enemy._animator.SetBool("Chase", true);
     }
