@@ -25,15 +25,10 @@ public class PunchEnemy : Enemy
     {
         _punchTimer += Time.deltaTime;
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
-
-        
         base.Attack();
 
         // 前進動作
         if (!_isDash) StartCoroutine(DoDash());
-
-        //アニメーションイベントで攻撃判定オブジェクトを生成したい(将来的に)
-
 
     }
 

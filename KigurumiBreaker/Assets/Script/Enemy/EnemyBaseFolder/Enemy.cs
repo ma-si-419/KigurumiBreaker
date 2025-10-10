@@ -42,8 +42,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected NavMeshAgent _agent; // NavMeshAgentの参照
     [SerializeField] protected GameObject _player; // プレイヤーの参照
     [SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
+    [SerializeField] public Animator _animator; // アニメーターの参照
 
-    public Animator _animator; // アニメーターの参照
     private Rigidbody _rigidbody; // Rigidbodyの参照
 
     private float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
 
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();
-        // animatorコンポーネントを取得
+        // Animatorコンポーネントを取得
         _animator = GetComponent<Animator>();
         // Rigidbodyコンポーネントを取得
         _rigidbody = GetComponent<Rigidbody>();
@@ -111,6 +111,7 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        //待機アニメーションを再生
         ChangeState(new IdleState(this));
     }
 
@@ -199,7 +200,8 @@ public class Enemy : MonoBehaviour
         Debug.DrawLine(transform.position, player.transform.position, Color.green);
         this.GetComponent<Renderer>().material.color = Color.white;
 
-        StopMovement(); // 移動を停止
+        // 移動を停止
+        StopMovement(); 
 
         Vector3 diff = _player.transform.position - transform.position; //プレイヤーとの位置差を計算
 
@@ -210,8 +212,7 @@ public class Enemy : MonoBehaviour
 
             //一度でも攻撃範囲内に入ったらフラグを立て続ける
             _isDetectPlayer = true;
-            //プレイヤーの方向を向き続ける
-            LookAtPlayer();
+
 
             _stateTimer += Time.deltaTime;
 
