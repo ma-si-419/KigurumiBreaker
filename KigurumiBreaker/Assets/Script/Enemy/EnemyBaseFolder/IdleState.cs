@@ -14,7 +14,7 @@ public class IdleState : IState
     public void Init()
     {
         //待機アニメーション開始
-        _enemy._animator.SetBool("Idle", true);
+        _enemy._animator.SetBool("Idle", false);
     }
 
     public void Update()
