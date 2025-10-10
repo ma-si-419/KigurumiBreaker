@@ -332,6 +332,7 @@ MonoBehaviour:
     attackRange: 20
   _idleWaitTime: 2
   _chaseWaitTime: 1
+  _attackCreateFrame: 0
   _agent: {fileID: 368834851}
   _player: {fileID: 0}
   _attackObjectPrefab: {fileID: 1480296614537264204, guid: 6a9b4e060aba9954db619ad8fe26c75d, type: 3}
@@ -817,9 +818,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Golem
       objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.71
+      value: -4.39
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_LocalPosition.y
@@ -827,7 +832,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 29.44
+      value: 20.94
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1163,6 +1168,7 @@ MonoBehaviour:
     attackRange: 0
   _idleWaitTime: 5
   _chaseWaitTime: 3
+  _attackCreateFrame: 0
   _agent: {fileID: 886635711}
   _player: {fileID: 0}
   _attackObjectPrefab: {fileID: 7092413309690627160, guid: cc3e96374149d034e9b08d27e444f611, type: 3}
@@ -1454,7 +1460,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6d38830f9e074b76b239dacd5a9cb3a0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6d38830f9e074b76b239dacd5a9cb3a0, type: 3}
       propertyPath: m_TagString
@@ -1548,6 +1554,7 @@ MonoBehaviour:
     attackRange: 5
   _idleWaitTime: 3
   _chaseWaitTime: 2
+  _attackCreateFrame: 0
   _agent: {fileID: 1253507466}
   _player: {fileID: 0}
   _attackObjectPrefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
@@ -1858,7 +1865,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.5
-  m_Height: 5
+  m_Height: 7
   m_Direction: 1
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!23 &1286718703
@@ -1918,7 +1925,7 @@ MonoBehaviour:
   _currentStateData:
     maxHp: 100
     maxTrunk: 0
-    enemyType: 0
+    enemyType: 1
     attackPower: 5
     moveSpeed: 3
     attackInterval: 3
@@ -1926,6 +1933,7 @@ MonoBehaviour:
     attackRange: 5
   _idleWaitTime: 3
   _chaseWaitTime: 2
+  _attackCreateFrame: 2
   _agent: {fileID: 1632475051}
   _player: {fileID: 1179962561}
   _attackObjectPrefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
@@ -2369,7 +2377,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4468665533456410853, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.13
+      value: 2.42
       objectReference: {fileID: 0}
     - target: {fileID: 4468665533456410853, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2377,7 +2385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4468665533456410853, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.91
+      value: 28.45
       objectReference: {fileID: 0}
     - target: {fileID: 4468665533456410853, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2465,6 +2473,7 @@ MonoBehaviour:
     attackRange: 2
   _idleWaitTime: 4
   _chaseWaitTime: 0
+  _attackCreateFrame: 0
   _agent: {fileID: 1746091663}
   _player: {fileID: 0}
   _attackObjectPrefab: {fileID: 3215702706224156630, guid: 17121093f54d56d48be3cd377ef038be, type: 3}
@@ -2844,6 +2853,7 @@ MonoBehaviour:
     attackRange: 5
   _idleWaitTime: 2
   _chaseWaitTime: 1
+  _attackCreateFrame: 0
   _agent: {fileID: 1927926035}
   _player: {fileID: 1179962561}
   _attackObjectPrefab: {fileID: 8603638642903214138, guid: ffdfa6e673cff8e43b4cf4e1bf63102c, type: 3}

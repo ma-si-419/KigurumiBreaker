@@ -12,7 +12,6 @@ public class AttackState : IState
 
     public void Init()
     {
-        //Debug.Log("AttackState: Init");
         //攻撃アニメーション開始
         _enemy._animator.SetTrigger("Attack");
     }

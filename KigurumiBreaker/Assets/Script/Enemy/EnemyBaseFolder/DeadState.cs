@@ -14,7 +14,6 @@ public class DeadState : IState
 
     public void Init()
     {
-        //Debug.Log("DeadState: Init");
         //死亡アニメーション開始
         _enemy._animator.SetTrigger("Dead");
     }

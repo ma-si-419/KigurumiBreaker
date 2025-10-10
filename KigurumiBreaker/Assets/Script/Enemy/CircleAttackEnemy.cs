@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class CircleAttackEnemy : Enemy
 {
+
     // 攻撃に関する変数
     private float _circleAttackTimer = 0.0f;   // タイマー
 
     public override void Attack()
     {
-        _circleAttackTimer += Time.deltaTime;
+
+        _circleAttackTimer += Time.deltaTime; //フレーム換算
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         base.Attack();
 
         //攻撃判定を一つ生成させる
-        if (!_isCreateAttack)
+        if(_circleAttackTimer > _attackCreateFrame)
         {
-            _isCreateAttack = true;
-            CreateAttack();
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                CreateAttack();
+            }
         }
     }
 
@@ -32,6 +37,8 @@ public class CircleAttackEnemy : Enemy
 
         //攻撃フラグをリセット
         _isCreateAttack = false;
+        _circleAttackTimer = 0.0f;
+
         ChangeState(new IdleState(this));
     }
 

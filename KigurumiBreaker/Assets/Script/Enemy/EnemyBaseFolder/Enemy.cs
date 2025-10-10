@@ -27,16 +27,15 @@ public class Enemy : MonoBehaviour
     protected float _currentTrunk; // 現在の耐久力
     protected int _currentEnemyType;    // 敵の種類
 
-    [Header("攻撃判定の設定")]
-    //[SerializeField] protected float _attackRadius; // 攻撃判定の半径
-
-
     protected float _detectRangeSqr; // プレイヤー検知範囲の二乗
     protected float _attackRangeSqr; // プレイヤー攻撃範囲の二乗
 
     [Header("敵が次の状態に遷移するまでの時間")]
     [SerializeField] protected float _idleWaitTime; // 待機時間
     [SerializeField] protected float _chaseWaitTime; // 追跡時間
+
+    [Header("攻撃判定が生成されるまでのフレーム時間")]
+    [SerializeField] protected float _attackCreateFrame; // 攻撃判定が生成されるまでのフレーム時間
 
     [Header("コンポーネント")]
     [SerializeField] protected NavMeshAgent _agent; // NavMeshAgentの参照
@@ -48,7 +47,7 @@ public class Enemy : MonoBehaviour
 
     private float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
     private float _rotationSpeed = 5.0f; // プレイヤーの方向を向く速度
-    private bool _isDetectPlayer = false; // プレイヤーを検知したかどうかのフラグ
+    private bool _isAttackRange = false; // プレイヤーを検知したかどうかのフラグ
     protected Vector3 _direction; // 移動方向
     protected bool _isCreateAttack = false; // 攻撃オブジェクトを生成したかどうかのフラグ
     protected bool _isDamage = false; // ダメージを受けたかどうかのフラグ
@@ -70,6 +69,8 @@ public class Enemy : MonoBehaviour
     public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
     public GameObject player => _player; // プレイヤーのゲッター
 
+    //public AnimatorStateInfo currentAnimState => _currentAnimState; // 現在のアニメーション状態のゲッター
+
     protected virtual void Start()
     {
         _detectRangeSqr = _currentStateData.detectionRange * _currentStateData.detectionRange;    // 検知範囲の二乗を計算して保存
@@ -87,6 +88,8 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
         // Rigidbodyコンポーネントを取得
         _rigidbody = GetComponent<Rigidbody>();
+
+
 
         //_agent.updatePosition = false; // NavMeshAgentに位置を更新させない
 
@@ -206,12 +209,11 @@ public class Enemy : MonoBehaviour
         Vector3 diff = _player.transform.position - transform.position; //プレイヤーとの位置差を計算
 
         //プレイヤーが検知範囲内にいるかチェック
-        if (diff.sqrMagnitude < _detectRangeSqr || _isDetectPlayer)
+        if (diff.sqrMagnitude < _detectRangeSqr && !_isAttackRange)
         {
             this.GetComponent<Renderer>().material.color = Color.green;
 
             //一度でも攻撃範囲内に入ったらフラグを立て続ける
-            _isDetectPlayer = true;
 
 
             _stateTimer += Time.deltaTime;
@@ -221,6 +223,27 @@ public class Enemy : MonoBehaviour
                 //追跡状態へ
                 _stateTimer = 0.0f;
                 ChangeState(new ChaseState(this));
+            }
+        }
+
+        // 攻撃範囲に入ったらフラグを立てる
+        if(diff.sqrMagnitude < _attackRangeSqr)
+        {
+            _isAttackRange = true;
+        }
+
+        if(_isAttackRange && _isAttackRange)
+        {
+            _stateTimer += Time.deltaTime;
+
+            LookAtPlayer(); // プレイヤーの方向を向く
+
+            if (_stateTimer > _idleWaitTime)
+            {
+                //追跡状態へ
+                _stateTimer = 0.0f;
+                _isAttackRange = false; // フラグをリセット
+                ChangeState(new AttackState(this));
             }
         }
 
