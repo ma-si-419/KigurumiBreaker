@@ -1,49 +1,72 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class EnemyWaveSpawner : MonoBehaviour
+[System.Serializable]
+public class EnemyProbability
 {
-    [Header("出現させる敵プレハブ（種類別に登録）")]
-    [SerializeField] private GameObject[] enemyPrefabs;
+    public GameObject enemyPrefab;
+    [Range(0f, 1f)]
+    public float spawnChance; // 出現確率
+    public string type;       // "Melee" / "Ranged" / "Suicide" / "Tackle"
+}
 
-    [Header("出現ポイント")]
+public class WaveSpawner : MonoBehaviour
+{
+    [Header("敵の出現確率設定")]
+    [SerializeField] private EnemyProbability[] enemyProbabilities;
+
+    [Header("Spawnポイント")]
     [SerializeField] private Transform[] spawnPoints;
 
     [Header("ウェーブ設定")]
-    [SerializeField] private int totalWaves = 3;         // 全ウェーブ数
-    [SerializeField] private int enemiesPerWave = 6;     // 1ウェーブあたりの敵数
-    [SerializeField] private float waveDelay = 2f;       // ウェーブ間の待機時間
+    [SerializeField] private int totalWaves = 5;
+    [SerializeField] private int enemiesPerWave = 6;
+    [SerializeField] private float waveDelay = 2f;
 
     [Header("対象のエフェクト")]
     [SerializeField] private ParticleSystem[] targetEffects;
+
+    [Header("Player参照")]
+    [SerializeField] private Transform player; // PlayerのTransform
+
+    [Header("近距離判定距離")]
+    [SerializeField] private float meleeDistance = 5f;
 
     private int currentWave = 0;
     private bool spawning = false;
     private bool allWavesFinished = false;
 
-    // 各スポーンポイントの敵キュー（順番に出すため）
     private Dictionary<Transform, Queue<GameObject>> spawnQueues = new Dictionary<Transform, Queue<GameObject>>();
-    // 現在生きている敵（追跡用）
     private Dictionary<Transform, GameObject> activeEnemyAtPoint = new Dictionary<Transform, GameObject>();
+
+    void Awake()
+    {
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+                player = playerObj.transform;
+            else
+                Debug.LogWarning("Scene に Player タグのオブジェクトが存在しません");
+        }
+    }
+
 
     void Start()
     {
-        // スポーンポイントごとにキューと現在敵リストを初期化
         foreach (var point in spawnPoints)
         {
             spawnQueues[point] = new Queue<GameObject>();
             activeEnemyAtPoint[point] = null;
         }
-
-        // 最初のWave開始
         StartCoroutine(SpawnWave());
+       
     }
 
     void Update()
     {
         if (allWavesFinished) return;
 
-        // 各ポイントの敵が死んでいたら次を生成
         foreach (var point in spawnPoints)
         {
             if (activeEnemyAtPoint[point] == null && spawnQueues[point].Count > 0)
@@ -52,7 +75,6 @@ public class EnemyWaveSpawner : MonoBehaviour
             }
         }
 
-        // 全ポイントのキューと敵が空なら次ウェーブへ
         bool allEmpty = true;
         foreach (var point in spawnPoints)
         {
@@ -63,7 +85,6 @@ public class EnemyWaveSpawner : MonoBehaviour
             }
         }
 
-        // 全部消滅 → 次Wave
         if (!spawning && allEmpty)
         {
             if (currentWave < totalWaves)
@@ -85,15 +106,14 @@ public class EnemyWaveSpawner : MonoBehaviour
         currentWave++;
         Debug.Log($"--- Wave {currentWave} 開始 ---");
 
-        // Waveごとにキュー登録（同じ場所で順番出現）
         for (int i = 0; i < enemiesPerWave; i++)
         {
-            Transform point = spawnPoints[Random.Range(0, spawnPoints.Length)];
-            GameObject prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
-            spawnQueues[point].Enqueue(prefab);
+            EnemyProbability selected = SelectEnemyByProbability();
+            Transform spawnPoint = ChooseSpawnPointByDistance(selected.type);
+            if (spawnPoint != null)
+                spawnQueues[spawnPoint].Enqueue(selected.enemyPrefab);
         }
 
-        // 各ポイントの最初の敵だけ出す
         foreach (var point in spawnPoints)
         {
             if (spawnQueues[point].Count > 0 && activeEnemyAtPoint[point] == null)
@@ -106,6 +126,50 @@ public class EnemyWaveSpawner : MonoBehaviour
         spawning = false;
     }
 
+    private EnemyProbability SelectEnemyByProbability()
+    {
+        float total = 0f;
+        foreach (var e in enemyProbabilities)
+        {
+            total += e.spawnChance;
+        }
+
+        float roll = Random.Range(0f, total);
+        float cumulative = 0f;
+
+        foreach (var e in enemyProbabilities)
+        {
+            cumulative += e.spawnChance;
+            if (roll <= cumulative)
+                return e;
+        }
+
+        return enemyProbabilities[enemyProbabilities.Length - 1]; // 万が一
+    }
+
+    private Transform ChooseSpawnPointByDistance(string type)
+    {
+        List<Transform> candidates = new List<Transform>();
+
+        foreach (var point in spawnPoints)
+        {
+            float dist = Vector3.Distance(point.position, player.position);
+            if (type == "Melee" || type == "Tackle" || type == "Suicide")
+            {
+                if (dist <= meleeDistance) candidates.Add(point); // Playerに近いポイント
+            }
+            else if (type == "Ranged")
+            {
+                if (dist > meleeDistance) candidates.Add(point);  // Playerから離れたポイント
+            }
+        }
+
+        if (candidates.Count == 0)
+            candidates.AddRange(spawnPoints); // 該当なしなら全体から
+
+        return candidates[Random.Range(0, candidates.Count)];
+    }
+
     private void SpawnEnemyAt(Transform point)
     {
         if (spawnQueues[point].Count == 0) return;
@@ -113,24 +177,18 @@ public class EnemyWaveSpawner : MonoBehaviour
         GameObject prefab = spawnQueues[point].Dequeue();
         GameObject enemy = Instantiate(prefab, point.position, Quaternion.identity);
 
-        // 敵破壊時にnullに戻すコルーチン
         StartCoroutine(TrackEnemyDeath(point, enemy));
         activeEnemyAtPoint[point] = enemy;
     }
 
     private System.Collections.IEnumerator TrackEnemyDeath(Transform point, GameObject enemy)
     {
-        // Destroyされるまで待つ
         while (enemy != null)
             yield return null;
 
-        // 死亡を確認したら空きにする
         activeEnemyAtPoint[point] = null;
     }
 
-    /// <summary>
-    /// 登録されたエフェクトを全停止
-    /// </summary>
     private void StopAllEffects()
     {
         foreach (var effect in targetEffects)

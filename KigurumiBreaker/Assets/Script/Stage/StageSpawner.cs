@@ -88,6 +88,7 @@ public class StageSpawner : MonoBehaviour
     {
         // 起動時に First ステージを生成
         SpawnStage(0);
+    
     }
 
     private void OnTriggerEnter(Collider other)
