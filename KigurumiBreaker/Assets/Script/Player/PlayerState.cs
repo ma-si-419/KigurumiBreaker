@@ -940,6 +940,8 @@ public class PlayerState : Player<PlayerState>
 
         private AttackData _currentAttackData;
 
+        private CameraMove _cameraMove;
+
         public SpecialAttackState(PlayerState next) : base(next)
         {
         }
@@ -960,13 +962,15 @@ public class PlayerState : Player<PlayerState>
             if (state._specialChargeTime == state._playerData.maxSpecialChargeTime)
             {
                 _currentAttackName = "SpecialAttack";
+
+                // カメラの特殊攻撃中フラグを設定
+                _cameraMove = state._camera.GetComponent<CameraMove>();
+                _cameraMove.SetSpecialAttack(true);
             }
             else
             {
                 _currentAttackName = "LowSpecialAttack";
             }
-
-            Debug.Log(_currentAttackName);
 
             // 特殊攻撃アニメーションを再生
             state._animator.SetTrigger(_currentAttackName);
@@ -1011,6 +1015,12 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger(_currentAttackName);
             // チャージ時間をリセット
             state._specialChargeTime = 0;
+
+            if(_cameraMove != null)
+            {
+                // カメラの特殊攻撃中フラグを解除
+                _cameraMove.SetSpecialAttack(false);
+            }
         }
     }
 
@@ -1086,6 +1096,7 @@ public class PlayerState : Player<PlayerState>
 
             // ダメージアニメーションを再生
             state._animator.SetTrigger(_damageAnim);
+
         }
         public override void OnUpdate()
         {
