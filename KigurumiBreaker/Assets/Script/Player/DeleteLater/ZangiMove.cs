@@ -18,7 +18,7 @@ public class ZangiMove : MonoBehaviour
     public int maxHp = 30;
     public int nowHp = 0;
 
-    [SerializeField] private BattleManager _battleManager;
+    [SerializeField] private GameObject _battleManager;
 
     [SerializeField] private int _dropTime = 100;
 
@@ -43,8 +43,10 @@ public class ZangiMove : MonoBehaviour
     private List<int> _dropBullets;
     void Start()
     {
+        BattleManager manager = _battleManager.GetComponent<BattleManager>();
+
         nowHp = maxHp;
-        _battleManager.AddEnemy(this.gameObject);
+        manager.AddEnemy(this.gameObject);
 
         // ドロップする弾のリストを初期化する
         _dropBullets = new List<int>();
@@ -158,6 +160,8 @@ public class ZangiMove : MonoBehaviour
 
             if (nowHp <= 0)
             {
+                _battleManager.GetComponent<BattleManager>().RemoveEnemy(this.gameObject);
+
                 Destroy(this.gameObject);
             }
         }
@@ -176,6 +180,8 @@ public class ZangiMove : MonoBehaviour
             
             if (nowHp <= 0)
             {
+                _battleManager.GetComponent<BattleManager>().RemoveEnemy(this.gameObject);
+
                 Destroy(this.gameObject);
             }
 
