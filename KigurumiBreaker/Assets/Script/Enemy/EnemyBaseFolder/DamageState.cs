@@ -15,7 +15,6 @@ public class DamageState : IState
     public void Init()
     {
         //ダメージアニメーション開始
-        _enemy.animator.SetTrigger("Damage");
     }
 
     public void Update()
