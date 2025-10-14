@@ -207,6 +207,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 476430302}
+    - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: _damageData
       value: 
       objectReference: {fileID: 11400000, guid: 5dfba6b2f3d537140b485cdfc7dafed9, type: 2}
@@ -983,8 +987,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 1005031193}
-  _offset: {x: 3.1, y: 6, z: -4.6}
   _moveArea: {fileID: 439639695}
+  _shakeData: {fileID: 11400000, guid: 722412d69f4260c43b98b89ea406160e, type: 2}
+  _cameraData: {fileID: 11400000, guid: 7cc2ab059aa4a7d45b5b3e2c83d4bfff, type: 2}
+  _specialAttackCameraMoveData: {fileID: 11400000, guid: 1cee8eb2ac57d35458a07510251454f1, type: 2}
 --- !u!1 &690358052
 GameObject:
   m_ObjectHideFlags: 0
