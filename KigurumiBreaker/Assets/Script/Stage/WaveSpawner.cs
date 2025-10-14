@@ -77,7 +77,7 @@ public class WaveSpawner : MonoBehaviour
     public ParticleSystem[] targetEffects;
 
     private Dictionary<EnemyKind, GameObject> prefabDict;
-    private int groupsFinished = 0;  // 完了したグループ数
+    private int groupsFinished = 0;
     private bool effectsStopped = false;
 
     private void Awake()
@@ -117,7 +117,6 @@ public class WaveSpawner : MonoBehaviour
                     continue;
                 }
 
-                // SpawnCountは廃止、1体ずつ生成
                 Vector3 pos = pop.randomizePosition ? GetRandomNavMeshPositionInArea() : pop.spawnPosition;
                 GameObject enemy = Instantiate(prefab, pos, Quaternion.identity);
                 spawned.Add(enemy);
@@ -166,7 +165,7 @@ public class WaveSpawner : MonoBehaviour
         {
             Vector3 offset = new Vector3(
                 Random.Range(-areaSize.x / 2, areaSize.x / 2),
-                0f, // NavMeshは水平面想定
+                0f,
                 Random.Range(-areaSize.z / 2, areaSize.z / 2)
             );
             pos = areaCenter.position + offset;
@@ -178,7 +177,6 @@ public class WaveSpawner : MonoBehaviour
             tries++;
         } while (tries < maxTries);
 
-        // 失敗時は中心に戻す
         return areaCenter.position;
     }
 
