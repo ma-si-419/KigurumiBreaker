@@ -47,6 +47,8 @@ public class Enemy : MonoBehaviour
     protected bool _isCreateAttack = false; // 攻撃オブジェクトを生成したかどうかのフラグ
     protected bool _isDamage = false; // ダメージを受けたかどうかのフラグ
 
+    protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
+
     /* 定数 */
     private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
     private const float ROTATION_SPEED = 5.0f; // プレイヤーの方向を向く速度
@@ -257,6 +259,7 @@ public class Enemy : MonoBehaviour
             //ダメージを受けたフラグを立てる
             _isDamage = true;
 
+
             //ダメージを受けたら赤くする(デバッグ)
             this.GetComponent<Renderer>().material.color = Color.red;
 
@@ -284,8 +287,10 @@ public class Enemy : MonoBehaviour
             {
                 if (_currentEnemyType == 1) return; // でかい敵はダメージ状態に遷移しない
 
+                _animator.CrossFade("Damage", 0.05f);
+
                 //ダメージ状態に遷移
-                ChangeState(new DamageState(this));
+                //ChangeState(new DamageState(this));
             }
 
             //攻撃はいったら攻撃判定を速攻消す
@@ -318,7 +323,11 @@ public class Enemy : MonoBehaviour
             {
                 if (_currentEnemyType == 1) return; // でかい敵はダメージ状態に遷移しない
                 //ダメージ状態に遷移
-                ChangeState(new DamageState(this));
+
+                //_animator.SetTrigger("Damage");
+                _animator.CrossFade("Damage", 0.05f);
+
+                //ChangeState(new DamageState(this));
             }
 
             //攻撃はいったら攻撃判定を速攻消す
@@ -362,6 +371,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void OnHit()
+    {
+        //一回だけヒット処理を行う
+        if (_isHit) return; 
+
+
+
+    }
+
     //デバッグ用に線を引く
     public void DebugLine()
     {
@@ -375,6 +393,7 @@ public class Enemy : MonoBehaviour
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
 
+    // Gizmosを使って検知範囲と攻撃範囲を表示
     private void OnDrawGizmosSelected()
     {
         // 検知範囲（シアン色のワイヤーフレーム球）
