@@ -15,7 +15,7 @@ public class DeadState : IState
     public void Init()
     {
         //死亡アニメーション開始
-        _enemy._animator.SetTrigger("Dead");
+        _enemy.animator.SetTrigger("Dead");
     }
 
     public void Update()
@@ -25,7 +25,7 @@ public class DeadState : IState
         //Debug.Log("死んだ");
 
         //死亡アニメーションが終わったらオブジェクト削除
-        if (_enemy._animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        if (_enemy.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
         {
             Object.Destroy(_enemy.gameObject);
         }

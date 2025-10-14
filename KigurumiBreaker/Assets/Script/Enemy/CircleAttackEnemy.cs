@@ -13,8 +13,6 @@ public class CircleAttackEnemy : Enemy
         _circleAttackTimer += Time.deltaTime; //フレーム換算
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
 
-        Debug.Log(_circleAttackTimer);
-        Debug.Log(_isCreateAttack);
 
         //攻撃判定を一つ生成させる
         if (_circleAttackTimer > ATTACK_CREATE_TIME)

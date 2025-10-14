@@ -32,10 +32,11 @@ public class Enemy : MonoBehaviour
     protected float _attackRangeSqr; // プレイヤー攻撃範囲の二乗
 
     [Header("コンポーネント")]
-    [SerializeField] protected NavMeshAgent _agent; // NavMeshAgentの参照
-    [SerializeField] protected GameObject _player; // プレイヤーの参照
     [SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
-    public Animator _animator; // アニメーターの参照
+
+    protected NavMeshAgent _agent; // NavMeshAgentの参照
+    protected GameObject _player; // プレイヤーの参照
+    protected Animator _animator; // アニメーターの参照
 
     private Rigidbody _rigidbody; // Rigidbodyの参照
 
@@ -69,7 +70,7 @@ public class Enemy : MonoBehaviour
     public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
     public GameObject player => _player; // プレイヤーのゲッター
 
-    //public AnimatorStateInfo currentAnimState => _currentAnimState; // 現在のアニメーション状態のゲッター
+    public Animator animator => _animator; // 現在のアニメーション状態のゲッター
 
     protected virtual void Start()
     {
@@ -88,10 +89,6 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
         // Rigidbodyコンポーネントを取得
         _rigidbody = GetComponent<Rigidbody>();
-
-
-
-        //_agent.updatePosition = false; // NavMeshAgentに位置を更新させない
 
         //ステータスからNavMeshAgentの速度を設定
         if (_agent != null)
@@ -114,17 +111,13 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        //待機アニメーションを再生
+        //待機状態に設定
         ChangeState(new IdleState(this));
     }
 
     private void Update()
     {
-        //Debug.Log(_currentHp);
-        //Debug.Log($"speed={_agent.speed}, isStopped={_agent.isStopped}, hasPath={_agent.hasPath}");
         DebugLine();
-
-
 
         // 現在のステートを更新
         _currentState?.Update();
@@ -167,7 +160,6 @@ public class Enemy : MonoBehaviour
             //タイマーを進める
             _stateTimer += Time.deltaTime;
 
-
             if (_stateTimer > CHASE_WAIT_TIME)
             {
                 _agent.isStopped = true; //追跡を停止
@@ -182,9 +174,6 @@ public class Enemy : MonoBehaviour
     //基本待機処理(オーバーライドで変更可)
     public virtual void Idle()
     {
-
-        Debug.Log("アイドル");
-
         _agent.isStopped = true; // 追跡を停止
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
