@@ -51634,6 +51634,10 @@ MonoBehaviour:
   areaCenter: {fileID: 5877859221655556574}
   areaSize: {x: 28, y: 0, z: 31}
   spawnInterval: 0.5
+  targetEffects:
+  - {fileID: 4509811258348602950}
+  - {fileID: 1287979652213450916}
+  - {fileID: 1544975785183819103}
 --- !u!114 &7694613364420493587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78155,6 +78159,11 @@ PrefabInstance:
       addedObject: {fileID: 3323820006360905742}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+--- !u!198 &1287979652213450916 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+  m_PrefabInstance: {fileID: 1287979652231673702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1287979652231802340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
@@ -81193,6 +81202,11 @@ PrefabInstance:
       addedObject: {fileID: 5790477012601691553}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+--- !u!198 &1544975785183819103 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+  m_PrefabInstance: {fileID: 1544975785198627485}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1544975785199022111 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
@@ -103668,6 +103682,11 @@ PrefabInstance:
 --- !u!4 &4509811258329203462 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+  m_PrefabInstance: {fileID: 4509811258329078148}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4509811258348602950 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
   m_PrefabInstance: {fileID: 4509811258329078148}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4510144448035115125

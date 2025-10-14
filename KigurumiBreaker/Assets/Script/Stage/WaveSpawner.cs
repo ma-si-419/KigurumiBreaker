@@ -63,11 +63,15 @@ public class WaveSpawner : MonoBehaviour
     [Header("出現間隔")]
     public float spawnInterval = 0.5f;
 
+    [Header("全グループ完了後に停止するエフェクト")]
+    public ParticleSystem[] targetEffects;
+
     private Dictionary<EnemyKind, GameObject> prefabDict;
+    private int groupsFinished = 0;  // 完了したグループ数
+    private bool effectsStopped = false;
 
     private void Awake()
     {
-        // EnumとPrefabをDictionaryで紐付け
         prefabDict = new Dictionary<EnemyKind, GameObject>();
         foreach (var entry in enemyPrefabs)
         {
@@ -78,7 +82,6 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
-        // 各グループを独立してWave進行
         foreach (var group in groups)
         {
             StartCoroutine(HandleGroupWaves(group));
@@ -124,6 +127,16 @@ public class WaveSpawner : MonoBehaviour
         }
 
         Debug.Log($"{group.groupName} の全Wave完了");
+
+        // グループ完了数をカウント
+        groupsFinished++;
+
+        // 全グループが終わったらエフェクト停止
+        if (!effectsStopped && groupsFinished >= groups.Count)
+        {
+            effectsStopped = true;
+            StopAllEffects();
+        }
     }
 
     private GameObject GetPrefabByKind(EnemyKind kind)
@@ -143,6 +156,20 @@ public class WaveSpawner : MonoBehaviour
             Random.Range(-areaSize.z / 2, areaSize.z / 2)
         );
         return areaCenter.position + offset;
+    }
+
+    private void StopAllEffects()
+    {
+        foreach (var effect in targetEffects)
+        {
+            if (effect != null)
+            {
+                var main = effect.main;
+                main.loop = false;
+                effect.Stop();
+            }
+        }
+        Debug.Log("全エフェクト停止完了");
     }
 
 #if UNITY_EDITOR
