@@ -10,13 +10,14 @@ public class CircleAttackEnemy : Enemy
 
     public override void Attack()
     {
-
         _circleAttackTimer += Time.deltaTime; //フレーム換算
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
-        base.Attack();
+
+        Debug.Log(_circleAttackTimer);
+        Debug.Log(_isCreateAttack);
 
         //攻撃判定を一つ生成させる
-        if(_circleAttackTimer > _attackCreateFrame)
+        if (_circleAttackTimer > ATTACK_CREATE_TIME)
         {
             if (!_isCreateAttack)
             {
@@ -39,6 +40,7 @@ public class CircleAttackEnemy : Enemy
         _isCreateAttack = false;
         _circleAttackTimer = 0.0f;
 
+        // 状態をIdleに変更
         ChangeState(new IdleState(this));
     }
 

@@ -12,6 +12,7 @@ public class AttackState : IState
 
     public void Init()
     {
+        _enemy.AttackReset(); //攻撃フラグリセット
         //攻撃アニメーション開始
         _enemy._animator.SetTrigger("Attack");
     }

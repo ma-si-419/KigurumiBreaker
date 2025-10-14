@@ -1,5 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.VirtualTexturing;
 
 [System.Serializable]
 public class EnemyStateData
@@ -9,7 +11,6 @@ public class EnemyStateData
     public int enemyType;         // 敵の種類（例：0=チビ、1=デカなど）
     public int attackPower;       // 攻撃力
     public float moveSpeed;       // 移動速度
-    public float attackInterval;  // 攻撃間隔
     public float detectionRange;  // 検知範囲
     public float attackRange;     // 攻撃範囲
 }
@@ -30,32 +31,31 @@ public class Enemy : MonoBehaviour
     protected float _detectRangeSqr; // プレイヤー検知範囲の二乗
     protected float _attackRangeSqr; // プレイヤー攻撃範囲の二乗
 
-    [Header("敵が次の状態に遷移するまでの時間")]
-    [SerializeField] protected float _idleWaitTime; // 待機時間
-    [SerializeField] protected float _chaseWaitTime; // 追跡時間
-
-    [Header("攻撃判定が生成されるまでのフレーム時間")]
-    [SerializeField] protected float _attackCreateFrame; // 攻撃判定が生成されるまでのフレーム時間
-
     [Header("コンポーネント")]
     [SerializeField] protected NavMeshAgent _agent; // NavMeshAgentの参照
     [SerializeField] protected GameObject _player; // プレイヤーの参照
     [SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
-    [SerializeField] public Animator _animator; // アニメーターの参照
+    public Animator _animator; // アニメーターの参照
 
     private Rigidbody _rigidbody; // Rigidbodyの参照
 
     private float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
-    private float _rotationSpeed = 5.0f; // プレイヤーの方向を向く速度
+    private float _attackTimer = 0.0f; // 状態遷移するまでのタイマー
     private bool _isAttackRange = false; // プレイヤーを検知したかどうかのフラグ
     protected Vector3 _direction; // 移動方向
     protected bool _isCreateAttack = false; // 攻撃オブジェクトを生成したかどうかのフラグ
     protected bool _isDamage = false; // ダメージを受けたかどうかのフラグ
 
-    private int _damageTime = 0; // ダメージを受けてからの時間
-
     /* 定数 */
     private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
+    private const float ROTATION_SPEED = 5.0f; // プレイヤーの方向を向く速度
+
+    [Header("敵が次の状態に遷移するまでの時間")]
+    [SerializeField] private float IDLE_WAIT_TIME = 0; // 待機時間
+    [SerializeField] public float CHASE_WAIT_TIME = 0; // 追跡時間
+
+    [Header("攻撃判定が生成されるまでのフレーム時間(遠距離タイプは無し)")]
+    [SerializeField] protected float ATTACK_CREATE_TIME = 0; // 攻撃判定が生成されるまでのフレーム時間
 
     public enum EnemyDebuff
     {
@@ -122,23 +122,9 @@ public class Enemy : MonoBehaviour
     {
         //Debug.Log(_currentHp);
         //Debug.Log($"speed={_agent.speed}, isStopped={_agent.isStopped}, hasPath={_agent.hasPath}");
+        DebugLine();
 
-        if (_isDamage)
-        {
-            _damageTime++;
 
-            if (_damageTime > MAX_DAMAGE_TIME)
-            {
-                _isDamage = false;
-                _damageTime = 0;
-            }
-
-            this.GetComponent<Renderer>().material.color = Color.red;
-        }
-        else
-        {
-            _damageTime = 0;
-        }
 
         // 現在のステートを更新
         _currentState?.Update();
@@ -153,19 +139,15 @@ public class Enemy : MonoBehaviour
     }
 
     //基本攻撃処理(オーバーライドで変更可)
-    public virtual void Attack() 
-    {
-        this.GetComponent<Renderer>().material.color = Color.cyan;
-    }
+    public virtual void Attack() { }
 
     //基本移動処理(オーバーライドで変更可)
     public virtual void Chase()
     {
-        this.GetComponent<Renderer>().material.color = Color.yellow;
-        Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
+        //this.GetComponent<Renderer>().material.color = Color.yellow;
+        _agent.isStopped = false; // 追跡を再開
 
         //プレイヤーの位置を目的地に設定
-        _agent.isStopped = false; // 追跡を再開
         _agent.SetDestination(_player.transform.position);
 
         StopMovement(); // 移動を停止
@@ -186,7 +168,7 @@ public class Enemy : MonoBehaviour
             _stateTimer += Time.deltaTime;
 
 
-            if (_stateTimer > _chaseWaitTime)
+            if (_stateTimer > CHASE_WAIT_TIME)
             {
                 _agent.isStopped = true; //追跡を停止
 
@@ -200,8 +182,12 @@ public class Enemy : MonoBehaviour
     //基本待機処理(オーバーライドで変更可)
     public virtual void Idle()
     {
-        Debug.DrawLine(transform.position, player.transform.position, Color.green);
-        this.GetComponent<Renderer>().material.color = Color.white;
+
+        Debug.Log("アイドル");
+
+        _agent.isStopped = true; // 追跡を停止
+        //プレイヤーの位置を目的地に設定
+        _agent.SetDestination(_player.transform.position);
 
         // 移動を停止
         StopMovement(); 
@@ -218,7 +204,7 @@ public class Enemy : MonoBehaviour
 
             _stateTimer += Time.deltaTime;
 
-            if (_stateTimer > _idleWaitTime)
+            if (_stateTimer > IDLE_WAIT_TIME)
             {
                 //追跡状態へ
                 _stateTimer = 0.0f;
@@ -231,18 +217,23 @@ public class Enemy : MonoBehaviour
         {
             _isAttackRange = true;
         }
-
-        if(_isAttackRange && _isAttackRange)
+        else
         {
-            _stateTimer += Time.deltaTime;
+            _attackTimer = 0.0f;
+            _isAttackRange = false;
+        }
+
+        if (_isAttackRange && _isAttackRange)
+        {
+            _attackTimer += Time.deltaTime;
 
             LookAtPlayer(); // プレイヤーの方向を向く
 
-            if (_stateTimer > _idleWaitTime)
+            if (_attackTimer > IDLE_WAIT_TIME)
             {
                 //追跡状態へ
-                _stateTimer = 0.0f;
                 _isAttackRange = false; // フラグをリセット
+                _stateTimer = 0.0f;
                 ChangeState(new AttackState(this));
             }
         }
@@ -264,7 +255,7 @@ public class Enemy : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(direction);
 
             // 現在の回転から目標の回転へ補完
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, ROTATION_SPEED * Time.deltaTime);
 
         }
     }
@@ -347,6 +338,13 @@ public class Enemy : MonoBehaviour
 
     }
 
+    public void AttackReset()
+    {
+        _isCreateAttack = false;
+        _stateTimer = 0.0f;
+        _attackTimer = 0.0f;
+    }
+
     // Getterメソッド
     public float GetMaxHp()
     {
@@ -373,6 +371,32 @@ public class Enemy : MonoBehaviour
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
         }
+    }
+
+    //デバッグ用に線を引く
+    public void DebugLine()
+    {
+        //プレイヤーとの位置差を表示
+        Debug.DrawLine(transform.position, player.transform.position, Color.green);
+
+        //敵の検知範囲を球で表示
+        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_detectRangeSqr), Color.blue);
+
+        //敵の攻撃範囲を表示
+        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // 検知範囲（シアン色のワイヤーフレーム球）
+        Gizmos.color = Color.yellow;
+        float detectRadius = _currentStateData != null ? _currentStateData.detectionRange : 0f;
+        Gizmos.DrawWireSphere(transform.position, detectRadius);
+
+        // 攻撃範囲（赤色のワイヤーフレーム球、必要なら）
+        Gizmos.color = Color.red;
+        float attackRadius = _currentStateData != null ? _currentStateData.attackRange : 0f;
+        Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 
 }
