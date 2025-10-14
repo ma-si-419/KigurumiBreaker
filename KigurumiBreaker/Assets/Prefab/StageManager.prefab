@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5423860653554385116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 468341052248712426}
+  - component: {fileID: 4991401918132676813}
+  m_Layer: 0
+  m_Name: StageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &468341052248712426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5423860653554385116}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.3179814, y: 0.35994744, z: 0.44952467}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4991401918132676813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5423860653554385116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 666fbd82f0b84b04eab632b0a2127ca0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageSets:
+  - stagePrefabs:
+    - {fileID: 7049480730227574804, guid: ff154ccd43bb0bc4da23b72e94196c34, type: 3}
+  - stagePrefabs:
+    - {fileID: 4135658842310630577, guid: b0c7ea22134fb4c40ac6c84de55f4f6e, type: 3}
+    - {fileID: 7049480730227574804, guid: ff154ccd43bb0bc4da23b72e94196c34, type: 3}
+    - {fileID: 8889140410866743679, guid: 63fe819e330c1ff4eb8e106c91ca2697, type: 3}
+    - {fileID: 2968718208737419968, guid: 32b82c4f16385e54f8f8c0bb76d095bf, type: 3}
+  - stagePrefabs:
+    - {fileID: 8911193368755114973, guid: cc2275fafef072a47a314abb11478cc8, type: 3}
+    - {fileID: 232759990420611164, guid: 8d461cdcd154dee4e8f8d2a06a0e25b8, type: 3}
+    - {fileID: 4307074512751786253, guid: 90d79ef3e57d6dd4e83bd2ffa2958fbc, type: 3}
+    - {fileID: 7143173382273664973, guid: f51582a8bea2af2439150efddd812fe6, type: 3}
+  player: {fileID: 0}
