@@ -1471,6 +1471,9 @@ public class PlayerState : Player<PlayerState>
         // カメラを揺らす種類を設定
         attackData.shakeKind = data.cameraShakeKind;
 
+        // ヒットエフェクトを設定
+        attackData.hitEffect = data.hitEffect;
+
         PlayerAttack playerAttack = attackObject.GetComponent<PlayerAttack>();
 
         // カメラを設定
