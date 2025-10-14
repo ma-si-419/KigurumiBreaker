@@ -25,9 +25,10 @@ public class DeadState : IState
         //Debug.Log("死んだ");
 
         //死亡アニメーションが終わったらオブジェクト削除
-        //オブジェクト削除
-        Object.Destroy(_enemy.gameObject);
-
+        if (_enemy._animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        {
+            Object.Destroy(_enemy.gameObject);
+        }
     }
 
     public void End()

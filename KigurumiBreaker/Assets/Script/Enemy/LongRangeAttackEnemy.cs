@@ -7,18 +7,18 @@ public class LongRangeAttackEnemy : Enemy
 {
     // UŒ‚‚ÉŠÖ‚·‚é•Ï”
     private float _longRangeTimer = 0.0f;   // ƒ^ƒCƒ}[
-    [SerializeField] public float shootInterval = 0.5f; // ËŒ‚ŠÔŠu
 
-    [SerializeField] private float _fleeDistance; // “¦‚°‚é‹——£
     [SerializeField] private float _shootCount;  // ’e‚ğŒ‚‚Â‰ñ”
-
     [SerializeField] private float _maxChaseRange; // ’ÇÕ‚ÌãŒÀ‹——£
     private float _maxChaseRangeSqr; // ’ÇÕ‚ÌãŒÀ‹——£‚Ì“ñæ
 
     /* ’è” */
-    private const int MAX_SHOOT_COUNT = 3; // ’e‚ğŒ‚‚ÂÅ‘å‰ñ”
-    private const float MIN_FLEE_DISTANCE = 20.0f; // “¦‚°‚é‹——£‚ÌÅ¬’l
-
+    [Header("’è”")]
+    [SerializeField] private float SHOOT_INTERVAL = 0.5f; // ËŒ‚ŠÔŠu
+    [SerializeField] private int MAX_SHOOT_COUNT = 3; // ’e‚ğŒ‚‚ÂÅ‘å‰ñ”
+    [SerializeField] private float MIN_FLEE_DISTANCE = 20.0f; // “¦‚°‚é‹——£‚ÌÅ¬’l
+    [SerializeField] private float FLEE_DISTANCE = 0.0f; // “¦‚°‚é‹——£
+    
     public override void Chase()
     {
         //“¦‚°‚éˆ—
@@ -33,7 +33,7 @@ public class LongRangeAttackEnemy : Enemy
         _longRangeTimer += Time.deltaTime;
 
 
-        if (_longRangeTimer > _chaseWaitTime)
+        if (_longRangeTimer > CHASE_WAIT_TIME)
         {
             _agent.isStopped = true; //’ÇÕ‚ğ’â~
 
@@ -49,7 +49,7 @@ public class LongRangeAttackEnemy : Enemy
         {
             _agent.isStopped = true; //’ÇÕ‚ğ’â~
             //‹ŠEŠO‚Éo‚½‚Ì‚ÅIdleó‘Ô‚Ö
-            ChangeState(new AttackState(this));
+            ChangeState(new IdleState(this));
         }
 
 
@@ -66,7 +66,7 @@ public class LongRangeAttackEnemy : Enemy
 
 
         // ˆê’èŠÔ‚²‚Æ‚É’e‚ğ”­Ë(3”­˜AË‚·‚é‚İ‚½‚¢‚ÈŠÔŠu‚É‚µ‚½‚¢)
-        if (_longRangeTimer > shootInterval)
+        if (_longRangeTimer > SHOOT_INTERVAL)
         {
             Shoot();
 
@@ -101,7 +101,7 @@ public class LongRangeAttackEnemy : Enemy
         Vector3 fleeDir = dirTarget.normalized;
 
         //ˆê’è‹——£æ‚ğ–Ú•W‚Éİ’è
-        Vector3 fleePos = transform.position + fleeDir * _fleeDistance;
+        Vector3 fleePos = transform.position + fleeDir * FLEE_DISTANCE;
 
         NavMeshHit hit;
         if(NavMesh.SamplePosition(fleePos, out hit, MIN_FLEE_DISTANCE, NavMesh.AllAreas))
