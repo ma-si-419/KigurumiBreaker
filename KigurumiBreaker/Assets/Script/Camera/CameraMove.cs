@@ -52,12 +52,15 @@ public class CameraMove : MonoBehaviour
         // プレイヤーの位置にオフセットを加えた位置にカメラを移動
         transform.position = _player.transform.position + _cameraData.cameraPosition;
 
-        // カメラの位置が移動範囲を超えないように制限
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.x = Mathf.Clamp(clampedPosition.x, _moveArea.bounds.min.x, _moveArea.bounds.max.x);
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, _moveArea.bounds.min.y, _moveArea.bounds.max.y);
-        clampedPosition.z = Mathf.Clamp(clampedPosition.z, _moveArea.bounds.min.z, _moveArea.bounds.max.z);
-        transform.position = clampedPosition;
+        if (_moveArea != null)
+        {
+            // カメラの位置が移動範囲を超えないように制限
+            Vector3 clampedPosition = transform.position;
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, _moveArea.bounds.min.x, _moveArea.bounds.max.x);
+            clampedPosition.y = Mathf.Clamp(clampedPosition.y, _moveArea.bounds.min.y, _moveArea.bounds.max.y);
+            clampedPosition.z = Mathf.Clamp(clampedPosition.z, _moveArea.bounds.min.z, _moveArea.bounds.max.z);
+            transform.position = clampedPosition;
+        }
 
         transform.rotation = Quaternion.Euler(_cameraData.cameraRotation); // カメラの初期回転を設定
 
@@ -70,7 +73,7 @@ public class CameraMove : MonoBehaviour
             float shakeY = Random.Range(-_shakePower, _shakePower);
             float shakeZ = Random.Range(-_shakePower, _shakePower);
 
-            Vector3 rota = new Vector3(shakeX,shakeY,shakeZ);
+            Vector3 rota = new Vector3(shakeX, shakeY, shakeZ);
 
             transform.rotation = Quaternion.Euler(_cameraData.cameraRotation + rota);
         }
