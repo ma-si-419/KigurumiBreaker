@@ -65616,15 +65616,24 @@ MonoBehaviour:
   - groupName: 
     waves:
     - popEnemies:
-      - enemyKind: 0
+      - enemyKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - enemyKind: 4
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
-      - enemyKind: 0
-        spawnPosition: {x: 0, y: 0, z: 0}
+      - enemyKind: 4
+        spawnPosition: {x: 0, y: 0, z: 1}
         randomizePosition: 1
     - popEnemies:
-      - enemyKind: 0
+      - enemyKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - enemyKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - enemyKind: 4
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
   - groupName: 
@@ -65633,7 +65642,16 @@ MonoBehaviour:
       - enemyKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
+      - enemyKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
     - popEnemies:
+      - enemyKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - enemyKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
       - enemyKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
