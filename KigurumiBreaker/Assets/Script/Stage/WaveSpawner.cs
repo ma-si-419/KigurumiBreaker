@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -23,7 +24,6 @@ public class PopEnemy
     public EnemyKind enemyKind;      // Enumで選択
     public Vector3 spawnPosition;    // 固定座標
     public bool randomizePosition = true;
-    public int spawnCount = 1;       // 出現数
 }
 
 //===================================
@@ -43,6 +43,16 @@ public class EnemyGroup
 {
     public string groupName = "Group";
     public List<EnemyWave> waves = new List<EnemyWave>();
+}
+
+//===================================
+// PrefabとEnumを紐付けるEntry
+//===================================
+[System.Serializable]
+public class EnemyPrefabEntry
+{
+    public EnemyKind enemyKind;
+    public GameObject prefab;
 }
 
 //===================================
@@ -107,16 +117,14 @@ public class WaveSpawner : MonoBehaviour
                     continue;
                 }
 
-                for (int i = 0; i < pop.spawnCount; i++)
-                {
-                    Vector3 pos = pop.randomizePosition ? GetRandomPositionInArea() : pop.spawnPosition;
-                    GameObject enemy = Instantiate(prefab, pos, Quaternion.identity);
-                    spawned.Add(enemy);
-                    yield return new WaitForSeconds(spawnInterval);
-                }
+                // SpawnCountは廃止、1体ずつ生成
+                Vector3 pos = pop.randomizePosition ? GetRandomNavMeshPositionInArea() : pop.spawnPosition;
+                GameObject enemy = Instantiate(prefab, pos, Quaternion.identity);
+                spawned.Add(enemy);
+                yield return new WaitForSeconds(spawnInterval);
             }
 
-            // このWaveの敵全滅を待つ
+            // Waveの敵全滅を待つ
             yield return new WaitUntil(() =>
             {
                 spawned.RemoveAll(e => e == null);
@@ -128,10 +136,7 @@ public class WaveSpawner : MonoBehaviour
 
         Debug.Log($"{group.groupName} の全Wave完了");
 
-        // グループ完了数をカウント
         groupsFinished++;
-
-        // 全グループが終わったらエフェクト停止
         if (!effectsStopped && groupsFinished >= groups.Count)
         {
             effectsStopped = true;
@@ -146,18 +151,40 @@ public class WaveSpawner : MonoBehaviour
         return null;
     }
 
-    private Vector3 GetRandomPositionInArea()
+    //===================================
+    // 範囲内でNavMeshに沿ったランダム位置を取得
+    //===================================
+    private Vector3 GetRandomNavMeshPositionInArea()
     {
         if (areaCenter == null) return Vector3.zero;
 
-        Vector3 offset = new Vector3(
-            Random.Range(-areaSize.x / 2, areaSize.x / 2),
-            Random.Range(-areaSize.y / 2, areaSize.y / 2),
-            Random.Range(-areaSize.z / 2, areaSize.z / 2)
-        );
-        return areaCenter.position + offset;
+        Vector3 pos;
+        int tries = 0;
+        const int maxTries = 20;
+
+        do
+        {
+            Vector3 offset = new Vector3(
+                Random.Range(-areaSize.x / 2, areaSize.x / 2),
+                0f, // NavMeshは水平面想定
+                Random.Range(-areaSize.z / 2, areaSize.z / 2)
+            );
+            pos = areaCenter.position + offset;
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(pos, out hit, 2f, NavMesh.AllAreas))
+                return hit.position;
+
+            tries++;
+        } while (tries < maxTries);
+
+        // 失敗時は中心に戻す
+        return areaCenter.position;
     }
 
+    //===================================
+    // 全エフェクト停止
+    //===================================
     private void StopAllEffects()
     {
         foreach (var effect in targetEffects)
@@ -182,14 +209,4 @@ public class WaveSpawner : MonoBehaviour
         Gizmos.DrawWireCube(areaCenter.position, areaSize);
     }
 #endif
-}
-
-//===================================
-// PrefabとEnumを紐付けるEntry
-//===================================
-[System.Serializable]
-public class EnemyPrefabEntry
-{
-    public EnemyKind enemyKind;
-    public GameObject prefab;
 }
