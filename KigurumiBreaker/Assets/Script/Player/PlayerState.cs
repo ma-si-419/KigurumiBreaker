@@ -242,6 +242,9 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
+
             // 攻撃入力があれば近接攻撃状態に遷移
             if (state._isAttackInput)
             {
@@ -704,6 +707,9 @@ public class PlayerState : Player<PlayerState>
         {
             _currentFrame++;
 
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
+
 
             // 攻撃するフレームに達したら攻撃オブジェクトを生成
             if (_currentFrame == _currentAttackData.startFrame)
@@ -786,6 +792,9 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             stateTime++;
+
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
 
             //特殊チャージの場合
             if (state._isSpecialCharge)
@@ -890,6 +899,9 @@ public class PlayerState : Player<PlayerState>
         {
             _currentFrame++;
 
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
+
             // 攻撃オブジェクトを生成するフレームに達したら攻撃オブジェクトを生成
             if (_currentFrame == _currentAttackData.startFrame)
             {
@@ -980,6 +992,9 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             _stateTime++;
+
+            // 移動ベクトルをリセット
+            state._rigidbody.velocity = Vector3.zero;
 
             // 攻撃オブジェクトを生成するフレームに達したら攻撃オブジェクトを生成
             if (_stateTime == _currentAttackData.startFrame)
