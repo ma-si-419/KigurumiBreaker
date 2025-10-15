@@ -20,12 +20,11 @@ public class DeadState : IState
 
     public void Update()
     {
-        //タイマーを進める
-        //Debug.Log("DeadState: Update");
-        //Debug.Log("死んだ");
+        _enemy.StopMovement(); //移動停止
 
         //死亡アニメーションが終わったらオブジェクト削除
-        if (_enemy.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        var stateInfo = _enemy.animator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("Dead") && stateInfo.normalizedTime >= 1.0f)
         {
             Object.Destroy(_enemy.gameObject);
         }
@@ -33,8 +32,7 @@ public class DeadState : IState
 
     public void End()
     {
-        //Debug.Log("DeadState: End");
         //死亡アニメーション終了
-
+        _enemy.animator.ResetTrigger("Dead");
     }
 }

@@ -5,22 +5,31 @@ using UnityEngine;
 public class SuicideEnemy : Enemy
 {
 
-    private float _suicideTimer = 0.0f; // タイマー
-    private const float SUICIDE_COUNTDOWN = 1.5f; // 自爆攻撃のカウントダウン
 
     public override void Attack()
     {
-        _suicideTimer += Time.deltaTime;
+        
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if(_suicideTimer > SUICIDE_COUNTDOWN)
+        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.7f)
         {
-
             //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
                 CreateAttack();
             }
+
+            _isStateChange = true;
+            //攻撃フラグをリセット
+            _isCreateAttack = false;
+        }
+        
+
+        if (_isStateChange)
+        {
+            _isStateChange = false;
+            ChangeState(new DeadState(this));
         }
 
     }
@@ -30,15 +39,8 @@ public class SuicideEnemy : Enemy
     {
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(_attackObjectPrefab);
-
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
-
-        //攻撃フラグをリセット
-        _isCreateAttack = false;
-        _suicideTimer = 0.0f;
-
-        ChangeState(new DeadState(this));
     }
 
 }

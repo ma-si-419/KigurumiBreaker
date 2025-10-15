@@ -5,24 +5,31 @@ using UnityEngine;
 public class CircleAttackEnemy : Enemy
 {
 
-    // 攻撃に関する変数
-    private float _circleAttackTimer = 0.0f;   // タイマー
 
     public override void Attack()
     {
-        _circleAttackTimer += Time.deltaTime; //フレーム換算
-        //アニメーションイベントで攻撃判定オブジェクトを生成したい
 
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        //攻撃判定を一つ生成させる
-        if (_circleAttackTimer > ATTACK_CREATE_TIME)
+        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.6f)
         {
+            //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
                 CreateAttack();
             }
         }
+
+        //敵のアニメーション状態を取得
+        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.8f)
+        {
+            Debug.Log("アニメーション終了");
+
+            //攻撃アニメーションが終了したらIdleStateに遷移
+            ChangeState(new IdleState(this));
+        }
+
     }
 
     // 攻撃オブジェクトを生成する関数
@@ -36,10 +43,6 @@ public class CircleAttackEnemy : Enemy
 
         //攻撃フラグをリセット
         _isCreateAttack = false;
-        _circleAttackTimer = 0.0f;
-
-        // 状態をIdleに変更
-        ChangeState(new IdleState(this));
     }
 
 }

@@ -15,6 +15,7 @@ public class IdleState : IState
     {
         _enemy.AttackReset(); //攻撃フラグリセット
 
+
         //待機アニメーション開始
         _enemy.animator.SetBool("Idle", false);
     }

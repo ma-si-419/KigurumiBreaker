@@ -10,13 +10,13 @@ public class ChaseState : IState
     {
         //コンストラクタでEnemyの参照を受け取る
         _enemy = enemy;
-        _enemy.agent.isStopped = false; //追跡を停止
     }
 
     public void Init()
     {
         //追跡アニメーション開始
         _enemy.animator.SetBool("Chase", true);
+        _enemy.agent.isStopped = false; //追跡再開
     }
 
     public void Update()
