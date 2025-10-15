@@ -24,7 +24,8 @@ public class CircleAttackEnemy : Enemy
         //敵のアニメーション状態を取得
         if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.8f)
         {
-            Debug.Log("アニメーション終了");
+            //攻撃フラグをリセット
+            _isCreateAttack = false;
 
             //攻撃アニメーションが終了したらIdleStateに遷移
             ChangeState(new IdleState(this));
@@ -41,8 +42,7 @@ public class CircleAttackEnemy : Enemy
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
 
-        //攻撃フラグをリセット
-        _isCreateAttack = false;
+
     }
 
 }

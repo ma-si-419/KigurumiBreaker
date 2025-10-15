@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
     protected bool _isStateChange = false;  // 状態遷移フラグ
 
     protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
-    protected float _hitTimer = 0.0f; // ヒットエフェクトのタイマー
+    protected float _hitTimer = 0.5f; // ヒットタイマー
 
     /* 定数 */
     private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
@@ -127,7 +127,7 @@ public class Enemy : MonoBehaviour
 
             if(_hitTimer <= 0.0f)
                 _isHit = false;
-            return; // ヒット中は他の処理を行わない
+                return; // ヒット中は他の処理を行わない
 
         }
 
@@ -269,8 +269,8 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            //ダメージを受けたら赤くする(デバッグ)
-            this.GetComponent<Renderer>().material.color = Color.red;
+            //死んだ状態になっている場合はダメージを受けない
+            if (_currentState is DeadState) return;
 
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
@@ -294,12 +294,21 @@ public class Enemy : MonoBehaviour
 
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
+
+            //攻撃状態のときはダメージアニメーションを行わない
+            if (_currentState is AttackState) return;
+
+            OnHit();
         }
 
         if (other.gameObject.CompareTag("PlayerRangedAttack"))
         {
+            //死んだ状態になっている場合はダメージを受けない
+            if (_currentState is DeadState) return;
+
             // プレイヤーにダメージを与える処理
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
@@ -314,6 +323,11 @@ public class Enemy : MonoBehaviour
 
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
+
+            //攻撃状態のときはダメージアニメーションを行わない
+            if (_currentState is AttackState) return;
+
+            OnHit();
         }
 
     }
@@ -359,10 +373,10 @@ public class Enemy : MonoBehaviour
         if (_isHit) return;
 
         _isHit = true;
-        _hitTimer = 0.1f;
+        _hitTimer = 0.5f;
 
         //今のステート状態のアニメーションにダメージアニメーションを重ねる
-        _animator.CrossFade("Damage", 0.8f);
+        _animator.CrossFade("Damage", 0.01f);
 
         //なんか演出とかあったらいいよね
 
