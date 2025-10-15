@@ -30262,66 +30262,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b524093896f408e96a993227ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefabs:
-  - enemyKind: 0
-    prefab: {fileID: 9006864392531979163, guid: 0d0da4fd8fcfa7b4994055d0129d470f, type: 3}
-  - enemyKind: 1
-    prefab: {fileID: 1483982165354295842, guid: 7b82c5d07368ccb409eeeb9fc0342981, type: 3}
-  - enemyKind: 4
-    prefab: {fileID: 819146475680616113, guid: fa4e5764b645d6547838d7740ca4fde9, type: 3}
-  - enemyKind: 2
-    prefab: {fileID: 2979169916064851300, guid: 87d6bbf53970eae40b3ec92c21bbc770, type: 3}
-  - enemyKind: 3
-    prefab: {fileID: 843610410157462309, guid: 68fe4666dd40ffe48985a9134d7db08a, type: 3}
+  areaCenter: {fileID: 2542454673692477470}
+  areaSize: {x: 28, y: 0, z: 30}
+  enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
   groups:
   - groupName: 
     waves:
     - popEnemies:
-      - enemyKind: 1
+      - spawnKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - enemyKind: 1
+      - spawnKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - enemyKind: 1
+      - spawnKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
-      - enemyKind: 1
+      - spawnKind: 2
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - enemyKind: 1
+      - spawnKind: 2
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
   - groupName: 
     waves:
     - popEnemies:
-      - enemyKind: 2
+      - spawnKind: 2
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - enemyKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-    - popEnemies:
-      - enemyKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - enemyKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - enemyKind: 1
+      - spawnKind: 2
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
-      - enemyKind: 2
+      - spawnKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-  areaCenter: {fileID: 2542454673692477470}
-  areaSize: {x: 28, y: 0, z: 30}
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
   spawnInterval: 0.5
   targetEffects:
   - {fileID: 8110345568826757905}
-  - {fileID: 5822691139969727909}
   - {fileID: 2003488670921913244}
 --- !u!114 &4019004346744930748
 MonoBehaviour:
@@ -113814,7 +113803,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
       propertyPath: m_Name
-      value: wall
+      value: wall2
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -113997,11 +113986,6 @@ PrefabInstance:
       addedObject: {fileID: 6707241825075881586}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
---- !u!198 &5822691139969727909 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
-  m_PrefabInstance: {fileID: 5822691139984794215}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5822691139984931045 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
