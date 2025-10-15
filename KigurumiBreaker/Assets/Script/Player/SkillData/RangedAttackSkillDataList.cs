@@ -12,6 +12,8 @@ public class RangedAttackSkillData
 {
     [Header("名前")]
     [SerializeField] private string SkillName;
+    [Header("属性")]
+    [SerializeField] private SkillData.SkillElement SkillElement;
     [Header("ダメージ増加量")]
     [SerializeField] private int DamageAddRate;
     [Header("速度倍率")]
@@ -24,13 +26,17 @@ public class RangedAttackSkillData
     [SerializeField] private GameObject ChaseAttack;
     [Header("相手にかけるデバフの種類")]
     [SerializeField] private Enemy.EnemyDebuff DebuffType;
+    [Header("スキルの説明文")]
+    [TextArea] [SerializeField] private string SkillContents;
 
     public string skillName => SkillName;
+    public SkillData.SkillElement skillElement => SkillElement;
     public int damageAddRate => DamageAddRate;
     public float speedRate => SpeedRate;
     public bool isKnockBack => IsKnockBack;
     public bool isHoming => IsHoming;
     public GameObject chaseAttack => ChaseAttack;
     public Enemy.EnemyDebuff debuffType => DebuffType;
+    public string skillContents => SkillContents;
 
 }

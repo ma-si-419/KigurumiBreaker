@@ -13,39 +13,51 @@ MonoBehaviour:
   m_Name: LowAttackSkillDataList
   m_EditorClassIdentifier: Assembly-CSharp::LowAttackSkillDataList
   lowAttackSkillDataList:
-  - SkillName: Fire
+  - SkillName: FireLowAttackUp
+    SkillElement: 0
     DamageAddRate: 100
     AttackRangeAddRate: 0
     AddKnockBackPower: 0
     DebuffType: 4
     ChaseAttack: {fileID: 0}
-  - SkillName: Water
+    SkillContents: "\u901A\u5E38\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: WaterLowAttackUp
+    SkillElement: 1
     DamageAddRate: 60
     AttackRangeAddRate: 500
     AddKnockBackPower: 0
     DebuffType: 4
     ChaseAttack: {fileID: 0}
-  - SkillName: Wind
+    SkillContents: "\u901A\u5E38\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: WindLowAttackUp
+    SkillElement: 2
     DamageAddRate: 60
     AttackRangeAddRate: 0
     AddKnockBackPower: 5
     DebuffType: 4
     ChaseAttack: {fileID: 0}
-  - SkillName: Thunder
+    SkillContents: "\u901A\u5E38\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: ThunderLowAttackUp
+    SkillElement: 3
     DamageAddRate: 80
     AttackRangeAddRate: 0
     AddKnockBackPower: 0
     DebuffType: 4
     ChaseAttack: {fileID: 0}
-  - SkillName: Freeze
+    SkillContents: "\u901A\u5E38\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: FreezeLowAttackUp
+    SkillElement: 4
     DamageAddRate: 50
     AttackRangeAddRate: 0
     AddKnockBackPower: 0
     DebuffType: 2
     ChaseAttack: {fileID: 0}
-  - SkillName: Poizon
+    SkillContents: "\u901A\u5E38\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: PoisonLowAttackUp
+    SkillElement: 5
     DamageAddRate: 50
     AttackRangeAddRate: 0
     AddKnockBackPower: 0
     DebuffType: 3
     ChaseAttack: {fileID: 0}
+    SkillContents: "\u901A\u5E38\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"

@@ -5,6 +5,28 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SkillData")]
 public class SkillData : ScriptableObject
 {
+    public enum SkillElement
+    {
+        Fire,
+        Water,
+        Wind,
+        Thunder,
+        Freeze,
+        Poison,
+        TypeNum
+    }
+
+    public enum SkillCategory
+    {
+        LowAttack,
+        ChargeAttack,
+        SpecialCharge,
+        RangedAttack,
+        Dash,
+        Passive,
+        CategoryNum
+    }
+
     [Header("通常攻撃のスキルリスト")]
     [SerializeField] private LowAttackSkillDataList LowAttackSkill;
     [Header("チャージ攻撃のスキルリスト")]

@@ -12,6 +12,8 @@ public class SpecialChargeSkillData
 {
     [Header("名前")]
     [SerializeField] private string SkillName;
+    [Header("属性")]
+    [SerializeField] private SkillData.SkillElement SkillElement;
     [Header("溜めている最中に出る攻撃オブジェクト")]
     [SerializeField] private GameObject ChargingAttackObject;
     [Header("ダメージ軽減率")]
@@ -22,12 +24,16 @@ public class SpecialChargeSkillData
     [SerializeField] private int AttackIntervalFrame;
     [Header("溜め速度倍率")]
     [SerializeField] private float ChargeSpeedRate;
+    [Header("スキル説明文")]
+    [TextArea] [SerializeField] private string SkillContents;
 
     public string skillName => SkillName;
+    public SkillData.SkillElement skillElement => SkillElement;
     public GameObject chargingAttackObject => ChargingAttackObject;
     public int damageReductionRate => DamageReductionRate;
     public bool isNotKnockBack => IsNotKnockBack;
     public int attackIntervalFrame => AttackIntervalFrame;
     public float chargeSpeedRate => ChargeSpeedRate;
+    public string skillContents => SkillContents;
 
 }

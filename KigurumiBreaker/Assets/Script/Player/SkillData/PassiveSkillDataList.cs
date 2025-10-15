@@ -48,13 +48,19 @@ public class PassiveSkillData
 
     [Header("名前")]
     [SerializeField] private string SkillName;
+    [Header("属性")]
+    [SerializeField] private SkillData.SkillElement SkillElement;
     [Header("ステータス上昇情報")]
     [SerializeField] private List<UpStatus> UpStatuses;
     [Header("ゲームオブジェクトが出るパッシブ情報")]
     [SerializeField] private List<PassiveObject> passiveObjects;
+    [Header("スキルの説明文")]
+    [TextArea] [SerializeField] private string SkillContents;
 
 
     public string skillName => SkillName;
+    public SkillData.SkillElement skillElement => SkillElement;
     public List<UpStatus> upStatuses => UpStatuses;
     public List<PassiveObject> PassiveObjects => passiveObjects;
+    public string skillContents => SkillContents;
 }
