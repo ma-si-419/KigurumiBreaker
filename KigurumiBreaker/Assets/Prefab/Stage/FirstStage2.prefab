@@ -51597,43 +51597,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b524093896f408e96a993227ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaCenter: {fileID: 5877859221655556574}
-  areaSize: {x: 28, y: 0, z: 31}
-  enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
+  enemyPrefabs:
+  - enemyKind: 0
+    prefab: {fileID: 9006864392531979163, guid: 0d0da4fd8fcfa7b4994055d0129d470f, type: 3}
+  - enemyKind: 1
+    prefab: {fileID: 1483982165354295842, guid: 7b82c5d07368ccb409eeeb9fc0342981, type: 3}
+  - enemyKind: 4
+    prefab: {fileID: 819146475680616113, guid: fa4e5764b645d6547838d7740ca4fde9, type: 3}
+  - enemyKind: 2
+    prefab: {fileID: 2979169916064851300, guid: 87d6bbf53970eae40b3ec92c21bbc770, type: 3}
+  - enemyKind: 3
+    prefab: {fileID: 843610410157462309, guid: 68fe4666dd40ffe48985a9134d7db08a, type: 3}
   groups:
   - groupName: 
     waves:
     - popEnemies:
-      - spawnKind: 0
+      - enemyKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
-      - spawnKind: 0
+      - enemyKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
   - groupName: 
     waves:
     - popEnemies:
-      - spawnKind: 0
+      - enemyKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 0
+      - enemyKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
-      - spawnKind: 0
+      - enemyKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 0
+      - enemyKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 0
+      - enemyKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
   - groupName: 
     waves: []
   - groupName: 
     waves: []
+  areaCenter: {fileID: 5877859221655556574}
+  areaSize: {x: 28, y: 0, z: 31}
   spawnInterval: 0.5
   targetEffects:
   - {fileID: 4509811258348602950}
