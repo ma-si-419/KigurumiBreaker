@@ -266,6 +266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 269079145}
+  - component: {fileID: 269079146}
   m_Layer: 0
   m_Name: Hp
   m_TagString: Untagged
@@ -293,6 +294,22 @@ Transform:
   - {fileID: 287689239}
   m_Father: {fileID: 474285260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &269079146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 269079144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322d27ef0b7149243b3411d1031ade64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 884169392}
+  _hpGaugeImage: {fileID: 2010305075}
+  _hpText: {fileID: 869817733}
+  _hpMaxText: {fileID: 210916223}
 --- !u!1 &287689238
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,6 +571,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 639345667}
+  - component: {fileID: 639345668}
   m_Layer: 0
   m_Name: PunchGarge
   m_TagString: Untagged
@@ -580,6 +598,23 @@ Transform:
   - {fileID: 1276834249}
   m_Father: {fileID: 474285260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &639345668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639345666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f65b18ca21f701941b5239e61b98c661, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 884169392}
+  _specialGaugeImage: {fileID: 823186214}
+  _auraImage: {fileID: 1024755419}
+  _auraImage2: {fileID: 1094176899}
+  _specialGaugeUiData: {fileID: 11400000, guid: 9888d5ed3b3c4124190e4daec44208dc, type: 2}
 --- !u!1 &823186212
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,6 +837,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1325045262616649141, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 9d2063dbdc039454c8ba907eafdd7f93, type: 2}
     - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: _camera
       value: 
@@ -865,6 +904,10 @@ PrefabInstance:
     - target: {fileID: 9066895370956956705, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_Constraints
       value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066895370956956705, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1396,6 +1439,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1536489856}
+  - component: {fileID: 1536489857}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -1422,6 +1466,21 @@ Transform:
   - {fileID: 1352566248}
   m_Father: {fileID: 474285260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1536489857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536489855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4951681b86201e246ab7d830a34212e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shootNumText: {fileID: 1821340369}
+  _shootNumMaxText: {fileID: 1263977525}
+  _player: {fileID: 884169392}
 --- !u!1001 &1656444612
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1706,7 +1765,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 269079145}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
