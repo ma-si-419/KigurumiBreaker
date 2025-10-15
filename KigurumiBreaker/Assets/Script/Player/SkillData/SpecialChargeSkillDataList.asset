@@ -13,39 +13,51 @@ MonoBehaviour:
   m_Name: SpecialChargeSkillDataList
   m_EditorClassIdentifier: Assembly-CSharp::SpecialChargeSkillDataList
   specialChargeSkillDataList:
-  - SkillName: Fire
+  - SkillName: FireSpecialUp
+    SkillElement: 0
     ChargingAttackObject: {fileID: 0}
     DamageReductionRate: 0
     IsNotKnockBack: 0
     AttackIntervalFrame: 0
     ChargeSpeedRate: 1
-  - SkillName: Water
+    SkillContents: "\u30C1\u30E3\u30FC\u30B8\u4E2D\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: WaterSpecialUp
+    SkillElement: 1
     ChargingAttackObject: {fileID: 0}
     DamageReductionRate: 70
     IsNotKnockBack: 1
     AttackIntervalFrame: 0
     ChargeSpeedRate: 1
-  - SkillName: Wind
+    SkillContents: "\u30C1\u30E3\u30FC\u30B8\u4E2D\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: WindSpecialUp
+    SkillElement: 2
     ChargingAttackObject: {fileID: 0}
     DamageReductionRate: 0
     IsNotKnockBack: 0
     AttackIntervalFrame: 0
     ChargeSpeedRate: 1
-  - SkillName: Thunder
+    SkillContents: "\u30C1\u30E3\u30FC\u30B8\u4E2D\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: ThunderSpecialUp
+    SkillElement: 3
     ChargingAttackObject: {fileID: 556962290782182867, guid: 2c2e32960eb31cf46aa773bf9ee9a177, type: 3}
     DamageReductionRate: 0
     IsNotKnockBack: 0
     AttackIntervalFrame: 10
     ChargeSpeedRate: 1.5
-  - SkillName: Freeze
+    SkillContents: "\u30C1\u30E3\u30FC\u30B8\u4E2D\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: FreezeSpecialUp
+    SkillElement: 4
     ChargingAttackObject: {fileID: 0}
     DamageReductionRate: 0
     IsNotKnockBack: 0
     AttackIntervalFrame: 0
     ChargeSpeedRate: 1
-  - SkillName: Poizon
+    SkillContents: "\u30C1\u30E3\u30FC\u30B8\u4E2D\u304C\u5F37\u304F\u306A\u308B\u3088"
+  - SkillName: PoisonSpecialUp
+    SkillElement: 5
     ChargingAttackObject: {fileID: 0}
     DamageReductionRate: 0
     IsNotKnockBack: 0
     AttackIntervalFrame: 0
     ChargeSpeedRate: 1
+    SkillContents: "\u30C1\u30E3\u30FC\u30B8\u4E2D\u304C\u5F37\u304F\u306A\u308B\u3088"

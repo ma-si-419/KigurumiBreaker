@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: ChargeAttackSkillDataList
   m_EditorClassIdentifier: Assembly-CSharp::ChargeAttackSkillDataList
   chargeAttackSkillDataList:
-  - SkillName: FIre
+  - SkillName: FIreChargeAttackUp
+    SkillElement: 0
     DamageAddRate: 100
     AttackRangeAddRate: 0
     ChargeSpeedRate: 0
@@ -21,7 +22,9 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-  - SkillName: Water
+    SkillContents: 
+  - SkillName: WaterChargeAttackUp
+    SkillElement: 1
     DamageAddRate: 80
     AttackRangeAddRate: 0
     ChargeSpeedRate: 0
@@ -29,7 +32,9 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-  - SkillName: Wind
+    SkillContents: 
+  - SkillName: WindChargeAttackUp
+    SkillElement: 2
     DamageAddRate: 60
     AttackRangeAddRate: 0
     ChargeSpeedRate: 0
@@ -37,7 +42,9 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 1
-  - SkillName: Thunder
+    SkillContents: 
+  - SkillName: ThunderChargeAttackUp
+    SkillElement: 3
     DamageAddRate: 60
     AttackRangeAddRate: 0
     ChargeSpeedRate: 0
@@ -45,7 +52,9 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-  - SkillName: Freeze
+    SkillContents: 
+  - SkillName: FreezeChargeAttackUp
+    SkillElement: 4
     DamageAddRate: 60
     AttackRangeAddRate: 0
     ChargeSpeedRate: 0
@@ -53,7 +62,9 @@ MonoBehaviour:
     DebuffType: 0
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-  - SkillName: Poizon
+    SkillContents: 
+  - SkillName: PoisonChargeAttackUp
+    SkillElement: 5
     DamageAddRate: 50
     AttackRangeAddRate: 0
     ChargeSpeedRate: 0
@@ -61,3 +72,4 @@ MonoBehaviour:
     DebuffType: 3
     ChaseAttack: {fileID: 0}
     IsReflect: 0
+    SkillContents: 
