@@ -40,25 +40,24 @@ public class Enemy : MonoBehaviour
 
     private Rigidbody _rigidbody; // Rigidbodyの参照
 
-    private float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
-    private float _attackTimer = 0.0f; // 状態遷移するまでのタイマー
-    private bool _isAttackRange = false; // プレイヤーを検知したかどうかのフラグ
+    protected float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
+    protected float _attackTimer = 0.0f; // 状態遷移するまでのタイマー
+    protected bool _isAttackRange = false; // プレイヤーを検知したかどうかのフラグ
     protected Vector3 _direction; // 移動方向
     protected bool _isCreateAttack = false; // 攻撃オブジェクトを生成したかどうかのフラグ
-    protected bool _isDamage = false; // ダメージを受けたかどうかのフラグ
+    protected bool _isSearched = false;     // プレイヤーを一度でも検知したかどうかのフラグ
+    protected bool _isStateChange = false;  // 状態遷移フラグ
 
     protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
+    protected float _hitTimer = 0.0f; // ヒットエフェクトのタイマー
 
     /* 定数 */
     private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
     private const float ROTATION_SPEED = 5.0f; // プレイヤーの方向を向く速度
 
     [Header("敵が次の状態に遷移するまでの時間")]
-    [SerializeField] private float IDLE_WAIT_TIME = 0; // 待機時間
+    [SerializeField] protected float IDLE_WAIT_TIME = 0; // 待機時間
     [SerializeField] public float CHASE_WAIT_TIME = 0; // 追跡時間
-
-    [Header("攻撃判定が生成されるまでのフレーム時間(遠距離タイプは無し)")]
-    [SerializeField] protected float ATTACK_CREATE_TIME = 0; // 攻撃判定が生成されるまでのフレーム時間
 
     public enum EnemyDebuff
     {
@@ -121,6 +120,17 @@ public class Enemy : MonoBehaviour
     {
         DebugLine();
 
+        // ヒットしたら一定時間ヒット状態を維持
+        if (_isHit)
+        {
+            _hitTimer -= Time.deltaTime;
+
+            if(_hitTimer <= 0.0f)
+                _isHit = false;
+            return; // ヒット中は他の処理を行わない
+
+        }
+
         // 現在のステートを更新
         _currentState?.Update();
     }
@@ -139,14 +149,11 @@ public class Enemy : MonoBehaviour
     //基本移動処理(オーバーライドで変更可)
     public virtual void Chase()
     {
-        //this.GetComponent<Renderer>().material.color = Color.yellow;
         _agent.isStopped = false; // 追跡を再開
 
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
-
-        StopMovement(); // 移動を停止
-
+        StopMovement(); // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
 
         //プレイヤーとの位置差を計算
         Vector3 diff = _player.transform.position - transform.position;
@@ -155,10 +162,8 @@ public class Enemy : MonoBehaviour
         //プレイヤーが検知範囲内にいるかチェック
         if (diff.sqrMagnitude < _attackRangeSqr)
         {
-
             //プレイヤーの方向を向き続ける
             LookAtPlayer();
-
             //タイマーを進める
             _stateTimer += Time.deltaTime;
 
@@ -177,6 +182,7 @@ public class Enemy : MonoBehaviour
     public virtual void Idle()
     {
         _agent.isStopped = true; // 追跡を停止
+
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
 
@@ -186,12 +192,18 @@ public class Enemy : MonoBehaviour
         Vector3 diff = _player.transform.position - transform.position; //プレイヤーとの位置差を計算
 
         //プレイヤーが検知範囲内にいるかチェック
-        if (diff.sqrMagnitude < _detectRangeSqr && !_isAttackRange)
+        if (diff.sqrMagnitude < _detectRangeSqr || _isSearched)
         {
-            this.GetComponent<Renderer>().material.color = Color.green;
+            //プレイヤー発見したら一度だけ呼ばれる
+            if (!_isSearched)
+            {
+                //敵の頭上にビックリマークを出す
+                
+
+            }
 
             //一度でも攻撃範囲内に入ったらフラグを立て続ける
-
+            _isSearched = true;
 
             _stateTimer += Time.deltaTime;
 
@@ -206,6 +218,7 @@ public class Enemy : MonoBehaviour
         // 攻撃範囲に入ったらフラグを立てる
         if(diff.sqrMagnitude < _attackRangeSqr)
         {
+            _isSearched = true;
             _isAttackRange = true;
         }
         else
@@ -220,7 +233,7 @@ public class Enemy : MonoBehaviour
 
             LookAtPlayer(); // プレイヤーの方向を向く
 
-            if (_attackTimer > IDLE_WAIT_TIME)
+            if (_attackTimer > CHASE_WAIT_TIME)
             {
                 //追跡状態へ
                 _isAttackRange = false; // フラグをリセット
@@ -256,15 +269,10 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            //ダメージを受けたフラグを立てる
-            _isDamage = true;
-
-
             //ダメージを受けたら赤くする(デバッグ)
             this.GetComponent<Renderer>().material.color = Color.red;
 
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
-            //_currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
             // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
@@ -283,15 +291,6 @@ public class Enemy : MonoBehaviour
                     ChangeState(new DeadState(this));
                 }
             }
-            else
-            {
-                if (_currentEnemyType == 1) return; // でかい敵はダメージ状態に遷移しない
-
-                _animator.CrossFade("Damage", 0.05f);
-
-                //ダメージ状態に遷移
-                //ChangeState(new DamageState(this));
-            }
 
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
@@ -299,14 +298,7 @@ public class Enemy : MonoBehaviour
 
         if (other.gameObject.CompareTag("PlayerRangedAttack"))
         {
-            //ダメージを受けたフラグを立てる
-            _isDamage = true;
-
-            //ダメージを受けたら赤くする(デバッグ)
-            this.GetComponent<Renderer>().material.color = Color.red;
-
             // プレイヤーにダメージを与える処理
-            //_currentHp -= other.GetComponent<SaitoAttackCol>().GetDamage();
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
             // Hpが0以下なら死亡処理に遷移
@@ -318,16 +310,6 @@ public class Enemy : MonoBehaviour
                 {
                     ChangeState(new DeadState(this));
                 }
-            }
-            else
-            {
-                if (_currentEnemyType == 1) return; // でかい敵はダメージ状態に遷移しない
-                //ダメージ状態に遷移
-
-                //_animator.SetTrigger("Damage");
-                _animator.CrossFade("Damage", 0.05f);
-
-                //ChangeState(new DamageState(this));
             }
 
             //攻撃はいったら攻撃判定を速攻消す
@@ -374,9 +356,15 @@ public class Enemy : MonoBehaviour
     public void OnHit()
     {
         //一回だけヒット処理を行う
-        if (_isHit) return; 
+        if (_isHit) return;
 
+        _isHit = true;
+        _hitTimer = 0.1f;
 
+        //今のステート状態のアニメーションにダメージアニメーションを重ねる
+        _animator.CrossFade("Damage", 0.8f);
+
+        //なんか演出とかあったらいいよね
 
     }
 
