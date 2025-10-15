@@ -42,6 +42,7 @@ public class WaveSpawner : MonoBehaviour
     [Header("全Wave終了後に停止するエフェクト")]
     public ParticleSystem[] targetEffects;
 
+    private int groupsCompleted = 0;  //完了したグループ数
     private bool allCleared = false;
 
     private void Start()
@@ -82,18 +83,22 @@ public class WaveSpawner : MonoBehaviour
                 return spawned.Count == 0;
             });
 
-            Debug.Log($"{group.groupName} Wave {w + 1} 終了");
         }
 
-        Debug.Log($"{group.groupName} の全Wave完了");
+        groupsCompleted++; //グループ完了をカウント
         CheckAllGroupsCleared();
     }
 
     private void CheckAllGroupsCleared()
     {
         if (allCleared) return;
-        allCleared = true;
-        StopAllEffects();
+
+        //全グループが完了したら
+        if (groupsCompleted >= groups.Count)
+        {
+            allCleared = true;
+            StopAllEffects();
+        }
     }
 
     private void StopAllEffects()
@@ -107,7 +112,6 @@ public class WaveSpawner : MonoBehaviour
                 effect.Stop();
             }
         }
-        Debug.Log("全エフェクト停止完了");
     }
 
     private Vector3 GetRandomNavMeshPosition()
@@ -124,7 +128,7 @@ public class WaveSpawner : MonoBehaviour
             bool invalid = false;
             foreach (var col in cols)
             {
-                if (col.CompareTag("NoSpawn"))
+                if (col.CompareTag("Wall"))
                 {
                     invalid = true;
                     break;

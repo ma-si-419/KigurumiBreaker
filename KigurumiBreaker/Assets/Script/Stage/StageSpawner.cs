@@ -66,7 +66,6 @@ public class StageSpawner : MonoBehaviour
         }
 
         currentStageIndex = index;
-        Debug.Log($"Stage {index + 1} を生成: {prefabs[randomIndex].name}");
     }
 
     /// <summary>
@@ -77,7 +76,6 @@ public class StageSpawner : MonoBehaviour
         int nextIndex = currentStageIndex + 1;
         if (nextIndex >= stageSets.Length)
         {
-            Debug.Log("全ステージクリア！");
             return;
         }
 
