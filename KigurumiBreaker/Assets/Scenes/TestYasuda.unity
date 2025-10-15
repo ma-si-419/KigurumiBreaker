@@ -1139,7 +1139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_TagString
@@ -1287,7 +1287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c9b76ad37caa4a3aaeecb9a10f8ae126, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c9b76ad37caa4a3aaeecb9a10f8ae126, type: 3}
       propertyPath: m_TagString
@@ -1952,7 +1952,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentStateData:
-    maxHp: 10
+    maxHp: 100
     maxTrunk: 0
     enemyType: 0
     attackPower: 5
@@ -2850,7 +2850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentStateData:
-    maxHp: 10
+    maxHp: 300
     maxTrunk: 0
     enemyType: 0
     attackPower: 5
@@ -4352,7 +4352,7 @@ MonoBehaviour:
     enemyType: 0
     attackPower: 3
     moveSpeed: 5
-    detectionRange: 5
+    detectionRange: 10
     attackRange: 8
   _attackObjectPrefab: {fileID: 1116344303506604534, guid: dd10a67aef618c94f9af5fc1a424105f, type: 3}
   IDLE_WAIT_TIME: 2
@@ -4361,7 +4361,7 @@ MonoBehaviour:
   _maxChaseRange: 20
   SHOOT_INTERVAL: 2
   MAX_SHOOT_COUNT: 3
-  MIN_FLEE_DISTANCE: 10
+  MIN_FLEE_DISTANCE: 20
   FLEE_DISTANCE: 5
 --- !u!195 &1864276522
 NavMeshAgent:
@@ -5409,7 +5409,7 @@ MonoBehaviour:
     attackPower: 5
     moveSpeed: 10
     detectionRange: 10
-    attackRange: 2
+    attackRange: 3.5
   _attackObjectPrefab: {fileID: 3215702706224156630, guid: 17121093f54d56d48be3cd377ef038be, type: 3}
   IDLE_WAIT_TIME: 2
   CHASE_WAIT_TIME: 0.5

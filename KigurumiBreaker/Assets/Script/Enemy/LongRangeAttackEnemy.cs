@@ -10,7 +10,6 @@ public class LongRangeAttackEnemy : Enemy
 
     [SerializeField] private float _shootCount;  // 弾を撃つ回数
     [SerializeField] private float _maxChaseRange; // 追跡の上限距離
-    private float _maxChaseRangeSqr; // 追跡の上限距離の二乗
 
     /* 定数 */
     [Header("定数")]
@@ -53,39 +52,13 @@ public class LongRangeAttackEnemy : Enemy
                 ChangeState(new ChaseState(this));
             }
         }
-
-        // 攻撃範囲外だったらフラグを立てる
-        if (diff.sqrMagnitude < _attackRangeSqr && _isSearched)
-        {
-            _isAttackRange = true;
-        }
-
-
-        if (_isAttackRange)
-        {
-            _attackTimer += Time.deltaTime;
-
-            LookAtPlayer(); // プレイヤーの方向を向く
-
-            if (_attackTimer > CHASE_WAIT_TIME)
-            {
-                //追跡状態へ
-                _isAttackRange = false; // フラグをリセット
-                _stateTimer = 0.0f;
-                _attackTimer = 0.0f;
-                ChangeState(new AttackState(this));
-            }
-        }
     }
 
     public override void Chase()
     {
         _agent.isStopped = false;
-
         //逃げる処理
         Nav();
-
-        _maxChaseRangeSqr = _maxChaseRange * _maxChaseRange;
 
         //タイマーを進める
         _longRangeTimer += Time.deltaTime;
@@ -93,39 +66,18 @@ public class LongRangeAttackEnemy : Enemy
 
         if (_longRangeTimer > CHASE_WAIT_TIME)
         {
-            _agent.isStopped = true; //追跡を停止
 
             //攻撃状態へ
             _longRangeTimer = 0.0f;
             ChangeState(new AttackState(this));
         }
-
-        ////プレイヤーとの上限距離を計算
-        //Vector3 diff = _player.transform.position - transform.position;
-
-        //if (diff.sqrMagnitude > _maxChaseRangeSqr)
-        //{
-        //    _agent.isStopped = true; //追跡を停止
-        //    //視界外に出たのでIdle状態へ
-        //    ChangeState(new IdleState(this));
-        //}
-
-        //まだ弾を撃ち終わっていない場合
-        //if (_shootCount > MAX_SHOOT_COUNT)
-        //{
-        //    _agent.isStopped = true; //追跡を停止
-
-        //    _isStateChange = false;
-        //    ChangeState(new AttackState(this));
-        //}
-
     }
 
     public override void Attack()
     {
-
         //プレイヤーの方向を向き続ける
         LookAtPlayer();
+        _agent.isStopped = true; //追跡を停止
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -136,7 +88,6 @@ public class LongRangeAttackEnemy : Enemy
             {
                 _isCreateAttack = true;
                 Shoot();
-                _shootCount += 1;
             }
 
             _isStateChange = true;
@@ -144,19 +95,9 @@ public class LongRangeAttackEnemy : Enemy
             _isCreateAttack = false;
         }
 
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.8f)
+        if (_isStateChange)
         {
-            if (_shootCount > 1)
-            {
-                animator.SetTrigger("Attack");
-            }
-        }
-
-
-
-        if (_shootCount >= MAX_SHOOT_COUNT)
-        {
-            _shootCount = 0;
+            _isStateChange = false;
             ChangeState(new IdleState(this));
         }
 
@@ -172,7 +113,6 @@ public class LongRangeAttackEnemy : Enemy
     //ナビメッシュエージェントでターゲットから逃げる処理
     private void Nav()
     {
-
         //ターゲットから敵への方向
         Vector3 dirTarget = transform.position - _player.transform.position;
 
