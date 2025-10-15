@@ -62772,13 +62772,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b524093896f408e96a993227ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waves:
-  - enemies:
-    - enemyPrefab: {fileID: 8688637090547299971, guid: 807ca60be3b05644fac73c43a7f73746, type: 3}
-      spawnPoint: {fileID: 4485477984533850799}
+  areaCenter: {fileID: 4485477984533850799}
+  areaSize: {x: 28, y: 0, z: 30}
+  enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
+  groups:
+  - groupName: 
+    waves:
+    - popEnemies:
+      - spawnKind: 0
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 0
+  spawnInterval: 0.5
   targetEffects:
   - {fileID: 8983523608027398834}
-  - {fileID: 6948273415147159261}
   - {fileID: 293853572830522051}
 --- !u!114 &2394727394644116377
 MonoBehaviour:
@@ -66486,7 +66492,7 @@ Transform:
   m_GameObject: {fileID: 8818666161253310794}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -19.2, y: 3.5, z: 51.6}
+  m_LocalPosition: {x: 10.9, y: 3.5, z: 6.7}
   m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -113943,7 +113949,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
       propertyPath: m_Name
-      value: wall
+      value: wall2
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -114126,11 +114132,6 @@ PrefabInstance:
       addedObject: {fileID: 3728028356817863089}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
---- !u!198 &6948273415147159261 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
-  m_PrefabInstance: {fileID: 6948273415162487071}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6948273415162362781 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
