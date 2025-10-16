@@ -42,16 +42,18 @@ public class WaveSpawner : MonoBehaviour
     [Header("全Wave終了後に停止するエフェクト")]
     public ParticleSystem[] targetEffects;                          //　Wave終了後に停止するエフェクト
 
+    [Header("スキルマネージャー")]
+    public SkillSelectManager skillSelectManager;                   // すべての敵撃破後に呼び出すスキルマネージャー
+
     private bool allCleared = false;                                // すべての敵が倒されたかどうかの判定
 
     private void Start()
     {
         foreach (var group in groups)                               // 各グループのWaveを順番に処理させる
         {
-            StartCoroutine(HandleGroupWaves(group));               
+            StartCoroutine(HandleGroupWaves(group));
         }
     }
-
 
     /// <summary>
     /// グループ内のWaveを順番に処理するコルーチン
@@ -82,7 +84,7 @@ public class WaveSpawner : MonoBehaviour
             }
 
             yield return new WaitUntil(() =>                                                                // Waveの敵全滅待ち
-            {  
+            {
                 spawned.RemoveAll(e => e == null);                                                          // 敵が倒されてnullになったものをリストから削除
                 return spawned.Count == 0;                                                                  // すべて倒されたかどうかを返す
             });
@@ -98,6 +100,17 @@ public class WaveSpawner : MonoBehaviour
     {
         if (allCleared) return;                                     // すでにすべて終了している場合は無視する
         allCleared = true;                                          // Trueにする
+
+        if (skillSelectManager != null)                             // SkillSelectManagerが存在する場合
+        {
+            Debug.Log("全ての敵を撃破。SkillSelectManagerを呼び出します。");
+            skillSelectManager.PopSkillGetObject(areaCenter.position, SkillData.SkillElement.Fire); // 仮でFire属性を渡す
+        }
+        else
+        {
+            Debug.LogWarning("SkillSelectManagerがアタッチされていません。");
+        }
+
         StopAllEffects();                                           // すべてのエフェクトを停止する
     }
 
@@ -119,7 +132,7 @@ public class WaveSpawner : MonoBehaviour
         for (int i = 0; i < 30; i++)                                // 最大30回試行(これに関しては適当な数字です)
         {
             Vector3 randomPos = areaCenter.position + new Vector3(  // ランダムな位置を計算
-                Random.Range(-areaSize.x / 2, areaSize.x / 2),      
+                Random.Range(-areaSize.x / 2, areaSize.x / 2),
                 0f,
                 Random.Range(-areaSize.z / 2, areaSize.z / 2)
             );

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &712578956180242229
+--- !u!1 &7987498371625589842
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3906885691193255744}
-  - component: {fileID: 1503229437863509935}
+  - component: {fileID: 6769821658531623314}
+  - component: {fileID: 694580747683765096}
   m_Layer: 0
-  m_Name: SkillManager
+  m_Name: SkillSelectManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3906885691193255744
+--- !u!4 &6769821658531623314
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 712578956180242229}
+  m_GameObject: {fileID: 7987498371625589842}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.53983593, y: 3.120112, z: 0.32413197}
+  m_LocalPosition: {x: -0.71137714, y: -1.5270052, z: 4.625922}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1503229437863509935
+--- !u!114 &694580747683765096
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 712578956180242229}
+  m_GameObject: {fileID: 7987498371625589842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92c48e955ab8b534abb3e263f452ec5c, type: 3}
+  m_Script: {fileID: 11500000, guid: fd7c0bc7d1ef2ca439d14ec03c710c85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillData: {fileID: 11400000, guid: cfa155911c56b7f4ea5f5f701e6290c3, type: 2}
-  _player: {fileID: 0}
-  _lowAttackSkillName: 
-  _chargeAttackSkillName: 
-  _specialChargeSkillName: 
-  _rangedAttackSkillName: 
-  _dashSkillName: 
-  _passiveSkillNameList: []
+  _changeSkillName: None
+  _isAdd: 0
+  _isSub: 0
+  _skillManager: {fileID: 0}
