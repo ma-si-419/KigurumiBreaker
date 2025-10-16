@@ -5,27 +5,6 @@ using UnityEngine.Rendering.VirtualTexturing;
 
 public class Enemy : EnemyBase
 {
-    /* 変数 */
-    //private IState _currentState;               // 現在のステート
-
-    //[Header("ステータス")]
-    //[SerializeField] protected EnemyStateData _currentStateData; // 現在のステータスデータ
-    //protected float _currentHp;    // 現在の体力
-    //protected float _currentTrunk; // 現在の耐久力
-    //protected int _currentEnemyType;    // 敵の種類
-
-    //protected float _detectRangeSqr; // プレイヤー検知範囲の二乗
-    //protected float _attackRangeSqr; // プレイヤー攻撃範囲の二乗
-
-    //[Header("コンポーネント")]
-    //[SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
-
-    //protected NavMeshAgent _agent; // NavMeshAgentの参照
-    //protected GameObject _player; // プレイヤーの参照
-    //protected Animator _animator; // アニメーターの参照
-
-    //private Rigidbody _rigidbody; // Rigidbodyの参照
-
     protected float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
     protected float _attackTimer = 0.0f; // 状態遷移するまでのタイマー
     protected bool _isAttackRange = false; // プレイヤーを検知したかどうかのフラグ
@@ -37,67 +16,8 @@ public class Enemy : EnemyBase
     protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
     protected float _hitTimer = 0.5f; // ヒットタイマー
 
-    /* 定数 */
-    //private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
-    //private const float ROTATION_SPEED = 5.0f; // プレイヤーの方向を向く速度
-
-    //[Header("敵が次の状態に遷移するまでの時間")]
-    //[SerializeField] protected float IDLE_WAIT_TIME = 0; // 待機時間
-    //[SerializeField] public float CHASE_WAIT_TIME = 0; // 追跡時間
-
-    //public enum EnemyDebuff
-    //{
-    //    AtkDown,
-    //    DefDown,
-    //    SpeedDown,
-    //    Poison,
-    //    None
-    //}
-
-    //public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
-    //public GameObject player => _player; // プレイヤーのゲッター
-
-    //public Animator animator => _animator; // 現在のアニメーション状態のゲッター
-
     protected override void Start()
     {
-        //_detectRangeSqr = _currentStateData.detectionRange * _currentStateData.detectionRange;    // 検知範囲の二乗を計算して保存
-        //_attackRangeSqr = _currentStateData.attackRange * _currentStateData.attackRange;    // 攻撃範囲の二乗を計算して保存
-
-        //// 体力と耐久力の初期化
-        //_currentHp = _currentStateData.maxHp;
-        //_currentTrunk = _currentStateData.maxTrunk; 
-        //_currentEnemyType = _currentStateData.enemyType;
-
-
-        //// NavMeshAgentコンポーネントを取得
-        //_agent = GetComponent<NavMeshAgent>();
-        //// Animatorコンポーネントを取得
-        //_animator = GetComponent<Animator>();
-        //// Rigidbodyコンポーネントを取得
-        //_rigidbody = GetComponent<Rigidbody>();
-
-        ////ステータスからNavMeshAgentの速度を設定
-        //if (_agent != null)
-        //{
-        //    _agent.speed = _currentStateData.moveSpeed;  // 移動速度を設定
-        //    _agent.stoppingDistance = _currentStateData.attackRange; // 攻撃範囲を設定
-        //}
-
-        //// プレイヤー参照が空なら自動で探す
-        //if (_player == null)
-        //{
-        //    GameObject playerObj = GameObject.FindWithTag("Player");
-        //    if (playerObj != null)
-        //    {
-        //        _player = playerObj;
-        //    }
-        //    else
-        //    {
-        //        Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
-        //    }
-        //}
-
         // 親クラスのStart()を呼び出す
         base.Start();
 
@@ -123,14 +43,6 @@ public class Enemy : EnemyBase
         // 親クラスのUpdate()を呼び出す
         base.Update();
     }
-
-    //ステートを変更する関数
-    //public void ChangeState(IState newState)
-    //{
-    //    _currentState?.End();       // 現在のステートを抜ける
-    //    _currentState = newState;   // 新しいステートに変更
-    //    _currentState.Init();       // 新しいステートに入る
-    //}
 
     //基本待機処理(オーバーライドで変更可)
     public virtual void Idle()
