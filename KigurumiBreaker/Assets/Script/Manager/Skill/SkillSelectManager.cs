@@ -16,6 +16,7 @@ public class SkillSelectManager : MonoBehaviour
     [SerializeField] private SkillData _skillData;
     [SerializeField] private Canvas _skillSelectCanvas;
     [SerializeField] private GameObject _skillSelectPanel;
+    [SerializeField] private GameObject _skillGetObject;
 
     private PlayerSkillManager _skillManager;
 
@@ -39,21 +40,6 @@ public class SkillSelectManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // デバッグ
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            StartSkillSelect();
-        }
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            _isSkillSelect = false;
-            Time.timeScale = 1f;
-            foreach (Transform child in _skillSelectCanvas.transform)
-            {
-                Destroy(child.gameObject);
-            }
-        }
-
         // スキル選択中以外は処理しない
         if (!_isSkillSelect) return;
 
@@ -74,13 +60,13 @@ public class SkillSelectManager : MonoBehaviour
         }
     }
 
-    public void StartSkillSelect()
+    public void StartSkillSelect(SkillData.SkillElement element)
     {
         _isSkillSelect = true;
 
         Time.timeScale = 0f;
 
-        List<SelectSkill> selectSkills = GetSelectSkill();
+        List<SelectSkill> selectSkills = GetSelectSkill(element);
 
         // スキル選択パネルを生成する
         for (int i = 0; i < SKILL_SELECT_NUM; i++)
@@ -159,17 +145,14 @@ public class SkillSelectManager : MonoBehaviour
             }
 
             // パネルの位置を調整する
-            panel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,(i - 1) * SKILL_PANEL_DISTANCE);
+            panel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i - 1) * SKILL_PANEL_DISTANCE);
         }
     }
 
-    private List<SelectSkill> GetSelectSkill()
+    private List<SelectSkill> GetSelectSkill(SkillData.SkillElement element)
     {
 
         List<SelectSkill> selectSkills = new List<SelectSkill>();
-
-        // まずスキルの属性を選択する
-        int skillElement = Random.Range(0, (int)SkillData.SkillElement.TypeNum);
 
         // 三つのスキルを選択する
         for (int i = 0; i < SKILL_SELECT_NUM; i++)
@@ -191,7 +174,7 @@ public class SkillSelectManager : MonoBehaviour
                         // スキルの属性が一致するスキルを取得する
                         foreach (var skill in _skillData.lowAttackSkill.lowAttackSkillDataList)
                         {
-                            if (skill.skillElement == (SkillData.SkillElement)skillElement)
+                            if (skill.skillElement == element)
                             {
                                 selectSkill.skillName = skill.skillName;
                                 selectSkill.skillCategory = SkillData.SkillCategory.LowAttack;
@@ -206,7 +189,7 @@ public class SkillSelectManager : MonoBehaviour
                         // スキルの属性が一致するスキルを取得する
                         foreach (var skill in _skillData.chargeAttackSkill.chargeAttackSkillDataList)
                         {
-                            if (skill.skillElement == (SkillData.SkillElement)skillElement)
+                            if (skill.skillElement == element)
                             {
                                 selectSkill.skillName = skill.skillName;
                                 selectSkill.skillCategory = SkillData.SkillCategory.ChargeAttack;
@@ -220,7 +203,7 @@ public class SkillSelectManager : MonoBehaviour
                         // スキルの属性が一致するスキルを取得する
                         foreach (var skill in _skillData.specialChargeSkill.specialChargeSkillDataList)
                         {
-                            if (skill.skillElement == (SkillData.SkillElement)skillElement)
+                            if (skill.skillElement == element)
                             {
                                 selectSkill.skillName = skill.skillName;
                                 selectSkill.skillCategory = SkillData.SkillCategory.SpecialCharge;
@@ -233,7 +216,7 @@ public class SkillSelectManager : MonoBehaviour
                         // スキルの属性が一致するスキルを取得する
                         foreach (var skill in _skillData.rangedAttackSkill.rangedAttackSkillDataList)
                         {
-                            if (skill.skillElement == (SkillData.SkillElement)skillElement)
+                            if (skill.skillElement == element)
                             {
                                 selectSkill.skillName = skill.skillName;
                                 selectSkill.skillCategory = SkillData.SkillCategory.RangedAttack;
@@ -246,7 +229,7 @@ public class SkillSelectManager : MonoBehaviour
                         // スキルの属性が一致するスキルを取得する
                         foreach (var skill in _skillData.dashSkill.dashSkillDataList)
                         {
-                            if (skill.skillElement == (SkillData.SkillElement)skillElement)
+                            if (skill.skillElement == element)
                             {
                                 selectSkill.skillName = skill.skillName;
                                 selectSkill.skillCategory = SkillData.SkillCategory.Dash;
@@ -261,7 +244,7 @@ public class SkillSelectManager : MonoBehaviour
                         List<int> index = new List<int>();
                         for (int j = 0; j < _skillData.passiveSkill.passiveSkillDataList.Count; j++)
                         {
-                            if (_skillData.passiveSkill.passiveSkillDataList[j].skillElement == (SkillData.SkillElement)skillElement)
+                            if (_skillData.passiveSkill.passiveSkillDataList[j].skillElement == element)
                             {
                                 index.Add(j);
                             }
@@ -309,6 +292,16 @@ public class SkillSelectManager : MonoBehaviour
         }
 
         return selectSkills;
+    }
+
+    public void PopSkillGetObject(Vector3 pos,SkillData.SkillElement element)
+    {
+        GameObject obj = Instantiate(_skillGetObject, pos, Quaternion.identity);
+        obj.transform.position = pos;
+        SkillGetItem script = obj.GetComponent<SkillGetItem>();
+
+        script.SetSkillElement(element);
+        script.SetSkillSelectManager(this.gameObject);
     }
 
 }
