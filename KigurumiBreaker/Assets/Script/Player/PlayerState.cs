@@ -171,6 +171,9 @@ public class PlayerState : Player<PlayerState>
     // 攻撃を前から受けたかどうか
     private bool _isFrontDamage;
 
+    // アイテム取得できる範囲にいるか
+    private bool _isInItemRange;
+
 
     // Start is called before the first frame update
     void Start()

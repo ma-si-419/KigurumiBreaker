@@ -235,4 +235,29 @@ public class PlayerSkillManager : MonoBehaviour
         // Œ©‚Â‚©‚ç‚È‚©‚Á‚½‚çnull‚ð•Ô‚·
         return null;
     }
+
+    public void SetSkillName(SkillData.SkillCategory category, string name)
+    {
+        switch (category)
+        {
+            case SkillData.SkillCategory.LowAttack:
+                _lowAttackSkillName = name;
+                break;
+            case SkillData.SkillCategory.ChargeAttack:
+                _chargeAttackSkillName = name;
+                break;
+            case SkillData.SkillCategory.SpecialCharge:
+                _specialChargeSkillName = name;
+                break;
+            case SkillData.SkillCategory.RangedAttack:
+                _rangedAttackSkillName = name;
+                break;
+            case SkillData.SkillCategory.Dash:
+                _dashSkillName = name;
+                break;
+            case SkillData.SkillCategory.Passive:
+                AddPassiveSkill(name);
+                break;
+        }
+    }
 }

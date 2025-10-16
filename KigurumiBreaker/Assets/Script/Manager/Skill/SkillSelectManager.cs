@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using TMPro;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
 
 public class SkillSelectManager : MonoBehaviour
 {
-    private const int SKILL_SELECT_NUM = 3; // 選択できるスキルの数
+    private const int SKILL_SELECT_NUM = 3;                                     // 選択できるスキルの数
 
-    private const int SKILL_PANEL_DISTANCE = 350; // スキルパネルの間隔
+    private const int SKILL_PANEL_DISTANCE = 350;                               // スキルパネルの間隔
 
+    [SerializeField] private GameObject _playerSkillManagerObject;              // PlayerSkillManagerのオブジェクト
+    [SerializeField] private SkillData _skillData;                              // スキルデータ
+    [SerializeField] private Canvas _skillSelectCanvas;                         // スキル選択のUIを表示するキャンバス
+    [SerializeField] private GameObject _skillSelectPanel;                      // スキル選択用のパネル
+    [SerializeField] private GameObject _skillGetObject;                        // 取得したらスキル選択を開始するオブジェクト
 
-    [SerializeField] private GameObject _playerSkillManager;
-    [SerializeField] private SkillData _skillData;
-    [SerializeField] private Canvas _skillSelectCanvas;
-    [SerializeField] private GameObject _skillSelectPanel;
-    [SerializeField] private GameObject _skillGetObject;
-
-    private PlayerSkillManager _skillManager;
+    private PlayerSkillManager _playerSkillManager;                             // PlayerSkillManagerのスクリプト
 
     private struct SelectSkill
     {
@@ -26,15 +26,25 @@ public class SkillSelectManager : MonoBehaviour
         public SkillData.SkillCategory skillCategory;
     }
 
-    private string _changeSkillName = "None";
-    private bool _isAdd = false;
-    private bool _isSub = false;
+    private List<SelectSkill> _selectSkills;
+
     private bool _isSkillSelect = false;
 
+    private bool _isMoveCursor = false;
+    private int _cursorIndex = 0; // 現在のカーソル位置
+
+    /*
+
+    // 削除が出てきたら使用する可能性あり
+    private bool _isAdd = false;
+    private bool _isSub = false;
+    private string _changeSkillName = "None";
+
+    */
 
     private void Start()
     {
-        _skillManager = _playerSkillManager.GetComponent<PlayerSkillManager>();
+        _playerSkillManager = _playerSkillManagerObject.GetComponent<PlayerSkillManager>();
     }
 
     // Update is called once per frame
@@ -43,30 +53,107 @@ public class SkillSelectManager : MonoBehaviour
         // スキル選択中以外は処理しない
         if (!_isSkillSelect) return;
 
+        int lastCursorIndex = _cursorIndex;
+
+        // デバッグ用　
+        // 上下キーで選択、Aボタンで決定
+
+        float inputV = Input.GetAxis("PadV");
+
+        // 上キーが押されたら選択を一つ上に移動
+        if (inputV > 0.5f)
+        {
+            if (!_isMoveCursor)
+            {
+                // カーソル移動フラグを立てる
+                _isMoveCursor = true;
+
+                // カーソル位置を更新
+                _cursorIndex--;
+
+                // もしカーソル位置が範囲外なら一番下に戻す
+                if (_cursorIndex < 0)
+                {
+                    _cursorIndex = SKILL_SELECT_NUM - 1;
+                }
+            }
+        }
+        // 下キーが押されたら選択を一つ下に移動
+        else if (inputV < -0.5f)
+        {
+            if (!_isMoveCursor)
+            {
+                // カーソル移動フラグを立てる
+                _isMoveCursor = true;
+
+                // カーソル位置を更新
+                _cursorIndex++;
+
+                // もしカーソル位置が範囲外なら一番上に戻す
+                if (_cursorIndex > SKILL_SELECT_NUM - 1)
+                {
+                    _cursorIndex = 0;
+                }
+            }
+        }
+        else
+        {
+            _isMoveCursor = false;
+        }
+
+        // 決定が押されたら選択したスキルをプレイヤーにセットする
+        if (Input.GetButtonDown("OK"))
+        {
+            SelectSkill setSkill = _selectSkills[_cursorIndex];
+
+            _playerSkillManager.SetSkillName(setSkill.skillCategory, setSkill.skillName);
+
+            // スキル選択パネルを削除する
+            foreach (Transform child in _skillSelectCanvas.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // スキル選択を終了する
+            _isSkillSelect = false;
+            Time.timeScale = 1f;
+        }
+
+        /*
+
+        // 削除が出てきたら使用する可能性あり
 
         if (_isAdd)
         {
-            _skillManager.AddPassiveSkill(_changeSkillName);
+            _playerSkillManager.AddPassiveSkill(_changeSkillName);
 
             _changeSkillName = "None";
             _isAdd = false;
         }
         else if (_isSub)
         {
-            _skillManager.SubPassiveSkill(_changeSkillName);
+            _playerSkillManager.SubPassiveSkill(_changeSkillName);
 
             _changeSkillName = "None";
             _isSub = false;
         }
+
+        */
     }
 
     public void StartSkillSelect(SkillData.SkillElement element)
     {
+        
         _isSkillSelect = true;
 
+        // 時間を止める
         Time.timeScale = 0f;
 
-        List<SelectSkill> selectSkills = GetSelectSkill(element);
+        // カーソルの位置を初期化する
+        _cursorIndex = 0;
+
+        // 選択することができるスキルを取得する
+        _selectSkills = GetSelectSkill(element);
 
         // スキル選択パネルを生成する
         for (int i = 0; i < SKILL_SELECT_NUM; i++)
@@ -74,9 +161,9 @@ public class SkillSelectManager : MonoBehaviour
             GameObject panel = Instantiate(_skillSelectPanel, _skillSelectCanvas.transform);
             SkillPanelInfo panelInfo = panel.GetComponent<SkillPanelInfo>();
 
-            string skillName = selectSkills[i].skillName;
+            string skillName = _selectSkills[i].skillName;
 
-            switch (selectSkills[i].skillCategory)
+            switch (_selectSkills[i].skillCategory)
             {
                 case SkillData.SkillCategory.LowAttack:
 
@@ -294,7 +381,7 @@ public class SkillSelectManager : MonoBehaviour
         return selectSkills;
     }
 
-    public void PopSkillGetObject(Vector3 pos,SkillData.SkillElement element)
+    public void PopSkillGetObject(Vector3 pos, SkillData.SkillElement element)
     {
         GameObject obj = Instantiate(_skillGetObject, pos, Quaternion.identity);
         obj.transform.position = pos;
