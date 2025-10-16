@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2979169916064818120
+--- !u!1001 &2435862415872414226
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -74,32 +74,32 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
       insertIndex: 1
-      addedObject: {fileID: 2242544134199673626}
+      addedObject: {fileID: 3209966293773871651}
     - targetCorrespondingSourceObject: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
       insertIndex: 2
-      addedObject: {fileID: 3611785652909599708}
+      addedObject: {fileID: 7792647260060705548}
     - targetCorrespondingSourceObject: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
       insertIndex: 3
-      addedObject: {fileID: 2994756314411878008}
+      addedObject: {fileID: 2246302835997742643}
     - targetCorrespondingSourceObject: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
       insertIndex: 4
-      addedObject: {fileID: 769902016259653327}
+      addedObject: {fileID: 7035554756945317501}
     - targetCorrespondingSourceObject: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
       insertIndex: 5
-      addedObject: {fileID: 3044844206440916378}
+      addedObject: {fileID: 8763360610782551941}
   m_SourcePrefab: {fileID: 100100000, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
---- !u!1 &2979169916064851300 stripped
+--- !u!1 &2435862415872447678 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
-  m_PrefabInstance: {fileID: 2979169916064818120}
+  m_PrefabInstance: {fileID: 2435862415872414226}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &2242544134199673626
+--- !u!23 &3209966293773871651
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2979169916064851300}
+  m_GameObject: {fileID: 2435862415872447678}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -135,13 +135,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3611785652909599708
+--- !u!136 &7792647260060705548
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2979169916064851300}
+  m_GameObject: {fileID: 2435862415872447678}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -158,13 +158,13 @@ CapsuleCollider:
   m_Height: 1.2
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!54 &2994756314411878008
+--- !u!54 &2246302835997742643
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2979169916064851300}
+  m_GameObject: {fileID: 2435862415872447678}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -185,13 +185,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!195 &769902016259653327
+--- !u!195 &7035554756945317501
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2979169916064851300}
+  m_GameObject: {fileID: 2435862415872447678}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
@@ -207,13 +207,13 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3044844206440916378
+--- !u!114 &8763360610782551941
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2979169916064851300}
+  m_GameObject: {fileID: 2435862415872447678}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46b923e960e341e4d90561667b35d186, type: 3}
@@ -226,11 +226,7 @@ MonoBehaviour:
     attackPower: 5
     moveSpeed: 10
     detectionRange: 10
-    attackRange: 2
-  _agent: {fileID: 0}
-  _player: {fileID: 0}
+    attackRange: 3.5
   _attackObjectPrefab: {fileID: 3215702706224156630, guid: 17121093f54d56d48be3cd377ef038be, type: 3}
-  _animator: {fileID: 0}
-  IDLE_WAIT_TIME: 0
-  CHASE_WAIT_TIME: 0
-  ATTACK_CREATE_TIME: 0
+  IDLE_WAIT_TIME: 2
+  CHASE_WAIT_TIME: 0.5
