@@ -1669,8 +1669,6 @@ MonoBehaviour:
   CHASE_WAIT_TIME: 0
   _shootCount: 3
   _maxChaseRange: 20
-  SHOOT_INTERVAL: 0.5
-  MAX_SHOOT_COUNT: 3
   MIN_FLEE_DISTANCE: 20
   FLEE_DISTANCE: 0
 --- !u!195 &886635711
@@ -4204,8 +4202,6 @@ MonoBehaviour:
   CHASE_WAIT_TIME: 0
   _shootCount: 3
   _maxChaseRange: 20
-  SHOOT_INTERVAL: 0.5
-  MAX_SHOOT_COUNT: 3
   MIN_FLEE_DISTANCE: 20
   FLEE_DISTANCE: 0
 --- !u!54 &1776196715
@@ -4356,13 +4352,11 @@ MonoBehaviour:
     attackRange: 8
   _attackObjectPrefab: {fileID: 1116344303506604534, guid: dd10a67aef618c94f9af5fc1a424105f, type: 3}
   IDLE_WAIT_TIME: 2
-  CHASE_WAIT_TIME: 8
+  CHASE_WAIT_TIME: 5
   _shootCount: 3
   _maxChaseRange: 20
-  SHOOT_INTERVAL: 2
-  MAX_SHOOT_COUNT: 3
-  MIN_FLEE_DISTANCE: 20
-  FLEE_DISTANCE: 5
+  MIN_FLEE_DISTANCE: 5
+  FLEE_DISTANCE: 10
 --- !u!195 &1864276522
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class LongRangeAttackEnemy : Enemy
 {
+
     // 攻撃に関する変数
     private float _longRangeTimer = 0.0f;   // タイマー
 
@@ -13,14 +14,12 @@ public class LongRangeAttackEnemy : Enemy
 
     /* 定数 */
     [Header("定数")]
-    [SerializeField] private float SHOOT_INTERVAL = 0.5f; // 射撃間隔
-    [SerializeField] private int MAX_SHOOT_COUNT = 3; // 弾を撃つ最大回数
     [SerializeField] private float MIN_FLEE_DISTANCE = 20.0f; // 逃げる距離の最小値
     [SerializeField] private float FLEE_DISTANCE = 0.0f; // 逃げる距離
 
     public override void Idle()
     {
-        _agent.isStopped = true; // 追跡を停止
+        //_agent.isStopped = true; // 追跡を停止
 
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
@@ -56,28 +55,49 @@ public class LongRangeAttackEnemy : Enemy
 
     public override void Chase()
     {
-        _agent.isStopped = false;
+
+        _longRangeTimer += Time.deltaTime;
+        
         //逃げる処理
         Nav();
 
-        //タイマーを進める
-        _longRangeTimer += Time.deltaTime;
+        //プレイヤーとの位置差を計算
+        Vector3 diff = _player.transform.position - transform.position;
+        float attackRange = _maxChaseRange * _maxChaseRange;
 
+        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_maxChaseRange), Color.black);
+
+        if (_longRangeTimer > 2.0f)
+        {
+            _agent.isStopped = true; //追跡を停止
+            LookAtPlayer();
+        }
+
+        if (diff.sqrMagnitude > attackRange)
+        {
+            _agent.isStopped = true; //追跡を停止
+            LookAtPlayer();
+        }
 
         if (_longRangeTimer > CHASE_WAIT_TIME)
         {
-
             //攻撃状態へ
             _longRangeTimer = 0.0f;
             ChangeState(new AttackState(this));
         }
+        //else if (diff.sqrMagnitude > attackRange)
+        //{
+        //    //プレイヤーが追跡範囲外に出たら
+        //    LookAtPlayer();
+        //    _longRangeTimer = 0.0f;
+        //    ChangeState(new AttackState(this));
+        //}
     }
 
     public override void Attack()
     {
         //プレイヤーの方向を向き続ける
         LookAtPlayer();
-        _agent.isStopped = true; //追跡を停止
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 

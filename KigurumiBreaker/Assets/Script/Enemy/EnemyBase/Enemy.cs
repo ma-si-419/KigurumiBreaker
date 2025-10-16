@@ -120,6 +120,8 @@ public class Enemy : MonoBehaviour
     {
         DebugLine();
 
+        
+
         // ヒットしたら一定時間ヒット状態を維持
         if (_isHit)
         {
@@ -143,13 +145,74 @@ public class Enemy : MonoBehaviour
         _currentState.Init();       // 新しいステートに入る
     }
 
-    //基本攻撃処理(オーバーライドで変更可)
-    public virtual void Attack() { }
+    //基本待機処理(オーバーライドで変更可)
+    public virtual void Idle()
+    {
+
+        //プレイヤーの位置を目的地に設定
+        _agent.SetDestination(_player.transform.position);
+
+        // 移動を停止
+        StopMovement();
+
+        Vector3 diff = _player.transform.position - transform.position; //プレイヤーとの位置差を計算
+
+        //プレイヤーが検知範囲内にいるかチェック
+        if (diff.sqrMagnitude < _detectRangeSqr || _isSearched)
+        {
+            //プレイヤー発見したら一度だけ呼ばれる
+            if (!_isSearched)
+            {
+                //敵の頭上にビックリマークを出す
+
+
+            }
+
+            //一度でも攻撃範囲内に入ったらフラグを立て続ける
+            _isSearched = true;
+
+            _stateTimer += Time.deltaTime;
+
+            if (_stateTimer > IDLE_WAIT_TIME)
+            {
+                //追跡状態へ
+                _stateTimer = 0.0f;
+                ChangeState(new ChaseState(this));
+            }
+        }
+
+        // 攻撃範囲に入ったらフラグを立てる
+        if (diff.sqrMagnitude < _attackRangeSqr)
+        {
+            _isSearched = true;
+            _isAttackRange = true;
+        }
+        else
+        {
+            _attackTimer = 0.0f;
+            _isAttackRange = false;
+        }
+
+        if (_isAttackRange && _isAttackRange)
+        {
+            _attackTimer += Time.deltaTime;
+
+            LookAtPlayer(); // プレイヤーの方向を向く
+
+            if (_attackTimer > CHASE_WAIT_TIME)
+            {
+                //追跡状態へ
+                _isAttackRange = false; // フラグをリセット
+                _stateTimer = 0.0f;
+                ChangeState(new AttackState(this));
+            }
+        }
+
+    }
 
     //基本移動処理(オーバーライドで変更可)
     public virtual void Chase()
     {
-        _agent.isStopped = false; // 追跡を再開
 
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
@@ -178,71 +241,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    //基本待機処理(オーバーライドで変更可)
-    public virtual void Idle()
-    {
-        _agent.isStopped = true; // 追跡を停止
 
-        //プレイヤーの位置を目的地に設定
-        _agent.SetDestination(_player.transform.position);
-
-        // 移動を停止
-        StopMovement(); 
-
-        Vector3 diff = _player.transform.position - transform.position; //プレイヤーとの位置差を計算
-
-        //プレイヤーが検知範囲内にいるかチェック
-        if (diff.sqrMagnitude < _detectRangeSqr || _isSearched)
-        {
-            //プレイヤー発見したら一度だけ呼ばれる
-            if (!_isSearched)
-            {
-                //敵の頭上にビックリマークを出す
-                
-
-            }
-
-            //一度でも攻撃範囲内に入ったらフラグを立て続ける
-            _isSearched = true;
-
-            _stateTimer += Time.deltaTime;
-
-            if (_stateTimer > IDLE_WAIT_TIME)
-            {
-                //追跡状態へ
-                _stateTimer = 0.0f;
-                ChangeState(new ChaseState(this));
-            }
-        }
-
-        // 攻撃範囲に入ったらフラグを立てる
-        if(diff.sqrMagnitude < _attackRangeSqr)
-        {
-            _isSearched = true;
-            _isAttackRange = true;
-        }
-        else
-        {
-            _attackTimer = 0.0f;
-            _isAttackRange = false;
-        }
-
-        if (_isAttackRange && _isAttackRange)
-        {
-            _attackTimer += Time.deltaTime;
-
-            LookAtPlayer(); // プレイヤーの方向を向く
-
-            if (_attackTimer > CHASE_WAIT_TIME)
-            {
-                //追跡状態へ
-                _isAttackRange = false; // フラグをリセット
-                _stateTimer = 0.0f;
-                ChangeState(new AttackState(this));
-            }
-        }
-
-    }
+    //基本攻撃処理(オーバーライドで変更可)
+    public virtual void Attack() { }
 
     // プレイヤー方向に向く処理
     public void LookAtPlayer()
