@@ -14,7 +14,7 @@ public class IdleState : IState
     public void Init()
     {
         _enemy.AttackReset(); //攻撃フラグリセット
-
+        _enemy.agent.isStopped = true; // 追跡を停止
 
         //待機アニメーション開始
         _enemy.animator.SetBool("Idle", false);
