@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
+  m_Name: CircleAttackEnemyData
+  m_EditorClassIdentifier: 
+  MaxHp: 100
+  MaxTrunk: 50
+  AttackPower: 3
+  MoveSpeed: 5
+  DetectionRange: 10
+  AttackRange: 5
+  IdleToChaseTime: 2
+  ChaseToAttack: 3
+  RotateSpeed: 5
+  AttackPrefab: {fileID: 0}

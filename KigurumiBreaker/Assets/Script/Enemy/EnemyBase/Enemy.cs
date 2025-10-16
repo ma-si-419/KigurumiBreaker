@@ -3,42 +3,28 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering.VirtualTexturing;
 
-[System.Serializable]
-public class EnemyStateData
+public class Enemy : EnemyBase
 {
-    public float maxHp;             // 最大体力
-    public float maxTrunk;          // 最大耐久力
-    public int enemyType;         // 敵の種類（例：0=チビ、1=デカなど）
-    public int attackPower;       // 攻撃力
-    public float moveSpeed;       // 移動速度
-    public float detectionRange;  // 検知範囲
-    public float attackRange;     // 攻撃範囲
-}
-
-
-public class Enemy : MonoBehaviour
-{
-    
     /* 変数 */
-    private IState _currentState;               // 現在のステート
+    //private IState _currentState;               // 現在のステート
 
-    [Header("ステータス")]
-    [SerializeField] protected EnemyStateData _currentStateData; // 現在のステータスデータ
-    protected float _currentHp;    // 現在の体力
-    protected float _currentTrunk; // 現在の耐久力
-    protected int _currentEnemyType;    // 敵の種類
+    //[Header("ステータス")]
+    //[SerializeField] protected EnemyStateData _currentStateData; // 現在のステータスデータ
+    //protected float _currentHp;    // 現在の体力
+    //protected float _currentTrunk; // 現在の耐久力
+    //protected int _currentEnemyType;    // 敵の種類
 
-    protected float _detectRangeSqr; // プレイヤー検知範囲の二乗
-    protected float _attackRangeSqr; // プレイヤー攻撃範囲の二乗
+    //protected float _detectRangeSqr; // プレイヤー検知範囲の二乗
+    //protected float _attackRangeSqr; // プレイヤー攻撃範囲の二乗
 
-    [Header("コンポーネント")]
-    [SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
+    //[Header("コンポーネント")]
+    //[SerializeField] protected GameObject _attackObjectPrefab; // 攻撃オブジェクトのプレハブ
 
-    protected NavMeshAgent _agent; // NavMeshAgentの参照
-    protected GameObject _player; // プレイヤーの参照
-    protected Animator _animator; // アニメーターの参照
+    //protected NavMeshAgent _agent; // NavMeshAgentの参照
+    //protected GameObject _player; // プレイヤーの参照
+    //protected Animator _animator; // アニメーターの参照
 
-    private Rigidbody _rigidbody; // Rigidbodyの参照
+    //private Rigidbody _rigidbody; // Rigidbodyの参照
 
     protected float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
     protected float _attackTimer = 0.0f; // 状態遷移するまでのタイマー
@@ -52,75 +38,77 @@ public class Enemy : MonoBehaviour
     protected float _hitTimer = 0.5f; // ヒットタイマー
 
     /* 定数 */
-    private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
-    private const float ROTATION_SPEED = 5.0f; // プレイヤーの方向を向く速度
+    //private const int MAX_DAMAGE_TIME = 15; // ダメージを受けてから赤くなる時間
+    //private const float ROTATION_SPEED = 5.0f; // プレイヤーの方向を向く速度
 
-    [Header("敵が次の状態に遷移するまでの時間")]
-    [SerializeField] protected float IDLE_WAIT_TIME = 0; // 待機時間
-    [SerializeField] public float CHASE_WAIT_TIME = 0; // 追跡時間
+    //[Header("敵が次の状態に遷移するまでの時間")]
+    //[SerializeField] protected float IDLE_WAIT_TIME = 0; // 待機時間
+    //[SerializeField] public float CHASE_WAIT_TIME = 0; // 追跡時間
 
-    public enum EnemyDebuff
+    //public enum EnemyDebuff
+    //{
+    //    AtkDown,
+    //    DefDown,
+    //    SpeedDown,
+    //    Poison,
+    //    None
+    //}
+
+    //public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
+    //public GameObject player => _player; // プレイヤーのゲッター
+
+    //public Animator animator => _animator; // 現在のアニメーション状態のゲッター
+
+    protected override void Start()
     {
-        AtkDown,
-        DefDown,
-        SpeedDown,
-        Poison,
-        None
-    }
+        //_detectRangeSqr = _currentStateData.detectionRange * _currentStateData.detectionRange;    // 検知範囲の二乗を計算して保存
+        //_attackRangeSqr = _currentStateData.attackRange * _currentStateData.attackRange;    // 攻撃範囲の二乗を計算して保存
 
-    public NavMeshAgent agent => _agent; // NavMeshAgentのゲッター
-    public GameObject player => _player; // プレイヤーのゲッター
-
-    public Animator animator => _animator; // 現在のアニメーション状態のゲッター
-
-    protected virtual void Start()
-    {
-        _detectRangeSqr = _currentStateData.detectionRange * _currentStateData.detectionRange;    // 検知範囲の二乗を計算して保存
-        _attackRangeSqr = _currentStateData.attackRange * _currentStateData.attackRange;    // 攻撃範囲の二乗を計算して保存
-
-        // 体力と耐久力の初期化
-        _currentHp = _currentStateData.maxHp;
-        _currentTrunk = _currentStateData.maxTrunk; 
-        _currentEnemyType = _currentStateData.enemyType;
+        //// 体力と耐久力の初期化
+        //_currentHp = _currentStateData.maxHp;
+        //_currentTrunk = _currentStateData.maxTrunk; 
+        //_currentEnemyType = _currentStateData.enemyType;
 
 
-        // NavMeshAgentコンポーネントを取得
-        _agent = GetComponent<NavMeshAgent>();
-        // Animatorコンポーネントを取得
-        _animator = GetComponent<Animator>();
-        // Rigidbodyコンポーネントを取得
-        _rigidbody = GetComponent<Rigidbody>();
+        //// NavMeshAgentコンポーネントを取得
+        //_agent = GetComponent<NavMeshAgent>();
+        //// Animatorコンポーネントを取得
+        //_animator = GetComponent<Animator>();
+        //// Rigidbodyコンポーネントを取得
+        //_rigidbody = GetComponent<Rigidbody>();
 
-        //ステータスからNavMeshAgentの速度を設定
-        if (_agent != null)
-        {
-            _agent.speed = _currentStateData.moveSpeed;  // 移動速度を設定
-            _agent.stoppingDistance = _currentStateData.attackRange; // 攻撃範囲を設定
-        }
+        ////ステータスからNavMeshAgentの速度を設定
+        //if (_agent != null)
+        //{
+        //    _agent.speed = _currentStateData.moveSpeed;  // 移動速度を設定
+        //    _agent.stoppingDistance = _currentStateData.attackRange; // 攻撃範囲を設定
+        //}
 
-        // プレイヤー参照が空なら自動で探す
-        if (_player == null)
-        {
-            GameObject playerObj = GameObject.FindWithTag("Player");
-            if (playerObj != null)
-            {
-                _player = playerObj;
-            }
-            else
-            {
-                Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
-            }
-        }
+        //// プレイヤー参照が空なら自動で探す
+        //if (_player == null)
+        //{
+        //    GameObject playerObj = GameObject.FindWithTag("Player");
+        //    if (playerObj != null)
+        //    {
+        //        _player = playerObj;
+        //    }
+        //    else
+        //    {
+        //        Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
+        //    }
+        //}
+
+        // 親クラスのStart()を呼び出す
+        base.Start();
 
         //待機状態に設定
         ChangeState(new IdleState(this));
     }
 
-    private void Update()
+    protected override void Update()
     {
+        // デバッグ用に線を引く
         DebugLine();
-
-        
 
         // ヒットしたら一定時間ヒット状態を維持
         if (_isHit)
@@ -130,20 +118,19 @@ public class Enemy : MonoBehaviour
             if(_hitTimer <= 0.0f)
                 _isHit = false;
                 return; // ヒット中は他の処理を行わない
-
         }
 
-        // 現在のステートを更新
-        _currentState?.Update();
+        // 親クラスのUpdate()を呼び出す
+        base.Update();
     }
 
     //ステートを変更する関数
-    public void ChangeState(IState newState)
-    {
-        _currentState?.End();       // 現在のステートを抜ける
-        _currentState = newState;   // 新しいステートに変更
-        _currentState.Init();       // 新しいステートに入る
-    }
+    //public void ChangeState(IState newState)
+    //{
+    //    _currentState?.End();       // 現在のステートを抜ける
+    //    _currentState = newState;   // 新しいステートに変更
+    //    _currentState.Init();       // 新しいステートに入る
+    //}
 
     //基本待機処理(オーバーライドで変更可)
     public virtual void Idle()
@@ -164,8 +151,6 @@ public class Enemy : MonoBehaviour
             if (!_isSearched)
             {
                 //敵の頭上にビックリマークを出す
-
-
             }
 
             //一度でも攻撃範囲内に入ったらフラグを立て続ける
@@ -173,7 +158,7 @@ public class Enemy : MonoBehaviour
 
             _stateTimer += Time.deltaTime;
 
-            if (_stateTimer > IDLE_WAIT_TIME)
+            if (_stateTimer > _enemyData.idleToChaseTime)
             {
                 //追跡状態へ
                 _stateTimer = 0.0f;
@@ -199,7 +184,7 @@ public class Enemy : MonoBehaviour
 
             LookAtPlayer(); // プレイヤーの方向を向く
 
-            if (_attackTimer > CHASE_WAIT_TIME)
+            if (_attackTimer > _enemyData.chaseToAttack)
             {
                 //追跡状態へ
                 _isAttackRange = false; // フラグをリセット
@@ -230,7 +215,7 @@ public class Enemy : MonoBehaviour
             //タイマーを進める
             _stateTimer += Time.deltaTime;
 
-            if (_stateTimer > CHASE_WAIT_TIME)
+            if (_stateTimer > _enemyData.chaseToAttack)
             {
                 _agent.isStopped = true; //追跡を停止
 
@@ -260,7 +245,7 @@ public class Enemy : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(direction);
 
             // 現在の回転から目標の回転へ補完
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, ROTATION_SPEED * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _enemyData.rotateSpeed * Time.deltaTime);
 
         }
     }
@@ -343,7 +328,7 @@ public class Enemy : MonoBehaviour
     // Getterメソッド
     public float GetMaxHp()
     {
-        return _currentStateData.maxHp;
+        return _enemyData.maxHp;
     }
     public float GetCurrentHp()
     {
@@ -351,7 +336,7 @@ public class Enemy : MonoBehaviour
     }
     public float GetMaxTrunk()
     {
-        return _currentStateData.maxTrunk;
+        return _enemyData.maxTrunk;
     }
     public float GetCurrentTrunk()
     {
@@ -401,12 +386,12 @@ public class Enemy : MonoBehaviour
     {
         // 検知範囲（シアン色のワイヤーフレーム球）
         Gizmos.color = Color.yellow;
-        float detectRadius = _currentStateData != null ? _currentStateData.detectionRange : 0f;
+        float detectRadius = _enemyData != null ? _enemyData.detectionRange : 0f;
         Gizmos.DrawWireSphere(transform.position, detectRadius);
 
         // 攻撃範囲（赤色のワイヤーフレーム球、必要なら）
         Gizmos.color = Color.red;
-        float attackRadius = _currentStateData != null ? _currentStateData.attackRange : 0f;
+        float attackRadius = _enemyData != null ? _enemyData.attackRange : 0f;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 
