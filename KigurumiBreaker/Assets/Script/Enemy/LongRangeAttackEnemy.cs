@@ -19,8 +19,6 @@ public class LongRangeAttackEnemy : Enemy
 
     public override void Idle()
     {
-        //_agent.isStopped = true; // 追跡を停止
-
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
 
@@ -44,7 +42,7 @@ public class LongRangeAttackEnemy : Enemy
 
             _stateTimer += Time.deltaTime;
 
-            if (_stateTimer > IDLE_WAIT_TIME)
+            if (_stateTimer > _enemyData.idleToChaseTime)
             {
                 //追跡状態へ
                 _stateTimer = 0.0f;
@@ -79,19 +77,12 @@ public class LongRangeAttackEnemy : Enemy
             LookAtPlayer();
         }
 
-        if (_longRangeTimer > CHASE_WAIT_TIME)
+        if (_longRangeTimer > _enemyData.chaseToAttack)
         {
             //攻撃状態へ
             _longRangeTimer = 0.0f;
             ChangeState(new AttackState(this));
         }
-        //else if (diff.sqrMagnitude > attackRange)
-        //{
-        //    //プレイヤーが追跡範囲外に出たら
-        //    LookAtPlayer();
-        //    _longRangeTimer = 0.0f;
-        //    ChangeState(new AttackState(this));
-        //}
     }
 
     public override void Attack()
