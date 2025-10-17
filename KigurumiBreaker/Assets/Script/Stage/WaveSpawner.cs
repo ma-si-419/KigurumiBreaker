@@ -6,49 +6,50 @@ using System.Collections.Generic;
 [System.Serializable]
 public class PopEnemy
 {
-    public EnemyKind spawnKind;                                       // 出したい敵の種類
-    public Vector3 spawnPosition;                                     // SpawnPositionを決める。
-    public bool randomizePosition = true;                             // TrueならSpawnPositionを無視してランダム生成
+    public EnemyKind spawnKind;
+    public Vector3 spawnPosition;
+    public bool randomizePosition = true;
 }
 
 [System.Serializable]
 public class EnemyWave
 {
-    public List<PopEnemy> popEnemies = new List<PopEnemy>();          // このWaveで出現させる敵たち
+    public List<PopEnemy> popEnemies = new List<PopEnemy>();
 }
 
 [System.Serializable]
 public class EnemyGroup
 {
-    public string groupName = "Group";                               // グループ名（デバッグ用）
-    public List<EnemyWave> waves = new List<EnemyWave>();             // このグループのWaveたち
+    public string groupName = "Group";
+    public List<EnemyWave> waves = new List<EnemyWave>();
 }
 
 public class WaveSpawner : MonoBehaviour
 {
     [Header("全体の出現範囲設定")]
-    public Transform areaCenter;                                     // 出現範囲の中心
+    public Transform areaCenter;
     public Vector3 areaSize = new Vector3(10, 0, 10);
 
     [Header("敵データ（SpawnData）")]
-    public SpawnData enemySetData;                                   // 敵データベース
+    public SpawnData enemySetData;
 
     [Header("グループ設定")]
-    public List<EnemyGroup> groups = new List<EnemyGroup>();         // 出現させるグループ設定
+    public List<EnemyGroup> groups = new List<EnemyGroup>();
 
     [Header("出現間隔")]
-    public float spawnInterval = 0.5f;                               // 敵出現の間隔
+    public float spawnInterval = 0.5f;
 
     [Header("全Wave終了後に停止するエフェクト")]
-    public ParticleSystem[] targetEffects;                           // Wave終了後に停止するエフェクト
+    public ParticleSystem[] targetEffects;
 
     [Header("スキル関連")]
-    public SkillSelectManager skillSelectManager;                    // SkillSelectManager参照
+    public SkillSelectManager skillSelectManager;
+    public SkillData.SkillElement nextSkillElement;
 
-    [HideInInspector] public bool isAllWavesCleared = false;          // 全Wave終了フラグ（SkillSelectManagerが監視する）
-    [HideInInspector] public bool skillSelectFinished = false;        // SkillSelect完了通知用（SkillSelectManagerがtrueにする）
+    [HideInInspector] public bool isAllWavesCleared = false;
+    [HideInInspector] public bool skillSelectFinished = false;
 
-    private bool allCleared = false;                                 // 内部判定用
+    private bool allCleared = false;
 
     private void Start()
     {
@@ -75,7 +76,6 @@ public class WaveSpawner : MonoBehaviour
                 }
 
                 Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
-
                 GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
                 spawned.Add(enemy);
 
@@ -101,23 +101,30 @@ public class WaveSpawner : MonoBehaviour
         if (allCleared) return;
         allCleared = true;
 
-        // SkillSelectManagerに監視してもらうため、フラグを立てる
+        // Wave完了フラグ
         isAllWavesCleared = true;
-        Debug.Log("全ての敵を撃破。isAllWavesCleared = true（SkillSelectManagerがこれを監視して起動）。");
+        Debug.Log("全ての敵を撃破。isAllWavesCleared = true");
 
-        // SkillSelect完了待ち
+        // スキル取得アイテムを生成
+        if (skillSelectManager != null)
+        {
+            Vector3 spawnPos = areaCenter != null ? areaCenter.position : transform.position;
+            skillSelectManager.PopSkillGetObject(spawnPos, nextSkillElement, this);
+            Debug.Log("PopSkillGetObject() を呼び出しました");
+        }
+
+        // Skill選択完了待ち
         StartCoroutine(WaitForSkillSelectFinish());
     }
 
     private IEnumerator WaitForSkillSelectFinish()
     {
-        // SkillSelectManagerがskillSelectFinished = trueにするのを待つ
         yield return new WaitUntil(() => skillSelectFinished);
 
-        Debug.Log("SkillSelect完了を検知。WaveSpawner側でエフェクト停止処理を実行。");
+        Debug.Log("SkillSelect完了を検知。エフェクト停止処理を実行。");
         StopAllEffects();
 
-        // フラグをリセット（次回のWave用）
+        // フラグリセット
         isAllWavesCleared = false;
         skillSelectFinished = false;
         allCleared = false;
@@ -151,13 +158,8 @@ public class WaveSpawner : MonoBehaviour
             bool invalid = false;
             foreach (var col in cols)
             {
-                if (col.CompareTag("NoSpawn"))
-                {
-                    invalid = true;
-                    break;
-                }
+                if (col.CompareTag("NoSpawn")) { invalid = true; break; }
             }
-
             if (invalid) continue;
 
             if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
