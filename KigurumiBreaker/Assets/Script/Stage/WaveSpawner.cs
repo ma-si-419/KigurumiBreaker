@@ -6,22 +6,22 @@ using System.Collections.Generic;
 [System.Serializable]
 public class PopEnemy
 {
-    public EnemyKind spawnKind;
-    public Vector3 spawnPosition;
-    public bool randomizePosition = true;
+    public EnemyKind spawnKind;          // 出したい敵の種類
+    public Vector3 spawnPosition;        // SpawnPositionを決める
+    public bool randomizePosition = true; // TrueならSpawnPositionを無視してランダム生成
 }
 
 [System.Serializable]
 public class EnemyWave
 {
-    public List<PopEnemy> popEnemies = new List<PopEnemy>();
+    public List<PopEnemy> popEnemies = new List<PopEnemy>(); // このWaveで出現させる敵たち
 }
 
 [System.Serializable]
 public class EnemyGroup
 {
-    public string groupName = "Group";
-    public List<EnemyWave> waves = new List<EnemyWave>();
+    public string groupName = "Group";                       // グループ名（デバッグ用）
+    public List<EnemyWave> waves = new List<EnemyWave>();    // このグループのWaveたち
 }
 
 public class WaveSpawner : MonoBehaviour
@@ -46,10 +46,11 @@ public class WaveSpawner : MonoBehaviour
     public SkillSelectManager skillSelectManager;
     public SkillData.SkillElement nextSkillElement;
 
-    [HideInInspector] public bool isAllWavesCleared = false;
-    [HideInInspector] public bool skillSelectFinished = false;
+    [HideInInspector] public bool isAllWavesCleared = false;  // SkillSelectManagerが監視
+    [HideInInspector] public bool skillSelectFinished = false; // Skill選択完了通知
 
-    private bool allCleared = false;
+    private int groupsClearedCount = 0;                       // 全グループ終了判定
+    private Vector3 lastDeadEnemyPos;                         // 最後に倒れた敵の位置
 
     private void Start()
     {
@@ -66,54 +67,76 @@ public class WaveSpawner : MonoBehaviour
             var wave = group.waves[w];
             List<GameObject> spawned = new List<GameObject>();
 
+            // 敵生成
             foreach (var pop in wave.popEnemies)
             {
                 GameObject prefabToSpawn = enemySetData?.GetPrefabByKind(pop.spawnKind);
-                if (prefabToSpawn == null)
-                {
-                    Debug.LogWarning($"[{group.groupName}] {pop.spawnKind} のPrefabが見つかりません");
-                    continue;
-                }
+                if (prefabToSpawn == null) continue;
 
                 Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
                 GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
                 spawned.Add(enemy);
-
                 yield return new WaitForSeconds(spawnInterval);
             }
 
-            // このWaveの敵が全滅するまで待つ
-            yield return new WaitUntil(() =>
-            {
-                spawned.RemoveAll(e => e == null);
-                return spawned.Count == 0;
-            });
+            // Wave内敵の全滅待機（最後に生きていた敵の座標を記録）
+            yield return StartCoroutine(WaitForWaveClear(spawned));
 
             Debug.Log($"{group.groupName} Wave {w + 1} 終了");
         }
 
         Debug.Log($"{group.groupName} の全Wave完了");
-        CheckAllGroupsCleared();
+        OnGroupCleared();
     }
 
-    private void CheckAllGroupsCleared()
+    /// <summary>
+    /// Wave内最後に生きていた敵の座標を保持しつつ全滅待機
+    /// </summary>
+    private IEnumerator WaitForWaveClear(List<GameObject> spawned)
     {
-        if (allCleared) return;
-        allCleared = true;
+        Vector3 lastPos = Vector3.zero;
 
-        // Wave完了フラグ
-        isAllWavesCleared = true;
-        Debug.Log("全ての敵を撃破。isAllWavesCleared = true");
-
-        // スキル取得アイテムを生成
-        if (skillSelectManager != null)
+        while (spawned.Count > 0)
         {
-            Vector3 spawnPos = areaCenter != null ? areaCenter.position : transform.position;
-            skillSelectManager.PopSkillGetObject(spawnPos, nextSkillElement, this);
-            Debug.Log("PopSkillGetObject() を呼び出しました");
+            for (int i = spawned.Count - 1; i >= 0; i--)
+            {
+                var go = spawned[i];
+                if (go == null)
+                {
+                    spawned.RemoveAt(i);
+                }
+                else
+                {
+                    // 毎フレーム、最後に存在する敵の座標を更新
+                    lastPos = go.transform.position;
+                }
+            }
+            yield return null;
         }
 
-        // Skill選択完了待ち
+        lastDeadEnemyPos = lastPos; // Wave終了時の最後の敵座標
+    }
+
+    private void OnGroupCleared()
+    {
+        groupsClearedCount++;
+
+        // まだ他のグループが残っていたら終了
+        if (groupsClearedCount < groups.Count) return;
+
+        // 全グループ終了
+        isAllWavesCleared = true;
+        Debug.Log("全グループの敵を撃破。isAllWavesCleared = true");
+
+        // 最後に倒れた敵の位置にスキル取得アイテム生成
+        if (skillSelectManager != null)
+        {
+            Vector3 spawnPos = lastDeadEnemyPos != Vector3.zero ? lastDeadEnemyPos : (areaCenter != null ? areaCenter.position : transform.position);
+            skillSelectManager.PopSkillGetObject(spawnPos, nextSkillElement, this);
+            Debug.Log($"PopSkillGetObject() を呼び出しました。位置: {spawnPos}");
+        }
+
+        // Skill選択完了待機
         StartCoroutine(WaitForSkillSelectFinish());
     }
 
@@ -121,13 +144,14 @@ public class WaveSpawner : MonoBehaviour
     {
         yield return new WaitUntil(() => skillSelectFinished);
 
-        Debug.Log("SkillSelect完了を検知。エフェクト停止処理を実行。");
+        Debug.Log("SkillSelect完了を検知。WaveSpawner側でエフェクト停止処理を実行。");
         StopAllEffects();
 
-        // フラグリセット
+        // 次回用にフラグをリセット
         isAllWavesCleared = false;
         skillSelectFinished = false;
-        allCleared = false;
+        groupsClearedCount = 0;
+        lastDeadEnemyPos = Vector3.zero;
     }
 
     private void StopAllEffects()
@@ -158,7 +182,11 @@ public class WaveSpawner : MonoBehaviour
             bool invalid = false;
             foreach (var col in cols)
             {
-                if (col.CompareTag("NoSpawn")) { invalid = true; break; }
+                if (col.CompareTag("Wall"))
+                {
+                    invalid = true;
+                    break;
+                }
             }
             if (invalid) continue;
 
@@ -168,7 +196,6 @@ public class WaveSpawner : MonoBehaviour
         return areaCenter.position;
     }
 
-    // SkillSelectManagerが呼ぶ関数（「スキル選択終わったよ！」通知用）
     public void OnSkillSelectFinished()
     {
         skillSelectFinished = true;
