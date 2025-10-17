@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossStunState : IState
+public class BossStanState : IState
 {
-    private BossEnemyTest _boss;   //ボス敵の参照
+    private BossEnemy _boss;   //ボス敵の参照
 
-    public BossStunState(BossEnemyTest boss)
+    public BossStanState(BossEnemy boss)
     {
         //コンストラクタでEnemyの参照を受け取る
         _boss = boss;
@@ -15,10 +15,10 @@ public class BossStunState : IState
     public void Init()
     {
         //_boss.AttackReset(); //攻撃フラグリセット
-        //_boss.agent.isStopped = true; // 追跡を停止
+        _boss.agent.isStopped = true; // 追跡を停止
 
-        ////待機アニメーション開始
-        //_boss.animator.SetBool("Idle", false);
+        //ダウンアニメーション開始
+        _boss.animator.SetTrigger("Down");
     }
 
     public void Update()

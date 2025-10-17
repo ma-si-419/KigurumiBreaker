@@ -5,10 +5,11 @@ using UnityEngine.Rendering.VirtualTexturing;
 
 public class Enemy : EnemyBase
 {
+
+
     protected float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
     protected float _attackTimer = 0.0f; // 状態遷移するまでのタイマー
     protected bool _isAttackRange = false; // プレイヤーを検知したかどうかのフラグ
-    protected Vector3 _direction; // 移動方向
     protected bool _isCreateAttack = false; // 攻撃オブジェクトを生成したかどうかのフラグ
     protected bool _isSearched = false;     // プレイヤーを一度でも検知したかどうかのフラグ
     protected bool _isStateChange = false;  // 状態遷移フラグ
@@ -138,29 +139,8 @@ public class Enemy : EnemyBase
         }
     }
 
-
     //基本攻撃処理(オーバーライドで変更可)
     public virtual void Attack() { }
-
-    // プレイヤー方向に向く処理
-    public void LookAtPlayer()
-    {
-        // 向きたい方向を計算
-        Vector3 direction = (_player.transform.position - transform.position).normalized;
-        _direction = direction;
-        // 水平方向のみ回転させる
-        direction.y = 0;
-
-        if (direction.sqrMagnitude > 0f)
-        {
-            // 目標の回転を取得
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-            // 現在の回転から目標の回転へ補完
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _enemyData.rotateSpeed * Time.deltaTime);
-
-        }
-    }
 
     // 攻撃判定に触れたときの処理
     private void OnTriggerEnter(Collider other)
@@ -237,34 +217,6 @@ public class Enemy : EnemyBase
         _attackTimer = 0.0f;
     }
 
-    // Getterメソッド
-    public float GetMaxHp()
-    {
-        return _enemyData.maxHp;
-    }
-    public float GetCurrentHp()
-    {
-        return _currentHp;
-    }
-    public float GetMaxTrunk()
-    {
-        return _enemyData.maxTrunk;
-    }
-    public float GetCurrentTrunk()
-    {
-        return _currentTrunk;
-    }
-
-    //オブジェクトの移動力をゼロにする
-    public void StopMovement()
-    {
-        if (_rigidbody != null)
-        {
-            _rigidbody.velocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
-        }
-    }
-
     public void OnHit()
     {
         //一回だけヒット処理を行う
@@ -293,19 +245,7 @@ public class Enemy : EnemyBase
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
 
-    // Gizmosを使って検知範囲と攻撃範囲を表示
-    private void OnDrawGizmosSelected()
-    {
-        // 検知範囲（シアン色のワイヤーフレーム球）
-        Gizmos.color = Color.yellow;
-        float detectRadius = _enemyData != null ? _enemyData.detectionRange : 0f;
-        Gizmos.DrawWireSphere(transform.position, detectRadius);
 
-        // 攻撃範囲（赤色のワイヤーフレーム球、必要なら）
-        Gizmos.color = Color.red;
-        float attackRadius = _enemyData != null ? _enemyData.attackRange : 0f;
-        Gizmos.DrawWireSphere(transform.position, attackRadius);
-    }
 
 }
 

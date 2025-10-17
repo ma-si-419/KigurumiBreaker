@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class EnemyBase : MonoBehaviour
 {
     //敵のステータスデータ
-   [SerializeField] protected EnemyData _enemyData;
+    [SerializeField] protected EnemyData _enemyData;
 
     // 現在のHP
     protected float _currentHp;
@@ -40,6 +40,9 @@ public class EnemyBase : MonoBehaviour
     // Rigidbodyの参照
     protected Rigidbody _rigidbody;
 
+    // 向きたい方向
+    protected Vector3 _direction;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {
@@ -55,13 +58,15 @@ public class EnemyBase : MonoBehaviour
     // Playerのゲッター
     public GameObject player => _player;
     // Animatorのゲッター
-    public Animator animator => _animator; 
+    public Animator animator => _animator;
+    // 敵のステータスデータのゲッター
+    public EnemyData enemyData => _enemyData;
 
     protected virtual void Start()
     {
         //索敵範囲と攻撃範囲の二乗を計算して保存
-        _detectRangeSqr = _enemyData.detectionRange * _enemyData.detectionRange;   
-        _attackRangeSqr = _enemyData.attackRange * _enemyData.attackRange;    
+        _detectRangeSqr = _enemyData.detectionRange * _enemyData.detectionRange;
+        _attackRangeSqr = _enemyData.attackRange * _enemyData.attackRange;
 
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
@@ -94,10 +99,6 @@ public class EnemyBase : MonoBehaviour
                 Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
             }
         }
-
-        //待機状態に設定
-        //ここは継承先で設定
-        //ChangeState(new IdleState(this));
     }
 
     protected virtual void Update()
@@ -115,5 +116,69 @@ public class EnemyBase : MonoBehaviour
         _currentState = newState;
         // 新しいステートの開始処理を呼び出す
         _currentState?.Init();
+    }
+
+
+
+    // 敵がプレイヤーを向く方向を計算して回転
+    public void LookAtPlayer()
+    {
+        // 向きたい方向を計算
+        Vector3 direction = (_player.transform.position - transform.position).normalized;
+        _direction = direction;
+        // 水平方向のみ回転させる
+        direction.y = 0;
+
+        if (direction.sqrMagnitude > 0f)
+        {
+            // 目標の回転を取得
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            // 現在の回転から目標の回転へ補完
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _enemyData.rotateSpeed * Time.deltaTime);
+
+        }
+    }
+
+    //オブジェクトの移動力をゼロにする
+    public void StopMovement()
+    {
+        if (_rigidbody != null)
+        {
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
+    }
+
+    // Getterメソッド
+    public float GetMaxHp()
+    {
+        return _enemyData.maxHp;
+    }
+    public float GetCurrentHp()
+    {
+        return _currentHp;
+    }
+    public float GetMaxTrunk()
+    {
+        return _enemyData.maxTrunk;
+    }
+    public float GetCurrentTrunk()
+    {
+        return _currentTrunk;
+    }
+
+    // Gizmosを使って検知範囲と攻撃範囲を表示
+    private void OnDrawGizmosSelected()
+    {
+        // 検知範囲（シアン色のワイヤーフレーム球）
+        Gizmos.color = Color.yellow;
+        float detectRadius = _enemyData != null ? _enemyData.detectionRange : 0f;
+        Gizmos.DrawWireSphere(transform.position, detectRadius);
+
+        // 攻撃範囲（赤色のワイヤーフレーム球、必要なら）
+        Gizmos.color = Color.red;
+        float attackRadius = _enemyData != null ? _enemyData.attackRange : 0f;
+        Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 }

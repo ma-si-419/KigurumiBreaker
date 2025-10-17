@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BossDeadState : IState
 {
-    private BossEnemyTest _boss;   //ボス敵の参照
+    private BossEnemy _boss;   //ボス敵の参照
 
-    public BossDeadState(BossEnemyTest boss)
+    public BossDeadState(BossEnemy boss)
     {
         //コンストラクタでEnemyの参照を受け取る
         _boss = boss;
@@ -15,20 +15,27 @@ public class BossDeadState : IState
     public void Init()
     {
         //_boss.AttackReset(); //攻撃フラグリセット
-        //_boss.agent.isStopped = true; // 追跡を停止
+        _boss.agent.isStopped = true; // 追跡を停止
 
-        ////待機アニメーション開始
-        //_boss.animator.SetBool("Idle", false);
+        //死亡アニメーション開始
+        _boss.animator.SetTrigger("Dead");
     }
 
     public void Update()
     {
-        //_boss.Idle(); //基本待機処理
+        _boss.StopMovement(); //移動停止
+
+        //死亡アニメーションが終わったらオブジェクト削除
+        var stateInfo = _boss.animator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("Dead") && stateInfo.normalizedTime >= 1.0f)
+        {
+            Object.Destroy(_boss.gameObject);
+        }
     }
 
     public void End()
     {
-        //待機アニメーション終了
-        //_boss.animator.SetBool("Idle", false);
+        //死亡アニメーション終了
+        _boss.animator.ResetTrigger("Dead");
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BossIdleState : IState
 {
-    private BossEnemyTest _boss;   //ボス敵の参照
+    private BossEnemy _boss;   //ボス敵の参照
 
-    public BossIdleState(BossEnemyTest boss)
+    public BossIdleState(BossEnemy boss)
     {
         //コンストラクタでEnemyの参照を受け取る
         _boss = boss;
@@ -23,7 +23,8 @@ public class BossIdleState : IState
 
     public void Update()
     {
-        //_boss.Idle(); //基本待機処理
+        //基本待機処理
+        _boss.Idle(); 
     }
 
     public void End()
