@@ -10,14 +10,12 @@ public class StageSpawner : MonoBehaviour
     }
 
     [SerializeField] private StageSet[] stageSets; // [0]=First, [1]=Second, ...
-    [SerializeField] private Transform player;     // プレイヤーを指定
+    [SerializeField] private Transform player;     // プレイヤー
+    [SerializeField] private SkillSelectManager skillSelectManager; // ★ ここを追加
 
-    private int currentStageIndex = 0;             // 今どの大ステージか
-    private GameObject currentStageInstance;       // 生成中のステージ
+    private int currentStageIndex = 0;
+    private GameObject currentStageInstance;
 
-    /// <summary>
-    /// 指定インデックスのステージセットからランダムに1つ生成
-    /// </summary>
     private void SpawnStage(int index)
     {
         if (index < 0 || index >= stageSets.Length) return;
@@ -28,7 +26,7 @@ public class StageSpawner : MonoBehaviour
             Destroy(currentStageInstance);
         }
 
-        // 候補からランダムに選択
+        // ランダムに選択
         var prefabs = stageSets[index].stagePrefabs;
         if (prefabs == null || prefabs.Length == 0)
         {
@@ -39,14 +37,14 @@ public class StageSpawner : MonoBehaviour
         int randomIndex = Random.Range(0, prefabs.Length);
         currentStageInstance = Instantiate(prefabs[randomIndex]);
 
+        // NavMesh再構築
         var surface = currentStageInstance.GetComponent<NavMeshSurface>();
         if (surface != null)
         {
             surface.BuildNavMesh();
         }
 
-
-        // SpawnPoint を探してプレイヤーを移動
+        // プレイヤー位置移動
         Transform spawn = currentStageInstance.transform.Find("SpawnPoint");
         if (spawn != null && player != null)
         {
@@ -54,7 +52,7 @@ public class StageSpawner : MonoBehaviour
             player.rotation = spawn.rotation;
         }
 
-        // GoalPoint を探して Collider を設定
+        // GoalPoint設定
         foreach (Transform child in currentStageInstance.transform)
         {
             if (child.name.Contains("GoalPoint"))
@@ -65,13 +63,32 @@ public class StageSpawner : MonoBehaviour
             }
         }
 
+        //  WaveSpawnerにSkillSelectManagerをアタッチ
+        AttachSkillManagerToWaveSpawners(currentStageInstance);
+
         currentStageIndex = index;
         Debug.Log($"Stage {index + 1} を生成: {prefabs[randomIndex].name}");
     }
 
     /// <summary>
-    /// 次の大ステージへ進む
+    /// ステージ内の全WaveSpawnerにSkillSelectManagerをセット
     /// </summary>
+    private void AttachSkillManagerToWaveSpawners(GameObject stage)
+    {
+        if (skillSelectManager == null)
+        {
+            Debug.LogWarning("StageSpawnerにSkillSelectManagerが設定されていません。");
+            return;
+        }
+
+        WaveSpawner[] waveSpawners = stage.GetComponentsInChildren<WaveSpawner>(true);
+        foreach (var wave in waveSpawners)
+        {
+            wave.skillSelectManager = skillSelectManager;
+            Debug.Log($"WaveSpawnerにSkillSelectManagerをアタッチ: {wave.name}");
+        }
+    }
+
     public void NextStage()
     {
         int nextIndex = currentStageIndex + 1;
@@ -86,7 +103,6 @@ public class StageSpawner : MonoBehaviour
 
     private void Start()
     {
-        // 起動時に First ステージを生成
         SpawnStage(0);
     }
 
@@ -94,7 +110,6 @@ public class StageSpawner : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // その GoalPoint が今のステージの子かチェック
             if (currentStageInstance != null && other.transform.IsChildOf(currentStageInstance.transform))
             {
                 NextStage();
