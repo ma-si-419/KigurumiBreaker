@@ -1622,6 +1622,12 @@ public class PlayerState : Player<PlayerState>
     {
         _playerSkill.dashSkillData = skill;
     }
+
+    public void OnMoveStage()
+    {
+        // ‹…”‚ğÅ‘å‚Ü‚Å‰ñ•œ
+        _nowBulletNum = GetMaxBulletNum();
+    }
     public void SetPassiveSkills(List<PassiveSkillData> passiveSkillDatas)
     {
         _playerSkill.passiveSkillDataList = passiveSkillDatas;
