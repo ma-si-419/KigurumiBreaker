@@ -2369,28 +2369,14 @@ PrefabInstance:
       insertIndex: 4
       addedObject: {fileID: 1215894876}
     - targetCorrespondingSourceObject: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
-      insertIndex: 5
-      addedObject: {fileID: 1215894875}
+      insertIndex: -1
+      addedObject: {fileID: 1215894882}
   m_SourcePrefab: {fileID: 100100000, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
 --- !u!1 &1215894874 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
   m_PrefabInstance: {fileID: 1215894873}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1215894875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1215894874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 866f7f4fb35631e4e80770c6036b0055, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemyData: {fileID: 11400000, guid: 39f86d7b6f55d524fad6ae47a6903031, type: 2}
-  _attackObjectPrefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
 --- !u!195 &1215894876
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2505,6 +2491,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1215894882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215894874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de2e2e63bd642524ba7c955fd7e51565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyData: {fileID: 11400000, guid: a6ae262887e2eed4da4dd7ef23a672a8, type: 2}
+  _attackObjectPrefab: {fileID: 0}
 --- !u!1 &1253507463
 GameObject:
   m_ObjectHideFlags: 0
@@ -3881,7 +3881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185a98e336a53d0478c50171132b0872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyData: {fileID: 0}
+  _enemyData: {fileID: 11400000, guid: 08c63e4f05e42bd428c99a5f597250cd, type: 2}
   _attackObjectPrefab: {fileID: 8603638642903214138, guid: ffdfa6e673cff8e43b4cf4e1bf63102c, type: 3}
   _dashSpeed: 3
   _dashTime: 0.3

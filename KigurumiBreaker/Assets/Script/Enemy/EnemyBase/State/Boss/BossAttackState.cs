@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class BossAttackState : IState
 {
-    private BossEnemyTest _boss;   //ボス敵の参照
+    //ボス敵の参照
+    private BossEnemy _boss;   
+    //ビヘイビアツリー
+    private BhaiviorTree _bhaiviorTree; 
 
-    public BossAttackState(BossEnemyTest boss)
+    public BossAttackState(BossEnemy boss)
     {
         //コンストラクタでEnemyの参照を受け取る
         _boss = boss;
+
+       
+
     }
 
     public void Init()
@@ -17,18 +23,29 @@ public class BossAttackState : IState
         //_boss.AttackReset(); //攻撃フラグリセット
         //_boss.agent.isStopped = true; // 追跡を停止
 
-        ////待機アニメーション開始
-        //_boss.animator.SetBool("Idle", false);
+        //攻撃回数をカウント
+        _boss._attackCount++;
+
+        //ビヘイビアツリーの構築
+        _bhaiviorTree = new SelectorNode(new SequenceNode
+                                        (new ConditionNode(() => _boss._attackCount == 1),
+                                         new ActionNode(() => { _boss.MeleeAttack(); return true; }),
+                                         new SequenceNode
+                                         (new ConditionNode(() => _boss._attackCount == 2), 
+                                         new ActionNode(() => { _boss.RangeAttack(); return true; }),
+                                         new ActionNode(() => { _boss.LongRangeAttack(); return true; })
+                                        )));
     }
 
     public void Update()
     {
-        //_boss.Idle(); //基本待機処理
+        Debug.Log("攻撃");
+
+        //ビヘイビアツリーの実行
+        _bhaiviorTree.Tick();
     }
 
     public void End()
     {
-        //待機アニメーション終了
-        //_boss.animator.SetBool("Idle", false);
     }
 }
