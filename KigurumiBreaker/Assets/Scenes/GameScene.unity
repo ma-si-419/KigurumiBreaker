@@ -1564,7 +1564,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 712578956180242229, guid: d1ad20fab9f62924d9c16673698b3369, type: 3}
       propertyPath: m_Name
-      value: SkillManager
+      value: PlayerSkillManager
       objectReference: {fileID: 0}
     - target: {fileID: 1503229437863509935, guid: d1ad20fab9f62924d9c16673698b3369, type: 3}
       propertyPath: _player
@@ -1672,6 +1672,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 884169393}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: skillSelectManager
+      value: 
+      objectReference: {fileID: 1796073483}
     - target: {fileID: 5423860653554385116, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: m_Name
       value: StageManager
@@ -1681,6 +1685,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+--- !u!114 &1796073483 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 694580747683765096, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
+  m_PrefabInstance: {fileID: 2037382789}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7c0bc7d1ef2ca439d14ec03c710c85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1821340367
 GameObject:
   m_ObjectHideFlags: 0
@@ -2088,7 +2103,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1575487485}
     - target: {fileID: 694580747683765096, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
+      propertyPath: _skillSelectCursor
+      value: 
+      objectReference: {fileID: 6964020695524414140, guid: f858d0d213e15d24d9a5063d688332c1, type: 3}
+    - target: {fileID: 694580747683765096, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
       propertyPath: _playerSkillManager
+      value: 
+      objectReference: {fileID: 2063134557}
+    - target: {fileID: 694580747683765096, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
+      propertyPath: _playerSkillManagerObject
       value: 
       objectReference: {fileID: 2063134557}
     - target: {fileID: 6769821658531623314, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
@@ -2133,7 +2156,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7987498371625589842, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
       propertyPath: m_Name
-      value: SkillSelect
+      value: SkillSelectManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
