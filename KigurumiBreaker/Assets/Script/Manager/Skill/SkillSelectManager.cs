@@ -33,6 +33,8 @@ public class SkillSelectManager : MonoBehaviour
     private bool _isMoveCursor = false;
     private int _cursorIndex = 0; // 現在のカーソル位置
 
+    private WaveSpawner _waveSpawner; // WaveSpawnerのスクリプト
+
     /*
 
     // 削除が出てきたら使用する可能性あり
@@ -116,6 +118,14 @@ public class SkillSelectManager : MonoBehaviour
 
             // スキル選択を終了する
             _isSkillSelect = false;
+
+            // WaveSpawnerがセットされていれば終了通知を送る
+            if (_waveSpawner != null)
+            {
+                _waveSpawner.OnSkillSelectFinished();
+                _waveSpawner = null;
+            }
+
             Time.timeScale = 1f;
         }
 
@@ -143,7 +153,7 @@ public class SkillSelectManager : MonoBehaviour
 
     public void StartSkillSelect(SkillData.SkillElement element)
     {
-        
+
         _isSkillSelect = true;
 
         // 時間を止める
@@ -383,12 +393,22 @@ public class SkillSelectManager : MonoBehaviour
 
     public void PopSkillGetObject(Vector3 pos, SkillData.SkillElement element)
     {
+        PopSkillGetObject(pos, element, null);
+    }
+
+    public void PopSkillGetObject(Vector3 pos, SkillData.SkillElement element, WaveSpawner waveSpawner)
+    {
         GameObject obj = Instantiate(_skillGetObject, pos, Quaternion.identity);
         obj.transform.position = pos;
         SkillGetItem script = obj.GetComponent<SkillGetItem>();
-
         script.SetSkillElement(element);
         script.SetSkillSelectManager(this.gameObject);
+
+        if (waveSpawner != null)
+        {
+            _waveSpawner = waveSpawner;
+        }
+
     }
 
 }
