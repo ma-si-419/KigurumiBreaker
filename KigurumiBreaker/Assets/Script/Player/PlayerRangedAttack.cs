@@ -37,6 +37,9 @@ public class PlayerRangedAttack : MonoBehaviour
     // 弾をドロップするときの運動量の大きさ
     [SerializeField] private float _dropBulletForce = 5.0f;
 
+    // 複数個の壁に同時に当たるのを防ぐためのフラグ
+    private bool _isHitWall = false;
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -92,6 +95,10 @@ public class PlayerRangedAttack : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Wall"))
         {
+            if(_isHitWall) return;
+
+            _isHitWall = true;
+
             // 壁に当たったら消す
             Destroy(this.gameObject);
 
