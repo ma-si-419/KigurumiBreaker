@@ -42,8 +42,16 @@ public class WaveSpawner : MonoBehaviour
     [Header("全Wave終了後に停止するエフェクト")]
     public ParticleSystem[] targetEffects;                          //　Wave終了後に停止するエフェクト
 
-    [Header("スキルマネージャー")]
-    public SkillSelectManager skillSelectManager;                   // すべての敵撃破後に呼び出すスキルマネージャー
+    [Header("スキル関連")]
+    // SkillSelectManager を直接呼ばない方式に変えたため、ここは Inspector に入れてもしなくてもOK。
+    public SkillSelectManager skillSelectManager;                   // 以前はここで呼んでいたが今回は参照だけ使用可
+
+    // WaveSpawner が完了したことを示すフラグ（SkillSelectManager が監視する）
+    [HideInInspector] public bool isAllWavesCleared = false;
+
+    // WaveSpawner がスキル選択の呼び出し元として渡したい要素（必要なら StageSpawner 等で差し替え）
+    // とりあえず仮で Fire を指定できるようにしておく
+    [HideInInspector] public SkillData.SkillElement requestedSkillElement = SkillData.SkillElement.Fire;
 
     private bool allCleared = false;                                // すべての敵が倒されたかどうかの判定
 
@@ -69,7 +77,7 @@ public class WaveSpawner : MonoBehaviour
 
             foreach (var pop in wave.popEnemies)                    // 各Wave内の敵を順番に出現させていく処理
             {
-                GameObject prefabToSpawn = enemySetData?.GetPrefabByKind(pop.spawnKind);　   // 敵の種類に応じたPrefabを取得
+                GameObject prefabToSpawn = enemySetData?.GetPrefabByKind(pop.spawnKind);   // 敵の種類に応じたPrefabを取得
                 if (prefabToSpawn == null)                                                   //　Prefabが見つからなかった場合は警告を出してスキップ
                 {
                     Debug.LogWarning($"[{group.groupName}] {pop.spawnKind} のPrefabが見つかりません");
@@ -101,22 +109,30 @@ public class WaveSpawner : MonoBehaviour
         if (allCleared) return;                                     // すでにすべて終了している場合は無視する
         allCleared = true;                                          // Trueにする
 
-        if (skillSelectManager != null)                             // SkillSelectManagerが存在する場合
-        {
-            Debug.Log("全ての敵を撃破。SkillSelectManagerを呼び出します。");
-            skillSelectManager.PopSkillGetObject(areaCenter.position, SkillData.SkillElement.Fire); // 仮でFire属性を渡す
-        }
-        else
-        {
-            Debug.LogWarning("SkillSelectManagerがアタッチされていません。");
-        }
+        // PopSkillGetObject は WaveSpawner 側からは呼ばない（SkillSelectManager が WaveSpawner のフラグを見て起動する）
+        // ここではフラグだけ立てて SkillSelectManager に判定させる。
+        isAllWavesCleared = true;
+        Debug.Log("全ての敵を撃破。IsAllWavesCleared を true に設定しました（SkillSelectManager が検知して StartSkillSelect を呼びます）。");
+    }
 
-        StopAllEffects();                                           // すべてのエフェクトを停止する
+    /// <summary>
+    /// SkillSelectManager から「スキル選択が完了したよ」と通知されたら呼ぶメソッド
+    /// （SkillSelectManager 側で OK 押下時に呼ぶ想定）
+    /// </summary>
+    public void OnSkillSelectionFinished()
+    {
+        // SkillSelect 時の後処理：エフェクトを止めたり内部フラグをリセットしたりする
+        StopAllEffects();
+
+        // 次回の使用に備えてフラグをリセット（必要なら Stage 進行に合わせて変える）
+        isAllWavesCleared = false;
+
+        Debug.Log("WaveSpawner: Skill 選択完了を受け取り、エフェクト停止・フラグリセットを行いました。");
     }
 
     private void StopAllEffects()                                   // すべてのエフェクトを停止する
     {
-        foreach (var effect in targetEffects)                       //書くエフェクトを順番に処理する
+        foreach (var effect in targetEffects)                       //各エフェクトを順番に処理する
         {
             if (effect != null)                                     // nullチェック
             {
@@ -125,6 +141,7 @@ public class WaveSpawner : MonoBehaviour
                 effect.Stop();                                      //　エフェクトを停止する
             }
         }
+        Debug.Log("全エフェクト停止完了");
     }
 
     private Vector3 GetRandomNavMeshPosition()                      // ナビメッシュ上のランダムな位置を取得する

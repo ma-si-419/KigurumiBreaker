@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a84a831fbc5f47928208907cc90d503a, type: 2}
     - target: {fileID: 919132149155446097, guid: c9b76ad37caa4a3aaeecb9a10f8ae126, type: 3}
       propertyPath: m_Name
-      value: LongRangeEnemy 1
+      value: LongRangeEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c9b76ad37caa4a3aaeecb9a10f8ae126, type: 3}
       propertyPath: m_IsActive
@@ -218,17 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c7b197ad03528428abdb51eaaf5465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentStateData:
-    maxHp: 100
-    maxTrunk: 0
-    enemyType: 0
-    attackPower: 3
-    moveSpeed: 5
-    detectionRange: 10
-    attackRange: 8
+  _enemyData: {fileID: 11400000, guid: 42d101831552635419c7f96609f40a89, type: 2}
   _attackObjectPrefab: {fileID: 1116344303506604534, guid: dd10a67aef618c94f9af5fc1a424105f, type: 3}
-  IDLE_WAIT_TIME: 2
-  CHASE_WAIT_TIME: 5
   _shootCount: 3
   _maxChaseRange: 20
   MIN_FLEE_DISTANCE: 5

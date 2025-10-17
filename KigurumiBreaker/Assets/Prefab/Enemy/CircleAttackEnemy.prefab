@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_Name
-      value: CircleAttackEnemy1
+      value: CircleAttackEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_IsActive
@@ -235,14 +235,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 866f7f4fb35631e4e80770c6036b0055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentStateData:
-    maxHp: 300
-    maxTrunk: 0
-    enemyType: 0
-    attackPower: 5
-    moveSpeed: 3
-    detectionRange: 7
-    attackRange: 3.5
+  _enemyData: {fileID: 11400000, guid: 39f86d7b6f55d524fad6ae47a6903031, type: 2}
   _attackObjectPrefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
-  IDLE_WAIT_TIME: 1
-  CHASE_WAIT_TIME: 2

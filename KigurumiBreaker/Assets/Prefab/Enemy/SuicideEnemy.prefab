@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
       propertyPath: m_Name
-      value: SuicideEnemy1
+      value: SuicideEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
       propertyPath: m_IsActive
@@ -219,14 +219,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b923e960e341e4d90561667b35d186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentStateData:
-    maxHp: 10
-    maxTrunk: 0
-    enemyType: 0
-    attackPower: 5
-    moveSpeed: 10
-    detectionRange: 10
-    attackRange: 3.5
+  _enemyData: {fileID: 11400000, guid: 35ae3b870eec36d4caf9101ee366d975, type: 2}
   _attackObjectPrefab: {fileID: 3215702706224156630, guid: 17121093f54d56d48be3cd377ef038be, type: 3}
-  IDLE_WAIT_TIME: 2
-  CHASE_WAIT_TIME: 0.5
