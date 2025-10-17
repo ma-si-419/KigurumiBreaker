@@ -11,13 +11,9 @@ public class SkillGetItem : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("プレイヤー接触");
-
             // Yボタンが押されたらスキル選択画面へ
             if (Input.GetButtonDown("ItemGet"))
             {
-                Debug.Log("アイテム取得");
-
                 _skillSelectManager.GetComponent<SkillSelectManager>().StartSkillSelect(_skillElement);
                 Destroy(gameObject);
             }
