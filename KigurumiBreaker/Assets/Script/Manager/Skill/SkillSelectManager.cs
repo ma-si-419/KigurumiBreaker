@@ -12,13 +12,19 @@ public class SkillSelectManager : MonoBehaviour
 
     private const int SKILL_PANEL_DISTANCE = 350;                               // スキルパネルの間隔
 
+    private const int SKill_CURSOR_PANEL_DISTANCE = 830;                        //(後々消す定数) 
+
     [SerializeField] private GameObject _playerSkillManagerObject;              // PlayerSkillManagerのオブジェクト
     [SerializeField] private SkillData _skillData;                              // スキルデータ
     [SerializeField] private Canvas _skillSelectCanvas;                         // スキル選択のUIを表示するキャンバス
     [SerializeField] private GameObject _skillSelectPanel;                      // スキル選択用のパネル
     [SerializeField] private GameObject _skillGetObject;                        // 取得したらスキル選択を開始するオブジェクト
+    [SerializeField] private GameObject _skillSelectCursor;                     // スキル選択カーソル(後々消す予定)
 
     private PlayerSkillManager _playerSkillManager;                             // PlayerSkillManagerのスクリプト
+
+    // 生成したカーソルのゲームオブジェクト
+    GameObject _cursorObj;
 
     private struct SelectSkill
     {
@@ -69,25 +75,6 @@ public class SkillSelectManager : MonoBehaviour
             {
                 // カーソル移動フラグを立てる
                 _isMoveCursor = true;
-
-                // カーソル位置を更新
-                _cursorIndex--;
-
-                // もしカーソル位置が範囲外なら一番下に戻す
-                if (_cursorIndex < 0)
-                {
-                    _cursorIndex = SKILL_SELECT_NUM - 1;
-                }
-            }
-        }
-        // 下キーが押されたら選択を一つ下に移動
-        else if (inputV < -0.5f)
-        {
-            if (!_isMoveCursor)
-            {
-                // カーソル移動フラグを立てる
-                _isMoveCursor = true;
-
                 // カーソル位置を更新
                 _cursorIndex++;
 
@@ -98,9 +85,35 @@ public class SkillSelectManager : MonoBehaviour
                 }
             }
         }
+        // 下キーが押されたら選択を一つ下に移動
+        else if (inputV < -0.5f)
+        {
+            if (!_isMoveCursor)
+            {
+                // カーソル位置を更新
+                _cursorIndex--;
+
+                // もしカーソル位置が範囲外なら一番下に戻す
+                if (_cursorIndex < 0)
+                {
+                    _cursorIndex = SKILL_SELECT_NUM - 1;
+                }
+                // カーソル移動フラグを立てる
+                _isMoveCursor = true;
+            }
+        }
         else
         {
             _isMoveCursor = false;
+        }
+
+        Debug.Log("Cursor Index: " + _cursorIndex);
+
+        // カーソル位置が変わっていたらカーソルの位置を更新する
+        if (lastCursorIndex != _cursorIndex)
+        {
+            Vector2 cursorPos = new Vector2(-SKill_CURSOR_PANEL_DISTANCE, (_cursorIndex * SKILL_PANEL_DISTANCE) - SKILL_PANEL_DISTANCE);
+            _cursorObj.GetComponent<RectTransform>().anchoredPosition = cursorPos;
         }
 
         // 決定が押されたら選択したスキルをプレイヤーにセットする
@@ -110,7 +123,7 @@ public class SkillSelectManager : MonoBehaviour
 
             _playerSkillManager.SetSkillName(setSkill.skillCategory, setSkill.skillName);
 
-            // スキル選択パネルを削除する
+            // スキル選択パネルとカーソルを削除する
             foreach (Transform child in _skillSelectCanvas.transform)
             {
                 Destroy(child.gameObject);
@@ -160,7 +173,8 @@ public class SkillSelectManager : MonoBehaviour
         Time.timeScale = 0f;
 
         // カーソルの位置を初期化する
-        _cursorIndex = 0;
+        _cursorIndex = SKILL_SELECT_NUM - 1;
+
 
         // 選択することができるスキルを取得する
         _selectSkills = GetSelectSkill(element);
@@ -244,6 +258,16 @@ public class SkillSelectManager : MonoBehaviour
             // パネルの位置を調整する
             panel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i - 1) * SKILL_PANEL_DISTANCE);
         }
+
+
+
+        // カーソルを生成する
+        Vector2 cursorPos = new Vector2(-SKill_CURSOR_PANEL_DISTANCE, (_cursorIndex * SKILL_PANEL_DISTANCE) - SKILL_PANEL_DISTANCE);
+
+        _cursorObj = Instantiate(_skillSelectCursor);
+
+        _cursorObj.transform.SetParent(_skillSelectCanvas.transform, false);
+        _cursorObj.GetComponent<RectTransform>().anchoredPosition = cursorPos;
     }
 
     private List<SelectSkill> GetSelectSkill(SkillData.SkillElement element)
