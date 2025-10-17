@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BossEnemy : EnemyBase
 {
+
+
     // 状態遷移するまでのタイマー
     protected float _stateTimer = 0.0f;
     // 攻撃するまでのタイマー
@@ -12,6 +14,8 @@ public class BossEnemy : EnemyBase
     protected bool _isAttack = false;
     // フェーズチェンジしたかどうかのフラグ
     protected bool _isPhaseChanged = false;
+    //攻撃終了フラグ
+    public bool _isAttackFinished = false;
 
     public int _attackCount = 0; // 攻撃回数カウント用
 
@@ -41,7 +45,7 @@ public class BossEnemy : EnemyBase
         //HPが一定数を下回ったらフェーズチェンジ状態へ
         //if (_currentHp <= _enemyData.maxHp / 2 && !_isPhaseChanged)
         //{
-                //ChangeState(new BossPhaseChangeState(this));
+        //ChangeState(new BossPhaseChangeState(this));
         //}
 
     }
@@ -144,10 +148,13 @@ public class BossEnemy : EnemyBase
         // 移動を停止
         StopMovement();
 
+        //攻撃終了フラグを立てる
+        _isAttackFinished = true;
+
         Debug.Log("通常攻撃");
         // ボス専用の近接攻撃処理をここに追加
 
-        ChangeState(new BossIdleState(this));
+        //ChangeState(new BossIdleState(this));
     }
 
     // 範囲攻撃(ボスによって変えたい場合はオーバライド)
@@ -158,10 +165,13 @@ public class BossEnemy : EnemyBase
         // 移動を停止
         StopMovement();
 
+        //攻撃終了フラグを立てる
+        _isAttackFinished = true;
+
         Debug.Log("範囲攻撃");
         // ボス専用の遠距離攻撃処理をここに追加
 
-        ChangeState(new BossIdleState(this));
+        //ChangeState(new BossIdleState(this));
     }
 
     // 長距離攻撃(ボスによって変えたい場合はオーバライド)
@@ -172,12 +182,15 @@ public class BossEnemy : EnemyBase
         // 移動を停止
         StopMovement();
 
+        //攻撃終了フラグを立てる
+        _isAttackFinished = true;
+
         Debug.Log("長距離攻撃");
         // ボス専用の長距離攻撃処理をここに追加
 
         _attackCount = 0; // 攻撃回数リセット
 
-        ChangeState(new BossIdleState(this));
+        //ChangeState(new BossIdleState(this));
     }
 
     public virtual void Stan()
