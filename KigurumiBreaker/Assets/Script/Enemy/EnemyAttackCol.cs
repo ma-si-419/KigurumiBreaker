@@ -30,6 +30,9 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void Start()
     {
+        //_damage = 
+
+
         // ˆê’èŽžŠÔŒã‚É’e‚ð”j‰ó
         if (CompareTag("EnemyRangedAttack"))
         {
