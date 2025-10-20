@@ -12,20 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b6114554185eaa458119ddda833348d, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  MoveSpeed: 4.5
-  DodgeSpeed: 6.5
   MoveInputLength: 0.1
   RotateAngle: 22
   DodgeStartTime: 3
   DodgeTime: 31
   DodgeCoolTime: 10
   DodgeSkillInterval: 5
-  MaxHp: 200
   ChargeAttackTime: 25
   MaxChargeAttackTime: 140
+  ChargeAttackAreaShiftX: 0.25
+  ChargeAttackAreaShiftZ: 0.8
   MoveDirAngle: 333
   MaxSpecialChargeTime: 150
   MaxSpecialAttackDamegeCutRate: 0.5
   ForwardAngle: 40
   ForwardDistance: 10
-  MaxBulletNum: 5
