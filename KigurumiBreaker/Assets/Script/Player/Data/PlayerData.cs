@@ -5,10 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PlayerData")]
 public class PlayerData : ScriptableObject
 {
-    [Header("ˆÚ“®‘¬“x")]
-    [SerializeField] private float MoveSpeed;
-    [Header("‰ñ”ð‘¬“x")]
-    [SerializeField] private float DodgeSpeed;
     [Header("ˆÚ“®“ü—ÍŠ´’m‚Ìè‡’l")]
     [SerializeField] private float MoveInputLength;
     [Header("1ƒtƒŒ[ƒ€‚Å‰ñ“]‚·‚é‚±‚Æ‚ª‚Å‚«‚éŠp“x")]
@@ -21,8 +17,6 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int DodgeCoolTime;
     [Header("‰ñ”ð’†‚ÌƒXƒLƒ‹‚ðo‚·ŠÔŠu")]
     [SerializeField] private int DodgeSkillInterval;
-    [Header("Å‘å‘Ì—Í")]
-    [SerializeField] private int MaxHp;
     [Header("‚½‚ßUŒ‚‚Ì”­“®‚Ü‚Å‚ÌŽžŠÔ")]
     [SerializeField] private int ChargeAttackTime;
     [Header("—­‚ßUŒ‚‚ÌÅ‘å—­‚ßŽžŠÔ")]
@@ -37,19 +31,14 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float ForwardAngle;
     [Header("‘O•ûŒü‚Ì“G‚ð”F’m‚·‚é‹——£")]
     [SerializeField] private float ForwardDistance;
-    [Header("‰“‹——£‚Ì’e‚ÌÅ‘å’l")]
-    [SerializeField] private int MaxBulletNum;
 
     // “Ç‚ÝŽæ‚èê—p
-    public float moveSpeed => MoveSpeed;
-    public float dodgeSpeed => DodgeSpeed;
     public float moveInputLength => MoveInputLength;
     public float rotateAngle => RotateAngle;
     public float dodgeStartTime => DodgeStartTime;
     public int dodgeTime => DodgeTime;
     public int dodgeSkillInterval => DodgeSkillInterval;
     public int dodgeCoolTime => DodgeCoolTime;
-    public int maxHp => MaxHp;
     public int chargeAttackTime => ChargeAttackTime;
     public int maxChargeAttackTime => MaxChargeAttackTime;
     public float moveDirAngle => MoveDirAngle;
@@ -57,6 +46,4 @@ public class PlayerData : ScriptableObject
     public float maxSpecialAttackDamegeCutRate => MaxSpecialAttackDamegeCutRate;
     public float forwardAngle => ForwardAngle;
     public float forwardDistance => ForwardDistance;
-    public int maxBulletNum => MaxBulletNum;
-
 }

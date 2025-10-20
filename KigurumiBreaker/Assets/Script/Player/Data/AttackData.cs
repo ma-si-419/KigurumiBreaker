@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "AttackDataList")]
-public class AttackDataList : ScriptableObject
+[CreateAssetMenu(menuName = "AttackData")]
+public class AttackData : ScriptableObject
 {
-    public List<AttackData> attackDataList;
+    public List<Attack> attackDataList;
+
+    public GameObject meleeAttackGameObject;    // ‹ßÚUŒ‚‚ÌUŒ‚”»’èƒvƒŒƒnƒu
+
+    public GameObject rangedAttackGameObject;   // ‰“‹——£UŒ‚‚ÌUŒ‚”»’èƒvƒŒƒnƒu
 }
 [System.Serializable]
-public class AttackData
+public class Attack
 {
     public enum AttackType
     {
