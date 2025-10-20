@@ -83,12 +83,11 @@ public class PlayerState : Player<PlayerState>
         // パッシブスキルで出すゲームオブジェクト
         public List<PassiveGameObject> passiveGameObjects;
     }
+    // プレイヤーのステータス
+    [SerializeField] private PlayerStatus _playerStatus;
 
     // 攻撃データ
-    [SerializeField] private AttackDataList _attackData;
-
-    // 攻撃オブジェクトの基本データ
-    [SerializeField] private GameObject _attackObjectPrefab;
+    [SerializeField] private AttackData _attackData;
 
     // プレイヤーが使用する定数データ
     [SerializeField] private PlayerData _playerData;
@@ -98,9 +97,6 @@ public class PlayerState : Player<PlayerState>
 
     // プレイヤーの被弾時のデータ
     [SerializeField] private DamageData _damageData;
-
-    // デフォルトの遠距離攻撃の弾
-    [SerializeField] private GameObject _bulletPrefab;
 
     // バトルマネージャー
     [SerializeField] private BattleManager _battleManager;
@@ -206,10 +202,10 @@ public class PlayerState : Player<PlayerState>
         ChangeState(new IdleState(this));
 
         // 体力を最大体力に設定
-        _nowHp = _playerData.maxHp;
+        _nowHp = _playerStatus.maxHp;
 
         // 弾の数を最大弾数に設定
-        _nowBulletNum = _playerData.maxBulletNum;
+        _nowBulletNum = _playerStatus.maxBulletNum;
     }
 
     // 各Stateクラス
@@ -297,7 +293,7 @@ public class PlayerState : Player<PlayerState>
             Vector3 moveDirection = state.CalculateMoveDirection(direction);
 
             // 移動ベクトル
-            Vector3 moveVelocity = moveDirection * state._playerData.moveSpeed;
+            Vector3 moveVelocity = moveDirection * state._playerStatus.moveSpeed;
 
             // パッシブスキルによる移動速度上昇率を加算
             moveVelocity *= (1.0f + state._passiveStatus.moveSpeedAddRate / 100.0f);
@@ -406,7 +402,7 @@ public class PlayerState : Player<PlayerState>
             }
 
             // 移動処理
-            Vector3 dodgeVelocity = dodgeDirection * state._playerData.dodgeSpeed;
+            Vector3 dodgeVelocity = dodgeDirection * state._playerStatus.dodgeSpeed;
 
             // パッシブスキルによる移動速度上昇率を加算
             dodgeVelocity *= (1.0f + state._passiveStatus.moveSpeedAddRate / 100.0f);
@@ -463,7 +459,7 @@ public class PlayerState : Player<PlayerState>
     public class MeleeAttackState : StateBase<PlayerState>
     {
         private string _currentAttackName;
-        private AttackData _currentAttackData;
+        private Attack _currentAttackData;
         private int _currentFrame;
         private GameObject _effectObject;
         // 攻撃を出したかどうか
@@ -591,7 +587,7 @@ public class PlayerState : Player<PlayerState>
                     state._isAttackInput = false;
                     // 次の攻撃データを取得
                     string nextAttackName = _currentAttackData.nextAttackName;
-                    AttackData nextAttackData = state.SearchAttackData(nextAttackName);
+                    Attack nextAttackData = state.SearchAttackData(nextAttackName);
 
                     // 現在の攻撃オブジェクトを削除
                     if (state._currentAttack)
@@ -666,7 +662,7 @@ public class PlayerState : Player<PlayerState>
 
         GameObject _target;
 
-        AttackData _currentAttackData;
+        Attack _currentAttackData;
 
         public RangedAttackState(PlayerState next) : base(next)
         {
@@ -865,7 +861,7 @@ public class PlayerState : Player<PlayerState>
     public class ChargeAttackState : StateBase<PlayerState>
     {
         private string _currentAttackName;
-        private AttackData _currentAttackData;
+        private Attack _currentAttackData;
         private int _currentFrame;
         public ChargeAttackState(PlayerState next) : base(next)
         {
@@ -953,7 +949,7 @@ public class PlayerState : Player<PlayerState>
 
         private string _currentAttackName;
 
-        private AttackData _currentAttackData;
+        private Attack _currentAttackData;
 
         private CameraMove _cameraMove;
 
@@ -1307,9 +1303,9 @@ public class PlayerState : Player<PlayerState>
         }
     }
 
-    private AttackData SearchAttackData(string attackName)
+    private Attack SearchAttackData(string attackName)
     {
-        AttackData result = null;
+        Attack result = null;
 
         if (attackName == "none") return result;
 
@@ -1399,10 +1395,10 @@ public class PlayerState : Player<PlayerState>
         return result;
     }
 
-    private void CreateAttack(AttackData data)
+    private void CreateAttack(Attack data)
     {
         // ゲームオブジェクトを生成
-        GameObject attackObject = Instantiate(_attackObjectPrefab);
+        GameObject attackObject = Instantiate(_attackData.meleeAttackGameObject);
 
         // 当たり判定のサイズ
         float scale = data.scale;
@@ -1413,7 +1409,7 @@ public class PlayerState : Player<PlayerState>
         // 攻撃にスキルの効果を乗せる
         switch (data.attackKind)
         {
-            case AttackData.AttackType.LowAttack:
+            case Attack.AttackType.LowAttack:
                 if (_playerSkill.lowAttackSkillData != null)
                 {
                     // ダメージにスキルのダメージ加算率を加算
@@ -1444,7 +1440,7 @@ public class PlayerState : Player<PlayerState>
 
                 break;
 
-            case AttackData.AttackType.ChargeAttack:
+            case Attack.AttackType.ChargeAttack:
                 if (_playerSkill.chargeAttackSkillData != null)
                 {
                     // ダメージにスキルのダメージ加算率を加算
@@ -1478,13 +1474,17 @@ public class PlayerState : Player<PlayerState>
 
                 break;
 
-            case AttackData.AttackType.SpecialAttack:
+            case Attack.AttackType.SpecialAttack:
                 // 特殊攻撃はスキルの効果を乗せない
                 attackData.damage = data.damage;
                 break;
         }
-        // 当たり判定のサイズを設定
-        attackObject.GetComponent<SphereCollider>().radius = scale;
+        
+        // 攻撃の大きさを設定
+        attackObject.transform.localScale = new Vector3(scale, scale, scale);
+
+        // 攻撃の生存時間を設定
+        attackData.attackLifeTime = data.attackLifeTime;
 
         // カメラを揺らす種類を設定
         attackData.shakeKind = data.cameraShakeKind;
@@ -1522,9 +1522,9 @@ public class PlayerState : Player<PlayerState>
     /// 遠距離攻撃オブジェクトを生成するときに使用
     /// </summary>
     /// <param name="attack">攻撃オブジェクト</param>
-    private GameObject CreateRangedAttack(AttackData data)
+    private GameObject CreateRangedAttack(Attack data)
     {
-        GameObject attack = _bulletPrefab;
+        GameObject attack = _attackData.rangedAttackGameObject;
 
         PlayerRangedAttack.RangedAttackData attackData = new PlayerRangedAttack.RangedAttackData();
 
@@ -1580,7 +1580,7 @@ public class PlayerState : Player<PlayerState>
     }
     public int GetMaxHp()
     {
-        return _playerData.maxHp + _passiveStatus.maxHpAddNum;
+        return _playerStatus.maxHp + _passiveStatus.maxHpAddNum;
     }
     public int GetNowHp()
     {
@@ -1588,7 +1588,7 @@ public class PlayerState : Player<PlayerState>
     }
     public int GetMaxBulletNum()
     {
-        return _playerData.maxBulletNum;
+        return _playerStatus.maxBulletNum;
     }
     public int GetNowBulletNum()
     {

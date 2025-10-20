@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d3a471dfe111214cae5e751a91dc3d3, type: 3}
-  m_Name: AttackDataList
+  m_Name: AttackData
   m_EditorClassIdentifier: 
   attackDataList:
   - AttackName: Low1
@@ -117,13 +117,13 @@ MonoBehaviour:
     CameraShakeKind: 1
   - AttackName: SpecialAttack
     Damage: 150
-    StartFrame: 85
+    StartFrame: 81
     StunFrame: 35
     CancelFrame: 120
     TotalFrame: 120
     MoveSpeed: 0
-    Scale: 4
-    ShiftPosZ: 4
+    Scale: 4.5
+    ShiftPosZ: 2.5
     AttackLifeTime: 5
     NextAttackName: None
     AttackPart: "\u53F3\u8155"
@@ -149,3 +149,5 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 2
     CameraShakeKind: 0
+  meleeAttackGameObject: {fileID: 5016116481081219338, guid: 22781efec99b0064c9a1cf149a4d686a, type: 3}
+  rangedAttackGameObject: {fileID: 3308976924760873119, guid: 7fea45659adf508429936af7309098f2, type: 3}
