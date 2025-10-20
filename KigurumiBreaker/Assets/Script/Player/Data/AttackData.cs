@@ -10,6 +10,8 @@ public class AttackData : ScriptableObject
 
     public GameObject meleeAttackGameObject;    // 近接攻撃の攻撃判定プレハブ
 
+    public GameObject chargeAttackAreaGameObject;   // 溜め攻撃の攻撃判定プレハブ
+
     public GameObject rangedAttackGameObject;   // 遠距離攻撃の攻撃判定プレハブ
 }
 [System.Serializable]
