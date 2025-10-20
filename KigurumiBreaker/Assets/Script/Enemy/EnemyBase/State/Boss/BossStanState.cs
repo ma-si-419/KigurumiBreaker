@@ -18,7 +18,7 @@ public class BossStanState : IState
         _boss.agent.isStopped = true; // 追跡を停止
 
         //ダウンアニメーション開始
-        _boss.animator.SetTrigger("Down");
+        _boss.animator.SetBool("Down", true);
     }
 
     public void Update()
@@ -29,6 +29,6 @@ public class BossStanState : IState
     public void End()
     {
         //待機アニメーション終了
-        //_boss.animator.SetBool("Idle", false);
+        _boss.animator.SetBool("Down", false);
     }
 }

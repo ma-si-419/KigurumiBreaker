@@ -9,16 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1164c4a136e2ac4199fa91f5a06e71e, type: 3}
-  m_Name: BossData
+  m_Script: {fileID: 11500000, guid: cca99f006e153a845b5520af033f6424, type: 3}
+  m_Name: BossAttackPartList
   m_EditorClassIdentifier: 
-  MaxHp: 0
-  MaxTrunk: 0
-  AttackPower: 0
-  MoveSpeed: 0
-  MaxStunDamage: 0
-  AttackRange: 0
-  IdleToChaseTime: 0
-  ChaseToAttack: 0
-  RotateSpeed: 0
-  AttackPrefab: {fileID: 0}
+  attackDataList:
+  - AttackPartName: "\u982D"
+    ObjectRigName: 
+  - AttackPartName: "\u53F3\u624B"
+    ObjectRigName: 
