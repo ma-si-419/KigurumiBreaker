@@ -35,7 +35,6 @@ public class BossChaseState : IState
     {
         Debug.Log("追跡中");
 
-
         //プレイヤーの位置を目的地に設定
         _boss.agent.SetDestination(_boss.player.transform.position);
         // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
@@ -51,21 +50,21 @@ public class BossChaseState : IState
         if (diff.sqrMagnitude < _boss.enemyData.attackRange)
         {
             //追跡を停止
-            //_boss.agent.isStopped = true;
             //タイマーを進める(スピード感を出すため一旦除外)
             _stateTimer += Time.deltaTime;
 
             if (_stateTimer > _boss.enemyData.chaseToAttack)
             {
                 //近い距離なら近接攻撃へ
-                if (diff.sqrMagnitude < _boss._meleeAttackRange)
+                if (diff.sqrMagnitude <= _boss._meleeAttackRange)
                 {
                     //遠距離攻撃範囲なら遠距離攻撃へ
                     _boss.ChangeState(new BossMeleeAttackState(_boss));
                 }
                 //遠い距離なら突進攻撃へ
-                else if (diff.sqrMagnitude < _boss._specialAttackRange)
+                else if (diff.sqrMagnitude <= _boss._specialAttackRange)
                 {
+
                     _boss.ChangeState(new BossAttackState(_boss));
                 }
             }
