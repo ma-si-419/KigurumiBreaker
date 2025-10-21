@@ -20,16 +20,13 @@ public class BossEnemy : EnemyBase
     protected bool _isPhaseChanged = false;
 
     // ボスの攻撃データリスト
-    protected BossAttackDataList _bossAttackData;
-
-    //// ボスの攻撃パターン
-    //protected AttackPatterns _attackPatterns; 
+    //[SerializeField] protected BossAttackData _bossAttackData;
 
     // Getter
-    public BossAttackDataList bossAttackData => _bossAttackData;
-    //public AttackPatterns attackPatterns => _attackPatterns;
+    //public BossAttackData bossAttackData => _bossAttackData;
 
-    
+    [SerializeField] public float _meleeAttackRange;
+    [SerializeField] public float _specialAttackRange;
 
     protected override void Start()
     {
@@ -49,9 +46,7 @@ public class BossEnemy : EnemyBase
     public virtual void Stan()
     {
         // ボス専用のスタンする処理をここに追加
-
         // 一定時間動けなくするなど
-
     }
 
     public virtual void PhaseChange()
@@ -62,29 +57,6 @@ public class BossEnemy : EnemyBase
     }
 
     // モデルのリグを取得して攻撃判定を特定のボーンにアタッチする処理
-    
-
-
-    private BossAttackData SerachAttackData(string attackName)
-    {
-        // 攻撃データを格納する変数
-        BossAttackData attackData = null;
-
-        // ボスの攻撃データリストから攻撃名に一致するデータを探す
-        if (attackName == null) return attackData;
-
-        // リストをループして攻撃名を比較
-        for (int i = 0; i < _bossAttackData.bossAttackDataList.Count; i++)
-        {
-            if (_bossAttackData.bossAttackDataList[i].attackName == attackName)
-            {
-                attackData = _bossAttackData.bossAttackDataList[i];
-                break;
-            }
-        }
-
-        return attackData;
-    }
 
 
     public void AttackReset()
@@ -92,4 +64,75 @@ public class BossEnemy : EnemyBase
         _isAttack = false;
         _attackTimer = 0.0f;
     }
+
+    // 攻撃判定に触れたときの処理
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PlayerAttack"))
+        {
+            //死んだ状態になっている場合はダメージを受けない
+            if (_currentState is BossDeadState) return;
+
+            // ダメージを受ける(プレイヤーアタックのダメージを取得する)
+            _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+
+            // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
+            //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
+
+            // ダメージエフェクトを生成する
+            //Instantiate(_damageEffect, transform.position, Quaternion.identity);
+
+            // Hpが0以下なら死亡処理に遷移
+            if (_currentHp <= 0)
+            {
+                _currentHp = 0;
+                // すでに死亡状態なら変更しない
+                if (!(_currentState is BossDeadState))
+                {
+                    ChangeState(new BossDeadState(this));
+                }
+            }
+
+            //攻撃はいったら攻撃判定を速攻消す
+            Destroy(other.gameObject);
+
+            //攻撃状態のときはダメージアニメーションを行わない
+            if (_currentState is BossAttackState) return;
+            if (_currentState is BossMeleeAttackState) return;
+
+            //OnHit();
+        }
+
+        if (other.gameObject.CompareTag("PlayerRangedAttack"))
+        {
+            //死んだ状態になっている場合はダメージを受けない
+            if (_currentState is BossDeadState) return;
+
+            // プレイヤーにダメージを与える処理
+            _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+
+
+            // Hpが0以下なら死亡処理に遷移
+            if (_currentHp <= 0)
+            {
+                _currentHp = 0;
+                // すでに死亡状態なら変更しない
+                if (!(_currentState is BossDeadState))
+                {
+                    ChangeState(new BossDeadState(this));
+                }
+            }
+
+            //攻撃はいったら攻撃判定を速攻消す
+            Destroy(other.gameObject);
+
+            //攻撃状態のときはダメージアニメーションを行わない
+            if (_currentState is BossAttackState) return;
+            if (_currentState is BossMeleeAttackState) return;
+
+            //OnHit();
+        }
+
+    }
+
 }

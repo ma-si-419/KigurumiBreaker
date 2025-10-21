@@ -17,7 +17,6 @@ public class BossAttackPart
     [SerializeField] private string ObjectRigName;
 
     // 読み取り専用プロパティ
-
     public string attackPartName => AttackPartName;
     public string objectRigName => ObjectRigName;
 
