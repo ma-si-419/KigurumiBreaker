@@ -6,9 +6,9 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class BossChaseState : IState
 {
     //ボス敵の参照
-    private BossEnemy _boss;   
-
-    //private float _stateTimer;
+    private BossEnemy _boss;
+    //状態遷移用タイマー
+    private float _stateTimer;
 
     public BossChaseState(BossEnemy boss)
     {
@@ -19,51 +19,54 @@ public class BossChaseState : IState
     public void Init()
     {
         _boss.agent.isStopped = false; // 追跡を停止
-        //_enemy.AttackReset(); //攻撃フラグリセット
-
-        ////待機アニメーション開始
-        //_enemy.animator.SetBool("Idle", false);
+        //待機アニメーション開始
+        _boss.animator.SetBool("Walk", true);
     }
 
     public void Update()
     {
-        // ボス専用の追跡処理をここに追加(正味ここはザコ敵と同じ処理)
-        Debug.Log("追跡");
-
         //プレイヤーの位置を目的地に設定
         _boss.agent.SetDestination(_boss.player.transform.position);
         // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
         _boss.StopMovement();
+        //プレイヤーの方向を向き続ける
+        _boss.LookAtPlayer();
 
         //プレイヤーとの位置差を計算
         Vector3 diff = _boss.player.transform.position - _boss.transform.position;
 
-        //攻撃圏内に入ると攻撃状態へ
+        //攻撃圏内で別々の処理
         //プレイヤーが検知範囲内にいるかチェック
-        //if (diff.sqrMagnitude < _attackRangeSqr)
+        if (diff.sqrMagnitude < _boss.enemyData.attackRange)
         {
-            //プレイヤーの方向を向き続ける
-            _boss.LookAtPlayer();
-
             //追跡を停止
             _boss.agent.isStopped = true;
-
-            //攻撃状態へ
-            //_stateTimer = 0.0f;
-            _boss.ChangeState(new BossAttackState(_boss));
-
             //タイマーを進める(スピード感を出すため一旦除外)
-            //_stateTimer += Time.deltaTime;
-            //if (_stateTimer > _enemyData.chaseToAttack)
-            //{
-            //}
-        }
+            _stateTimer += Time.deltaTime;
 
+            if (_stateTimer > _boss.enemyData.chaseToAttack)
+            {
+                //近い距離なら近接攻撃へ
+                if (diff.sqrMagnitude > _boss.enemyData.attackRange)
+                {
+                    //遠距離攻撃範囲なら遠距離攻撃へ
+                    _stateTimer = 0;
+                    _boss.ChangeState(new BossMeleeAttackState(_boss));
+                }
+                //遠い距離なら突進攻撃へ
+                else if (diff.sqrMagnitude <= _boss.enemyData.attackRange / 1.5f)
+                {
+                    _stateTimer = 0;
+                    _boss.ChangeState(new BossAttackState(_boss));
+                }
+            }
+
+        }
     }
 
     public void End()
     {
         //待機アニメーション終了
-        //_enemy.animator.SetBool("Idle", false);
+        _boss.animator.SetBool("Walk", false);
     }
 }

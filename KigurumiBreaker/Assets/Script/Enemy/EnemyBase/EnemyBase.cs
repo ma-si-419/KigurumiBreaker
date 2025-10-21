@@ -26,7 +26,7 @@ public class EnemyBase : MonoBehaviour
 
     // 攻撃オブジェクトのプレハブ
     [Header("コンポーネント")]
-    [SerializeField] protected GameObject _attackObjectPrefab; 
+    [SerializeField] public GameObject attackObjectPrefab; 
 
     // NavMeshAgentの参照
     protected NavMeshAgent _agent;

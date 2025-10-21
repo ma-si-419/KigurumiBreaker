@@ -37,7 +37,7 @@ public class CircleAttackEnemy : Enemy
     private void CreateAttack()
     {
         // ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(_attackObjectPrefab);
+        GameObject attackObject = Instantiate(attackObjectPrefab);
 
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;

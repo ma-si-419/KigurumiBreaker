@@ -96,7 +96,7 @@ public class PunchEnemy : Enemy
     private void CreateAttack()
     {
         //ゲームオブジェクト生成
-       GameObject attackObject = Instantiate(_attackObjectPrefab);
+       GameObject attackObject = Instantiate(attackObjectPrefab);
 
        // ゲームオブジェクト生成
        //_attackObject = Instantiate(_attackObjectPrefab);

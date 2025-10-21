@@ -215,6 +215,7 @@ public class PlayerState : Player<PlayerState>
     {
         public IdleState(PlayerState next) : base(next)
         {
+
         }
         public override void OnEnterState()
         {

@@ -15,7 +15,7 @@ public class BossAttackData
     public enum BossAttackType
     {
         MeleeAttack,    // ‹ßÚUŒ‚
-        TackleAttack,   // “ËiUŒ‚
+        SpecialAttack,  // “ÁêUŒ‚
         RangedAttack,   // ‰“‹——£UŒ‚
         ChargeAttack,   // ”ÍˆÍUŒ‚
     }
@@ -23,22 +23,12 @@ public class BossAttackData
 
     [Header("UŒ‚‚Ì–¼‘O")]
     [SerializeField] private string AttackName;
-    [Header("ƒ_ƒ[ƒW—Ê")]
-    [SerializeField] private int Damage;
-    [Header("”­ºƒtƒŒ[ƒ€")]
-    [SerializeField] private int StartFrame;
-    [Header("d’¼ƒtƒŒ[ƒ€")]
-    [SerializeField] private int StunFrame;
     [Header("‘O‚Éi‚Ş‘¬“x")]
     [SerializeField] private float MoveSpeed;
     [Header("UŒ‚”»’è‚Ì‘å‚«‚³")]
     [SerializeField] private float Scale;
     [Header("UŒ‚”»’è‚ğ‘O•ûŒü‚É‚¸‚ç‚·‘å‚«‚³")]
     [SerializeField] private float ShiftPosZ;
-    [Header("UŒ‚”»’è‚Ì‘±ŠÔ")]
-    [SerializeField] private int AttackLifeTime;
-    [Header("Ÿ‚Éo‚·UŒ‚‚Ì–¼‘O(ƒRƒ“ƒ{—p)")]
-    [SerializeField] private string NextAttackName;
     [Header("UŒ‚‚ğo‚·•”ˆÊ")]
     [SerializeField] private string AttackPart;
     [Header("UŒ‚‚ğo‚·•”ˆÊ‚Éo‚·ƒGƒtƒFƒNƒg")]
@@ -47,14 +37,12 @@ public class BossAttackData
     [SerializeField] private float EffectShiftScale;
     [Header("UŒ‚‚ª‚ ‚½‚Á‚½‚Éo‚·ƒGƒtƒFƒNƒg")]
     [SerializeField] private GameObject HitEffect;
-    [Header("UŒ‚‚Ìí—Ş")]
-    [SerializeField] private BossAttackType AttackKind;
+    //[Header("UŒ‚‚Ìí—Ş")]
+    //[SerializeField] private BossAttackType AttackKind;
+
 
     // “Ç‚İæ‚èê—pƒvƒƒpƒeƒB
     public string attackName => AttackName;
-    public int damage => Damage;
-    public int startFrame => StartFrame;
-    public int stunFrame => StunFrame;
     public float moveSpeed => MoveSpeed;
     public float scale => Scale;
     public float shiftPosZ => ShiftPosZ;
@@ -64,6 +52,5 @@ public class BossAttackData
     public GameObject attackEffect => AttackEffect;
     public float effectShiftScale => EffectShiftScale;
     public GameObject hitEffect => HitEffect;
-    public BossAttackType attackKind => AttackKind;
-
+    //public BossAttackType attackKind => AttackKind;
 }

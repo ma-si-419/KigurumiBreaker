@@ -1,26 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.VisualScripting;
+using UnityEngine.AI;
+using UnityEngine.Rendering.VirtualTexturing;
 
 public class BossEnemy : EnemyBase
 {
     // 状態遷移するまでのタイマー
     protected float _stateTimer = 0.0f;
+
     // 攻撃するまでのタイマー
     protected float _attackTimer = 0.0f;
+
     // プレイヤーが攻撃範囲に入ったら攻撃状態に遷移させるためのフラグ
     protected bool _isAttack = false;
+
     // フェーズチェンジしたかどうかのフラグ
     protected bool _isPhaseChanged = false;
 
-    public int _attackCount = 0; // 攻撃回数カウント用
+    // ボスの攻撃データリスト
+    protected BossAttackDataList _bossAttackData;
 
-    private BossAttackDataList _bossAttackData;
+    //// ボスの攻撃パターン
+    //protected AttackPatterns _attackPatterns; 
+
+    // Getter
+    public BossAttackDataList bossAttackData => _bossAttackData;
+    //public AttackPatterns attackPatterns => _attackPatterns;
+
+    
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
         // ボス専用の初期化処理をここに追加
         ChangeState(new BossIdleState(this));
     }
@@ -29,50 +44,6 @@ public class BossEnemy : EnemyBase
     {
         // 親クラスのUpdate()を呼び出す
         base.Update();
-    }
-
-    // 通常攻撃(ボスによって変えたい場合はオーバライド)
-    public virtual void MeleeAttack()
-    {
-        animator.SetTrigger("MeleeAttack");
-
-        // 移動を停止
-        StopMovement();
-
-        Debug.Log("通常攻撃");
-        // ボス専用の近接攻撃処理をここに追加
-
-        ChangeState(new BossIdleState(this));
-    }
-
-    // 範囲攻撃(ボスによって変えたい場合はオーバライド)
-    public virtual void RangeAttack()
-    {
-        animator.SetTrigger("RangeAttack");
-
-        // 移動を停止
-        StopMovement();
-
-        Debug.Log("範囲攻撃");
-        // ボス専用の遠距離攻撃処理をここに追加
-
-        ChangeState(new BossIdleState(this));
-    }
-
-    // 長距離攻撃(ボスによって変えたい場合はオーバライド)
-    public virtual void LongRangeAttack()
-    {
-        animator.SetTrigger("LongRangeAttack");
-
-        // 移動を停止
-        StopMovement();
-
-        Debug.Log("長距離攻撃");
-        // ボス専用の長距離攻撃処理をここに追加
-
-        _attackCount = 0; // 攻撃回数リセット
-
-        ChangeState(new BossIdleState(this));
     }
 
     public virtual void Stan()
@@ -114,6 +85,7 @@ public class BossEnemy : EnemyBase
 
         return attackData;
     }
+
 
     public void AttackReset()
     {
