@@ -12,6 +12,7 @@ public class Player<T> : MonoBehaviour where T : Player<T>
     //次の状態
     private StateBase<T> _nextState;
 
+
     /// <summary>
     /// 状態を変更する関数
     /// </summary>
@@ -51,11 +52,11 @@ public class Player<T> : MonoBehaviour where T : Player<T>
         }
 
         // 現在のStateをDebugLogで表示
- //       Debug.Log((_currentState != null ? _currentState.GetType().Name : "None"));
+        //       Debug.Log((_currentState != null ? _currentState.GetType().Name : "None"));
 
         //現在の状態があれば更新処理
         if (_currentState != null)
-        {
+        { 
             //更新処理を行う
             _currentState.OnUpdate();
         }
