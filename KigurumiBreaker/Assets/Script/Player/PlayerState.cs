@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using JetBrains.Annotations;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.U2D;
 using UnityEngine;
@@ -98,6 +99,9 @@ public class PlayerState : Player<PlayerState>
     // プレイヤーの被弾時のデータ
     [SerializeField] private DamageData _damageData;
 
+    // プレイヤーのエフェクトデータ
+    [SerializeField] private PlayerEffectData _playerEffectData;
+
     // バトルマネージャー
     [SerializeField] private BattleManager _battleManager;
 
@@ -169,6 +173,12 @@ public class PlayerState : Player<PlayerState>
 
     // アイテム取得できる範囲にいるか
     private bool _isInItemRange;
+
+    // 動きを止めるフラグ
+    private bool _isStop;
+
+    // アニメーションの速度を保存しておく
+    private float _animationSpeed;
 
 
     // Start is called before the first frame update
@@ -242,6 +252,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            if (state._isStop) return;
+
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
 
@@ -289,6 +301,10 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
             // 移動方向の計算
             Vector3 direction = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
             Vector3 moveDirection = state.CalculateMoveDirection(direction);
@@ -386,6 +402,10 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
             // 回避時間をカウント
             dodgeTime++;
 
@@ -512,6 +532,11 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
+
             _currentFrame++;
 
             // エフェクトの位置を更新
@@ -535,7 +560,7 @@ public class PlayerState : Player<PlayerState>
             }
 
             // 攻撃を出した後
-            if (_currentFrame > _currentAttackData.startFrame)
+            if (_currentFrame >= _currentAttackData.startFrame)
             {
                 // 攻撃オブジェクトが存在するなら攻撃オブジェクトの座標を更新
                 if (state._currentAttack)
@@ -705,6 +730,11 @@ public class PlayerState : Player<PlayerState>
 
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
+
             _currentFrame++;
 
             // 移動ベクトルをリセット
@@ -771,6 +801,8 @@ public class PlayerState : Player<PlayerState>
 
         float attackScale;
 
+        GameObject chargeEffect;
+
         public ChargeState(PlayerState next) : base(next)
         {
         }
@@ -789,19 +821,28 @@ public class PlayerState : Player<PlayerState>
             {
                 // 特殊チャージアニメーションを再生
                 state._animator.SetTrigger("SpecialCharge");
+
+                // 特殊チャージエフェクトを出す
+                chargeEffect = Instantiate(state._playerEffectData.specialAttackChargeEffectPrefab, state.transform.position, Quaternion.identity, state.transform);
             }
             else
             {
                 // 通常チャージアニメーションを再生
                 state._animator.SetTrigger("NormalCharge");
-                
+
                 attackScale = state.SearchAttackData("LowChargeAttack").scale;
             }
+
 
             stateTime = 0;
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
+
             stateTime++;
 
             // 移動ベクトルをリセット
@@ -899,6 +940,13 @@ public class PlayerState : Player<PlayerState>
             {
                 state._animator.ResetTrigger("SpecialCharge");
                 state._isSpecialCharge = false;
+
+                // チャージエフェクトを削除
+                if (chargeEffect)
+                {
+                    Destroy(chargeEffect);
+                    chargeEffect = null;
+                }
             }
             else
             {
@@ -953,6 +1001,11 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
+
             _currentFrame++;
 
             // 移動ベクトルをリセット
@@ -1010,6 +1063,8 @@ public class PlayerState : Player<PlayerState>
 
         private CameraMove _cameraMove;
 
+        private GameObject _attackEffect;
+
         public SpecialAttackState(PlayerState next) : base(next)
         {
         }
@@ -1047,6 +1102,11 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
+
             _stateTime++;
 
             // 移動ベクトルをリセット
@@ -1057,7 +1117,20 @@ public class PlayerState : Player<PlayerState>
             {
                 state.CreateAttack(_currentAttackData);
 
-                // TODO : 弾を生成する
+                _attackEffect = Instantiate(state._playerEffectData.specialAttackEffectPrefab, state.transform.position, Quaternion.identity);
+
+                // エフェクトの向きをプレイヤーの向きに合わせる
+                _attackEffect.transform.forward = state.transform.forward;
+
+                // エフェクトの位置を少し前にずらす
+                Vector3 shiftVec = state.transform.forward * _currentAttackData.shiftPosZ;
+                _attackEffect.transform.position += shiftVec;
+
+                // エフェクトのサイズを攻撃データに合わせる
+                float effectScale = _currentAttackData.scale;
+                _attackEffect.transform.localScale = new Vector3(effectScale, effectScale, effectScale);
+
+                // TODO : 弾を生成する(特殊攻撃を飛ばす仕様ならば)
 
                 // チャージ時間をリセット
                 state._specialChargeTime = 0;
@@ -1091,6 +1164,13 @@ public class PlayerState : Player<PlayerState>
             {
                 // カメラの特殊攻撃中フラグを解除
                 _cameraMove.SetSpecialAttack(false);
+            }
+
+            // エフェクトを削除
+            if (_attackEffect != null)
+            {
+                Destroy(_attackEffect);
+                _attackEffect = null;
             }
         }
     }
@@ -1171,6 +1251,11 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
+
             // スタン時間をカウントダウン
             _stateTime++;
 
@@ -1244,6 +1329,11 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnUpdate()
         {
+            // 移動をリセットする
+            state._rigidbody.velocity = Vector3.zero;
+
+            if (state._isStop) return;
+
             // 移動ベクトルをリセットし続ける
             state._rigidbody.velocity = Vector3.zero;
         }
@@ -1678,6 +1768,24 @@ public class PlayerState : Player<PlayerState>
     public void SetDashSkill(DashSkillData skill)
     {
         _playerSkill.dashSkillData = skill;
+    }
+
+    public void SetStop(bool flag)
+    {
+        _isStop = flag;
+    }
+
+    public void StopAnimation()
+    {
+        if (_animator.speed > 0)
+        {
+            _animationSpeed = _animator.speed;
+        }
+        _animator.speed = 0;
+    }
+    public void StartAnimation()
+    {
+        _animator.speed = _animationSpeed;
     }
 
     public void OnMoveStage()
