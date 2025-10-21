@@ -854,6 +854,7 @@ public class PlayerState : Player<PlayerState>
                 // 特殊攻撃可能
                 state.isAbleToSpecialAttack = true;
 
+                state._camera.GetComponent<CameraMove>().SetSwing();
 
                 // スキルがある場合の処理
                 if (state._playerSkill.specialChargeSkill != null)
@@ -1639,6 +1640,9 @@ public class PlayerState : Player<PlayerState>
         // ヒットエフェクトを設定
         attackData.hitEffect = data.hitEffect;
 
+        // ヒットストップ時間を設定
+        attackData.hitStopFrame = data.hitStopFrame;
+
         PlayerAttack playerAttack = attackObject.GetComponent<PlayerAttack>();
 
         // カメラを設定
@@ -1940,6 +1944,7 @@ public class PlayerState : Player<PlayerState>
                     _currentDirection = -toEnemy;
                 }
             }
+            _battleManager.RemoveEnemyAttack(other.gameObject);
 
             // 攻撃オブジェクトを削除する
             Destroy(other.gameObject);

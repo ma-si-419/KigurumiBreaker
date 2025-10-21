@@ -22,6 +22,7 @@ public class PlayerAttack : MonoBehaviour
         public Enemy.EnemyDebuff debuffType;
         public bool isReflect;
         public CameraMove.ShakeKind shakeKind;
+        public int hitStopFrame;
     }
 
     private GameObject _camera; // カメラオブジェクトの参照
@@ -84,6 +85,11 @@ public class PlayerAttack : MonoBehaviour
     public float GetDamage()
     {
         return _attackData.damage;
+    }
+
+    public int GetHitStopTime()
+    {
+        return _attackData.hitStopFrame;
     }
 
     void OnTriggerEnter(Collider other)

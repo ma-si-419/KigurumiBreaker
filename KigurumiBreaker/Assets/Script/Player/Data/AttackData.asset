@@ -15,7 +15,7 @@ MonoBehaviour:
   attackDataList:
   - AttackName: Low1
     Damage: 12
-    StartFrame: 10
+    StartFrame: 11
     StunFrame: 13
     CancelFrame: 20
     TotalFrame: 30
@@ -30,6 +30,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 0
     CameraShakeKind: 1
+    HitStopFrame: 3
   - AttackName: Low2
     Damage: 12
     StartFrame: 12
@@ -47,6 +48,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 0
     CameraShakeKind: 1
+    HitStopFrame: 3
   - AttackName: Low3
     Damage: 24
     StartFrame: 18
@@ -64,6 +66,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 0
     CameraShakeKind: 2
+    HitStopFrame: 8
   - AttackName: LowChargeAttack
     Damage: 20
     StartFrame: 12
@@ -81,6 +84,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 1
     CameraShakeKind: 2
+    HitStopFrame: 7
   - AttackName: ChargeAttack
     Damage: 80
     StartFrame: 10
@@ -98,6 +102,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 1
     CameraShakeKind: 3
+    HitStopFrame: 12
   - AttackName: LowSpecialAttack
     Damage: 50
     StartFrame: 38
@@ -115,6 +120,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 3
     CameraShakeKind: 1
+    HitStopFrame: 6
   - AttackName: SpecialAttack
     Damage: 150
     StartFrame: 81
@@ -132,6 +138,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 3
     CameraShakeKind: 3
+    HitStopFrame: 12
   - AttackName: RangedAttack
     Damage: 10
     StartFrame: 10
@@ -149,6 +156,7 @@ MonoBehaviour:
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 2
     CameraShakeKind: 0
+    HitStopFrame: 5
   meleeAttackGameObject: {fileID: 5016116481081219338, guid: 22781efec99b0064c9a1cf149a4d686a, type: 3}
   chargeAttackAreaGameObject: {fileID: 470787370950120252, guid: a2b47f6aaa2f5ef4e93446234eccde20, type: 3}
   rangedAttackGameObject: {fileID: 3308976924760873119, guid: 7fea45659adf508429936af7309098f2, type: 3}

@@ -33,6 +33,10 @@ public class CameraMove : MonoBehaviour
     int _specialAttackFrame = 0;                            // 必殺技中のフレーム数を保存する変数
     int _returnFrame = 0;                                   // 必殺技終了後の元の位置に戻るまでのフレーム数を保存する変数
 
+    bool _isStop = false;                                   // カメラ移動を停止するかどうかを保存する変数
+
+    bool _isSwingCamera = false;                                // カメラがスイングしているかどうかを保存する変数
+
     SpecialAttackCameraMoveData.MoveData _currentMoveData;  // 現在の必殺技中のカメラ移動データを保存する変数
 
     Vector3 _frameMoveVec = Vector3.zero;                   // 一フレームに移動するベクトルを保存する変数
@@ -49,19 +53,7 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        // プレイヤーの位置にオフセットを加えた位置にカメラを移動
-        transform.position = _player.transform.position + _cameraData.cameraPosition;
-
-        if (_moveArea != null)
-        {
-            // カメラの位置が移動範囲を超えないように制限
-            Vector3 clampedPosition = transform.position;
-            clampedPosition.x = Mathf.Clamp(clampedPosition.x, _moveArea.bounds.min.x, _moveArea.bounds.max.x);
-            clampedPosition.y = Mathf.Clamp(clampedPosition.y, _moveArea.bounds.min.y, _moveArea.bounds.max.y);
-            clampedPosition.z = Mathf.Clamp(clampedPosition.z, _moveArea.bounds.min.z, _moveArea.bounds.max.z);
-            transform.position = clampedPosition;
-        }
-
+        // カメラシェイクは常に行う
         transform.rotation = Quaternion.Euler(_cameraData.cameraRotation); // カメラの初期回転を設定
 
         if (_shakeTime > 0)
@@ -76,8 +68,38 @@ public class CameraMove : MonoBehaviour
             Vector3 rota = new Vector3(shakeX, shakeY, shakeZ);
 
             transform.rotation = Quaternion.Euler(_cameraData.cameraRotation + rota);
+
         }
 
+
+        if (_isStop) return;
+
+        // スイングカメラ処理
+        if (_isSwingCamera)
+        {
+            // カメラの向きを上下に揺らす
+            float swingX = Mathf.Sin(Time.time * 30.0f) * 1.0f; // 周期と振幅を調整
+            Vector3 rota = new Vector3(swingX * 0.7f, 0.0f, 0.0f);
+            transform.rotation = Quaternion.Euler(_cameraData.cameraRotation + rota);
+        }
+
+        // 関数が呼ばれている間だけスイングカメラを有効にする
+        _isSwingCamera = false;
+
+
+
+        // プレイヤーの位置にオフセットを加えた位置にカメラを移動
+        transform.position = _player.transform.position + _cameraData.cameraPosition;
+
+        if (_moveArea != null)
+        {
+            // カメラの位置が移動範囲を超えないように制限
+            Vector3 clampedPosition = transform.position;
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, _moveArea.bounds.min.x, _moveArea.bounds.max.x);
+            clampedPosition.y = Mathf.Clamp(clampedPosition.y, _moveArea.bounds.min.y, _moveArea.bounds.max.y);
+            clampedPosition.z = Mathf.Clamp(clampedPosition.z, _moveArea.bounds.min.z, _moveArea.bounds.max.z);
+            transform.position = clampedPosition;
+        }
 
         if (_isSpecialAttack)
         {
@@ -138,6 +160,11 @@ public class CameraMove : MonoBehaviour
         _shakePower = power;
     }
 
+    public void SetSwing()
+    {
+        _isSwingCamera = true;
+    }
+
     public void SetShakeData(ShakeKind type)
     {
         switch (type)
@@ -163,5 +190,10 @@ public class CameraMove : MonoBehaviour
         // セットするたびにフレーム数をリセット
         _specialAttackFrame = 0;
         _returnFrame = 0;
+    }
+
+    public void SetStop(bool flag)
+    {
+        _isStop = flag;
     }
 }

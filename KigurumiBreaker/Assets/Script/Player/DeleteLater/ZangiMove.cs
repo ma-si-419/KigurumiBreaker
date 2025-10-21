@@ -171,6 +171,7 @@ public class ZangiMove : MonoBehaviour
 
                     attackScript.SetMoveDir(forward);
                     attackScript.SetAttackEnemy(this.gameObject);
+                    attackScript.SetBattleManager(_battleManager);
                 }
             }
         }
@@ -186,9 +187,11 @@ public class ZangiMove : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PlayerAttack"))
         {
-            nowHp -= (int)other.gameObject.GetComponent<PlayerAttack>().GetDamage();
+            PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
 
-            Debug.Log(other.gameObject.GetComponent<PlayerAttack>().GetDamage() + "のダメージ");
+            nowHp -= (int)playerAttack.GetDamage();
+
+            Debug.Log(playerAttack.GetDamage() + "のダメージ");
 
             _isDamage = true;
 
@@ -199,7 +202,8 @@ public class ZangiMove : MonoBehaviour
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
 
             // ヒットストップ
-            manager.StopTime(3);
+            manager.StopTime(playerAttack.GetHitStopTime());
+
             _stopPos = this.transform.position;
 
             if (nowHp <= 0)
