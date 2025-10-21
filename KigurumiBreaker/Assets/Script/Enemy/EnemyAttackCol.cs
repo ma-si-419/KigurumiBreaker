@@ -17,48 +17,49 @@ public class EnemyAttackCol : MonoBehaviour
     [SerializeField] private float _shotLifeTime; // 弾の寿命
 
     [Header("ヒットダメージ設定")]
-    [SerializeField]private float _damage;            // ヒットダメージ
+    [SerializeField] private float _damage;            // ヒットダメージ
     [SerializeField] private AttackType _damageKind;   // ダメージの種類（弱、中、強）
     [SerializeField] private GameObject _hitEffectPrefab;   // ヒットエフェクトのプレハブ
 
-    [SerializeField]private int _lifeTime;         // 攻撃判定の寿命（フレーム数）
+    [SerializeField] private int _lifeTime;         // 攻撃判定の寿命（フレーム数）
 
     private GameObject _attackEnemy;    // 攻撃を行った敵
 
-    private Vector3 _moveDir = new Vector3(0.0f,0.0f,1.0f); // 移動方向ベクトル(仮で前方向を入れておく)
+    private GameObject _battleManager;
 
+    private Vector3 _moveDir = new Vector3(0.0f, 0.0f, 1.0f); // 移動方向ベクトル(仮で前方向を入れておく)
+
+    private bool _isStop = false;   // ヒットストップ中に動かないようにするフラグ
 
     private void Start()
     {
-        //_damage = 
+        _battleManager.GetComponent<BattleManager>().AddEnemyAttack(this.gameObject);
 
-
-        // 一定時間後に弾を破壊
         if (CompareTag("EnemyRangedAttack"))
         {
-            Destroy(gameObject, _shotLifeTime); // 一定時間後に弾を破壊
+            _lifeTime = (int)_shotLifeTime;
         }
     }
 
     private void FixedUpdate()
     {
+        if (_isStop) return;
+
         _lifeTime--;
 
-        if(CompareTag("EnemyAttack"))
+        if (_lifeTime <= 0)
         {
-            if (_lifeTime <= 0)
-            {
-                //攻撃判定の寿命が来たら消す
-                Destroy(this.gameObject);
-            }
+            //攻撃判定の寿命が来たら消す
+            Destroy(this.gameObject);
+
+            _battleManager.GetComponent<BattleManager>().RemoveEnemyAttack(this.gameObject);
         }
 
-        if(CompareTag("EnemyRangedAttack"))
+        if (CompareTag("EnemyRangedAttack"))
         {
             // 弾を前方に移動
             transform.Translate(_moveDir * _shootSpeed * Time.deltaTime);
         }
-
     }
 
     public float GetDamage()
@@ -88,13 +89,42 @@ public class EnemyAttackCol : MonoBehaviour
         _attackEnemy = enemy;
     }
 
+    public void SetBattleManager(GameObject manager)
+    {
+        _battleManager = manager;
+    }
+
     public Vector3 GetEnemyPos()
     {
-        if(_attackEnemy != null)
+        if (_attackEnemy != null)
         {
             return _attackEnemy.transform.position;
         }
         return Vector3.zero;
+    }
+
+    public void SetStop(bool isStop)
+    {
+        _isStop = isStop;
+        if (isStop)
+        {
+            // エフェクトの再生を止める
+            ParticleSystem ps = GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                ps.Pause();
+            }
+        }
+        else
+        {
+            // エフェクトの再生を再開する
+            ParticleSystem ps = GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                ps.Play();
+            }
+        }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -105,6 +135,8 @@ public class EnemyAttackCol : MonoBehaviour
             {
                 // 壁や障害物に当たった場合弾を削除
                 Destroy(gameObject);
+
+                _battleManager.GetComponent<BattleManager>().RemoveEnemyAttack(this.gameObject);
             }
         }
     }

@@ -61,6 +61,8 @@ public class Attack
     [SerializeField] private AttackType AttackKind;
     [Header("カメラを揺らす大きさ")]
     [SerializeField] private CameraMove.ShakeKind CameraShakeKind;
+    [Header("ヒットストップの長さ")]
+    [SerializeField] private int HitStopFrame;
 
     // 読み取り専用プロパティ
 
@@ -80,6 +82,6 @@ public class Attack
     public float effectShiftScale => EffectShiftScale;
     public GameObject hitEffect => HitEffect;
     public AttackType attackKind => AttackKind;
-
     public CameraMove.ShakeKind cameraShakeKind => CameraShakeKind;
+    public int hitStopFrame => HitStopFrame;
 }
