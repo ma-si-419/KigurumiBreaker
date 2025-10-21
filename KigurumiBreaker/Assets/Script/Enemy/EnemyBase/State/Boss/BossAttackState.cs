@@ -32,7 +32,8 @@ public class BossAttackState : IState
 
     public void Update()
     {
-        
+        Debug.Log("‚Ó‚Â‚¤");
+
 
 
     }

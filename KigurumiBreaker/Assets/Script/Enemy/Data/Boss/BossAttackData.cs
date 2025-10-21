@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "BossAttackData")]
-public class BossAttackDataList : ScriptableObject
-{
-    public List<BossAttackData> bossAttackDataList;
-}
+//public class BossAttackDataList : ScriptableObject
+//{
+//    public List<BossAttackData> bossAttackDataList;
+//}
 
-[System.Serializable]
-public class BossAttackData
+[CreateAssetMenu(menuName = "BossAttackData")]
+//[System.Serializable]
+public class BossAttackData : ScriptableObject
 {
     
     public enum BossAttackType
@@ -19,7 +19,6 @@ public class BossAttackData
         RangedAttack,   // ‰“‹——£UŒ‚
         ChargeAttack,   // ”ÍˆÍUŒ‚
     }
-
 
     [Header("UŒ‚‚Ì–¼‘O")]
     [SerializeField] private string AttackName;
@@ -37,8 +36,10 @@ public class BossAttackData
     [SerializeField] private float EffectShiftScale;
     [Header("UŒ‚‚ª‚ ‚½‚Á‚½Žž‚Éo‚·ƒGƒtƒFƒNƒg")]
     [SerializeField] private GameObject HitEffect;
-    //[Header("UŒ‚‚ÌŽí—Þ")]
-    //[SerializeField] private BossAttackType AttackKind;
+    [Header("’ÊíUŒ‚‚Ì”ÍˆÍ")]
+    [SerializeField] private float MeleeAttackRange;
+    [Header("“ÁŽêUŒ‚‚Ì”ÍˆÍ")]
+    [SerializeField] private float SpecialAttackRange;
 
 
     // “Ç‚ÝŽæ‚èê—pƒvƒƒpƒeƒB
@@ -46,11 +47,14 @@ public class BossAttackData
     public float moveSpeed => MoveSpeed;
     public float scale => Scale;
     public float shiftPosZ => ShiftPosZ;
-    public int attackLifeTime => AttackLifeTime;
-    public string nextAttackName => NextAttackName;
     public string attackPart => AttackPart;
     public GameObject attackEffect => AttackEffect;
     public float effectShiftScale => EffectShiftScale;
     public GameObject hitEffect => HitEffect;
+    public float meleeAttackRange => MeleeAttackRange;
+    public float specialAttackRange => SpecialAttackRange;
+
+
+
     //public BossAttackType attackKind => AttackKind;
 }
