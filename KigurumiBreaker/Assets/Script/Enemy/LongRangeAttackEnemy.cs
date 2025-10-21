@@ -118,7 +118,7 @@ public class LongRangeAttackEnemy : Enemy
     private void Shoot()
     {
         //弾を生成
-        GameObject bullet = Instantiate(_attackObjectPrefab, this.transform.position, this.transform.rotation);
+        GameObject bullet = Instantiate(attackObjectPrefab, this.transform.position, this.transform.rotation);
     }
 
     //ナビメッシュエージェントでターゲットから逃げる処理
