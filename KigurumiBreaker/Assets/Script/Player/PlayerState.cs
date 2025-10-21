@@ -854,7 +854,7 @@ public class PlayerState : Player<PlayerState>
                         Vector3 AreaPos = state.transform.position;
 
                         //　ずらす分のベクトル
-                        Vector3 shift = new Vector3(state._playerData.chargeAttackAreaShiftX,0.0f,state._playerData.chargeAttackAreaShiftZ);
+                        Vector3 shift = state._playerData.chargeAttackAreaShiftVector;
                         // プレイヤーの向きに合わせてずらす分を回転させる
                         shift = Quaternion.Euler(0, state.transform.eulerAngles.y, 0) * shift;
 

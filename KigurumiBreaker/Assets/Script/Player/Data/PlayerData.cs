@@ -21,10 +21,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int ChargeAttackTime;
     [Header("ため攻撃の最大溜め時間")]
     [SerializeField] private int MaxChargeAttackTime;
-    [Header("ため攻撃の範囲を表示するときに横にずらす大きさ")]
-    [SerializeField] private float ChargeAttackAreaShiftX;
-    [Header("ため攻撃の範囲を表示するときに前にずらす大きさ")]
-    [SerializeField] private float ChargeAttackAreaShiftZ;
+    [Header("ため攻撃の範囲を表示するときにずらすベクトル")]
+    [SerializeField] private Vector3 ChargeAttackAreaShiftVector;
     [Header("移動ベクトルの回転度")]
     [SerializeField] private float MoveDirAngle;
     [Header("特殊攻撃の最大のチャージ時間")]
@@ -45,8 +43,7 @@ public class PlayerData : ScriptableObject
     public int dodgeCoolTime => DodgeCoolTime;
     public int chargeAttackTime => ChargeAttackTime;
     public int maxChargeAttackTime => MaxChargeAttackTime;
-    public float chargeAttackAreaShiftX => ChargeAttackAreaShiftX;
-    public float chargeAttackAreaShiftZ => ChargeAttackAreaShiftZ;
+    public Vector3 chargeAttackAreaShiftVector => ChargeAttackAreaShiftVector;
     public float moveDirAngle => MoveDirAngle;
     public float maxSpecialChargeTime => MaxSpecialChargeTime;
     public float maxSpecialAttackDamegeCutRate => MaxSpecialAttackDamegeCutRate;
