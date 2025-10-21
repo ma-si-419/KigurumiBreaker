@@ -98,6 +98,9 @@ public class PlayerState : Player<PlayerState>
     // プレイヤーの被弾時のデータ
     [SerializeField] private DamageData _damageData;
 
+    // プレイヤーのエフェクトデータ
+    [SerializeField] private PlayerEffectData _playerEffectData;
+
     // バトルマネージャー
     [SerializeField] private BattleManager _battleManager;
 
@@ -770,6 +773,8 @@ public class PlayerState : Player<PlayerState>
 
         float attackScale;
 
+        GameObject chargeEffect;
+
         public ChargeState(PlayerState next) : base(next)
         {
         }
@@ -788,14 +793,18 @@ public class PlayerState : Player<PlayerState>
             {
                 // 特殊チャージアニメーションを再生
                 state._animator.SetTrigger("SpecialCharge");
+
+                // 特殊チャージエフェクトを出す
+                chargeEffect = Instantiate(state._playerEffectData.specialAttackChargeEffectPrefab, state.transform.position, Quaternion.identity, state.transform);
             }
             else
             {
                 // 通常チャージアニメーションを再生
                 state._animator.SetTrigger("NormalCharge");
-                
+
                 attackScale = state.SearchAttackData("LowChargeAttack").scale;
             }
+
 
             stateTime = 0;
         }
@@ -898,6 +907,13 @@ public class PlayerState : Player<PlayerState>
             {
                 state._animator.ResetTrigger("SpecialCharge");
                 state._isSpecialCharge = false;
+
+                // チャージエフェクトを削除
+                if (chargeEffect)
+                {
+                    Destroy(chargeEffect);
+                    chargeEffect = null;
+                }
             }
             else
             {
