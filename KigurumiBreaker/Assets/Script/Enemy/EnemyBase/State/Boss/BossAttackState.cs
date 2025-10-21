@@ -40,6 +40,6 @@ public class BossAttackState : IState
 
     public void End()
     {
-
+        _boss.animator.ResetTrigger("Attack");
     }
 }
