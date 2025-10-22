@@ -281,7 +281,14 @@ public class Enemy : EnemyBase
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
 
+    public virtual void CreateAttackPos()
+    {
+    }
 
+    public void CreateAttack(GameObject attackObj)
+    {
+
+    }
 
 }
 

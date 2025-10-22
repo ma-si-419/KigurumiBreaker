@@ -74,8 +74,12 @@ public class TackleEnemy : Enemy
     // 攻撃オブジェクトを生成する関数
     private void CreateAttack()
     {
+
+        BattleManager manager = _battleManager.GetComponent<BattleManager>();
         // ゲームオブジェクト生成
-        _attackObject = Instantiate(attackObjectPrefab);
+        GameObject attackObject = Instantiate(attackObjectPrefab);
+
+        manager.AddEnemyAttack(attackObject);
     }
 
 }

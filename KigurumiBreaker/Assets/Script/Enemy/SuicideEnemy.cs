@@ -17,7 +17,7 @@ public class SuicideEnemy : Enemy
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
-                CreateAttack();
+                CreateAttackPos();
             }
 
             _isStateChange = true;
@@ -35,10 +35,14 @@ public class SuicideEnemy : Enemy
     }
 
     // 攻撃オブジェクトを生成する関数
-    private void CreateAttack()
+    public override void CreateAttackPos()
     {
+
+        BattleManager manager = _battleManager.GetComponent<BattleManager>();
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(attackObjectPrefab);
+
+        manager.AddEnemyAttack(attackObject);
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
     }

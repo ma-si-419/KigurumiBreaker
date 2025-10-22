@@ -53,7 +53,7 @@ public class PunchEnemy : Enemy
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
-                CreateAttack();
+                CreateAttackPos();
             }
         }
 
@@ -93,13 +93,17 @@ public class PunchEnemy : Enemy
     }
 
     // 攻撃オブジェクトを生成する関数
-    private void CreateAttack()
+    public override void CreateAttackPos()
     {
-        //ゲームオブジェクト生成
-       GameObject attackObject = Instantiate(attackObjectPrefab);
+        BattleManager manager = _battleManager.GetComponent<BattleManager>();
 
-       // ゲームオブジェクト生成
-       //_attackObject = Instantiate(_attackObjectPrefab);
+        //ゲームオブジェクト生成
+        GameObject attackObject = Instantiate(attackObjectPrefab);
+
+        manager.AddEnemyAttack(attackObject);
+
+        // ゲームオブジェクト生成
+        //_attackObject = Instantiate(_attackObjectPrefab);
 
         float yOffset = 1.0f; // Y軸のオフセット値（必要に応じて調整）
 
