@@ -14,10 +14,28 @@ public class BossEnemy : EnemyBase
     protected float _attackTimer = 0.0f;
 
     // プレイヤーが攻撃範囲に入ったら攻撃状態に遷移させるためのフラグ
-    protected bool _isAttack = false;
+    public bool isAttack = false;
 
     // フェーズチェンジしたかどうかのフラグ
     protected bool _isPhaseChanged = false;
+
+    // 攻撃範囲の値の二乗
+    protected float _meleeAttackRangeSqr;
+    protected float _specialAttackRangeSqr;
+
+    [SerializeField] public float _meleeAttackRange;
+    [SerializeField] public float _specialAttackRange;
+
+    [Header("通常攻撃のプレハブ(仮)")]
+    [SerializeField] protected GameObject _meleeAttackPrefab; // 
+
+    protected bool _isStop = false;
+
+    protected bool _isDamage = false;
+
+    protected Vector3 _shakeVec;
+
+    protected Vector3 _stopPos;
 
     // ボスの攻撃データリスト
     //[SerializeField] protected BossAttackData _bossAttackData;
@@ -25,13 +43,18 @@ public class BossEnemy : EnemyBase
     // Getter
     //public BossAttackData bossAttackData => _bossAttackData;
 
-    [SerializeField] public float _meleeAttackRange;
-    [SerializeField] public float _specialAttackRange;
+    public float meleeAttackRangeSqr => _meleeAttackRangeSqr;
+    public float specialAttackRangeSqr => _specialAttackRangeSqr;
+
+    public GameObject meleeAttackPrefab => _meleeAttackPrefab;
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
+        _meleeAttackRangeSqr = _meleeAttackRange * _meleeAttackRange;
+        _specialAttackRangeSqr = _specialAttackRange * _specialAttackRange;
 
         // ボス専用の初期化処理をここに追加
         ChangeState(new BossIdleState(this));
@@ -39,9 +62,43 @@ public class BossEnemy : EnemyBase
 
     protected override void Update()
     {
+        float a = 0.05f;
+
+        if (_isStop)
+        {
+            if (_isDamage)
+            {
+                _shakeVec.x = Random.Range(-a, a);
+                _shakeVec.z = Random.Range(-a, a);
+            }
+
+            this.transform.position += _shakeVec;
+        }
+        else
+        {
+            if (_shakeVec.sqrMagnitude >= 0.001f)
+            {
+                this.transform.position = _stopPos;
+            }
+
+            _shakeVec = Vector3.zero;
+        }
+
+        if (_isStop) return;
+
         // 親クラスのUpdate()を呼び出す
         base.Update();
+
+
+
+        DebugLine();
     }
+
+    // ボス専用の近接攻撃処理(オーバライド)
+    public virtual void MeleeAttack(){}
+
+    // ボス専用の特殊攻撃処理(オーバライド)
+    public virtual void Attack(){}
 
     public virtual void Stan()
     {
@@ -61,7 +118,7 @@ public class BossEnemy : EnemyBase
 
     public void AttackReset()
     {
-        _isAttack = false;
+        isAttack = false;
         _attackTimer = 0.0f;
     }
 
@@ -75,6 +132,12 @@ public class BossEnemy : EnemyBase
 
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+
+            //ヒットストップ処理
+            PlayerAttack playerAttack = other.GetComponent<PlayerAttack>();
+            BattleManager manager = _battleManager.GetComponent<BattleManager>();
+            manager.StopTime(playerAttack.GetHitStopTime());
+
 
             // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
             //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
@@ -111,6 +174,10 @@ public class BossEnemy : EnemyBase
             // プレイヤーにダメージを与える処理
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
+            //ヒットストップ処理
+            PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
+            BattleManager manager = _battleManager.GetComponent<BattleManager>();
+            manager.StopTime(playerAttack.GetHitStopTime());
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
@@ -132,6 +199,20 @@ public class BossEnemy : EnemyBase
 
             //OnHit();
         }
+
+    }
+
+    //デバッグ用に線を引く
+    public void DebugLine()
+    {
+        //プレイヤーとの位置差を表示
+        Debug.DrawLine(transform.position, player.transform.position, Color.green);
+
+        //敵の攻撃範囲を表示
+        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(specialAttackRangeSqr), Color.red);
+        
+        //敵の検知範囲を球で表示
+        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(meleeAttackRangeSqr), Color.blue);
 
     }
 

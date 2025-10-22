@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
   m_Name: BossEnemyData
   m_EditorClassIdentifier: 
-  MaxHp: 10
+  MaxHp: 500
   MaxTrunk: 0
   AttackPower: 5
-  MoveSpeed: 4
-  DetectionRange: 10
-  AttackRange: 10
-  IdleToChaseTime: 3
-  ChaseToAttack: 3
+  MoveSpeed: 3
+  DetectionRange: 12
+  AttackRange: 4
+  IdleToChaseTime: 1.5
+  ChaseToAttack: 2
   RotateSpeed: 4
   AttackPrefab: {fileID: 0}

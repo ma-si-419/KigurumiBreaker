@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class BossAttackState : IState
@@ -7,10 +8,7 @@ public class BossAttackState : IState
     //ボス敵の参照
     private BossEnemy _boss;   
     //ビヘイビアツリー
-    private BhaiviorTree _bhaiviorTree;
-
-    //攻撃クールダウンタイマー
-    private float _cooldownTimer = 0.0f; 
+    //private BhaiviorTree _bhaiviorTree;
 
     public BossAttackState(BossEnemy boss)
     {
@@ -21,7 +19,7 @@ public class BossAttackState : IState
     public void Init()
     {
         //ボスの攻撃アニメーションを開始
-        _cooldownTimer = 0.0f;
+        //_cooldownTimer = 0.0f;
         // 追跡を停止
         _boss.agent.isStopped = true;
         //攻撃フラグリセット
@@ -32,9 +30,7 @@ public class BossAttackState : IState
 
     public void Update()
     {
-        Debug.Log("ふつう");
-
-
+        _boss.Attack();
 
     }
 
