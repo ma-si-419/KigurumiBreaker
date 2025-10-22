@@ -45,6 +45,14 @@ public class EnemyBase : MonoBehaviour
     // 向きたい方向
     protected Vector3 _direction;
 
+    protected bool _isStop = false;
+
+    protected bool _isDamage = false;
+
+    protected Vector3 _shakeVec;
+
+    protected Vector3 _stopPos;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {
@@ -145,11 +153,8 @@ public class EnemyBase : MonoBehaviour
     //オブジェクトの移動力をゼロにする
     public void StopMovement()
     {
-        if (_rigidbody != null)
-        {
-            _rigidbody.velocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
-        }
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
     }
 
     // Getterメソッド
@@ -174,6 +179,11 @@ public class EnemyBase : MonoBehaviour
     public void SetBattleManager(BattleManager battleManager)
     {
         _battleManager = battleManager;
+    }
+
+    public void SetStop(bool flag)
+    {
+        _isStop = flag;
     }
 
     // Gizmosを使って検知範囲と攻撃範囲を表示
