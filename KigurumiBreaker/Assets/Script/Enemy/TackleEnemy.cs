@@ -76,10 +76,11 @@ public class TackleEnemy : Enemy
     {
 
         BattleManager manager = _battleManager.GetComponent<BattleManager>();
+
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(attackObjectPrefab);
 
-        manager.AddEnemyAttack(attackObject);
+        manager.GetComponent<BattleManager>().AddEnemyAttack(attackObject);
     }
 
 }

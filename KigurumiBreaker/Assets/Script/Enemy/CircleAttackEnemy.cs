@@ -41,7 +41,7 @@ public class CircleAttackEnemy : Enemy
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(attackObjectPrefab);
 
-        battleManager.AddEnemyAttack(attackObject);
+        manager.AddEnemyAttack(attackObject);
 
 
         // 攻撃オブジェクトの位置を調整

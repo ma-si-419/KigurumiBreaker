@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyAttackCol : MonoBehaviour
 {
-
     enum AttackType //UŒ‚‚Ìí—Ş
     {
         Low,        //ãUŒ‚
@@ -23,6 +22,8 @@ public class EnemyAttackCol : MonoBehaviour
 
     [SerializeField] private int _lifeTime;         // UŒ‚”»’è‚Ìõ–½iƒtƒŒ[ƒ€”j
 
+    private bool _setBattleManager = false;
+
     private GameObject _attackEnemy;    // UŒ‚‚ğs‚Á‚½“G
 
     private GameObject _battleManager;
@@ -33,8 +34,7 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void Start()
     {
-        _battleManager.GetComponent<BattleManager>().AddEnemyAttack(this.gameObject);
-
+        _battleManager = GameObject.Find("BattleManager");
         if (CompareTag("EnemyRangedAttack"))
         {
             _lifeTime = (int)_shotLifeTime;
@@ -43,16 +43,31 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(!_setBattleManager)
+        {
+            if(_battleManager != null)
+            {
+                Debug.Log("AddEnemyAttack");
+                _battleManager.GetComponent<BattleManager>().AddEnemyAttack(this.gameObject);
+                _setBattleManager = true;
+            }
+            else
+            {
+                Debug.Log("ƒoƒgƒ‹ƒ}ƒl[ƒWƒƒ[‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            }
+        }
+
         if (_isStop) return;
 
         _lifeTime--;
-
-        if (_lifeTime <= 0)
+        Debug.Log(_lifeTime);
+        if (_lifeTime < 0)
         {
-            //UŒ‚”»’è‚Ìõ–½‚ª—ˆ‚½‚çÁ‚·
-            Destroy(this.gameObject);
+            Debug.Log("EnemyAttackCol(FixedUpdate):UŒ‚”»’èÁ–Å");
 
             _battleManager.GetComponent<BattleManager>().RemoveEnemyAttack(this.gameObject);
+            //UŒ‚”»’è‚Ìõ–½‚ª—ˆ‚½‚çÁ‚·
+            Destroy(this.gameObject);
         }
 
         if (CompareTag("EnemyRangedAttack"))
@@ -133,6 +148,7 @@ public class EnemyAttackCol : MonoBehaviour
         {
             if (other.CompareTag("Wall"))
             {
+                Debug.Log("EnemyAttackCol(OnTriggerEnter):’e‚ª•Ç‚É“–‚½‚Á‚½");
                 // •Ç‚âáŠQ•¨‚É“–‚½‚Á‚½ê‡’e‚ğíœ
                 Destroy(gameObject);
 
