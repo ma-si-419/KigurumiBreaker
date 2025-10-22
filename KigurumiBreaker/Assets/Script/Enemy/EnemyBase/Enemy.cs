@@ -200,6 +200,7 @@ public class Enemy : EnemyBase
                 }
             }
 
+            Debug.Log(playerAttack.GetDamage() + "のダメージ");
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
@@ -233,6 +234,7 @@ public class Enemy : EnemyBase
                 }
             }
 
+            Debug.Log("DestroyInEnemy.cs");
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
@@ -272,22 +274,13 @@ public class Enemy : EnemyBase
     public void DebugLine()
     {
         //プレイヤーとの位置差を表示
-        Debug.DrawLine(transform.position, player.transform.position, Color.green);
+        //Debug.DrawLine(transform.position, player.transform.position, Color.green);
 
         //敵の検知範囲を球で表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_detectRangeSqr), Color.blue);
 
         //敵の攻撃範囲を表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
-    }
-
-    public virtual void CreateAttackPos()
-    {
-    }
-
-    public void CreateAttack(GameObject attackObj)
-    {
-
     }
 
 }

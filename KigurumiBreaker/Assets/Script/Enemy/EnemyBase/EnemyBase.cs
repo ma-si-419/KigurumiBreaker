@@ -82,9 +82,12 @@ public class EnemyBase : MonoBehaviour
         _detectRangeSqr = _enemyData.detectionRange * _enemyData.detectionRange;
         _attackRangeSqr = _enemyData.attackRange * _enemyData.attackRange;
 
+
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
+
+
 
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();
@@ -113,6 +116,13 @@ public class EnemyBase : MonoBehaviour
                 Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
             }
         }
+    }
+
+    protected void Awake()
+    {
+        _battleManager = GetComponent<BattleManager>();
+
+        //_battleManager.AddEnemy(this.gameObject);
     }
 
     protected virtual void Update()

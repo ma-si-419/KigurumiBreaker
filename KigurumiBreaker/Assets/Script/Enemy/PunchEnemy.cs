@@ -53,7 +53,7 @@ public class PunchEnemy : Enemy
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
-                CreateAttackPos();
+                CreateAttack();
             }
         }
 
@@ -93,7 +93,7 @@ public class PunchEnemy : Enemy
     }
 
     // 攻撃オブジェクトを生成する関数
-    public override void CreateAttackPos()
+    private void CreateAttack()
     {
         BattleManager manager = _battleManager.GetComponent<BattleManager>();
 
