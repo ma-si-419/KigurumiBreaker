@@ -14,12 +14,6 @@ public class Enemy : EnemyBase
     protected bool _isSearched = false;     // プレイヤーを一度でも検知したかどうかのフラグ
     protected bool _isStateChange = false;  // 状態遷移フラグ
 
-    //ヒットストップ用
-    protected Vector3 _shakeVec;
-    protected Vector3 _stopPos;
-    protected bool _isStop = false;
-    protected bool _isDamage = false;
-
     protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
     protected float _hitTimer = 0.5f; // ヒットタイマー
 

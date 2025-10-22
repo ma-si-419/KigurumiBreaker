@@ -9,7 +9,7 @@ public class MiddleBoss : BossEnemy
     //攻撃クールダウンタイマー
     //private float _cooldownTimer = 0.0f;
 
-    private float CHARGE_SPEED = 15f; // 突進速度
+    private float CHARGE_SPEED = 10f; // 突進速度
     private float CHARGE_TIME = 1.0f; // 突進時間
 
     private bool _isCharge = false; // 突進中かどうかのフラグ
@@ -19,11 +19,6 @@ public class MiddleBoss : BossEnemy
     /* 定数 */
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
     private const float ATTACK_DISTANCE = 1.0f; // 攻撃判定の距離
-
-    protected override void Start()
-    {
-        base.Start();
-    }
 
     public override void MeleeAttack()
     {
@@ -71,8 +66,15 @@ public class MiddleBoss : BossEnemy
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
+        //攻撃開始
         if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.5f)
         {
+            if(!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                CreateAttack();
+            }
+
             //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
             {
@@ -97,6 +99,9 @@ public class MiddleBoss : BossEnemy
             ChangeState(new BossIdleState(this));
         }
 
+
+
+
     }
 
     private IEnumerator DoCharge()
@@ -106,10 +111,12 @@ public class MiddleBoss : BossEnemy
         // 前進方向を計算
         Vector3 dir = (transform.forward).normalized;
 
-        _rigidbody.velocity = dir * CHARGE_SPEED;
+        Debug.Log("うおおおぉぉぉ");
 
         while (timer < CHARGE_TIME && _isCharge)
         {
+
+            _rigidbody.velocity = dir * CHARGE_SPEED;
             // 前進方向を計算
             //transform.position += dir * CHARGE_SPEED * Time.deltaTime;
 

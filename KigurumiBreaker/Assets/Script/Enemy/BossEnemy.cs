@@ -29,13 +29,7 @@ public class BossEnemy : EnemyBase
     [Header("通常攻撃のプレハブ(仮)")]
     [SerializeField] protected GameObject _meleeAttackPrefab; // 
 
-    protected bool _isStop = false;
 
-    protected bool _isDamage = false;
-
-    protected Vector3 _shakeVec;
-
-    protected Vector3 _stopPos;
 
     // ボスの攻撃データリスト
     //[SerializeField] protected BossAttackData _bossAttackData;
@@ -52,6 +46,15 @@ public class BossEnemy : EnemyBase
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
+        if (_rigidbody == null)
+        {
+            Debug.LogError("Rigidbodyが設定されていません！");
+        }
+        else
+        {
+            Debug.Log("Rigidbody検出成功: " + _rigidbody.name);
+        }
 
         _meleeAttackRangeSqr = _meleeAttackRange * _meleeAttackRange;
         _specialAttackRangeSqr = _specialAttackRange * _specialAttackRange;
