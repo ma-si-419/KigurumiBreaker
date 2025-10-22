@@ -22,8 +22,6 @@ public class MiddleBoss : BossEnemy
 
     public override void MeleeAttack()
     {
-        // 中ボス専用の近接攻撃処理をここに追加
-        Debug.Log("中ボスの通常攻撃！");
 
         _stateTimer += Time.deltaTime;
         //一旦
@@ -59,7 +57,6 @@ public class MiddleBoss : BossEnemy
 
     public override void Attack()
     {
-        Debug.Log("中ボスのタックル攻撃！");
 
         // ここにタックル攻撃の具体的な処理を追加
         _tackleTime += Time.deltaTime;
@@ -75,22 +72,30 @@ public class MiddleBoss : BossEnemy
                 CreateAttack();
             }
 
-            //攻撃判定を一つ生成させる
-            if (!_isCreateAttack)
-            {
-                Debug.Log("攻撃!");
-                _isCreateAttack = true;
-                CreateAttack();
-            }
-
-            if (_attackObject != null)
+            if(_attackObject != null)
             {
                 // 破棄されていない場合のみ位置を更新
                 _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
             }
 
-            // 突進中でなければ突進を開始
-            if (!_isCharge) StartCoroutine(DoCharge());
+
+
+            ////攻撃判定を一つ生成させる
+            //if (!_isCreateAttack)
+            //{
+            //    Debug.Log("攻撃!");
+            //    _isCreateAttack = true;
+            //    CreateAttack();
+            //}
+
+            //if (_attackObject != null)
+            //{
+            //    // 破棄されていない場合のみ位置を更新
+            //    _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
+            //}
+
+            //// 突進中でなければ突進を開始
+            //if (!_isCharge) StartCoroutine(DoCharge());
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
