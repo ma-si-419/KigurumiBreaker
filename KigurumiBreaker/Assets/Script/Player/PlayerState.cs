@@ -34,7 +34,7 @@ public class PlayerState : Player<PlayerState>
     {
         LOW,
         MIDDLE,
-        HEAVY
+        HIGH
     }
 
     public struct PlayerSkill
@@ -180,6 +180,11 @@ public class PlayerState : Player<PlayerState>
     // アニメーションの速度を保存しておく
     private float _animationSpeed;
 
+    // プレイヤーメッシュレンダラー
+    private SkinnedMeshRenderer _playerMeshRenderer;
+
+    // プレイヤーのマテリアル
+    private Material _playerMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -216,6 +221,12 @@ public class PlayerState : Player<PlayerState>
 
         // 弾の数を最大弾数に設定
         _nowBulletNum = _playerStatus.maxBulletNum;
+
+        // プレイヤーメッシュレンダラーを取得
+        _playerMeshRenderer = transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
+
+        // プレイヤーのマテリアルを取得
+        _playerMaterial = _playerMeshRenderer.material;
     }
 
     // 各Stateクラス
@@ -355,10 +366,10 @@ public class PlayerState : Player<PlayerState>
     public class DodgeState : StateBase<PlayerState>
     {
         // 回避時間のカウント
-        int dodgeTime;
+        private int _dodgeTime;
 
         // 回避方向
-        Vector3 dodgeDirection;
+        private Vector3 _dodgeDirection;
 
         public DodgeState(PlayerState next) : base(next)
         {
@@ -376,19 +387,19 @@ public class PlayerState : Player<PlayerState>
             // 回避アニメーションを再生
             state._animator.SetTrigger("Dodge");
             // 回避時間を設定
-            dodgeTime = 0;
+            _dodgeTime = 0;
 
             // 移動方向の計算
 
             // 移動方向がない場合は現在の向きを使用
             if (state._moveInput.magnitude < state._playerData.moveInputLength)
             {
-                dodgeDirection = state._currentDirection;
+                _dodgeDirection = state._currentDirection;
             }
             else
             {
-                dodgeDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
-                dodgeDirection = state.CalculateMoveDirection(dodgeDirection);
+                _dodgeDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+                _dodgeDirection = state.CalculateMoveDirection(_dodgeDirection);
             }
             if (state._playerSkill.dashSkillData != null)
             {
@@ -407,23 +418,23 @@ public class PlayerState : Player<PlayerState>
 
             if (state._isStop) return;
             // 回避時間をカウント
-            dodgeTime++;
+            _dodgeTime++;
 
             // 回避方向に向ける
-            if (dodgeDirection != Vector3.zero)
+            if (_dodgeDirection != Vector3.zero)
             {
-                state.transform.forward = dodgeDirection;
+                state.transform.forward = _dodgeDirection;
             }
 
             // 最初の数フレームは移動しない
-            if (dodgeTime < state._playerData.dodgeStartTime)
+            if (_dodgeTime < state._playerData.dodgeStartTime)
             {
                 state._rigidbody.velocity = Vector3.zero;
                 return;
             }
 
             // 移動処理
-            Vector3 dodgeVelocity = dodgeDirection * state._playerStatus.dodgeSpeed;
+            Vector3 dodgeVelocity = _dodgeDirection * state._playerStatus.dodgeSpeed;
 
             // パッシブスキルによる移動速度上昇率を加算
             dodgeVelocity *= (1.0f + state._passiveStatus.moveSpeedAddRate / 100.0f);
@@ -442,7 +453,7 @@ public class PlayerState : Player<PlayerState>
 
 
             // 一定時間経過したら待機状態に遷移
-            if (dodgeTime >= state._playerData.dodgeTime)
+            if (_dodgeTime >= state._playerData.dodgeTime)
             {
                 if (state._playerSkill.dashSkillData != null)
                 {
@@ -791,17 +802,17 @@ public class PlayerState : Player<PlayerState>
     // チャージ状態
     public class ChargeState : StateBase<PlayerState>
     {
-        int stateTime;
+        int _stateTime;
 
-        bool isShowAttackRange = false;
+        bool _isShowAttackRange = false;
 
-        bool isLowChargeAttack = false;
+        bool _isLowChargeAttack = false;
 
-        GameObject attackArea;
+        GameObject _attackArea;
 
-        float attackScale;
+        float _attackScale;
 
-        GameObject chargeEffect;
+        GameObject _chargeEffect;
 
         public ChargeState(PlayerState next) : base(next)
         {
@@ -823,18 +834,18 @@ public class PlayerState : Player<PlayerState>
                 state._animator.SetTrigger("SpecialCharge");
 
                 // 特殊チャージエフェクトを出す
-                chargeEffect = Instantiate(state._playerEffectData.specialAttackChargeEffectPrefab, state.transform.position, Quaternion.identity, state.transform);
+                _chargeEffect = Instantiate(state._playerEffectData.specialAttackChargeEffectPrefab, state.transform.position, Quaternion.identity, state.transform);
             }
             else
             {
                 // 通常チャージアニメーションを再生
                 state._animator.SetTrigger("NormalCharge");
 
-                attackScale = state.SearchAttackData("LowChargeAttack").scale;
+                _attackScale = state.SearchAttackData("LowChargeAttack").scale;
             }
 
 
-            stateTime = 0;
+            _stateTime = 0;
         }
         public override void OnUpdate()
         {
@@ -843,7 +854,7 @@ public class PlayerState : Player<PlayerState>
 
             if (state._isStop) return;
 
-            stateTime++;
+            _stateTime++;
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
@@ -864,7 +875,7 @@ public class PlayerState : Player<PlayerState>
 
                     // チャージ中に出すスキルを出す
                     if (state._playerSkill.specialChargeSkill.chargingAttackObject != null &&
-                        stateTime % state._playerSkill.specialChargeSkill.attackIntervalFrame == 0)
+                        _stateTime % state._playerSkill.specialChargeSkill.attackIntervalFrame == 0)
                     {
                         Instantiate(state._playerSkill.specialChargeSkill.chargingAttackObject, state.transform.position, Quaternion.identity);
                     }
@@ -892,7 +903,7 @@ public class PlayerState : Player<PlayerState>
                 if (state._normalChargeTime > state._playerData.chargeAttackTime)
                 {
                     // 攻撃範囲を表示していない場合、攻撃範囲を表示
-                    if (!isShowAttackRange)
+                    if (!_isShowAttackRange)
                     {
                         Vector3 AreaPos = state.transform.position;
 
@@ -903,11 +914,11 @@ public class PlayerState : Player<PlayerState>
 
                         AreaPos += shift;
 
-                        attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
+                        _attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
 
-                        attackArea.transform.localScale = new Vector3(attackScale, attackArea.transform.localScale.y, attackScale);
+                        _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
 
-                        isShowAttackRange = true;
+                        _isShowAttackRange = true;
                     }
                 }
 
@@ -915,13 +926,13 @@ public class PlayerState : Player<PlayerState>
                 if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
                 {
                     // 強チャージ攻撃の攻撃範囲に変更
-                    if (!isLowChargeAttack)
+                    if (!_isLowChargeAttack)
                     {
-                        attackScale = state.SearchAttackData("ChargeAttack").scale;
+                        _attackScale = state.SearchAttackData("ChargeAttack").scale;
 
-                        attackArea.transform.localScale = new Vector3(attackScale, attackArea.transform.localScale.y, attackScale);
+                        _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
 
-                        isLowChargeAttack = true;
+                        _isLowChargeAttack = true;
                     }
                 }
 
@@ -943,10 +954,10 @@ public class PlayerState : Player<PlayerState>
                 state._isSpecialCharge = false;
 
                 // チャージエフェクトを削除
-                if (chargeEffect)
+                if (_chargeEffect)
                 {
-                    Destroy(chargeEffect);
-                    chargeEffect = null;
+                    Destroy(_chargeEffect);
+                    _chargeEffect = null;
                 }
             }
             else
@@ -955,10 +966,10 @@ public class PlayerState : Player<PlayerState>
             }
 
             // 攻撃範囲オブジェクトを削除
-            if (attackArea)
+            if (_attackArea)
             {
-                Destroy(attackArea);
-                attackArea = null;
+                Destroy(_attackArea);
+                _attackArea = null;
             }
         }
     }
@@ -1184,6 +1195,7 @@ public class PlayerState : Player<PlayerState>
         private int _knockbackTime;
         private float _knockBackScale;
         private string _damageAnim;
+        private bool _changeMaterial = false;
 
         public DamageState(PlayerState next) : base(next)
         {
@@ -1227,7 +1239,7 @@ public class PlayerState : Player<PlayerState>
                 }
             }
             // 大ダメージ
-            else if (state._damageKind == DamageKind.HEAVY)
+            else if (state._damageKind == DamageKind.HIGH)
             {
                 _stunDuration = state._damageData.highStanTime;
                 _knockbackTime = state._damageData.highKnockBackTime;
@@ -1249,6 +1261,24 @@ public class PlayerState : Player<PlayerState>
             // ダメージアニメーションを再生
             state._animator.SetTrigger(_damageAnim);
 
+            // ヒットストップを行う
+            int stopTime = 0;
+
+            switch (state._damageKind)
+            {
+                case DamageKind.LOW:
+                    stopTime = state._damageData.lowHitStop;
+                    break;
+                case DamageKind.MIDDLE:
+                    stopTime = state._damageData.middleHitStop;
+                    break;
+                case DamageKind.HIGH:
+                    stopTime = state._damageData.highHitStop;
+                    break;
+            }
+
+            state._battleManager.GetComponent<BattleManager>().StopTime(stopTime);
+
         }
         public override void OnUpdate()
         {
@@ -1256,6 +1286,15 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             if (state._isStop) return;
+
+            // ヒットストップが終わってマテリアルが変更されたままだったら
+            if(!_changeMaterial)
+            {
+                // マテリアルを元に戻す
+                state._playerMeshRenderer.material = state._playerMaterial;
+            
+                _changeMaterial = true;
+            }
 
             // スタン時間をカウントダウン
             _stateTime++;
@@ -1927,7 +1966,7 @@ public class PlayerState : Player<PlayerState>
                 _isFrontDamage = true;
 
                 // もし攻撃がHeavyなら攻撃の方向を向く
-                if (_damageKind == DamageKind.HEAVY)
+                if (_damageKind == DamageKind.HIGH)
                 {
                     transform.forward = toEnemy;
                     _currentDirection = toEnemy;
@@ -1938,7 +1977,7 @@ public class PlayerState : Player<PlayerState>
                 _isFrontDamage = false;
 
                 // もし攻撃がHeavyなら攻撃の方向と逆を向く
-                if (_damageKind == DamageKind.HEAVY)
+                if (_damageKind == DamageKind.HIGH)
                 {
                     transform.forward = -toEnemy;
                     _currentDirection = -toEnemy;
@@ -1976,6 +2015,9 @@ public class PlayerState : Player<PlayerState>
 
                 // HPを減らす
                 _nowHp -= damage;
+
+                // ダメージマテリアルに変更
+                _playerMeshRenderer.material = _damageData.damageMaterial;
 
                 // ダメージの種類を取得
                 _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
