@@ -153,6 +153,9 @@ public class Enemy : EnemyBase
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
+            // ヒットストップ
+            // manager.StopTime(playerAttack.GetHitStopTime());
+
             // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
             //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
 
@@ -185,7 +188,7 @@ public class Enemy : EnemyBase
             if (_currentState is DeadState) return;
 
             // プレイヤーにダメージを与える処理
-            _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+            _currentHp -= other.GetComponent<PlayerRangedAttack>().GetDamage();
 
 
             // Hpが0以下なら死亡処理に遷移
