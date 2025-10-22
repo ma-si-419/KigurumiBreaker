@@ -5215,6 +5215,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f4addbd83ce534bb02fa6eab52fca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goalIndex: 0
+  waveSpawner: {fileID: 5189397451757403068}
 --- !u!1 &416127081031825926
 GameObject:
   m_ObjectHideFlags: 0
@@ -52422,13 +52424,25 @@ MonoBehaviour:
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
   spawnInterval: 0.5
-  targetEffects:
-  - {fileID: 784641345403866207}
-  - {fileID: 6136722122833758511}
+  goalPositions:
+  - {fileID: 405927038507834836}
+  - {fileID: 7098949160334464887}
+  stageProbabilities:
+  - eventType: 6
+    probability: 0.3
+  - eventType: 7
+    probability: 0.7
   skillSelectManager: {fileID: 0}
   nextSkillElement: 0
+  wallEffects:
+  - {fileID: 784641345419367743}
+  - {fileID: 6136722122852405327}
   isAllWavesCleared: 0
   skillSelectFinished: 0
+  beforskill: 
+  afterskill: 
+  battleManager: {fileID: 0}
+  stageSpawner: {fileID: 0}
 --- !u!114 &2049974637482684102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88199,6 +88213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f4addbd83ce534bb02fa6eab52fca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goalIndex: 1
+  waveSpawner: {fileID: 5189397451757403068}
 --- !u!1 &7114255030334036964
 GameObject:
   m_ObjectHideFlags: 0
@@ -119835,14 +119851,14 @@ PrefabInstance:
       addedObject: {fileID: 746521946110619996}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
---- !u!198 &784641345403866207 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
-  m_PrefabInstance: {fileID: 784641345419465629}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &784641345419069727 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+  m_PrefabInstance: {fileID: 784641345419465629}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &784641345419367743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
   m_PrefabInstance: {fileID: 784641345419465629}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &795641797257631246
@@ -164957,14 +164973,14 @@ PrefabInstance:
       addedObject: {fileID: 7189330973014393559}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
---- !u!198 &6136722122833758511 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
-  m_PrefabInstance: {fileID: 6136722122852505325}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6136722122852109423 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+  m_PrefabInstance: {fileID: 6136722122852505325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6136722122852405327 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
   m_PrefabInstance: {fileID: 6136722122852505325}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6145349469120789372
