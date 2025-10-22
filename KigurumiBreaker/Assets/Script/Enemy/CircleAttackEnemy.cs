@@ -46,8 +46,6 @@ public class CircleAttackEnemy : Enemy
 
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
-
-
     }
 
 }

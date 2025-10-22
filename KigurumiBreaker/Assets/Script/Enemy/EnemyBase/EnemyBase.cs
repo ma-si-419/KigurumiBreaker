@@ -74,6 +74,8 @@ public class EnemyBase : MonoBehaviour
     // 敵のステータスデータのゲッター
     public EnemyData enemyData => _enemyData;
 
+    public BattleManager battleManager => _battleManager;
+
     protected virtual void Start()
     {
         //索敵範囲と攻撃範囲の二乗を計算して保存

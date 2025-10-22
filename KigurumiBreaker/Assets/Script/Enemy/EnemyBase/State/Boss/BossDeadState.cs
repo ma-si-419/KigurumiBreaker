@@ -24,13 +24,16 @@ public class BossDeadState : IState
     public void Update()
     {
         _boss.StopMovement(); //移動停止
+        BattleManager manager = _boss.battleManager.GetComponent<BattleManager>();
 
         //死亡アニメーションが終わったらオブジェクト削除
         var stateInfo = _boss.animator.GetCurrentAnimatorStateInfo(0);
         if (stateInfo.IsName("Dead") && stateInfo.normalizedTime >= 1.0f)
         {
+            manager.RemoveEnemy(_boss.gameObject);
             Object.Destroy(_boss.gameObject);
         }
+
     }
 
     public void End()

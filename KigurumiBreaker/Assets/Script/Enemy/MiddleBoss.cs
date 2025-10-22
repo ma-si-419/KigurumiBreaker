@@ -10,10 +10,10 @@ public class MiddleBoss : BossEnemy
     //private float _cooldownTimer = 0.0f;
 
     private float CHARGE_SPEED = 10f; // 突進速度
-    private float CHARGE_TIME = 1.0f; // 突進時間
+    private float CHARGE_TIME = 5.0f; // 突進時間
 
     private bool _isCharge = false; // 突進中かどうかのフラグ
-    private float _tackleTime = 0.0f; // タイマー
+    private float _chargeTimer = 0.0f; // タイマー
     private GameObject _attackObject; // 攻撃オブジェクト
 
     /* 定数 */
@@ -59,7 +59,7 @@ public class MiddleBoss : BossEnemy
     {
 
         // ここにタックル攻撃の具体的な処理を追加
-        _tackleTime += Time.deltaTime;
+        _chargeTimer += Time.deltaTime;
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -78,7 +78,30 @@ public class MiddleBoss : BossEnemy
                 _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
             }
 
+            if(!_isCharge)
+            {
+                _isCharge = true;
+                _chargeTimer = 0.0f;
+            }
 
+            if(_isCharge)
+            {
+                _chargeTimer += Time.deltaTime;
+
+                if(_chargeTimer < CHARGE_TIME)
+                {
+                    _rigidbody.velocity = transform.forward * CHARGE_SPEED;
+                }
+                else
+                {
+                    // 突進終了
+                    _rigidbody.velocity = Vector3.zero;
+                    _isCharge = false;
+                    _chargeTimer = 0.0f;
+                    _isCreateAttack = false;
+                    isAttack = false;
+                }
+            }
 
             ////攻撃判定を一つ生成させる
             //if (!_isCreateAttack)
@@ -103,10 +126,6 @@ public class MiddleBoss : BossEnemy
         {
             ChangeState(new BossIdleState(this));
         }
-
-
-
-
     }
 
     private IEnumerator DoCharge()
@@ -135,7 +154,7 @@ public class MiddleBoss : BossEnemy
         //}
 
         _isCharge = false;
-        _tackleTime = 0.0f;
+        _chargeTimer = 0.0f;
         //攻撃フラグをリセット
         _isCreateAttack = false;
         isAttack = false;
@@ -144,15 +163,23 @@ public class MiddleBoss : BossEnemy
     // 攻撃オブジェクトを生成する関数
     private void CreateMeleeAttack()
     {
-        //ゲームオブジェクト生成
-       //GameObject attackObject = Instantiate(meleeAttackPrefab);
+        BattleManager manager = _battleManager.GetComponent<BattleManager>();
 
-       // //攻撃オブジェクトの位置を調整
-       // attackObject.transform.position = this.transform.position;
+        //manager.AddEnemyAttack(attackObject);
+
+        //ゲームオブジェクト生成
+        //GameObject attackObject = Instantiate(meleeAttackPrefab);
+
+        // //攻撃オブジェクトの位置を調整
+        // attackObject.transform.position = this.transform.position;
     }
 
     private void CreateAttack()
     {
+        BattleManager manager = _battleManager.GetComponent<BattleManager>();
+
+        //manager.AddEnemyAttack(attackObject);
+
         // ゲームオブジェクト生成
         //_attackObject = Instantiate(attackObjectPrefab);
     }
