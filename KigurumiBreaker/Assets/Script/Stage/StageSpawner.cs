@@ -21,8 +21,8 @@ public class StageSpawner : MonoBehaviour
     public List<SkillData.SkillElement> acquiredSkills = new List<SkillData.SkillElement>();
 
     [Header("WaveSpawner用 SkillSelectManager")]
-    [SerializeField] private SkillSelectManager skillSelectManagerPrefab;
-    [SerializeField] private BattleManager battleManagerPrefab;
+    [SerializeField] private SkillSelectManager skillSelectManager;
+    [SerializeField] private BattleManager battleManager;
 
     private int currentStageIndex = 0;
     private GameObject currentStageInstance;
@@ -57,10 +57,10 @@ public class StageSpawner : MonoBehaviour
         WaveSpawner[] waveSpawners = currentStageInstance.GetComponentsInChildren<WaveSpawner>();
         foreach (var wave in waveSpawners)
         {
-            if (wave.skillSelectManager == null && skillSelectManagerPrefab != null)
+            if (wave.skillSelectManager == null && skillSelectManager != null)
             {
-                wave.skillSelectManager = skillSelectManagerPrefab;
-                wave.battleManager = battleManagerPrefab;
+                wave.skillSelectManager = skillSelectManager;
+                wave.SetBattleManager(battleManager);
             }
 
             // 前ステージで会得したスキルを渡す
