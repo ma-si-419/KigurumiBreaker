@@ -80,6 +80,8 @@ public class BattleManager : MonoBehaviour
 
     public void StopTime(int time)
     {
+        if(time <= 0) return;
+
         _isStop = true;
         _stopFrame = time;
 
