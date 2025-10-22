@@ -46,7 +46,7 @@ public class BattleManager : MonoBehaviour
                 
                 foreach (GameObject enemy in enemies)
                 {
-                    enemy.GetComponent<ZangiMove>().SetStop(false);
+                    enemy.GetComponent<EnemyBase>().SetStop(false);
                 }
 
                 foreach (GameObject enemyAttack in _enemyAttacks)
@@ -92,7 +92,7 @@ public class BattleManager : MonoBehaviour
 
         foreach(GameObject enemy in enemies)
         {
-            enemy.GetComponent<ZangiMove>().SetStop(true);
+            enemy.GetComponent<EnemyBase>().SetStop(true);
         }
 
         foreach(GameObject enemyAttack in _enemyAttacks)
