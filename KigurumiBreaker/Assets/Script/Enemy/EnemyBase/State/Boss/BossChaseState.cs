@@ -11,8 +11,6 @@ public class BossChaseState : IState
     //状態遷移用タイマー
     private float _stateTimer;
 
-    private float _meleeAttackRangeSqr;
-    private float _specialAttackRangeSqr;
 
     public BossChaseState(BossEnemy boss)
     {
@@ -22,13 +20,10 @@ public class BossChaseState : IState
 
     public void Init()
     {
-        _meleeAttackRangeSqr = _boss._meleeAttackRange * _boss._meleeAttackRange;
-        _specialAttackRangeSqr = _boss._specialAttackRange * _boss._specialAttackRange;
-        
         // 追跡を再開
         _boss.agent.isStopped = false; 
         //待機アニメーション開始
-        _boss.animator.SetBool("Walk", true);
+        _boss.animator.SetBool("Chase", true);
     }
 
     public void Update()
@@ -45,36 +40,31 @@ public class BossChaseState : IState
         //プレイヤーとの位置差を計算
         Vector3 diff = _boss.player.transform.position - _boss.transform.position;
 
-        //攻撃圏内で別々の処理
-        //プレイヤーが検知範囲内にいるかチェック
-        if (diff.sqrMagnitude < _boss.enemyData.attackRange)
+        //追跡を停止
+        //タイマーを進める(スピード感を出すため一旦除外)
+        _stateTimer += Time.deltaTime;
+
+        //if (_stateTimer > _boss.enemyData.chaseToAttack)
         {
-            //追跡を停止
-            //タイマーを進める(スピード感を出すため一旦除外)
-            _stateTimer += Time.deltaTime;
-
-            if (_stateTimer > _boss.enemyData.chaseToAttack)
+            //近い距離なら近接攻撃へ
+            if (diff.sqrMagnitude < _boss.meleeAttackRangeSqr)
             {
-                //近い距離なら近接攻撃へ
-                if (diff.sqrMagnitude <= _boss._meleeAttackRange)
-                {
-                    //遠距離攻撃範囲なら遠距離攻撃へ
-                    _boss.ChangeState(new BossMeleeAttackState(_boss));
-                }
-                //遠い距離なら突進攻撃へ
-                else if (diff.sqrMagnitude <= _boss._specialAttackRange)
-                {
-
-                    _boss.ChangeState(new BossAttackState(_boss));
-                }
+                //通常攻撃へ移行
+                _boss.ChangeState(new BossMeleeAttackState(_boss));
             }
-
+            //中距離なら突進攻撃へ
+            else if (diff.sqrMagnitude < _boss.specialAttackRangeSqr)
+            {
+                //突進攻撃へ移行
+                _boss.ChangeState(new BossAttackState(_boss));
+            }
         }
+
     }
 
     public void End()
     {
         //待機アニメーション終了
-        _boss.animator.SetBool("Walk", false);
+        _boss.animator.SetBool("Chase", false);
     }
 }

@@ -14,6 +14,12 @@ public class Enemy : EnemyBase
     protected bool _isSearched = false;     // プレイヤーを一度でも検知したかどうかのフラグ
     protected bool _isStateChange = false;  // 状態遷移フラグ
 
+    //ヒットストップ用
+    protected Vector3 _shakeVec;
+    protected Vector3 _stopPos;
+    protected bool _isStop = false;
+    protected bool _isDamage = false;
+
     protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
     protected float _hitTimer = 0.5f; // ヒットタイマー
 
@@ -30,6 +36,30 @@ public class Enemy : EnemyBase
     {
         // デバッグ用に線を引く
         DebugLine();
+
+        float a = 0.05f;
+
+        if (_isStop)
+        {
+            if (_isDamage)
+            {
+                _shakeVec.x = Random.Range(-a, a);
+                _shakeVec.z = Random.Range(-a, a);
+            }
+
+            this.transform.position += _shakeVec;
+        }
+        else
+        {
+            if (_shakeVec.sqrMagnitude >= 0.001f)
+            {
+                this.transform.position = _stopPos;
+            }
+
+            _shakeVec = Vector3.zero;
+        }
+
+        if (_isStop) return;
 
         // ヒットしたら一定時間ヒット状態を維持
         if (_isHit)
@@ -153,6 +183,11 @@ public class Enemy : EnemyBase
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
+            //ヒットストップ処理
+            PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
+            BattleManager manager = _battleManager.GetComponent<BattleManager>();
+            manager.StopTime(playerAttack.GetHitStopTime());
+
             // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
             //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
 
@@ -187,6 +222,10 @@ public class Enemy : EnemyBase
             // プレイヤーにダメージを与える処理
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
+            //ヒットストップ処理
+            PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
+            BattleManager manager = _battleManager.GetComponent<BattleManager>();
+            manager.StopTime(playerAttack.GetHitStopTime());
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)

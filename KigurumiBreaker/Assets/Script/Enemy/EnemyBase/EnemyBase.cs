@@ -9,6 +9,8 @@ public class EnemyBase : MonoBehaviour
     //敵のステータスデータ
     [SerializeField] protected EnemyData _enemyData;
 
+    protected BattleManager _battleManager;
+
     // 現在のHP
     protected float _currentHp;
 
@@ -166,6 +168,12 @@ public class EnemyBase : MonoBehaviour
     public float GetCurrentTrunk()
     {
         return _currentTrunk;
+    }
+
+    //バトルマネージャーの参照をセットするメソッド
+    public void SetBattleManager(BattleManager battleManager)
+    {
+        _battleManager = battleManager;
     }
 
     // Gizmosを使って検知範囲と攻撃範囲を表示
