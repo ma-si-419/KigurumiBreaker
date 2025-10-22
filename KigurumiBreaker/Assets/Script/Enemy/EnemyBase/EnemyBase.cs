@@ -53,6 +53,8 @@ public class EnemyBase : MonoBehaviour
 
     protected Vector3 _stopPos;
 
+    protected float _animationSpeed = 1.0f;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {
@@ -184,6 +186,19 @@ public class EnemyBase : MonoBehaviour
     public void SetStop(bool flag)
     {
         _isStop = flag;
+    }
+    public void StopAnimation()
+    {
+        if (_animator.speed > 0)
+        {
+            _animationSpeed = _animator.speed;
+        }
+        _animator.speed = 0;
+    }
+
+    public void StartAnimation()
+    {
+        _animator.speed = _animationSpeed;
     }
 
     // Gizmosを使って検知範囲と攻撃範囲を表示
