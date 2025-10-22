@@ -57,6 +57,7 @@ public class MiddleBoss : BossEnemy
 
     public override void Attack()
     {
+        Debug.Log("タックル攻撃!");
 
         // ここにタックル攻撃の具体的な処理を追加
         _chargeTimer += Time.deltaTime;
@@ -68,6 +69,7 @@ public class MiddleBoss : BossEnemy
         {
             if(!_isCreateAttack)
             {
+                Debug.Log("攻撃!");
                 _isCreateAttack = true;
                 CreateAttack();
             }
@@ -95,7 +97,7 @@ public class MiddleBoss : BossEnemy
                 else
                 {
                     // 突進終了
-                    _rigidbody.velocity = Vector3.zero;
+                    //_rigidbody.velocity = Vector3.zero;
                     _isCharge = false;
                     _chargeTimer = 0.0f;
                     _isCreateAttack = false;
@@ -163,7 +165,7 @@ public class MiddleBoss : BossEnemy
     // 攻撃オブジェクトを生成する関数
     private void CreateMeleeAttack()
     {
-        BattleManager manager = _battleManager.GetComponent<BattleManager>();
+        //BattleManager manager = _battleManager.GetComponent<BattleManager>();
 
         //manager.AddEnemyAttack(attackObject);
 
@@ -176,7 +178,7 @@ public class MiddleBoss : BossEnemy
 
     private void CreateAttack()
     {
-        BattleManager manager = _battleManager.GetComponent<BattleManager>();
+        //BattleManager manager = _battleManager.GetComponent<BattleManager>();
 
         //manager.AddEnemyAttack(attackObject);
 
