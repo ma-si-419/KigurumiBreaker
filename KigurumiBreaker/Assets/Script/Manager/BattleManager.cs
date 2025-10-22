@@ -43,10 +43,12 @@ public class BattleManager : MonoBehaviour
                 _playerState.SetStop(false);
                 _playerState.StartAnimation();
                 _cameraMove.SetStop(false);
-                
+
                 foreach (GameObject enemy in enemies)
                 {
-                    enemy.GetComponent<EnemyBase>().SetStop(false);
+                    EnemyBase sc = enemy.GetComponent<EnemyBase>();
+                    sc.SetStop(false);
+                    sc.StartAnimation();
                 }
 
                 foreach (GameObject enemyAttack in _enemyAttacks)
@@ -80,7 +82,7 @@ public class BattleManager : MonoBehaviour
 
     public void StopTime(int time)
     {
-        if(time <= 0) return;
+        if (time <= 0) return;
 
         _isStop = true;
         _stopFrame = time;
@@ -90,12 +92,14 @@ public class BattleManager : MonoBehaviour
         _playerState.StopAnimation();
         _cameraMove.SetStop(true);
 
-        foreach(GameObject enemy in enemies)
+        foreach (GameObject enemy in enemies)
         {
-            enemy.GetComponent<EnemyBase>().SetStop(true);
+            EnemyBase sc = enemy.GetComponent<EnemyBase>();
+            sc.SetStop(true);
+            sc.StopAnimation();
         }
 
-        foreach(GameObject enemyAttack in _enemyAttacks)
+        foreach (GameObject enemyAttack in _enemyAttacks)
         {
             enemyAttack.GetComponent<EnemyAttackCol>().SetStop(true);
         }
