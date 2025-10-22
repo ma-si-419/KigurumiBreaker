@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52fec27fabb04741865c07b53aed82d, type: 3}
   m_Name: DamageData
   m_EditorClassIdentifier: 
+  DamageMaterial: {fileID: 2100000, guid: 32835a43c01063d45b80a9392ae42483, type: 2}
   LowStanTime: 5
+  LowHitStop: 0
   MiddleStanTime: 15
   MiddleKnockBackScale: 4
   MiddleKnockBackTime: 3
+  MiddleHitStop: 3
   HighStanTime: 115
   HighKnockBackScale: 10
   HighKnockBackTime: 13
+  HighHitStop: 7
