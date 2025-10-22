@@ -218,9 +218,9 @@ public class Enemy : EnemyBase
             _currentHp -= other.GetComponent<PlayerRangedAttack>().GetDamage();
 
             //ヒットストップ処理
-            PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
+            PlayerRangedAttack playerRangedAttack = other.gameObject.GetComponent<PlayerRangedAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
-            manager.StopTime(playerAttack.GetHitStopTime());
+            manager.StopTime(playerRangedAttack.GetHitStopTime());
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)

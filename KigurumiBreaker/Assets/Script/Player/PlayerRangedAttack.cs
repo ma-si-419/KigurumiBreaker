@@ -15,6 +15,7 @@ public class PlayerRangedAttack : MonoBehaviour
         public GameObject chaseAttack;
         public GameObject hitEffect;
         public float effectShiftScale;
+        public int hitStopTime;
     }
 
     private RangedAttackData _attackData;
@@ -74,6 +75,11 @@ public class PlayerRangedAttack : MonoBehaviour
     public int GetDamage()
     {
         return _attackData.damage;
+    }
+
+    public int GetHitStopTime()
+    {
+        return _attackData.hitStopTime;
     }
 
     private void OnTriggerEnter(Collider other)

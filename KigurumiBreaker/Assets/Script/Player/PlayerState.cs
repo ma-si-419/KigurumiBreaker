@@ -1750,6 +1750,9 @@ public class PlayerState : Player<PlayerState>
         // 遠距離攻撃ダメージ増加率分の効果を追加
         attackData.damage = attackData.damage + (int)(data.damage * (_passiveStatus.rangedAttackDamageAddRate / 100));
 
+        // 弾のヒットストップ時間を設定
+        attackData.hitStopTime = data.hitStopFrame;
+
         // 攻撃の情報をオブジェクトに入れる
         GameObject bullet = Instantiate(attack);
 
