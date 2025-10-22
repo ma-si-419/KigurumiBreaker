@@ -3,7 +3,8 @@ using UnityEngine;
 public class GoalPoint : MonoBehaviour
 {
     private StageSpawner spawner;
-
+    public int goalIndex;
+    public WaveSpawner waveSpawner;
     void Start()
     {
         spawner = FindObjectOfType<StageSpawner>();
@@ -14,6 +15,7 @@ public class GoalPoint : MonoBehaviour
         if (other.CompareTag("Player") && spawner != null)
         {
             spawner.NextStage();
+            waveSpawner.OnGoalReached(goalIndex);
         }
     }
 }

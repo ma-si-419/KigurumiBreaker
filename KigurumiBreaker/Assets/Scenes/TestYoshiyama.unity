@@ -228,9 +228,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3682041957359305794, guid: 34043e329935fd741abe96b1d2a82edf, type: 3}
     - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: _playerStatus
+      value: 
+      objectReference: {fileID: 11400000, guid: da5db4141ce3d3c4ba100dd119219842, type: 2}
+    - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: _battleManager
       value: 
       objectReference: {fileID: 274764435}
+    - target: {fileID: 3526729217197581994, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: _playerEffectData
+      value: 
+      objectReference: {fileID: 11400000, guid: 8713ce858496f0549a5a7c54c77f96b3, type: 2}
     - target: {fileID: 3839374813110153823, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_Name
       value: Player
@@ -405,6 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 1005031193}
+  _camera: {fileID: 476430302}
 --- !u!4 &274764436
 Transform:
   m_ObjectHideFlags: 0
@@ -2023,6 +2032,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 48862259}
     - target: {fileID: 694580747683765096, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
+      propertyPath: _skillSelectCursor
+      value: 
+      objectReference: {fileID: 6964020695524414140, guid: f858d0d213e15d24d9a5063d688332c1, type: 3}
+    - target: {fileID: 694580747683765096, guid: 36a3f66219393774f9e72dc26ee797c1, type: 3}
       propertyPath: _playerSkillManager
       value: 
       objectReference: {fileID: 738369554}
@@ -2313,9 +2326,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1673280610}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: battleManagerPrefab
+      value: 
+      objectReference: {fileID: 274764435}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: skillSelectManagerPrefab
+      value: 
+      objectReference: {fileID: 1673280610}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: acquiredSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: stageSets.Array.data[1].stagePrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: stageSets.Array.data[0].stagePrefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 2968718208737419968, guid: 32b82c4f16385e54f8f8c0bb76d095bf, type: 3}
+      objectReference: {fileID: 4135658842310630577, guid: b0c7ea22134fb4c40ac6c84de55f4f6e, type: 3}
     - target: {fileID: 5423860653554385116, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: m_Name
       value: StageManager
