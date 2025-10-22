@@ -7,34 +7,34 @@ public class Enemy : EnemyBase
 {
 
 
-    protected float _stateTimer = 0.0f; // ó‘Ô‘JˆÚ‚·‚é‚Ü‚Å‚Ìƒ^ƒCƒ}[
-    protected float _attackTimer = 0.0f; // ó‘Ô‘JˆÚ‚·‚é‚Ü‚Å‚Ìƒ^ƒCƒ}[
-    protected bool _isAttackRange = false; // ƒvƒŒƒCƒ„[‚ğŒŸ’m‚µ‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-    protected bool _isCreateAttack = false; // UŒ‚ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µ‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-    protected bool _isSearched = false;     // ƒvƒŒƒCƒ„[‚ğˆê“x‚Å‚àŒŸ’m‚µ‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-    protected bool _isStateChange = false;  // ó‘Ô‘JˆÚƒtƒ‰ƒO
+    protected float _stateTimer = 0.0f; // çŠ¶æ…‹é·ç§»ã™ã‚‹ã¾ã§ã®ã‚¿ã‚¤ãƒãƒ¼
+    protected float _attackTimer = 0.0f; // çŠ¶æ…‹é·ç§»ã™ã‚‹ã¾ã§ã®ã‚¿ã‚¤ãƒãƒ¼
+    protected bool _isAttackRange = false; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¤œçŸ¥ã—ãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
+    protected bool _isCreateAttack = false; // æ”»æ’ƒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
+    protected bool _isSearched = false;     // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸€åº¦ã§ã‚‚æ¤œçŸ¥ã—ãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
+    protected bool _isStateChange = false;  // çŠ¶æ…‹é·ç§»ãƒ•ãƒ©ã‚°
 
-    //ƒqƒbƒgƒXƒgƒbƒv—p
+    //ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ç”¨
     protected Vector3 _shakeVec;
     protected Vector3 _stopPos;
     protected bool _isStop = false;
     protected bool _isDamage = false;
 
-    protected bool _isHit = false; // UŒ‚‚ªƒqƒbƒg‚µ‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-    protected float _hitTimer = 0.5f; // ƒqƒbƒgƒ^ƒCƒ}[
+    protected bool _isHit = false; // æ”»æ’ƒãŒãƒ’ãƒƒãƒˆã—ãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
+    protected float _hitTimer = 0.5f; // ãƒ’ãƒƒãƒˆã‚¿ã‚¤ãƒãƒ¼
 
     protected override void Start()
     {
-        // eƒNƒ‰ƒX‚ÌStart()‚ğŒÄ‚Ño‚·
+        // è¦ªã‚¯ãƒ©ã‚¹ã®Start()ã‚’å‘¼ã³å‡ºã™
         base.Start();
 
-        //‘Ò‹@ó‘Ô‚Éİ’è
+        //å¾…æ©ŸçŠ¶æ…‹ã«è¨­å®š
         ChangeState(new IdleState(this));
     }
 
     protected override void Update()
     {
-        // ƒfƒoƒbƒO—p‚Éü‚ğˆø‚­
+        // ãƒ‡ãƒãƒƒã‚°ç”¨ã«ç·šã‚’å¼•ã
         DebugLine();
 
         float a = 0.05f;
@@ -61,55 +61,55 @@ public class Enemy : EnemyBase
 
         if (_isStop) return;
 
-        // ƒqƒbƒg‚µ‚½‚çˆê’èŠÔƒqƒbƒgó‘Ô‚ğˆÛ
+        // ãƒ’ãƒƒãƒˆã—ãŸã‚‰ä¸€å®šæ™‚é–“ãƒ’ãƒƒãƒˆçŠ¶æ…‹ã‚’ç¶­æŒ
         if (_isHit)
         {
             _hitTimer -= Time.deltaTime;
 
             if(_hitTimer <= 0.0f)
                 _isHit = false;
-                return; // ƒqƒbƒg’†‚Í‘¼‚Ìˆ—‚ğs‚í‚È‚¢
+                return; // ãƒ’ãƒƒãƒˆä¸­ã¯ä»–ã®å‡¦ç†ã‚’è¡Œã‚ãªã„
         }
 
-        // eƒNƒ‰ƒX‚ÌUpdate()‚ğŒÄ‚Ño‚·
+        // è¦ªã‚¯ãƒ©ã‚¹ã®Update()ã‚’å‘¼ã³å‡ºã™
         base.Update();
     }
 
-    //Šî–{‘Ò‹@ˆ—(ƒI[ƒo[ƒ‰ƒCƒh‚Å•ÏX‰Â)
+    //åŸºæœ¬å¾…æ©Ÿå‡¦ç†(ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã§å¤‰æ›´å¯)
     public virtual void Idle()
     {
 
-        //ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğ–Ú“I’n‚Éİ’è
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’ç›®çš„åœ°ã«è¨­å®š
         _agent.SetDestination(_player.transform.position);
 
-        // ˆÚ“®‚ğ’â~
+        // ç§»å‹•ã‚’åœæ­¢
         StopMovement();
 
-        Vector3 diff = _player.transform.position - transform.position; //ƒvƒŒƒCƒ„[‚Æ‚ÌˆÊ’u·‚ğŒvZ
+        Vector3 diff = _player.transform.position - transform.position; //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ä½ç½®å·®ã‚’è¨ˆç®—
 
-        //ƒvƒŒƒCƒ„[‚ªŒŸ’m”ÍˆÍ“à‚É‚¢‚é‚©ƒ`ƒFƒbƒN
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ¤œçŸ¥ç¯„å›²å†…ã«ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
         if (diff.sqrMagnitude < _detectRangeSqr || _isSearched)
         {
-            //ƒvƒŒƒCƒ„[”­Œ©‚µ‚½‚çˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç™ºè¦‹ã—ãŸã‚‰ä¸€åº¦ã ã‘å‘¼ã°ã‚Œã‚‹
             if (!_isSearched)
             {
-                //“G‚Ì“ªã‚ÉƒrƒbƒNƒŠƒ}[ƒN‚ğo‚·
+                //æ•µã®é ­ä¸Šã«ãƒ“ãƒƒã‚¯ãƒªãƒãƒ¼ã‚¯ã‚’å‡ºã™
             }
 
-            //ˆê“x‚Å‚àUŒ‚”ÍˆÍ“à‚É“ü‚Á‚½‚çƒtƒ‰ƒO‚ğ—§‚Ä‘±‚¯‚é
+            //ä¸€åº¦ã§ã‚‚æ”»æ’ƒç¯„å›²å†…ã«å…¥ã£ãŸã‚‰ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ç¶šã‘ã‚‹
             _isSearched = true;
 
             _stateTimer += Time.deltaTime;
 
             if (_stateTimer > _enemyData.idleToChaseTime)
             {
-                //’ÇÕó‘Ô‚Ö
+                //è¿½è·¡çŠ¶æ…‹ã¸
                 _stateTimer = 0.0f;
                 ChangeState(new ChaseState(this));
             }
         }
 
-        // UŒ‚”ÍˆÍ‚É“ü‚Á‚½‚çƒtƒ‰ƒO‚ğ—§‚Ä‚é
+        // æ”»æ’ƒç¯„å›²ã«å…¥ã£ãŸã‚‰ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
         if (diff.sqrMagnitude < _attackRangeSqr)
         {
             _isSearched = true;
@@ -125,12 +125,12 @@ public class Enemy : EnemyBase
         {
             _attackTimer += Time.deltaTime;
 
-            LookAtPlayer(); // ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ğŒü‚­
+            LookAtPlayer(); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹å‘ã‚’å‘ã
 
             if (_attackTimer > _enemyData.chaseToAttack)
             {
-                //’ÇÕó‘Ô‚Ö
-                _isAttackRange = false; // ƒtƒ‰ƒO‚ğƒŠƒZƒbƒg
+                //è¿½è·¡çŠ¶æ…‹ã¸
+                _isAttackRange = false; // ãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆ
                 _stateTimer = 0.0f;
                 ChangeState(new AttackState(this));
             }
@@ -138,77 +138,78 @@ public class Enemy : EnemyBase
 
     }
 
-    //Šî–{ˆÚ“®ˆ—(ƒI[ƒo[ƒ‰ƒCƒh‚Å•ÏX‰Â)
+    //åŸºæœ¬ç§»å‹•å‡¦ç†(ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã§å¤‰æ›´å¯)
     public virtual void Chase()
     {
 
-        //ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğ–Ú“I’n‚Éİ’è
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’ç›®çš„åœ°ã«è¨­å®š
         _agent.SetDestination(_player.transform.position);
-        StopMovement(); // Rigidbody‚ÌˆÚ“®‚ğ’â~(ƒvƒŒƒCƒ„[‚ÆÕ“Ë‚µ‚½Û‚É‚Á”ò‚Î‚³‚ê‚È‚¢‚½‚ß)
+        StopMovement(); // Rigidbodyã®ç§»å‹•ã‚’åœæ­¢(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨è¡çªã—ãŸéš›ã«å¹ã£é£›ã°ã•ã‚Œãªã„ãŸã‚)
 
-        //ƒvƒŒƒCƒ„[‚Æ‚ÌˆÊ’u·‚ğŒvZ
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ä½ç½®å·®ã‚’è¨ˆç®—
         Vector3 diff = _player.transform.position - transform.position;
 
-        //UŒ‚Œ—“à‚É“ü‚é‚ÆUŒ‚ó‘Ô‚Ö
-        //ƒvƒŒƒCƒ„[‚ªŒŸ’m”ÍˆÍ“à‚É‚¢‚é‚©ƒ`ƒFƒbƒN
+        //æ”»æ’ƒåœå†…ã«å…¥ã‚‹ã¨æ”»æ’ƒçŠ¶æ…‹ã¸
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ¤œçŸ¥ç¯„å›²å†…ã«ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
         if (diff.sqrMagnitude < _attackRangeSqr)
         {
-            //ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ğŒü‚«‘±‚¯‚é
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹å‘ã‚’å‘ãç¶šã‘ã‚‹
             LookAtPlayer();
-            //ƒ^ƒCƒ}[‚ği‚ß‚é
+            //ã‚¿ã‚¤ãƒãƒ¼ã‚’é€²ã‚ã‚‹
             _stateTimer += Time.deltaTime;
 
             if (_stateTimer > _enemyData.chaseToAttack)
             {
-                _agent.isStopped = true; //’ÇÕ‚ğ’â~
+                _agent.isStopped = true; //è¿½è·¡ã‚’åœæ­¢
 
-                //UŒ‚ó‘Ô‚Ö
+                //æ”»æ’ƒçŠ¶æ…‹ã¸
                 _stateTimer = 0.0f;
                 ChangeState(new AttackState(this));
             }
         }
     }
 
-    //Šî–{UŒ‚ˆ—(ƒI[ƒo[ƒ‰ƒCƒh‚Å•ÏX‰Â)
+    //åŸºæœ¬æ”»æ’ƒå‡¦ç†(ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã§å¤‰æ›´å¯)
     public virtual void Attack() { }
 
-    // UŒ‚”»’è‚ÉG‚ê‚½‚Æ‚«‚Ìˆ—
+    // æ”»æ’ƒåˆ¤å®šã«è§¦ã‚ŒãŸã¨ãã®å‡¦ç†
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            //€‚ñ‚¾ó‘Ô‚É‚È‚Á‚Ä‚¢‚éê‡‚Íƒ_ƒ[ƒW‚ğó‚¯‚È‚¢
+            //æ­»ã‚“ã çŠ¶æ…‹ã«ãªã£ã¦ã„ã‚‹å ´åˆã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªã„
             if (_currentState is DeadState) return;
 
-            // ƒ_ƒ[ƒW‚ğó‚¯‚é(ƒvƒŒƒCƒ„[ƒAƒ^ƒbƒN‚Ìƒ_ƒ[ƒW‚ğæ“¾‚·‚é)
+            // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¢ã‚¿ãƒƒã‚¯ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—ã™ã‚‹)
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
 
-            //ƒqƒbƒgƒXƒgƒbƒvˆ—
+            //ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—å‡¦ç†
             PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.StopTime(playerAttack.GetHitStopTime());
 
-            // ‘Ï‹v—Í‚ğŒ¸‚ç‚·(ƒvƒŒƒCƒ„[ƒAƒ^ƒbƒN‚Ì‘Ï‹v—Íƒ_ƒ[ƒW‚ğæ“¾‚·‚é)
+
+            // è€ä¹…åŠ›ã‚’æ¸›ã‚‰ã™(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¢ã‚¿ãƒƒã‚¯ã®è€ä¹…åŠ›ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—ã™ã‚‹)
             //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
 
-            // ƒ_ƒ[ƒWƒGƒtƒFƒNƒg‚ğ¶¬‚·‚é
+            // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
             //Instantiate(_damageEffect, transform.position, Quaternion.identity);
 
-            // Hp‚ª0ˆÈ‰º‚È‚ç€–Sˆ—‚É‘JˆÚ
+            // HpãŒ0ä»¥ä¸‹ãªã‚‰æ­»äº¡å‡¦ç†ã«é·ç§»
             if (_currentHp <= 0)
             {
                 _currentHp = 0;
-                // ‚·‚Å‚É€–Só‘Ô‚È‚ç•ÏX‚µ‚È‚¢
+                // ã™ã§ã«æ­»äº¡çŠ¶æ…‹ãªã‚‰å¤‰æ›´ã—ãªã„
                 if (!(_currentState is DeadState))
                 {
                     ChangeState(new DeadState(this));
                 }
             }
 
-            //UŒ‚‚Í‚¢‚Á‚½‚çUŒ‚”»’è‚ğ‘¬UÁ‚·
+            //æ”»æ’ƒã¯ã„ã£ãŸã‚‰æ”»æ’ƒåˆ¤å®šã‚’é€Ÿæ”»æ¶ˆã™
             Destroy(other.gameObject);
 
-            //UŒ‚ó‘Ô‚Ì‚Æ‚«‚Íƒ_ƒ[ƒWƒAƒjƒ[ƒVƒ‡ƒ“‚ğs‚í‚È‚¢
+            //æ”»æ’ƒçŠ¶æ…‹ã®ã¨ãã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¡Œã‚ãªã„
             if (_currentState is AttackState) return;
 
             OnHit();
@@ -216,32 +217,32 @@ public class Enemy : EnemyBase
 
         if (other.gameObject.CompareTag("PlayerRangedAttack"))
         {
-            //€‚ñ‚¾ó‘Ô‚É‚È‚Á‚Ä‚¢‚éê‡‚Íƒ_ƒ[ƒW‚ğó‚¯‚È‚¢
+            //æ­»ã‚“ã çŠ¶æ…‹ã«ãªã£ã¦ã„ã‚‹å ´åˆã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªã„
             if (_currentState is DeadState) return;
 
-            // ƒvƒŒƒCƒ„[‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éˆ—
-            _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹å‡¦ç†
+            _currentHp -= other.GetComponent<PlayerRangedAttack>().GetDamage();
 
-            //ƒqƒbƒgƒXƒgƒbƒvˆ—
+            //ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—å‡¦ç†
             PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.StopTime(playerAttack.GetHitStopTime());
 
-            // Hp‚ª0ˆÈ‰º‚È‚ç€–Sˆ—‚É‘JˆÚ
+            // HpãŒ0ä»¥ä¸‹ãªã‚‰æ­»äº¡å‡¦ç†ã«é·ç§»
             if (_currentHp <= 0)
             {
                 _currentHp = 0;
-                // ‚·‚Å‚É€–Só‘Ô‚È‚ç•ÏX‚µ‚È‚¢
+                // ã™ã§ã«æ­»äº¡çŠ¶æ…‹ãªã‚‰å¤‰æ›´ã—ãªã„
                 if (!(_currentState is DeadState))
                 {
                     ChangeState(new DeadState(this));
                 }
             }
 
-            //UŒ‚‚Í‚¢‚Á‚½‚çUŒ‚”»’è‚ğ‘¬UÁ‚·
+            //æ”»æ’ƒã¯ã„ã£ãŸã‚‰æ”»æ’ƒåˆ¤å®šã‚’é€Ÿæ”»æ¶ˆã™
             Destroy(other.gameObject);
 
-            //UŒ‚ó‘Ô‚Ì‚Æ‚«‚Íƒ_ƒ[ƒWƒAƒjƒ[ƒVƒ‡ƒ“‚ğs‚í‚È‚¢
+            //æ”»æ’ƒçŠ¶æ…‹ã®ã¨ãã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¡Œã‚ãªã„
             if (_currentState is AttackState) return;
 
             OnHit();
@@ -258,29 +259,29 @@ public class Enemy : EnemyBase
 
     public void OnHit()
     {
-        //ˆê‰ñ‚¾‚¯ƒqƒbƒgˆ—‚ğs‚¤
+        //ä¸€å›ã ã‘ãƒ’ãƒƒãƒˆå‡¦ç†ã‚’è¡Œã†
         if (_isHit) return;
 
         _isHit = true;
         _hitTimer = 0.5f;
 
-        //¡‚ÌƒXƒe[ƒgó‘Ô‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Éƒ_ƒ[ƒWƒAƒjƒ[ƒVƒ‡ƒ“‚ğd‚Ë‚é
+        //ä»Šã®ã‚¹ãƒ†ãƒ¼ãƒˆçŠ¶æ…‹ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é‡ã­ã‚‹
         _animator.CrossFade("Damage", 0.01f);
 
-        //‚È‚ñ‚©‰‰o‚Æ‚©‚ ‚Á‚½‚ç‚¢‚¢‚æ‚Ë
+        //ãªã‚“ã‹æ¼”å‡ºã¨ã‹ã‚ã£ãŸã‚‰ã„ã„ã‚ˆã­
 
     }
 
-    //ƒfƒoƒbƒO—p‚Éü‚ğˆø‚­
+    //ãƒ‡ãƒãƒƒã‚°ç”¨ã«ç·šã‚’å¼•ã
     public void DebugLine()
     {
-        //ƒvƒŒƒCƒ„[‚Æ‚ÌˆÊ’u·‚ğ•\¦
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ä½ç½®å·®ã‚’è¡¨ç¤º
         Debug.DrawLine(transform.position, player.transform.position, Color.green);
 
-        //“G‚ÌŒŸ’m”ÍˆÍ‚ğ‹…‚Å•\¦
+        //æ•µã®æ¤œçŸ¥ç¯„å›²ã‚’çƒã§è¡¨ç¤º
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_detectRangeSqr), Color.blue);
 
-        //“G‚ÌUŒ‚”ÍˆÍ‚ğ•\¦
+        //æ•µã®æ”»æ’ƒç¯„å›²ã‚’è¡¨ç¤º
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
 

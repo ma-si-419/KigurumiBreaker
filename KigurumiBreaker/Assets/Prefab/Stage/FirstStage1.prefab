@@ -1602,7 +1602,7 @@ GameObject:
   - component: {fileID: 5265498534606014882}
   - component: {fileID: 6103942884682992016}
   m_Layer: 0
-  m_Name: 'GoalPoint '
+  m_Name: GoalPoint 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1656,6 +1656,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f4addbd83ce534bb02fa6eab52fca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goalIndex: 1
+  waveSpawner: {fileID: 7772868012875844131}
 --- !u!1 &239118321125897923
 GameObject:
   m_ObjectHideFlags: 0
@@ -27571,7 +27573,7 @@ GameObject:
   - component: {fileID: 5274960984635142912}
   - component: {fileID: 9040432251229432109}
   m_Layer: 0
-  m_Name: GoalPoint
+  m_Name: GoalPoint0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27625,6 +27627,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f4addbd83ce534bb02fa6eab52fca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goalIndex: 0
+  waveSpawner: {fileID: 7772868012875844131}
 --- !u!1 &3854983718195733072
 GameObject:
   m_ObjectHideFlags: 0
@@ -30248,6 +30252,7 @@ Transform:
   - {fileID: 7987761132306407893}
   - {fileID: 2444978266266611193}
   - {fileID: 6019701618852057199}
+  - {fileID: 8078638957979648096}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7772868012875844131
@@ -30272,50 +30277,63 @@ MonoBehaviour:
       - spawnKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 1
+      - spawnKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 1
+      - spawnKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
-      - spawnKind: 2
+      - spawnKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
       - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
   - groupName: 
     waves:
     - popEnemies:
-      - spawnKind: 2
+      - spawnKind: 0
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 2
+      - spawnKind: 1
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-    - popEnemies:
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 3
+      - spawnKind: 4
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
       - spawnKind: 4
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
   spawnInterval: 0.5
-  targetEffects:
-  - {fileID: 8110345568826757905}
-  - {fileID: 2003488670921913244}
+  goalPositions:
+  - {fileID: 3841734184284957099}
+  - {fileID: 222872016100320352}
+  stageProbabilities:
+  - eventType: 4
+    probability: 0.6
+  - eventType: 6
+    probability: 0.4
   skillSelectManager: {fileID: 0}
   nextSkillElement: 0
+  wallEffects:
+  - {fileID: 8110345568812436081}
+  - {fileID: 2003488670908050172}
   isAllWavesCleared: 0
   skillSelectFinished: 0
+  beforskill: 
+  afterskill: 
+  stageSpawner: {fileID: 0}
 --- !u!114 &4019004346744930748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53598,6 +53616,59 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &7233138280450025318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8078638957979648096}
+  - component: {fileID: 8867132293873297346}
+  m_Layer: 0
+  m_Name: Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8078638957979648096
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7233138280450025318}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 35.17617, y: 28.47183, z: 8.789871}
+  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6565267351908876195}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8867132293873297346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7233138280450025318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d17a2bc1d81d343ac487c5118dd9d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillRates:
+  - rewardType: 0
+    customName: 
+    element: 0
+    probability: 56.4
+  - rewardType: 3
+    customName: 
+    element: 0
+    probability: 72.3
 --- !u!1 &7235818101372929881
 GameObject:
   m_ObjectHideFlags: 0
@@ -85165,9 +85236,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
   m_PrefabInstance: {fileID: 2003488670908148830}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &2003488670921913244 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+--- !u!1 &2003488670908050172 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
   m_PrefabInstance: {fileID: 2003488670908148830}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2006716703707116409
@@ -130990,14 +131061,14 @@ PrefabInstance:
       addedObject: {fileID: 6177314432292998529}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+--- !u!1 &8110345568812436081 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
+  m_PrefabInstance: {fileID: 8110345568812469459}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8110345568812602961 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
-  m_PrefabInstance: {fileID: 8110345568812469459}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8110345568826757905 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19800002, guid: 34fd02ac9d79ecc48959596089be08ca, type: 3}
   m_PrefabInstance: {fileID: 8110345568812469459}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8116469789065488401
