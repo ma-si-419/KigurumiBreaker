@@ -79,7 +79,7 @@ public class WaveSpawner : MonoBehaviour
 
     [SerializeField] public string beforskill; // 前ステージで取得したスキル
     [SerializeField] public string afterskill;
-    [SerializeField] public BattleManager battleManager;
+    private BattleManager _battleManager;
 
     [HideInInspector] public StageSpawner stageSpawner;
 
@@ -152,6 +152,9 @@ public class WaveSpawner : MonoBehaviour
                 Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
                 GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
                 spawned.Add(enemy);
+                _battleManager.AddEnemy(enemy);
+                enemy.GetComponent<EnemyBase>().SetBattleManager(_battleManager);
+
                 yield return new WaitForSeconds(spawnInterval);
             }
 
@@ -312,6 +315,11 @@ public class WaveSpawner : MonoBehaviour
             }
         }
         Debug.Log("壁エフェクトをすべて破棄しました");
+    }
+
+    public void SetBattleManager(BattleManager manager)
+    {
+        _battleManager = manager;
     }
 
 #if UNITY_EDITOR
