@@ -9,7 +9,11 @@ public class EnemyBase : MonoBehaviour
     //敵のステータスデータ
     [SerializeField] protected EnemyData _enemyData;
 
+    //バトルマネージャーの参照
     protected BattleManager _battleManager;
+
+    //敵の攻撃判定の参照
+    protected EnemyAttackCol _enemyAttackCol;
 
     // 現在のHP
     protected float _currentHp;
@@ -83,11 +87,10 @@ public class EnemyBase : MonoBehaviour
         _attackRangeSqr = _enemyData.attackRange * _enemyData.attackRange;
 
 
+
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
-
-
 
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();
@@ -120,9 +123,8 @@ public class EnemyBase : MonoBehaviour
 
     protected void Awake()
     {
+        // バトルマネージャーの参照を取得
         _battleManager = GetComponent<BattleManager>();
-
-        //_battleManager.AddEnemy(this.gameObject);
     }
 
     protected virtual void Update()

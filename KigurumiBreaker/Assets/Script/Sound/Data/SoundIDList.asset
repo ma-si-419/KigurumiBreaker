@@ -9,16 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
-  m_Name: TackleEnemyData
+  m_Script: {fileID: 11500000, guid: 9edbe54c7f2c3804ead78b841f7949e2, type: 3}
+  m_Name: SoundIDList
   m_EditorClassIdentifier: 
-  MaxHp: 100
-  MaxTrunk: 50
-  AttackPower: 3
-  MoveSpeed: 5
-  DetectionRange: 20
-  AttackRange: 10
-  IdleToChaseTime: 2
-  ChaseToAttack: 2
-  RotateSpeed: 5
-  AttackPrefab: {fileID: 0}
+  soundDatas:
+  - Name: Low1
+    Clip: {fileID: 0}
+    Volume: 0.61
+  - Name: Low2
+    Clip: {fileID: 0}
+    Volume: 0.61
