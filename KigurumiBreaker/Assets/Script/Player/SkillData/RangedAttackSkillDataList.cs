@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "RangedAttackSkillDataList")]
+[CreateAssetMenu(menuName = "Skill/RangedAttackSkillDataList")]
 public class RangedAttackSkillDataList : ScriptableObject
 {
     public List<RangedAttackSkillData> rangedAttackSkillDataList;

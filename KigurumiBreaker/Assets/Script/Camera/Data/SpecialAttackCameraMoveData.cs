@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SpecialAttackCameraMoveData")]
+[CreateAssetMenu(menuName = "Camera/SpecialAttackCameraMoveData")]
 
 [System.Serializable]
 public class SpecialAttackCameraMoveData : ScriptableObject

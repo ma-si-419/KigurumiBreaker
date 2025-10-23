@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CameraShakeData")]
+[CreateAssetMenu(menuName = "Camera/CameraShakeData")]
 
 [System.Serializable]
 public class CameraShakeData : ScriptableObject

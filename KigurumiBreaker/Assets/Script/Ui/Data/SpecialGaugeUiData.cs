@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "SpecialGaugeUiData")]
+[CreateAssetMenu(menuName = "UI/SpecialGaugeUiData")]
 public class SpecialGaugeUiData : ScriptableObject
 {
     [Header("‚½‚Ü‚Á‚Ä‚¢‚È‚¢‚Æ‚«‚ÌƒQ[ƒW‚ÌF")]

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PlayerStatus")]
+[CreateAssetMenu(menuName = "Player/PlayerStatus")]
 public class PlayerStatus : ScriptableObject
 {
     [Header("Å‘å‘Ì—Í")]

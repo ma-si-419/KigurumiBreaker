@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ChargeAttackSkillDataList")]
+[CreateAssetMenu(menuName = "Skill/ChargeAttackSkillDataList")]
 public class ChargeAttackSkillDataList : ScriptableObject
 {
     public List<ChargeAttackSkillData> chargeAttackSkillDataList;

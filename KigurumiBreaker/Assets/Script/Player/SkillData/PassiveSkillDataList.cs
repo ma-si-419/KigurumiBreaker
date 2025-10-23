@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PassiveSkillDataList")]
+[CreateAssetMenu(menuName = "Skill/PassiveSkillDataList")]
 public class PassiveSkillDataList : ScriptableObject
 {
     public List<PassiveSkillData> passiveSkillDataList;

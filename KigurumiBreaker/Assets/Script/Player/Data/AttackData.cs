@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "AttackData")]
+[CreateAssetMenu(menuName = "Player/AttackData")]
 public class AttackData : ScriptableObject
 {
     public List<Attack> attackDataList;

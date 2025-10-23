@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "DashSkillDataList")]
+[CreateAssetMenu(menuName = "Skill/DashSkillDataList")]
 public class DashSkillDataList : ScriptableObject
 {
     public List<DashSkillData> dashSkillDataList;
