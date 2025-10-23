@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SoundData2
+public class SoundData
 {
     public string Name; // 識別名 (例: "TitleBGM")
     public AudioClip Clip; // 再生する AudioClip
@@ -18,5 +18,13 @@ public class SoundData2
 public class SoundIDList : ScriptableObject
 {
     // サウンドの名前
-    public List<SoundData2> soundDatas = new List<SoundData2>();
+    [Header("SEリスト")]
+    public List<SoundData> soundDatas = new List<SoundData>();
+
+    // Enum (SoundID) から SoundData を返す（名前が enum.ToString() と等しいことが前提）
+    public SoundData SoundEntry(SoundID id)
+    {
+        if (soundDatas == null) return null;
+        return soundDatas.Find(s => s != null && s.Name == id.ToString());
+    }
 }
