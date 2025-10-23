@@ -9,10 +9,6 @@ public class EnemyBase : MonoBehaviour
     //敵のステータスデータ
     [SerializeField] protected EnemyData _enemyData;
 
-
-    //敵の攻撃判定の参照
-    protected EnemyAttackCol _enemyAttackCol;
-
     // 現在のHP
     protected float _currentHp;
 

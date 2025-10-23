@@ -39,11 +39,7 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void Start()
     {
-        //バトルマネージャーを取得(これじゃ設計上良くない…)
-        //_battleManager = GameObject.Find("BattleManager");
-
-        
-
+        // 弾の寿命をフレーム数に変換してセット
         if (CompareTag("EnemyRangedAttack"))
         {
             _lifeTime = (int)_shotLifeTime;
