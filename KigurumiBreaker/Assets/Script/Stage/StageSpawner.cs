@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
 
@@ -12,95 +11,100 @@ public class StageSet
 
 public class StageSpawner : MonoBehaviour
 {
-    [SerializeField] private StageSet[] stageSets;
-    [SerializeField] private Transform player;
+    [SerializeField] private StageSet[] _stageSets;
+    [SerializeField] private Transform _player;
 
     [Header("スキル情報")]
-    [SerializeField] public string beforskill; // 現在持っているスキル
-    [SerializeField] public string afterskill;
+    [SerializeField] public string beforeSkill;   // 現在持っているスキル
+    [SerializeField] public string afterSkill;
     public List<SkillData.SkillElement> acquiredSkills = new List<SkillData.SkillElement>();
 
     [Header("WaveSpawner用 SkillSelectManager")]
-    [SerializeField] private SkillSelectManager skillSelectManager;
-    [SerializeField] private BattleManager battleManager;
+    [SerializeField] private SkillSelectManager _skillSelectManager;
+    [SerializeField] private BattleManager _battleManager;
 
-    private int currentStageIndex = 0;
-    private GameObject currentStageInstance;
+    private int _currentStageIndex = 0;
+    private GameObject _currentStageInstance;
 
     public void SpawnStage(int index)
     {
-        if (index < 0 || index >= stageSets.Length) return;
+        if (index < 0 || index >= _stageSets.Length) return;
 
         // 前ステージを破棄
-        if (currentStageInstance != null)
-            Destroy(currentStageInstance);
+        if (_currentStageInstance != null)
+        {
+            Destroy(_currentStageInstance);
+        }
 
-        StageSet set = stageSets[index];
+        StageSet stageSet = _stageSets[index];
 
         // ランダムでPrefab選択
-        int prefabIndex = Random.Range(0, set.stagePrefabs.Length);
-        currentStageInstance = Instantiate(set.stagePrefabs[prefabIndex]);
+        int prefabIndex = Random.Range(0, stageSet.stagePrefabs.Length);
+        _currentStageInstance = Instantiate(stageSet.stagePrefabs[prefabIndex]);
 
         // NavMesh再生成
-        var surface = currentStageInstance.GetComponent<NavMeshSurface>();
-        if (surface != null) surface.BuildNavMesh();
-
-        // Player初期位置
-        Transform spawn = currentStageInstance.transform.Find("SpawnPoint");
-        if (spawn != null && player != null)
+        var navMeshSurface = _currentStageInstance.GetComponent<NavMeshSurface>();
+        if (navMeshSurface != null)
         {
-            player.position = spawn.position;
-            player.rotation = spawn.rotation;
+            navMeshSurface.BuildNavMesh();
+        }
+
+        // Player初期位置設定
+        Transform spawnPoint = _currentStageInstance.transform.Find("SpawnPoint");
+        if (spawnPoint != null && _player != null)
+        {
+            _player.position = spawnPoint.position;
+            _player.rotation = spawnPoint.rotation;
         }
 
         // WaveSpawner に SkillSelectManager とスキル情報をセット
-        WaveSpawner[] waveSpawners = currentStageInstance.GetComponentsInChildren<WaveSpawner>();
-        foreach (var wave in waveSpawners)
+        WaveSpawner[] waveSpawners = _currentStageInstance.GetComponentsInChildren<WaveSpawner>();
+        foreach (var waveSpawner in waveSpawners)
         {
-            if (wave.skillSelectManager == null && skillSelectManager != null)
+            if (waveSpawner.skillSelectManager == null && _skillSelectManager != null)
             {
-                wave.skillSelectManager = skillSelectManager;
-                wave.SetBattleManager(battleManager);
+                waveSpawner.skillSelectManager = _skillSelectManager;
+                waveSpawner.SetBattleManager(_battleManager);
             }
 
             // 前ステージで会得したスキルを渡す
             if (acquiredSkills.Count > 0)
             {
-                wave.beforskill = string.Join(",", acquiredSkills);
+                waveSpawner.beforskill = string.Join(",", acquiredSkills);
             }
 
-            // StageSpawner の参照も渡す
-            wave.stageSpawner = this;
+            // StageSpawner の参照を渡す
+            waveSpawner.stageSpawner = this;
         }
 
-        currentStageIndex = index;
-        Debug.Log($"Stage {index + 1} を生成: {set.stagePrefabs[prefabIndex].name}");
+        _currentStageIndex = index;
+        Debug.Log($"Stage {index + 1} を生成: {stageSet.stagePrefabs[prefabIndex].name}");
     }
 
     public void NextStage()
     {
-        int nextIndex = currentStageIndex + 1;
-        if (nextIndex >= stageSets.Length)
+        int nextIndex = _currentStageIndex + 1;
+        if (nextIndex >= _stageSets.Length)
         {
             Debug.Log("全ステージクリア！");
             return;
         }
+
         SpawnStage(nextIndex);
     }
 
     private void Start()
     {
         SpawnStage(0);
-        //AudioManager.Instance.PlayBGM("TitleBGM");
-        //AudioManager.Instance.PlaySE("TestSE");
-
+        // AudioManager.Instance.PlayBGM("TitleBGM");
+        // AudioManager.Instance.PlaySE("TestSE");
     }
 
     // WaveSpawner から通知される
     public void OnPathSelected(SkillData.SkillElement selectedSkill)
     {
-        beforskill = selectedSkill.ToString();
-        Debug.Log($"StageSpawner: プレイヤーが選択した道のスキルは {beforskill}");
+        beforeSkill = selectedSkill.ToString();
+        Debug.Log($"StageSpawner: プレイヤーが選択した道のスキルは {beforeSkill}");
     }
 
     // WaveSpawner からスキル会得通知
@@ -109,8 +113,8 @@ public class StageSpawner : MonoBehaviour
         if (!acquiredSkills.Contains(acquiredSkill))
         {
             acquiredSkills.Add(acquiredSkill);
-            afterskill = acquiredSkill.ToString();
-            Debug.Log($"StageSpawner: 会得スキルに {afterskill} を追加");
+            afterSkill = acquiredSkill.ToString();
+            Debug.Log($"StageSpawner: 会得スキルに {afterSkill} を追加");
         }
     }
 }

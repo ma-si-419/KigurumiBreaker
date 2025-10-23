@@ -92,9 +92,9 @@ public class WaveSpawner : MonoBehaviour
         if (stageSpawner == null)
             stageSpawner = FindObjectOfType<StageSpawner>();
 
-        if (stageSpawner != null && !string.IsNullOrEmpty(stageSpawner.beforskill))
+        if (stageSpawner != null && !string.IsNullOrEmpty(stageSpawner.beforeSkill))
         {
-            beforskill = stageSpawner.beforskill;
+            beforskill = stageSpawner.beforeSkill;
             Debug.Log($"WaveSpawner: 前ステージスキル {beforskill} を取得");
         }
 

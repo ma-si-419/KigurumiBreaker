@@ -69,7 +69,7 @@ public class AudioManager : MonoBehaviour
     // ============================================================
     public void PlayBGM(string id)
     {
-        var entry = audioDatabase.GetBGMEntry(id);
+        var entry = audioDatabase.GetBgmEntry(id);
         if (entry == null || entry.clip == null) return;
 
         if (bgmSource.clip == entry.clip && bgmSource.isPlaying) return;
@@ -83,7 +83,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySE(string id)
     {
-        var entry = audioDatabase.GetSEEntry(id);
+        var entry = audioDatabase.GetSeEntry(id);
         if (entry == null || entry.clip == null) return;
 
         seSource.PlayOneShot(entry.clip, entry.volume);

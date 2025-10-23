@@ -4,8 +4,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class SoundEntry
 {
-    public string id;                 // ¯•Ê–¼ (—á: "TitleBGM")
-    public AudioClip clip;            // Ä¶‚·‚éAudioClip
+    public string id; // ¯•Ê–¼ (—á: "TitleBGM")
+    public AudioClip clip; // Ä¶‚·‚é AudioClip
     [Range(0f, 1f)] public float volume = 1f; // ŒÂ•Ê‰¹—Ê
 }
 
@@ -18,14 +18,13 @@ public class SoundData : ScriptableObject
     [Header("SEƒŠƒXƒg")]
     public List<SoundEntry> seList = new List<SoundEntry>();
 
-    public SoundEntry GetBGMEntry(string id)
+    public SoundEntry GetBgmEntry(string id)
     {
-        return bgmList.Find(entry => entry.id == id);
+        return bgmList.Find(bgmEntry => bgmEntry.id == id);
     }
 
-    public SoundEntry GetSEEntry(string id)
+    public SoundEntry GetSeEntry(string id)
     {
-        return seList.Find(entry => entry.id == id);
+        return seList.Find(seEntry => seEntry.id == id);
     }
 }
-
