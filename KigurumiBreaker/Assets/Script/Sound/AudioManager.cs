@@ -13,8 +13,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource seSource;
 
-    [Header("Audio Database")]
-    [SerializeField] private SoundData audioDatabase;
+    // ここを SoundData（個別エントリ）ではなく、SoundIDList（一覧の ScriptableObject）にする
+    [Header("Audio Database (ScriptableObject)")]
+    [SerializeField] private SoundIDList audioDatabase;
 
     [Header("UI Elements (Option Menu)")]
     [SerializeField] private Slider masterSlider;
@@ -27,27 +28,25 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
+            Debug.LogWarning("[AudioManager] Duplicate instance detected and destroyed.");
             Destroy(gameObject);
             return;
         }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        // --- スライダー初期設定 ---
+        float master = PlayerPrefs.GetFloat(MASTER_PARAM, 1f);
+        float bgm = PlayerPrefs.GetFloat(BGM_PARAM, 1f);
+        float se = PlayerPrefs.GetFloat(SE_PARAM, 1f);
+
         if (masterSlider != null)
         {
-            float master = PlayerPrefs.GetFloat(MASTER_PARAM, 1f);
-            float bgm = PlayerPrefs.GetFloat(BGM_PARAM, 1f);
-            float se = PlayerPrefs.GetFloat(SE_PARAM, 1f);
-
             masterSlider.value = master;
             bgmSlider.value = bgm;
             seSlider.value = se;
@@ -55,23 +54,30 @@ public class AudioManager : MonoBehaviour
             masterSlider.onValueChanged.AddListener(SetMasterVolume);
             bgmSlider.onValueChanged.AddListener(SetBGMVolume);
             seSlider.onValueChanged.AddListener(SetSEVolume);
+        }
 
-            ApplyVolumes();
-        }
-        else
-        {
-            ApplyVolumes();
-        }
+        ApplyVolumes();
     }
 
     // ============================================================
     // 再生処理
     // ============================================================
-    public void PlayBGM(string id)
+    public void PlaySound(SoundID id)
     {
-        var entry = audioDatabase.GetBgmEntry(id);
-        if (entry == null || entry.clip == null) return;
+        if (audioDatabase == null)
+        {
+            Debug.LogError("[AudioManager] audioDatabase is null. Assign your SoundIDList asset in the inspector.");
+            return;
+        }
 
+        var entry = audioDatabase.SoundEntry(id); // ← SoundIDList に追加したメソッドを使用
+        if (entry == null || entry.clip == null)
+        {
+            Debug.LogWarning($"[AudioManager] Sound not found or clip null for id: {id}");
+            return;
+        }
+
+        // ここは BGM扱いで再生（もし SE と BGM を分けたいなら判定を追加してください）
         if (bgmSource.clip == entry.clip && bgmSource.isPlaying) return;
 
         bgmSource.clip = entry.clip;
@@ -81,16 +87,26 @@ public class AudioManager : MonoBehaviour
         bgmSource.Play();
     }
 
-    public void PlaySE(string id)
+    public void PlaySE(SoundID id)
     {
-        var entry = audioDatabase.GetSeEntry(id);
-        if (entry == null || entry.clip == null) return;
+        if (audioDatabase == null)
+        {
+            Debug.LogError("[AudioManager] audioDatabase is null. Assign your SoundIDList asset in the inspector.");
+            return;
+        }
+
+        var entry = audioDatabase.SoundEntry(id);
+        if (entry == null || entry.clip == null)
+        {
+            Debug.LogWarning($"[AudioManager] SE not found or clip null for id: {id}");
+            return;
+        }
 
         seSource.PlayOneShot(entry.clip, entry.volume);
     }
 
     // ============================================================
-    // 音量制御
+    // 音量制御（略、既存のまま）
     // ============================================================
     private void ApplyVolumes()
     {
@@ -103,18 +119,21 @@ public class AudioManager : MonoBehaviour
     {
         SetMixerVolume(MASTER_PARAM, value);
         PlayerPrefs.SetFloat(MASTER_PARAM, value);
+        PlayerPrefs.Save();
     }
 
     public void SetBGMVolume(float value)
     {
         SetMixerVolume(BGM_PARAM, value);
         PlayerPrefs.SetFloat(BGM_PARAM, value);
+        PlayerPrefs.Save();
     }
 
     public void SetSEVolume(float value)
     {
         SetMixerVolume(SE_PARAM, value);
         PlayerPrefs.SetFloat(SE_PARAM, value);
+        PlayerPrefs.Save();
     }
 
     private void SetMixerVolume(string param, float value)
@@ -123,9 +142,6 @@ public class AudioManager : MonoBehaviour
         audioMixer.SetFloat(param, volume);
     }
 
-    // ============================================================
-    // 保存反映用
-    // ============================================================
     public void SaveVolumeSettings()
     {
         PlayerPrefs.Save();

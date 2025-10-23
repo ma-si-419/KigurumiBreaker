@@ -1,6 +1,9 @@
-﻿// This file is auto-generated. Do not edit manually!
-public enum SoundID
+﻿public enum SoundID
 {
-    Low1,
-    Low2,
+    ChargeSE,
+    ChargeAttackSE,
+    Deth,
+    FirstPunch,
+    SecondPunchj,
+    ThurdKick,
 }

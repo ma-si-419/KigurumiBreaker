@@ -40,7 +40,7 @@ public class SoundIDListEditor : Editor
         sb.AppendLine("{");
 
         // 各サウンドデータから名前を取得してenumの要素に追加
-        foreach (SoundData2 data in list.soundDatas)
+        foreach (SoundData data in list.soundDatas)
         {
             string name = data.name;
             if (string.IsNullOrWhiteSpace(name)) continue;
