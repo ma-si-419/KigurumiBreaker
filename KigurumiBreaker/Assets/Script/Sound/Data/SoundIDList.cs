@@ -22,9 +22,9 @@ public class SoundIDList : ScriptableObject
     public List<SoundData> soundDatas = new List<SoundData>();
 
     // Enum (SoundID) から SoundData を返す（名前が enum.ToString() と等しいことが前提）
-    public SoundData SoundEntry(SoundID id)
+    public SoundData SoundFind(SoundID id)
     {
         if (soundDatas == null) return null;
-        return soundDatas.Find(s => s != null && s.Name == id.ToString());
+        return soundDatas[(int)id];
     }
 }

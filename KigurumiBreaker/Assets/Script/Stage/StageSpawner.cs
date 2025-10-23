@@ -26,6 +26,10 @@ public class StageSpawner : MonoBehaviour
     private int _currentStageIndex = 0;
     private GameObject _currentStageInstance;
 
+    /// <summary>
+    /// 指定したインデックスのステージを生成する
+    /// </summary>
+    /// <param name="index"></param>
     public void SpawnStage(int index)
     {
         if (index < 0 || index >= _stageSets.Length) return;
@@ -70,7 +74,7 @@ public class StageSpawner : MonoBehaviour
             // 前ステージで会得したスキルを渡す
             if (acquiredSkills.Count > 0)
             {
-                waveSpawner.beforskill = string.Join(",", acquiredSkills);
+                waveSpawner.beforeSkill = string.Join(",", acquiredSkills);
             }
 
             // StageSpawner の参照を渡す
@@ -78,15 +82,16 @@ public class StageSpawner : MonoBehaviour
         }
 
         _currentStageIndex = index;
-        Debug.Log($"Stage {index + 1} を生成: {stageSet.stagePrefabs[prefabIndex].name}");
     }
 
+    /// <summary>
+    /// 次のステージを生成する
+    /// </summary>
     public void NextStage()
     {
         int nextIndex = _currentStageIndex + 1;
         if (nextIndex >= _stageSets.Length)
         {
-            Debug.Log("全ステージクリア！");
             return;
         }
 
@@ -98,21 +103,25 @@ public class StageSpawner : MonoBehaviour
         SpawnStage(0);
     }
 
-    // WaveSpawner から通知される
+    /// <summary>
+    /// WaveSpawner から通知される
+    /// </summary>
+    /// <param name="selectedSkill"></param>
     public void OnPathSelected(SkillData.SkillElement selectedSkill)
     {
         beforeSkill = selectedSkill.ToString();
-        Debug.Log($"StageSpawner: プレイヤーが選択した道のスキルは {beforeSkill}");
     }
 
-    // WaveSpawner からスキル会得通知
+    /// <summary>
+    /// WaveSpawner からスキル会得通知
+    /// </summary>
+    /// <param name="acquiredSkill"></param>
     public void AcquireSkill(SkillData.SkillElement acquiredSkill)
     {
         if (!acquiredSkills.Contains(acquiredSkill))
         {
             acquiredSkills.Add(acquiredSkill);
             afterSkill = acquiredSkill.ToString();
-            Debug.Log($"StageSpawner: 会得スキルに {afterSkill} を追加");
         }
     }
 }

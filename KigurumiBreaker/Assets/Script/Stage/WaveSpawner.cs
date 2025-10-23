@@ -48,24 +48,23 @@ public enum StageEventType
 
 public class WaveSpawner : MonoBehaviour
 {
-    [Header("全体の出現範囲設定")]
-    public Transform areaCenter;
-    public Vector3 areaSize = new Vector3(10, 0, 10);
+    [Header("全体の出現範囲設定")]   
+    [SerializeField] private Transform areaCenter;
+    [SerializeField] private Vector3 areaSize = new Vector3(10, 0, 10);
 
     [Header("敵データ（SpawnData）")]
-    public SpawnData enemySetData;
+    [SerializeField] private SpawnData enemySetData;
 
     [Header("グループ設定")]
-    public List<EnemyGroup> groups = new List<EnemyGroup>();
+    [SerializeField] private List<EnemyGroup> groups = new List<EnemyGroup>();
 
-    [Header("出現間隔")]
-    public float spawnInterval = 0.5f;
+    [SerializeField] private float spawnInterval = 0.5f;
 
     [Header("GoalPosition 配列")]
-    public GameObject[] goalPositions;
+    [SerializeField] private GameObject[] goalPositions;
 
     [Header("StageEvent 確率設定")]
-    public List<StageProbability> stageProbabilities = new List<StageProbability>();
+    [SerializeField] private List<StageProbability> stageProbabilities = new List<StageProbability>();
 
     [Header("スキル関連")]
     public SkillSelectManager skillSelectManager;
@@ -74,11 +73,10 @@ public class WaveSpawner : MonoBehaviour
     [Header("スキル取得後に消す壁エフェクト")]
     public GameObject[] wallEffects;
 
-    [HideInInspector] public bool isAllWavesCleared = false;
-    [HideInInspector] public bool skillSelectFinished = false;
+    [HideInInspector] private bool skillSelectFinished = false;
 
-    [SerializeField] public string beforskill; // 前ステージで取得したスキル
-    [SerializeField] public string afterskill;
+    [SerializeField] public string beforeSkill; // 前ステージで取得したスキル
+    [SerializeField] public string aftereSkill;
     private BattleManager _battleManager;
 
     [HideInInspector] public StageSpawner stageSpawner;
@@ -94,8 +92,7 @@ public class WaveSpawner : MonoBehaviour
 
         if (stageSpawner != null && !string.IsNullOrEmpty(stageSpawner.beforeSkill))
         {
-            beforskill = stageSpawner.beforeSkill;
-            Debug.Log($"WaveSpawner: 前ステージスキル {beforskill} を取得");
+            beforeSkill = stageSpawner.beforeSkill;
         }
 
         AssignSkillsToGoals();
@@ -115,14 +112,17 @@ public class WaveSpawner : MonoBehaviour
             StageProbability sp = i < stageProbabilities.Count ? stageProbabilities[i] : null;
             if (sp == null) continue;
 
-            Debug.Log($"GoalPosition[{i}] ({goalPositions[i].name}) に StageEventType {sp.eventType} を割り当て");
-
             // 最初のGoalをnextSkillElementに設定
             if (i == 0)
                 nextSkillElement = ConvertStageEventToSkill(sp.eventType);
         }
     }
 
+    /// <summary>
+    /// StageEventType を SkillData.SkillElement に変換
+    /// </summary>
+    /// <param name="eventType"></param>
+    /// <returns></returns>
     private SkillData.SkillElement ConvertStageEventToSkill(StageEventType eventType)
     {
         switch (eventType)
@@ -137,6 +137,11 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// グループ内のウェーブを順次処理
+    /// </summary>
+    /// <param name="group"></param>
+    /// <returns></returns>
     private IEnumerator HandleGroupWaves(EnemyGroup group)
     {
         for (int w = 0; w < group.waves.Count; w++)
@@ -164,6 +169,11 @@ public class WaveSpawner : MonoBehaviour
         OnGroupCleared();
     }
 
+    /// <summary>
+    /// ウェーブ内の敵が全滅するまで待機
+    /// </summary>
+    /// <param name="spawned"></param>
+    /// <returns></returns>
     private IEnumerator WaitForWaveClear(List<GameObject> spawned)
     {
         Vector3 lastPos = Vector3.zero;
@@ -182,12 +192,14 @@ public class WaveSpawner : MonoBehaviour
         lastDeadEnemyPos = lastPos;
     }
 
+    /// <summary>
+    /// グループが全滅したときの処理
+    /// </summary>
     private void OnGroupCleared()
     {
         groupsClearedCount++;
         if (groupsClearedCount < groups.Count) return;
 
-        isAllWavesCleared = true;
 
         if (skillSelectManager != null && goalPositions.Length > 0)
         {
@@ -195,9 +207,9 @@ public class WaveSpawner : MonoBehaviour
 
             // beforskill を StageEventType に変換
             StageEventType stageEventType = StageEventType.Fire; // デフォルト
-            if (!string.IsNullOrEmpty(beforskill))
+            if (!string.IsNullOrEmpty(beforeSkill))
             {
-                if (System.Enum.TryParse(beforskill, out StageEventType parsed))
+                if (System.Enum.TryParse(beforeSkill, out StageEventType parsed))
                 {
                     stageEventType = parsed;
                 }
@@ -208,27 +220,21 @@ public class WaveSpawner : MonoBehaviour
             {
                 case StageEventType.Fire:
                     skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Fire, this);
-                    Debug.Log($"Fireスキル提供: {SkillData.SkillElement.Fire} at {spawnPos}");
                     break;
                 case StageEventType.Water:
                     skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Water, this);
-                    Debug.Log($"Waterスキル提供: {SkillData.SkillElement.Water} at {spawnPos}");
                     break;
                 case StageEventType.Wind:
                     skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Wind, this);
-                    Debug.Log($"Windスキル提供: {SkillData.SkillElement.Wind} at {spawnPos}");
                     break;
                 case StageEventType.Thunder:
                     skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Thunder, this);
-                    Debug.Log($"Thunderスキル提供: {SkillData.SkillElement.Thunder} at {spawnPos}");
                     break;
                 case StageEventType.Freeze:
                     skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Freeze, this);
-                    Debug.Log($"Freezeスキル提供: {SkillData.SkillElement.Freeze} at {spawnPos}");
                     break;
                 case StageEventType.Poison:
                     skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Poison, this);
-                    Debug.Log($"Poisonスキル提供: {SkillData.SkillElement.Poison} at {spawnPos}");
                     break;
                 case StageEventType.Shop:
                     Debug.Log("Shopイベント発生：ショップUIを開く処理をここに実装予定");
@@ -239,15 +245,16 @@ public class WaveSpawner : MonoBehaviour
                 case StageEventType.Heal:
                     Debug.Log("Healイベント発生：HP回復処理");
                     break;
-                case StageEventType.Treasure:
-                    Debug.Log("Treasureイベント発生：宝箱出現処理");
-                    break;
             }
         }
 
         StartCoroutine(WaitForSkillSelectFinish());
     }
 
+    /// <summary>
+    /// スキル選択完了まで待機
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator WaitForSkillSelectFinish()
     {
         yield return new WaitUntil(() => skillSelectFinished);
@@ -255,12 +262,15 @@ public class WaveSpawner : MonoBehaviour
         if (stageSpawner != null)
             stageSpawner.AcquireSkill(nextSkillElement);
 
-        isAllWavesCleared = false;
         skillSelectFinished = false;
         groupsClearedCount = 0;
         lastDeadEnemyPos = Vector3.zero;
     }
 
+    /// <summary>
+    /// NavMesh上のランダム位置を取得
+    /// </summary>
+    /// <returns></returns>
     private Vector3 GetRandomNavMeshPosition()
     {
         for (int i = 0; i < 30; i++)
@@ -287,7 +297,10 @@ public class WaveSpawner : MonoBehaviour
         return areaCenter.position;
     }
 
-    // Goal に到達したら StageSpawner にスキル通知
+    /// <summary>
+    /// Goal に到達したら StageSpawner にスキル通知
+    /// </summary>
+    /// <param name="goalIndex"></param>
     public void OnGoalReached(int goalIndex)
     {
         if (goalPositions == null || goalIndex < 0 || goalIndex >= goalPositions.Length) return;
@@ -298,10 +311,12 @@ public class WaveSpawner : MonoBehaviour
         if (stageSpawner != null)
         {
             stageSpawner.OnPathSelected(selectedSkill);
-            Debug.Log($"WaveSpawner: Goal {goalIndex} に到達したのでスキル {selectedSkill} を StageSpawner に通知");
         }
     }
 
+    /// <summary>
+    /// スキル選択完了時の処理
+    /// </summary>
     public void OnSkillSelectFinished()
     {
         skillSelectFinished = true;
@@ -314,9 +329,12 @@ public class WaveSpawner : MonoBehaviour
                 Destroy(wall);
             }
         }
-        Debug.Log("壁エフェクトをすべて破棄しました");
     }
 
+    /// <summary>
+    /// BattleManager をセット
+    /// </summary>
+    /// <param name="manager"></param>
     public void SetBattleManager(BattleManager manager)
     {
         _battleManager = manager;
