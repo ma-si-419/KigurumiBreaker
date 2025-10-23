@@ -27,7 +27,7 @@ public class BossEnemy : EnemyBase
     [SerializeField] public float _specialAttackRange;
 
     [Header("’ÊíUŒ‚‚ÌƒvƒŒƒnƒu(‰¼)")]
-    [SerializeField] protected GameObject _meleeAttackPrefab; // 
+    [SerializeField] protected GameObject _meleeAttackPrefab; 
 
 
 

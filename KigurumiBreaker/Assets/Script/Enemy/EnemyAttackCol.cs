@@ -39,8 +39,10 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void Start()
     {
-        //バトルマネージャーを取得
-        _battleManager = GameObject.Find("BattleManager");
+        //バトルマネージャーを取得(これじゃ設計上良くない…)
+        //_battleManager = GameObject.Find("BattleManager");
+
+        
 
         if (CompareTag("EnemyRangedAttack"))
         {
