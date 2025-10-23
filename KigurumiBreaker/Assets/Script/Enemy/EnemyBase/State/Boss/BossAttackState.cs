@@ -7,8 +7,6 @@ public class BossAttackState : IState
 {
     //ボス敵の参照
     private BossEnemy _boss;   
-    //ビヘイビアツリー
-    //private BhaiviorTree _bhaiviorTree;
 
     public BossAttackState(BossEnemy boss)
     {
@@ -21,7 +19,9 @@ public class BossAttackState : IState
         //ボスの攻撃アニメーションを開始
         //_cooldownTimer = 0.0f;
         // 追跡を停止
-        _boss.agent.isStopped = true;
+        //_boss.agent.isStopped = true;
+        //NavMeshAgent停止
+        _boss.agent.enabled = false;
         //攻撃フラグリセット
         _boss.AttackReset(); 
         //攻撃アニメーション開始
@@ -30,12 +30,15 @@ public class BossAttackState : IState
 
     public void Update()
     {
-        _boss.Attack();
 
+        _boss.Attack();
     }
 
     public void End()
     {
+        //NavMeshAgent再開
+        _boss.agent.enabled = true;
+        //攻撃アニメーション終了
         _boss.animator.ResetTrigger("Attack");
     }
 }

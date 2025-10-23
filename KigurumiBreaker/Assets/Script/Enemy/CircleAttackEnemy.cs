@@ -38,11 +38,10 @@ public class CircleAttackEnemy : Enemy
     {
         // ゲームオブジェクト生成
         GameObject attackObject = Instantiate(attackObjectPrefab);
-
-        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-
         // 攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
+
+        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 
 }

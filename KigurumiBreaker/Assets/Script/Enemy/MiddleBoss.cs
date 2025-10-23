@@ -9,8 +9,8 @@ public class MiddleBoss : BossEnemy
     //攻撃クールダウンタイマー
     //private float _cooldownTimer = 0.0f;
 
-    private float CHARGE_SPEED = 10f; // 突進速度
-    private float CHARGE_TIME = 5.0f; // 突進時間
+    private float CHARGE_SPEED = 0.4f; // 突進速度
+    private float CHARGE_TIME = 0.1f; // 突進時間
 
     private bool _isCharge = false; // 突進中かどうかのフラグ
     private float _chargeTimer = 0.0f; // タイマー
@@ -18,7 +18,7 @@ public class MiddleBoss : BossEnemy
 
     /* 定数 */
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
-    private const float ATTACK_DISTANCE = 1.0f; // 攻撃判定の距離
+    private const float ATTACK_DISTANCE = 3.0f; // 攻撃判定の距離
 
     public override void MeleeAttack()
     {
@@ -38,7 +38,6 @@ public class MiddleBoss : BossEnemy
             //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
             {
-                Debug.Log("攻撃!");
                 _isCreateAttack = true;
                 CreateMeleeAttack();
             }
@@ -57,8 +56,6 @@ public class MiddleBoss : BossEnemy
 
     public override void Attack()
     {
-        Debug.Log("タックル攻撃!");
-
         // ここにタックル攻撃の具体的な処理を追加
         _chargeTimer += Time.deltaTime;
 
@@ -69,63 +66,31 @@ public class MiddleBoss : BossEnemy
         {
             if(!_isCreateAttack)
             {
-                Debug.Log("攻撃!");
                 _isCreateAttack = true;
                 CreateAttack();
             }
 
-            if(_attackObject != null)
-            {
-                // 破棄されていない場合のみ位置を更新
-                _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
-            }
-
             if(!_isCharge)
             {
-                _isCharge = true;
-                _chargeTimer = 0.0f;
+                StartCoroutine(DoCharge());
             }
+        }
+        else
+        {
+            LookAtPlayer();
+        }
 
-            if(_isCharge)
-            {
-                _chargeTimer += Time.deltaTime;
-
-                if(_chargeTimer < CHARGE_TIME)
-                {
-                    _rigidbody.velocity = transform.forward * CHARGE_SPEED;
-                }
-                else
-                {
-                    // 突進終了
-                    //_rigidbody.velocity = Vector3.zero;
-                    _isCharge = false;
-                    _chargeTimer = 0.0f;
-                    _isCreateAttack = false;
-                    isAttack = false;
-                }
-            }
-
-            ////攻撃判定を一つ生成させる
-            //if (!_isCreateAttack)
-            //{
-            //    Debug.Log("攻撃!");
-            //    _isCreateAttack = true;
-            //    CreateAttack();
-            //}
-
-            //if (_attackObject != null)
-            //{
-            //    // 破棄されていない場合のみ位置を更新
-            //    _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
-            //}
-
-            //// 突進中でなければ突進を開始
-            //if (!_isCharge) StartCoroutine(DoCharge());
+        if (_attackObject != null)
+        {
+            // 破棄されていない場合のみ位置を更新
+            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
         if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.8f)
         {
+            StopMovement();
+            _isCreateAttack = false;
             ChangeState(new BossIdleState(this));
         }
     }
@@ -134,56 +99,42 @@ public class MiddleBoss : BossEnemy
     {
         _isCharge = true;
         float timer = 0f;
-        // 前進方向を計算
-        Vector3 dir = (transform.forward).normalized;
-
-        Debug.Log("うおおおぉぉぉ");
+        Vector3 dir = transform.forward.normalized;
 
         while (timer < CHARGE_TIME && _isCharge)
         {
-
             _rigidbody.velocity = dir * CHARGE_SPEED;
-            // 前進方向を計算
-            //transform.position += dir * CHARGE_SPEED * Time.deltaTime;
 
-            timer += Time.deltaTime;
-            yield return null;
+            this.transform.position += _rigidbody.velocity;
+
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
 
-        //if (_rigidbody != null)
-        //{
-        //    _rigidbody.velocity = Vector3.zero;
-        //}
-
+        _rigidbody.velocity = Vector3.zero; // 終了時に停止を保証
         _isCharge = false;
         _chargeTimer = 0.0f;
-        //攻撃フラグをリセット
-        _isCreateAttack = false;
         isAttack = false;
     }
 
     // 攻撃オブジェクトを生成する関数
     private void CreateMeleeAttack()
     {
-        //BattleManager manager = _battleManager.GetComponent<BattleManager>();
-
-        //manager.AddEnemyAttack(attackObject);
-
         //ゲームオブジェクト生成
-        //GameObject attackObject = Instantiate(meleeAttackPrefab);
+        GameObject attackObject = Instantiate(meleeAttackPrefab);
+        //攻撃オブジェクトの位置を調整
+        attackObject.transform.position = this.transform.position;
+        _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
 
-        // //攻撃オブジェクトの位置を調整
-        // attackObject.transform.position = this.transform.position;
+
     }
 
     private void CreateAttack()
     {
-        //BattleManager manager = _battleManager.GetComponent<BattleManager>();
-
-        //manager.AddEnemyAttack(attackObject);
-
         // ゲームオブジェクト生成
-        //_attackObject = Instantiate(attackObjectPrefab);
+        _attackObject = Instantiate(attackObjectPrefab);
+        _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
+
     }
 
 

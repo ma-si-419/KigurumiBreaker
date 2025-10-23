@@ -97,16 +97,13 @@ public class PunchEnemy : Enemy
     {
         //ゲームオブジェクト生成
         GameObject attackObject = Instantiate(attackObjectPrefab);
-        // ゲームオブジェクト生成
-        //_attackObject = Instantiate(_attackObjectPrefab);
+
+        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
 
         float yOffset = 1.0f; // Y軸のオフセット値（必要に応じて調整）
 
         // 攻撃オブジェクトの位置を調整(Y軸を調整したい)
         attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance + Vector3.up * yOffset;
-
-
-
     }
 
 }
