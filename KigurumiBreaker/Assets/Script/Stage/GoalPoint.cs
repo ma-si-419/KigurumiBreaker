@@ -2,19 +2,20 @@ using UnityEngine;
 
 public class GoalPoint : MonoBehaviour
 {
-    private StageSpawner spawner;
+    private StageSpawner _stageSpawner;
     public int goalIndex;
     public WaveSpawner waveSpawner;
+
     void Start()
     {
-        spawner = FindObjectOfType<StageSpawner>();
+        _stageSpawner = FindObjectOfType<StageSpawner>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && spawner != null)
+        if (other.CompareTag("Player") && _stageSpawner != null)
         {
-            spawner.NextStage();
+            _stageSpawner.NextStage();
             waveSpawner.OnGoalReached(goalIndex);
         }
     }

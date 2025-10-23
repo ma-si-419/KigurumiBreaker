@@ -17,15 +17,15 @@ public class EnemyEntry
     public GameObject prefab;
 }
 
-[CreateAssetMenu(menuName = "SpawnData")]
+[CreateAssetMenu(fileName = "SpawnData", menuName = "Game/Spawn Data")]
 public class SpawnData : ScriptableObject
 {
-    public List<EnemyEntry> enemies = new List<EnemyEntry>();
+    [Header("敵プレハブリスト")]
+    [SerializeField] private List<EnemyEntry> _enemies = new List<EnemyEntry>();
 
     public GameObject GetPrefabByKind(EnemyKind kind)
     {
-        var entry = enemies.Find(e => e.kind == kind);
+        var entry = _enemies.Find(e => e.kind == kind);
         return entry != null ? entry.prefab : null;
     }
-
 }

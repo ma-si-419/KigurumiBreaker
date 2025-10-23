@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 666fbd82f0b84b04eab632b0a2127ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageSets:
+  _stageSets:
   - stagePrefabs:
-    - {fileID: 7049480730227574804, guid: ff154ccd43bb0bc4da23b72e94196c34, type: 3}
+    - {fileID: 8457745352734132792, guid: bb8763f8366e5e14bbb33203c3443610, type: 3}
   - stagePrefabs:
     - {fileID: 4135658842310630577, guid: b0c7ea22134fb4c40ac6c84de55f4f6e, type: 3}
     - {fileID: 7049480730227574804, guid: ff154ccd43bb0bc4da23b72e94196c34, type: 3}
@@ -57,4 +57,11 @@ MonoBehaviour:
     - {fileID: 232759990420611164, guid: 8d461cdcd154dee4e8f8d2a06a0e25b8, type: 3}
     - {fileID: 4307074512751786253, guid: 90d79ef3e57d6dd4e83bd2ffa2958fbc, type: 3}
     - {fileID: 7143173382273664973, guid: f51582a8bea2af2439150efddd812fe6, type: 3}
-  player: {fileID: 0}
+  - stagePrefabs:
+    - {fileID: 6620864812451297630, guid: 9e860593ec08e07478067bada7440acf, type: 3}
+  _player: {fileID: 0}
+  beforeSkill: 
+  afterSkill: 
+  acquiredSkills: 
+  _skillSelectManager: {fileID: 0}
+  _battleManager: {fileID: 0}
