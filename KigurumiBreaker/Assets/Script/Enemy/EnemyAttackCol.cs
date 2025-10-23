@@ -28,7 +28,7 @@ public class EnemyAttackCol : MonoBehaviour
     private GameObject _attackEnemy;    // 攻撃を行った敵
 
     //private BattleManager _battleManager;
-    private GameObject _battleManager;
+    private BattleManager _battleManager;
 
     //敵全体が持っているベースクラス
     private EnemyBase _enemyBase;
@@ -109,7 +109,7 @@ public class EnemyAttackCol : MonoBehaviour
         _attackEnemy = enemy;
     }
 
-    public void SetBattleManager(GameObject manager)
+    public void SetBattleManager(BattleManager manager)
     {
         _battleManager = manager;
     }
