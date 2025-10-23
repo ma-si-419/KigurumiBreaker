@@ -9,8 +9,6 @@ public class EnemyBase : MonoBehaviour
     //敵のステータスデータ
     [SerializeField] protected EnemyData _enemyData;
 
-    //バトルマネージャーの参照
-    protected BattleManager _battleManager;
 
     //敵の攻撃判定の参照
     protected EnemyAttackCol _enemyAttackCol;
@@ -45,6 +43,9 @@ public class EnemyBase : MonoBehaviour
 
     // Rigidbodyの参照
     protected Rigidbody _rigidbody;
+
+    //バトルマネージャーの参照
+    [SerializeField]protected BattleManager _battleManager;
 
     // 向きたい方向
     protected Vector3 _direction;
@@ -86,11 +87,12 @@ public class EnemyBase : MonoBehaviour
         _detectRangeSqr = _enemyData.detectionRange * _enemyData.detectionRange;
         _attackRangeSqr = _enemyData.attackRange * _enemyData.attackRange;
 
-
-
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
+
+        // バトルマネージャーの参照を取得
+        _battleManager = GetComponent<BattleManager>();
 
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();
@@ -123,8 +125,15 @@ public class EnemyBase : MonoBehaviour
 
     protected void Awake()
     {
-        // バトルマネージャーの参照を取得
-        _battleManager = GetComponent<BattleManager>();
+
+        if (_battleManager == null)
+        {
+            Debug.LogWarning("BattleManager取得失敗");
+        }
+        else
+        {
+            Debug.Log("BattleManager取得成功");
+        }
     }
 
     protected virtual void Update()
