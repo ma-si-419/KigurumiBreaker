@@ -48,7 +48,6 @@ public class EnemyAttackCol : MonoBehaviour
             if(_battleManager != null)
             {
                 Debug.Log("AddEnemyAttack");
-                _battleManager.GetComponent<BattleManager>().AddEnemyAttack(this.gameObject);
                 _setBattleManager = true;
             }
             else
@@ -149,10 +148,11 @@ public class EnemyAttackCol : MonoBehaviour
             if (other.CompareTag("Wall"))
             {
                 Debug.Log("EnemyAttackCol(OnTriggerEnter):’e‚ª•Ç‚É“–‚½‚Á‚½");
+
+                _battleManager.GetComponent<BattleManager>().RemoveEnemyAttack(this.gameObject);
                 // •Ç‚âáŠQ•¨‚É“–‚½‚Á‚½ê‡’e‚ğíœ
                 Destroy(gameObject);
 
-                _battleManager.GetComponent<BattleManager>().RemoveEnemyAttack(this.gameObject);
             }
         }
     }

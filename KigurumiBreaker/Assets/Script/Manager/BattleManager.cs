@@ -51,9 +51,14 @@ public class BattleManager : MonoBehaviour
                     sc.StartAnimation();
                 }
 
-                foreach (GameObject enemyAttack in _enemyAttacks)
+                if (_enemyAttacks.Count > 0)
                 {
-                    enemyAttack.GetComponent<EnemyAttackCol>().SetStop(false);
+                    Debug.Log("êî" + _enemyAttacks.Count);
+
+                    foreach (GameObject enemyAttack in _enemyAttacks)
+                    {
+                        enemyAttack.GetComponent<EnemyAttackCol>().SetStop(false);
+                    }
                 }
             }
         }
@@ -76,7 +81,13 @@ public class BattleManager : MonoBehaviour
     }
     public void RemoveEnemyAttack(GameObject enemyAttack)
     {
+        int enemyNum = _enemyAttacks.Count;
+
         _enemyAttacks.Remove(enemyAttack);
+
+        int enemyNumAfter = _enemyAttacks.Count;
+
+        Debug.Log("RemoveEnemyAttack:ìGÇÃçUåÇîªíËÇçÌèúÇµÇ‹ÇµÇΩÅBçÌèúëOÇÃêî:" + enemyNum + "çÌèúå„ÇÃêî:" + enemyNumAfter);
     }
 
 
@@ -99,9 +110,12 @@ public class BattleManager : MonoBehaviour
             sc.StopAnimation();
         }
 
-        foreach (GameObject enemyAttack in _enemyAttacks)
+        if (_enemyAttacks.Count > 0)
         {
-            enemyAttack.GetComponent<EnemyAttackCol>().SetStop(true);
+            foreach (GameObject enemyAttack in _enemyAttacks)
+            {
+                enemyAttack.GetComponent<EnemyAttackCol>().SetStop(true);
+            }
         }
 
     }

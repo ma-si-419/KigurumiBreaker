@@ -1277,6 +1277,8 @@ public class PlayerState : Player<PlayerState>
                     break;
             }
 
+            Debug.Log("ヒットストップ開始" );
+
             state._battleManager.GetComponent<BattleManager>().StopTime(stopTime);
 
         }
@@ -1986,6 +1988,7 @@ public class PlayerState : Player<PlayerState>
                     _currentDirection = -toEnemy;
                 }
             }
+
             _battleManager.RemoveEnemyAttack(other.gameObject);
 
             // 攻撃オブジェクトを削除する
