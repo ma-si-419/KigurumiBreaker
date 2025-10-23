@@ -91,8 +91,8 @@ public class StageSpawner : MonoBehaviour
     private void Start()
     {
         SpawnStage(0);
-        AudioManager.Instance.PlayBGM("TitleBGM");
-        AudioManager.Instance.PlaySE("TestSE");
+        //AudioManager.Instance.PlayBGM("TitleBGM");
+        //AudioManager.Instance.PlaySE("TestSE");
 
     }
 

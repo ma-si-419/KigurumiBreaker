@@ -77,6 +77,7 @@ public class AudioManager : MonoBehaviour
         bgmSource.clip = entry.clip;
         bgmSource.volume = entry.volume;
         bgmSource.loop = true;
+        Debug.Log($"Play BGM: {id}");
         bgmSource.Play();
     }
 
