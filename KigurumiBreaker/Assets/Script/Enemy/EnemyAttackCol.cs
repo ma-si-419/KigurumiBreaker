@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAttackCol : MonoBehaviour
@@ -26,7 +27,11 @@ public class EnemyAttackCol : MonoBehaviour
 
     private GameObject _attackEnemy;    // 攻撃を行った敵
 
+    //private BattleManager _battleManager;
     private GameObject _battleManager;
+
+    //敵全体が持っているベースクラス
+    private EnemyBase _enemyBase;
 
     private Vector3 _moveDir = new Vector3(0.0f, 0.0f, 1.0f); // 移動方向ベクトル(仮で前方向を入れておく)
 
@@ -34,7 +39,9 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void Start()
     {
+        //バトルマネージャーを取得
         _battleManager = GameObject.Find("BattleManager");
+
         if (CompareTag("EnemyRangedAttack"))
         {
             _lifeTime = (int)_shotLifeTime;
@@ -59,11 +66,8 @@ public class EnemyAttackCol : MonoBehaviour
         if (_isStop) return;
 
         _lifeTime--;
-        Debug.Log(_lifeTime);
         if (_lifeTime < 0)
         {
-            Debug.Log("EnemyAttackCol(FixedUpdate):攻撃判定消滅");
-
             _battleManager.GetComponent<BattleManager>().RemoveEnemyAttack(this.gameObject);
             //攻撃判定の寿命が来たら消す
             Destroy(this.gameObject);

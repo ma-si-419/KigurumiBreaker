@@ -171,7 +171,7 @@ public class ZangiMove : MonoBehaviour
 
                     attackScript.SetMoveDir(forward);
                     attackScript.SetAttackEnemy(this.gameObject);
-                    attackScript.SetBattleManager(_battleManager);
+                    //attackScript.SetBattleManager(_battleManager);
                 }
             }
         }
