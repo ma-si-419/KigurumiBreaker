@@ -23,14 +23,14 @@ public class EnemyBase : MonoBehaviour
     protected IState _currentState;
 
     //索敵範囲の二乗
-    protected float _detectRangeSqr; 
+    protected float _detectRangeSqr;
 
     //攻撃範囲の二乗
     protected float _attackRangeSqr;
 
     // 攻撃オブジェクトのプレハブ
     [Header("コンポーネント")]
-    [SerializeField] public GameObject attackObjectPrefab; 
+    [SerializeField] public GameObject attackObjectPrefab;
 
     // NavMeshAgentの参照
     protected NavMeshAgent _agent;
@@ -45,7 +45,7 @@ public class EnemyBase : MonoBehaviour
     protected Rigidbody _rigidbody;
 
     //バトルマネージャーの参照
-    [SerializeField]protected BattleManager _battleManager;
+    protected BattleManager _battleManager;
 
     // 向きたい方向
     protected Vector3 _direction;
@@ -91,9 +91,6 @@ public class EnemyBase : MonoBehaviour
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
 
-        // バトルマネージャーの参照を取得
-        _battleManager = GetComponent<BattleManager>();
-
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();
         // Animatorコンポーネントを取得
@@ -120,19 +117,6 @@ public class EnemyBase : MonoBehaviour
             {
                 Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
             }
-        }
-    }
-
-    protected void Awake()
-    {
-
-        if (_battleManager == null)
-        {
-            Debug.LogWarning("BattleManager取得失敗");
-        }
-        else
-        {
-            Debug.Log("BattleManager取得成功");
         }
     }
 
