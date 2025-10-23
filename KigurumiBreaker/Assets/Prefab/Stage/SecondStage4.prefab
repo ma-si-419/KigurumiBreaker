@@ -1191,8 +1191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &1106509029765638058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2371,8 +2371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &5369601584040088408
 GameObject:
   m_ObjectHideFlags: 0
@@ -2651,8 +2651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &5823747511440695213
 GameObject:
   m_ObjectHideFlags: 0
@@ -2910,8 +2910,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &6124777328836040919
 GameObject:
   m_ObjectHideFlags: 0
@@ -3159,8 +3159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &6419831480357737124
 GameObject:
   m_ObjectHideFlags: 0
@@ -22107,6 +22107,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4115939204200704949}
     m_Modifications:
+    - target: {fileID: 2696184887282397893, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 86d16e666cd4aba4c9b3800c330480ff, type: 2}
     - target: {fileID: 2696184887282397895, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
       propertyPath: m_LocalScale.x
       value: 3.6
@@ -22125,7 +22129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2696184887282397895, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.4
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2696184887282397895, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -55154,6 +55158,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4115939204200704949}
     m_Modifications:
+    - target: {fileID: 2696184887282397893, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 86d16e666cd4aba4c9b3800c330480ff, type: 2}
     - target: {fileID: 2696184887282397895, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
       propertyPath: m_LocalScale.x
       value: 3.6
@@ -55172,7 +55180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2696184887282397895, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.4
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2696184887282397895, guid: 8d2d1e873eee3624483b08b43135630c, type: 3}
       propertyPath: m_LocalPosition.z
