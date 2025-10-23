@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AttackPartList")]
+[CreateAssetMenu(menuName = "Player/AttackPartList")]
 public class AttackPartList : ScriptableObject
 {
     public List<AttackPart> attackDataList;

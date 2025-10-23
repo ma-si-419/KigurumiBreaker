@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "DamageData")]
+[CreateAssetMenu(menuName = "Player/DamageData")]
 public class DamageData : ScriptableObject
 {
     [Header("ダメージを受けた際に変化させるマテリアル")]

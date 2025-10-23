@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "SpecialChargeSkillDataList")]
+[CreateAssetMenu(menuName = "Skill/SpecialChargeSkillDataList")]
 public class SpecialChargeSkillDataList : ScriptableObject
 {
     public List<SpecialChargeSkillData> specialChargeSkillDataList;

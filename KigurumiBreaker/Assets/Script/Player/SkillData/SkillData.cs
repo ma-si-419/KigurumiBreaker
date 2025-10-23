@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "SkillData")]
+[CreateAssetMenu(menuName = "Skill/SkillData")]
 public class SkillData : ScriptableObject
 {
     public enum SkillElement

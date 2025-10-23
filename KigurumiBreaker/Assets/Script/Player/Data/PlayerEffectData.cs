@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PlayerEffectData")]
+[CreateAssetMenu(menuName = "Player/PlayerEffectData")]
 public class PlayerEffectData : ScriptableObject
 {
     [Header("特殊攻撃チャージ中のエフェクト")]
