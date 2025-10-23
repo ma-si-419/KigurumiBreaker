@@ -876,7 +876,7 @@ GameObject:
   - component: {fileID: 2497798638795642871}
   m_Layer: 6
   m_Name: NoSpawnPosition
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -981,7 +981,7 @@ GameObject:
   - component: {fileID: 4472352678775063480}
   m_Layer: 6
   m_Name: NoSpawnPosition
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1366,7 +1366,7 @@ GameObject:
   - component: {fileID: 8383628275976581869}
   m_Layer: 6
   m_Name: NoSpawnPosition
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2700,7 +2700,7 @@ GameObject:
   - component: {fileID: 7864589293345116597}
   m_Layer: 6
   m_Name: NoSpawnPosition
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3395,7 +3395,7 @@ GameObject:
   - component: {fileID: 5056055463925568569}
   m_Layer: 6
   m_Name: NoSpawnPosition
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3613,10 +3613,8 @@ MonoBehaviour:
   wallEffects:
   - {fileID: 2797703722305474277}
   - {fileID: 7728029492488185567}
-  isAllWavesCleared: 0
-  skillSelectFinished: 0
-  beforskill: 
-  afterskill: 
+  beforeSkill: 
+  aftereSkill: 
   stageSpawner: {fileID: 0}
 --- !u!114 &7724426924368485173
 MonoBehaviour:
@@ -3792,7 +3790,7 @@ GameObject:
   - component: {fileID: 307749204638764218}
   m_Layer: 6
   m_Name: NoSpawnPosition
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

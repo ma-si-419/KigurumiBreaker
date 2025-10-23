@@ -1,9 +1,9 @@
 ﻿public enum SoundID
 {
-    ChargeSE,
     ChargeAttackSE,
-    Deth,
-    FirstPunch,
-    SecondPunchj,
-    ThurdKick,
+    ChargeSE,
+    FirstAttack,
+    SecondAttack,
+    ThirdAttack,
+    Death,
 }

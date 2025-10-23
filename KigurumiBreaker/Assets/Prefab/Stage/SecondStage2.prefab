@@ -152,10 +152,8 @@ MonoBehaviour:
   wallEffects:
   - {fileID: 2620207659083202921}
   - {fileID: 7238007211646806301}
-  isAllWavesCleared: 0
-  skillSelectFinished: 0
-  beforskill: 
-  afterskill: 
+  beforeSkill: 
+  aftereSkill: 
   stageSpawner: {fileID: 0}
 --- !u!114 &60859177894612746
 MonoBehaviour:
@@ -336,7 +334,7 @@ GameObject:
   - component: {fileID: 652668249213737649}
   m_Layer: 6
   m_Name: NoSpawnPoitn
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -546,8 +544,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &1116298727512418247
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,8 +953,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &2142944976045355271
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,7 +969,7 @@ GameObject:
   - component: {fileID: 3148675136950245999}
   m_Layer: 6
   m_Name: NoSpawnPoitn
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1076,7 +1074,7 @@ GameObject:
   - component: {fileID: 3571275637515103683}
   m_Layer: 6
   m_Name: NoSpawnPoitn
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1419,8 +1417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &3581123462734648526
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,8 +1538,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &3712419166432712019
 GameObject:
   m_ObjectHideFlags: 0
@@ -3038,7 +3036,7 @@ GameObject:
   - component: {fileID: 1835746919048122781}
   m_Layer: 6
   m_Name: NoSpawnPoitn
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4154,8 +4152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &9179999584108450282
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource seSource;
 
-    // ここを SoundData（個別エントリ）ではなく、SoundIDList（一覧の ScriptableObject）にする
+    // SoundDataではなく、SoundIDListにする
     [Header("Audio Database (ScriptableObject)")]
     [SerializeField] private SoundIDList audioDatabase;
 
@@ -30,7 +30,6 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("[AudioManager] Duplicate instance detected and destroyed.");
             Destroy(gameObject);
             return;
         }
@@ -62,28 +61,25 @@ public class AudioManager : MonoBehaviour
     // ============================================================
     // 再生処理
     // ============================================================
-    public void PlaySound(SoundID id)
+    public void PlayBGM(SoundID id)
     {
         if (audioDatabase == null)
         {
-            Debug.LogError("[AudioManager] audioDatabase is null. Assign your SoundIDList asset in the inspector.");
             return;
         }
 
-        var entry = audioDatabase.SoundEntry(id); // ← SoundIDList に追加したメソッドを使用
+        var entry = audioDatabase.SoundFind(id); // ← SoundIDList に追加したメソッドを使用
         if (entry == null || entry.clip == null)
         {
-            Debug.LogWarning($"[AudioManager] Sound not found or clip null for id: {id}");
             return;
         }
 
-        // ここは BGM扱いで再生（もし SE と BGM を分けたいなら判定を追加してください）
+        // BGM再生中に同じBGMがリクエストされた場合は無視
         if (bgmSource.clip == entry.clip && bgmSource.isPlaying) return;
 
         bgmSource.clip = entry.clip;
         bgmSource.volume = entry.volume;
         bgmSource.loop = true;
-        Debug.Log($"Play BGM: {id}");
         bgmSource.Play();
     }
 
@@ -91,14 +87,12 @@ public class AudioManager : MonoBehaviour
     {
         if (audioDatabase == null)
         {
-            Debug.LogError("[AudioManager] audioDatabase is null. Assign your SoundIDList asset in the inspector.");
             return;
         }
 
-        var entry = audioDatabase.SoundEntry(id);
+        var entry = audioDatabase.SoundFind(id);
         if (entry == null || entry.clip == null)
         {
-            Debug.LogWarning($"[AudioManager] SE not found or clip null for id: {id}");
             return;
         }
 
@@ -106,14 +100,21 @@ public class AudioManager : MonoBehaviour
     }
 
     // ============================================================
-    // 音量制御（略、既存のまま）
+    // 音量制御
     // ============================================================
+    /// <summary>
+    /// PlayerPrefs から音量設定を取得して AudioMixer に適用する
+    /// </summary>
     private void ApplyVolumes()
     {
         SetMasterVolume(PlayerPrefs.GetFloat(MASTER_PARAM, 1f));
         SetBGMVolume(PlayerPrefs.GetFloat(BGM_PARAM, 1f));
         SetSEVolume(PlayerPrefs.GetFloat(SE_PARAM, 1f));
     }
+    /// <summary>
+    /// マスターボリューム設定
+    /// </summary>
+    /// <param name="value"></param>
 
     public void SetMasterVolume(float value)
     {
@@ -121,6 +122,10 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat(MASTER_PARAM, value);
         PlayerPrefs.Save();
     }
+    /// <summary>
+    /// BGMボリューム設定
+    /// </summary>
+    /// <param name="value"></param>
 
     public void SetBGMVolume(float value)
     {
@@ -128,20 +133,30 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat(BGM_PARAM, value);
         PlayerPrefs.Save();
     }
-
+    /// <summary>
+    /// SEボリューム設定
+    /// </summary>
+    /// <param name="value"></param>
     public void SetSEVolume(float value)
     {
         SetMixerVolume(SE_PARAM, value);
         PlayerPrefs.SetFloat(SE_PARAM, value);
         PlayerPrefs.Save();
     }
+    /// <summary>
+    /// AudioMixer に対してデシベル変換を行い音量設定を適用する
+    /// </summary>
+    /// <param name="param"></param>
+    /// <param name="value"></param>
 
     private void SetMixerVolume(string param, float value)
     {
         float volume = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
         audioMixer.SetFloat(param, volume);
     }
-
+    /// <summary>
+    /// 音量設定を PlayerPrefs に保存する
+    /// </summary>
     public void SaveVolumeSettings()
     {
         PlayerPrefs.Save();
