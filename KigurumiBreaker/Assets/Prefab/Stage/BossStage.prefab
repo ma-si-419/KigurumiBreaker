@@ -119,8 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &996861402923450367
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,8 +564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &3125346279411658901
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,8 +826,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &3721981974027488921
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,8 +1352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &5677508249823054363
 GameObject:
   m_ObjectHideFlags: 0
@@ -1664,13 +1664,10 @@ MonoBehaviour:
   areaCenter: {fileID: 5632449421562164312}
   areaSize: {x: 28, y: 0, z: 30}
   enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  groups:
-  - groupName: 
-    waves:
-    - popEnemies:
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 0
+  stageEnemyInfos:
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: f7a3fa15386e0474f97b4b999a0ae28f, type: 2}
   spawnInterval: 0.5
   goalPositions:
   - {fileID: 996861402923450367}
@@ -1685,10 +1682,8 @@ MonoBehaviour:
   wallEffects:
   - {fileID: 6076127931541242299}
   - {fileID: 8135456338302381769}
-  isAllWavesCleared: 0
-  skillSelectFinished: 0
-  beforskill: 
-  afterskill: 
+  beforeSkill: 
+  aftereSkill: 
   stageSpawner: {fileID: 0}
 --- !u!114 &8904450654190285669
 MonoBehaviour:
@@ -2703,8 +2698,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &8585943589529327122
 GameObject:
   m_ObjectHideFlags: 0

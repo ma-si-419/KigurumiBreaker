@@ -3554,51 +3554,13 @@ MonoBehaviour:
   areaCenter: {fileID: 368290987064971443}
   areaSize: {x: 40, y: 0, z: 43}
   enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  groups:
-  - groupName: 
-    waves:
-    - popEnemies:
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-    - popEnemies:
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-  - groupName: 
-    waves:
-    - popEnemies:
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-    - popEnemies:
-      - spawnKind: 4
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 4
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 4
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
+  stageEnemyInfos:
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: 14404258f7c902a42ab652f8d4f47119, type: 2}
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: 90fcb2f3aa96edf48aea37385d68ae37, type: 2}
   spawnInterval: 0.5
   goalPositions:
   - {fileID: 1901371038696261190}

@@ -222,8 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &1452558541580546642
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,8 +463,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &1958207124238809762
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,8 +847,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &3841734184284957099
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,51 +1650,13 @@ MonoBehaviour:
   areaCenter: {fileID: 2542454673692477470}
   areaSize: {x: 28, y: 0, z: 30}
   enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  groups:
-  - groupName: 
-    waves:
-    - popEnemies:
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-    - popEnemies:
-      - spawnKind: 3
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-  - groupName: 
-    waves:
-    - popEnemies:
-      - spawnKind: 0
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 4
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-    - popEnemies:
-      - spawnKind: 4
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
+  stageEnemyInfos:
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: 42b8739f9e9bf8640bbcd89dee14d84d, type: 2}
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: 320b6969dae915f48b0ed458e5320146, type: 2}
   spawnInterval: 0.5
   goalPositions:
   - {fileID: 3841734184284957099}
@@ -1709,10 +1671,8 @@ MonoBehaviour:
   wallEffects:
   - {fileID: 8110345568812436081}
   - {fileID: 2003488670908050172}
-  isAllWavesCleared: 0
-  skillSelectFinished: 0
-  beforskill: 
-  afterskill: 
+  beforeSkill: 
+  aftereSkill: 
   stageSpawner: {fileID: 0}
 --- !u!114 &4019004346744930748
 MonoBehaviour:
@@ -1931,8 +1891,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &4906701226614320475
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,8 +2341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &6010917989222267568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2502,8 +2462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &6571945869816386384
 GameObject:
   m_ObjectHideFlags: 0
@@ -3363,8 +3323,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1001 &370917945889019
 PrefabInstance:
   m_ObjectHideFlags: 0

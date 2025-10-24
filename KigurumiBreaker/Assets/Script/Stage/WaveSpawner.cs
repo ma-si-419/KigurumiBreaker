@@ -1,37 +1,18 @@
-// WaveSpawner.cs
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class PopEnemy
-{
-    public EnemyKind spawnKind;
-    public Vector3 spawnPosition;
-    public bool randomizePosition = true;
-}
-
-[System.Serializable]
-public class EnemyWave
-{
-    public List<PopEnemy> popEnemies = new List<PopEnemy>();
-}
-
-[System.Serializable]
 public class StageEnemyInfo
 {
-    public string stageInfoName;               // ステージ名
-    public List<EnemyGroup> enemyGroups;       // このステージに出現する敵グループ
+    public List<EnemyGroup> enemyGroups; // このステージに出現する敵グループ
 }
-
-
 
 [System.Serializable]
 public class EnemyGroup
 {
-    public string groupName = "Group";
-    public List<EnemyWave> waves = new List<EnemyWave>();
+    public List<SpawnEnemyData> spawnDataList; // すべてのSpawnDataを順に処理する
 }
 
 [System.Serializable]
@@ -57,19 +38,17 @@ public enum StageEventType
 
 public class WaveSpawner : MonoBehaviour
 {
-    [Header("全体の出現範囲設定")]   
+    [Header("全体の出現範囲設定")]
     [SerializeField] private Transform areaCenter;
     [SerializeField] private Vector3 areaSize = new Vector3(10, 0, 10);
 
-    [Header("敵データ（SpawnData）")]
+    [Header("敵データ（SpawnData参照用）")]
     [SerializeField] private SpawnData enemySetData;
 
-    [Header("グループ設定")]
-    [SerializeField]
-    private List<StageEnemyInfo> stageEnemyInfos;  // ステージごとの敵配置データ
+    [Header("ステージごとの敵配置データ")]
+    [SerializeField] private List<StageEnemyInfo> stageEnemyInfos;
 
-    private StageEnemyInfo currentStageInfo;       // 今回選ばれたステージ情報
-
+    private StageEnemyInfo currentStageInfo;
     private List<EnemyGroup> groups = new List<EnemyGroup>();
 
     [SerializeField] private float spawnInterval = 0.5f;
@@ -89,10 +68,9 @@ public class WaveSpawner : MonoBehaviour
 
     [HideInInspector] private bool skillSelectFinished = false;
 
-    [SerializeField] public string beforeSkill; // 前ステージで取得したスキル
+    [SerializeField] public string beforeSkill;
     [SerializeField] public string aftereSkill;
     private BattleManager _battleManager;
-
     [HideInInspector] public StageSpawner stageSpawner;
 
     private int groupsClearedCount = 0;
@@ -100,7 +78,6 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
-        // StageSpawner を取得
         if (stageSpawner == null)
             stageSpawner = FindObjectOfType<StageSpawner>();
 
@@ -111,14 +88,9 @@ public class WaveSpawner : MonoBehaviour
 
         AssignSkillsToGoals();
         if (stageEnemyInfos == null || stageEnemyInfos.Count == 0)
-        {
             return;
-        }
 
-        // ステージ内の敵情報からランダム選択
         currentStageInfo = stageEnemyInfos[Random.Range(0, stageEnemyInfos.Count)];
-
-        Debug.Log($"選ばれたステージ: {currentStageInfo.stageInfoName}");
 
         StartCoroutine(HandleStageGroups(currentStageInfo));
     }
@@ -132,17 +104,11 @@ public class WaveSpawner : MonoBehaviour
             StageProbability sp = i < stageProbabilities.Count ? stageProbabilities[i] : null;
             if (sp == null) continue;
 
-            // 最初のGoalをnextSkillElementに設定
             if (i == 0)
                 nextSkillElement = ConvertStageEventToSkill(sp.eventType);
         }
     }
 
-    /// <summary>
-    /// StageEventType を SkillData.SkillElement に変換
-    /// </summary>
-    /// <param name="eventType"></param>
-    /// <returns></returns>
     private SkillData.SkillElement ConvertStageEventToSkill(StageEventType eventType)
     {
         switch (eventType)
@@ -159,6 +125,7 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator HandleStageGroups(StageEnemyInfo stageInfo)
     {
+        // 各グループを順に処理
         foreach (var group in stageInfo.enemyGroups)
         {
             yield return HandleGroupWaves(group);
@@ -167,44 +134,42 @@ public class WaveSpawner : MonoBehaviour
         Debug.Log("すべてのグループがクリアされました。");
     }
 
-
-    /// <summary>
-    /// グループ内のウェーブを順次処理
-    /// </summary>
-    /// <param name="group"></param>
-    /// <returns></returns>
     private IEnumerator HandleGroupWaves(EnemyGroup group)
     {
-        for (int w = 0; w < group.waves.Count; w++)
+        if (group.spawnDataList == null || group.spawnDataList.Count == 0)
+            yield break;
+
+        // 複数のSpawnDataすべてを順に処理
+        foreach (var spawnData in group.spawnDataList)
         {
-            var wave = group.waves[w];
-            List<GameObject> spawned = new List<GameObject>();
+            if (spawnData == null) continue;
 
-            foreach (var pop in wave.popEnemies)
+            foreach (var wave in spawnData.waveEnemyDataList)
             {
-                GameObject prefabToSpawn = enemySetData?.GetPrefabByKind(pop.spawnKind);
-                if (prefabToSpawn == null) continue;
+                List<GameObject> spawned = new List<GameObject>();
 
-                Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
-                GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
-                spawned.Add(enemy);
-                _battleManager.AddEnemy(enemy);
-                enemy.GetComponent<EnemyBase>().SetBattleManager(_battleManager);
+                foreach (var pop in wave.popEnemies)
+                {
+                    GameObject prefabToSpawn = enemySetData?.GetPrefabByKind(pop.spawnKind);
+                    if (prefabToSpawn == null) continue;
 
-                yield return new WaitForSeconds(spawnInterval);
+                    Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
+                    GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+                    spawned.Add(enemy);
+                    _battleManager.AddEnemy(enemy);
+                    enemy.GetComponent<EnemyBase>().SetBattleManager(_battleManager);
+
+                    yield return new WaitForSeconds(spawnInterval);
+                    Debug.Log("Aaaaa");
+                }
+
+                yield return StartCoroutine(WaitForWaveClear(spawned));
             }
-
-            yield return StartCoroutine(WaitForWaveClear(spawned));
         }
 
         OnGroupCleared();
     }
 
-    /// <summary>
-    /// ウェーブ内の敵が全滅するまで待機
-    /// </summary>
-    /// <param name="spawned"></param>
-    /// <returns></returns>
     private IEnumerator WaitForWaveClear(List<GameObject> spawned)
     {
         Vector3 lastPos = Vector3.zero;
@@ -223,21 +188,16 @@ public class WaveSpawner : MonoBehaviour
         lastDeadEnemyPos = lastPos;
     }
 
-    /// <summary>
-    /// グループが全滅したときの処理
-    /// </summary>
     private void OnGroupCleared()
     {
         groupsClearedCount++;
         if (groupsClearedCount < groups.Count) return;
 
-
         if (skillSelectManager != null && goalPositions.Length > 0)
         {
             Vector3 spawnPos = lastDeadEnemyPos != Vector3.zero ? lastDeadEnemyPos : areaCenter.position;
 
-            // beforskill を StageEventType に変換
-            StageEventType stageEventType = StageEventType.Fire; // デフォルト
+            StageEventType stageEventType = StageEventType.Fire;
             if (!string.IsNullOrEmpty(beforeSkill))
             {
                 if (System.Enum.TryParse(beforeSkill, out StageEventType parsed))
@@ -246,7 +206,6 @@ public class WaveSpawner : MonoBehaviour
                 }
             }
 
-            // 変換した StageEventType に応じて処理
             switch (stageEventType)
             {
                 case StageEventType.Fire:
@@ -282,10 +241,6 @@ public class WaveSpawner : MonoBehaviour
         StartCoroutine(WaitForSkillSelectFinish());
     }
 
-    /// <summary>
-    /// スキル選択完了まで待機
-    /// </summary>
-    /// <returns></returns>
     private IEnumerator WaitForSkillSelectFinish()
     {
         yield return new WaitUntil(() => skillSelectFinished);
@@ -298,10 +253,6 @@ public class WaveSpawner : MonoBehaviour
         lastDeadEnemyPos = Vector3.zero;
     }
 
-    /// <summary>
-    /// NavMesh上のランダム位置を取得
-    /// </summary>
-    /// <returns></returns>
     private Vector3 GetRandomNavMeshPosition()
     {
         for (int i = 0; i < 30; i++)
@@ -328,10 +279,6 @@ public class WaveSpawner : MonoBehaviour
         return areaCenter.position;
     }
 
-    /// <summary>
-    /// Goal に到達したら StageSpawner にスキル通知
-    /// </summary>
-    /// <param name="goalIndex"></param>
     public void OnGoalReached(int goalIndex)
     {
         if (goalPositions == null || goalIndex < 0 || goalIndex >= goalPositions.Length) return;
@@ -340,19 +287,13 @@ public class WaveSpawner : MonoBehaviour
         SkillData.SkillElement selectedSkill = ConvertStageEventToSkill(eventType);
 
         if (stageSpawner != null)
-        {
             stageSpawner.OnPathSelected(selectedSkill);
-        }
     }
 
-    /// <summary>
-    /// スキル選択完了時の処理
-    /// </summary>
     public void OnSkillSelectFinished()
     {
         skillSelectFinished = true;
 
-        // 壁エフェクトを消す
         foreach (var wall in wallEffects)
         {
             if (wall != null)
@@ -362,10 +303,6 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// BattleManager をセット
-    /// </summary>
-    /// <param name="manager"></param>
     public void SetBattleManager(BattleManager manager)
     {
         _battleManager = manager;
