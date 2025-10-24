@@ -5,8 +5,8 @@ using UnityEngine;
 public class TackleEnemy : Enemy
 {
     [Header("タックル敵変数")]
-    private float CHARGE_SPEED = 0.2f; // 突進速度
-    private float CHARGE_TIME = 0.1f; // 突進時間
+    private float CHARGE_SPEED = 0.1f; // 突進速度
+    private float CHARGE_TIME = 0.05f; // 突進時間
 
     private bool _isCharge = false; // 突進中かどうかのフラグ
     private float _tackleTime = 0.0f; // タイマー
