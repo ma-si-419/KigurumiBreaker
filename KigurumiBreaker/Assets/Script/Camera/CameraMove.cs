@@ -8,7 +8,7 @@ public class CameraMove : MonoBehaviour
 
     [SerializeField] private GameObject _player; // プレイヤーオブジェクトの参照
 
-    [SerializeField] private BoxCollider _moveArea; // カメラの移動範囲を指定するBoxCollider
+    [SerializeField] private CapsuleCollider _moveArea; // カメラの移動範囲を指定するCapsuleCollider
 
     [SerializeField] private CameraShakeData _shakeData; // カメラの揺れデータ
 
@@ -16,7 +16,7 @@ public class CameraMove : MonoBehaviour
 
     [SerializeField] private SpecialAttackCameraMoveData _specialAttackCameraMoveData; // 必殺技中のカメラ移動データ
 
-    bool _isSpecialAttack = false; // プレイヤーが必殺技を使っているかどうか
+    private bool _isSpecialAttack = false; // プレイヤーが必殺技を使っているかどうか
 
     public enum ShakeKind
     {
@@ -27,22 +27,20 @@ public class CameraMove : MonoBehaviour
         TYPENUM
     }
 
-    int _shakeTime = 0;                                     // 揺れの時間を保存する変数
-    float _shakePower = 0.0f;                               // 揺れの大きさを保存する変数
+    private int _shakeTime = 0;                                     // 揺れの時間を保存する変数
+    private float _shakePower = 0.0f;                               // 揺れの大きさを保存する変数
 
-    int _specialAttackFrame = 0;                            // 必殺技中のフレーム数を保存する変数
-    int _returnFrame = 0;                                   // 必殺技終了後の元の位置に戻るまでのフレーム数を保存する変数
+    private int _specialAttackFrame = 0;                            // 必殺技中のフレーム数を保存する変数
+    private int _returnFrame = 0;                                   // 必殺技終了後の元の位置に戻るまでのフレーム数を保存する変数
 
-    bool _isStop = false;                                   // カメラ移動を停止するかどうかを保存する変数
+    private bool _isStop = false;                                   // カメラ移動を停止するかどうかを保存する変数
 
-    bool _isSwingCamera = false;                                // カメラがスイングしているかどうかを保存する変数
+    private bool _isSwingCamera = false;                                // カメラがスイングしているかどうかを保存する変数
 
-    SpecialAttackCameraMoveData.MoveData _currentMoveData;  // 現在の必殺技中のカメラ移動データを保存する変数
+    private SpecialAttackCameraMoveData.MoveData _currentMoveData;  // 現在の必殺技中のカメラ移動データを保存する変数
 
-    Vector3 _frameMoveVec = Vector3.zero;                   // 一フレームに移動するベクトルを保存する変数
-    Vector3 _specialAttackShiftVec = Vector3.zero;          // 必殺技中に移動したベクトルの合計を保存する変数
-
-    private Vector3 _initialRotation;                       // カメラの初期回転を保存する変数
+    private Vector3 _frameMoveVec = Vector3.zero;                   // 一フレームに移動するベクトルを保存する変数
+    private Vector3 _specialAttackShiftVec = Vector3.zero;          // 必殺技中に移動したベクトルの合計を保存する変数
 
     // Start is called before the first frame update
     void Start()
@@ -93,12 +91,9 @@ public class CameraMove : MonoBehaviour
 
         if (_moveArea != null)
         {
-            // カメラの位置が移動範囲を超えないように制限
-            Vector3 clampedPosition = transform.position;
-            clampedPosition.x = Mathf.Clamp(clampedPosition.x, _moveArea.bounds.min.x, _moveArea.bounds.max.x);
-            clampedPosition.y = Mathf.Clamp(clampedPosition.y, _moveArea.bounds.min.y, _moveArea.bounds.max.y);
-            clampedPosition.z = Mathf.Clamp(clampedPosition.z, _moveArea.bounds.min.z, _moveArea.bounds.max.z);
-            transform.position = clampedPosition;
+            // カメラの位置が移動範囲外に出ないように制限
+            Vector3 closestPoint = _moveArea.ClosestPoint(transform.position);
+            transform.position = closestPoint;
         }
 
         if (_isSpecialAttack)
