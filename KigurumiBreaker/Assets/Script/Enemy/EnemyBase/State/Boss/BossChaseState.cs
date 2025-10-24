@@ -35,7 +35,7 @@ public class BossChaseState : IState
         // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
         _boss.StopMovement();
         //プレイヤーの方向を向き続ける
-        _boss.LookAtPlayer();
+        //_boss.LookAtPlayer();
 
         //プレイヤーとの位置差を計算
         Vector3 diff = _boss.player.transform.position - _boss.transform.position;

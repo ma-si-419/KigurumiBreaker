@@ -48,6 +48,9 @@ public class BossEnemy : EnemyBase
         _meleeAttackRangeSqr = _meleeAttackRange * _meleeAttackRange;
         _specialAttackRangeSqr = _specialAttackRange * _specialAttackRange;
 
+        // ボスのNavMeshの当たり判定の半径を設定（必要に応じて調整）
+        agent.radius = 1.0f; 
+
         // ボス専用の初期化処理をここに追加
         ChangeState(new BossIdleState(this));
     }
