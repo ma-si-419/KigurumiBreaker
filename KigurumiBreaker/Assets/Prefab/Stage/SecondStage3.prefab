@@ -1184,8 +1184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &2560338696982050637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,8 +1439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &3331474789834666607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,51 +1799,13 @@ MonoBehaviour:
   areaCenter: {fileID: 5761817754588841471}
   areaSize: {x: 40, y: 0, z: 30}
   enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  groups:
-  - groupName: 
-    waves:
-    - popEnemies:
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-    - popEnemies:
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-  - groupName: 
-    waves:
-    - popEnemies:
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 1
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-    - popEnemies:
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
-      - spawnKind: 2
-        spawnPosition: {x: 0, y: 0, z: 0}
-        randomizePosition: 1
+  stageEnemyInfos:
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: 90fcb2f3aa96edf48aea37385d68ae37, type: 2}
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: 7289c476f556bca44bc2d7c46543d7e1, type: 2}
   spawnInterval: 0.5
   goalPositions:
   - {fileID: 405927038507834836}
@@ -1858,10 +1820,8 @@ MonoBehaviour:
   wallEffects:
   - {fileID: 784641345419367743}
   - {fileID: 6136722122852405327}
-  isAllWavesCleared: 0
-  skillSelectFinished: 0
-  beforskill: 
-  afterskill: 
+  beforeSkill: 
+  aftereSkill: 
   stageSpawner: {fileID: 0}
 --- !u!114 &2049974637482684102
 MonoBehaviour:
@@ -2600,8 +2560,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &6694032135289491434
 GameObject:
   m_ObjectHideFlags: 0
@@ -2721,8 +2681,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1 &6856988845657803813
 GameObject:
   m_ObjectHideFlags: 0
@@ -3458,8 +3418,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2683028b17503ad4e9b3718b2dbf433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetEffects: []
-  enemyTag: Enemy
+  _targetEffects: []
+  _enemyTag: Enemy
 --- !u!1001 &21239939025731963
 PrefabInstance:
   m_ObjectHideFlags: 0
