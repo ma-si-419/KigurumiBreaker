@@ -2377,22 +2377,9 @@ MonoBehaviour:
   areaSize: {x: 28, y: 0, z: 30}
   enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
   stageEnemyInfos:
-  - stageInfoName: 
-    enemyGroups:
-    - groupName: 
-      waves:
-      - popEnemies:
-        - spawnKind: 0
-          spawnPosition: {x: 0, y: 0, z: 0}
-          randomizePosition: 0
-  - stageInfoName: 
-    enemyGroups:
-    - groupName: 
-      waves:
-      - popEnemies:
-        - spawnKind: 2
-          spawnPosition: {x: 0, y: 0, z: 0}
-          randomizePosition: 0
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: c3b1d51c0bec551449280f595ca1df54, type: 2}
   spawnInterval: 0.5
   goalPositions:
   - {fileID: 5749454913018647715}
