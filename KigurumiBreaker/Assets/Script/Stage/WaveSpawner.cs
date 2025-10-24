@@ -19,6 +19,15 @@ public class EnemyWave
 }
 
 [System.Serializable]
+public class StageEnemyInfo
+{
+    public string stageInfoName;               // ステージ名
+    public List<EnemyGroup> enemyGroups;       // このステージに出現する敵グループ
+}
+
+
+
+[System.Serializable]
 public class EnemyGroup
 {
     public string groupName = "Group";
@@ -56,7 +65,12 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private SpawnData enemySetData;
 
     [Header("グループ設定")]
-    [SerializeField] private List<EnemyGroup> groups = new List<EnemyGroup>();
+    [SerializeField]
+    private List<StageEnemyInfo> stageEnemyInfos;  // ステージごとの敵配置データ
+
+    private StageEnemyInfo currentStageInfo;       // 今回選ばれたステージ情報
+
+    private List<EnemyGroup> groups = new List<EnemyGroup>();
 
     [SerializeField] private float spawnInterval = 0.5f;
 
@@ -96,11 +110,17 @@ public class WaveSpawner : MonoBehaviour
         }
 
         AssignSkillsToGoals();
-
-        foreach (var group in groups)
+        if (stageEnemyInfos == null || stageEnemyInfos.Count == 0)
         {
-            StartCoroutine(HandleGroupWaves(group));
+            return;
         }
+
+        // ステージ内の敵情報からランダム選択
+        currentStageInfo = stageEnemyInfos[Random.Range(0, stageEnemyInfos.Count)];
+
+        Debug.Log($"選ばれたステージ: {currentStageInfo.stageInfoName}");
+
+        StartCoroutine(HandleStageGroups(currentStageInfo));
     }
 
     private void AssignSkillsToGoals()
@@ -136,6 +156,17 @@ public class WaveSpawner : MonoBehaviour
             default: return SkillData.SkillElement.Fire;
         }
     }
+
+    private IEnumerator HandleStageGroups(StageEnemyInfo stageInfo)
+    {
+        foreach (var group in stageInfo.enemyGroups)
+        {
+            yield return HandleGroupWaves(group);
+        }
+
+        Debug.Log("すべてのグループがクリアされました。");
+    }
+
 
     /// <summary>
     /// グループ内のウェーブを順次処理
