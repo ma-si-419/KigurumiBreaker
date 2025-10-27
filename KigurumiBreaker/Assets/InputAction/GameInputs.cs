@@ -80,6 +80,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""GetItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e9675ff-d591-40a5-8ab3-89b444645936"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -269,6 +278,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""ChargeAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef552d11-77ad-47d6-9193-727213625b2e"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GetItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -344,6 +364,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_SpecialAttack = m_Player.FindAction("SpecialAttack", throwIfNotFound: true);
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
         m_Player_RangedAttack = m_Player.FindAction("RangedAttack", throwIfNotFound: true);
+        m_Player_GetItem = m_Player.FindAction("GetItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -411,6 +432,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SpecialAttack;
     private readonly InputAction m_Player_Dodge;
     private readonly InputAction m_Player_RangedAttack;
+    private readonly InputAction m_Player_GetItem;
     public struct PlayerActions
     {
         private @GameInputs m_Wrapper;
@@ -421,6 +443,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @SpecialAttack => m_Wrapper.m_Player_SpecialAttack;
         public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
         public InputAction @RangedAttack => m_Wrapper.m_Player_RangedAttack;
+        public InputAction @GetItem => m_Wrapper.m_Player_GetItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -448,6 +471,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @RangedAttack.started += instance.OnRangedAttack;
             @RangedAttack.performed += instance.OnRangedAttack;
             @RangedAttack.canceled += instance.OnRangedAttack;
+            @GetItem.started += instance.OnGetItem;
+            @GetItem.performed += instance.OnGetItem;
+            @GetItem.canceled += instance.OnGetItem;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -470,6 +496,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @RangedAttack.started -= instance.OnRangedAttack;
             @RangedAttack.performed -= instance.OnRangedAttack;
             @RangedAttack.canceled -= instance.OnRangedAttack;
+            @GetItem.started -= instance.OnGetItem;
+            @GetItem.performed -= instance.OnGetItem;
+            @GetItem.canceled -= instance.OnGetItem;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -540,5 +569,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnSpecialAttack(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
         void OnRangedAttack(InputAction.CallbackContext context);
+        void OnGetItem(InputAction.CallbackContext context);
     }
 }
