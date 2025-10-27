@@ -498,7 +498,13 @@ public class PlayerState : Player<PlayerState>
         /////////////////////////////////////////////////////////
 
         private GameObject _attackPart;
-        
+
+        private Vector3 _attackPartPos;
+
+        private float _attackPartScale;
+
+        private Vector3 _attackPartDefaultPos;
+
         /////////////////////////////////////////////////////////
 
         // 攻撃を出したかどうか
@@ -546,6 +552,15 @@ public class PlayerState : Player<PlayerState>
             // 攻撃する部位を取得
             _attackPart = state.GetAttackPart(_currentAttackData.attackPartName);
 
+            // 攻撃する部位の位置を保存
+            _attackPartDefaultPos = _attackPart.transform.localPosition;
+
+            // 攻撃する部位の座標を取得
+            _attackPartPos = _attackPart.transform.localPosition;
+
+            // 攻撃する部位の大きさを保存
+            _attackPartScale = _attackPart.transform.localScale.x;
+
             //////////////////////////////////////////////////////////////////////////////
 
             // 座標を少しプレイヤーから離す
@@ -565,15 +580,27 @@ public class PlayerState : Player<PlayerState>
 
             _currentFrame++;
 
+            ////////////////////////////////////////////////////////////////////////////////
+
+            float s = 5.0f;
+            float v = 4.0f;
+
+            // 少しずつ大きくする
+            _attackPartScale = Mathf.Lerp(1.0f, s, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame,0.0f,1.0f));
+
+
             // 攻撃する部位を大きくする
-            if (_attackPart != null)
-            {
-                Debug.Log("拡大");
+            _attackPart.transform.localScale = new Vector3(_attackPartScale, _attackPartScale, _attackPartScale);
 
-                _attackPart.transform.localScale = new Vector3(7.0f, 7.0f, 7.0f);
-               
+            // 少しずつずらす
+            float shiftScale = Mathf.Lerp(1.0f, v, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
 
-            }
+            Debug.Log(shiftScale);
+
+            // 攻撃座標の位置をずらす
+            _attackPart.transform.localPosition = _attackPartPos * shiftScale;
+
+            ////////////////////////////////////////////////////////////////////////////////
 
             // エフェクトの位置を更新
             if (_effectObject)
@@ -679,12 +706,17 @@ public class PlayerState : Player<PlayerState>
 
                         if (_attackPart != null)
                         {
-
                             // 攻撃する部位の大きさを元に戻す
                             _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
+                            // 位置を元に戻す
+                            _attackPart.transform.localPosition = _attackPartPos;
+
                             // 攻撃する部位を取得
                             _attackPart = state.GetAttackPart(_currentAttackData.attackPartName);
+
+                            // 攻撃する部位の位置を保存
+                            _attackPartPos = _attackPart.transform.localPosition;
 
                         }
 
@@ -721,6 +753,9 @@ public class PlayerState : Player<PlayerState>
                     // 攻撃する部位の大きさを元に戻す
                     _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
+                    // 位置を元に戻す
+                    _attackPart.transform.localPosition = _attackPartPos;
+
                 }
 
                 ///////////////////////////////////////////////////////////////////////
@@ -750,6 +785,9 @@ public class PlayerState : Player<PlayerState>
 
                 // 攻撃する部位の大きさを元に戻す
                 _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+                // 位置を元に戻す
+                _attackPart.transform.localPosition = _attackPartPos;
 
             }
 
