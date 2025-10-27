@@ -582,18 +582,18 @@ public class PlayerState : Player<PlayerState>
 
             ////////////////////////////////////////////////////////////////////////////////
 
-            float s = 5.0f;
-            float v = 4.0f;
+            float scale = 10.0f;
+            float vec = 2.0f;
 
             // ­‚µ‚¸‚Â‘å‚«‚­‚·‚é
-            _attackPartScale = Mathf.Lerp(1.0f, s, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame,0.0f,1.0f));
+            _attackPartScale = Mathf.Lerp(1.0f, scale, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame,0.0f,1.0f));
 
 
             // UŒ‚‚·‚é•”ˆÊ‚ğ‘å‚«‚­‚·‚é
             _attackPart.transform.localScale = new Vector3(_attackPartScale, _attackPartScale, _attackPartScale);
 
             // ­‚µ‚¸‚Â‚¸‚ç‚·
-            float shiftScale = Mathf.Lerp(1.0f, v, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+            float shiftScale = Mathf.Lerp(1.0f, vec, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
 
             Debug.Log(shiftScale);
 
