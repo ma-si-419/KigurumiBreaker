@@ -17,6 +17,8 @@ public class Enemy : EnemyBase
     protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
     protected float _hitTimer = 0.5f; // ヒットタイマー
 
+
+
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
@@ -30,6 +32,14 @@ public class Enemy : EnemyBase
     {
         // デバッグ用に線を引く
         DebugLine();
+        Debug.Log(_currentTrunk);
+        Debug.Log(_currentHp);
+        Debug.Log(_isArmor);
+
+        if(_isArmor && _currentTrunk <= 0)
+        {
+            _isArmor = false;
+        }
 
         float a = 0.05f;
 
@@ -174,8 +184,18 @@ public class Enemy : EnemyBase
             //死んだ状態になっている場合はダメージを受けない
             if (_currentState is DeadState) return;
 
-            // ダメージを受ける(プレイヤーアタックのダメージを取得する)
-            _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+            if(!_isArmor)
+            {
+                // アーマーでない場合は通常通りダメージを受ける
+                // ダメージを受ける(プレイヤーアタックのダメージを取得する)
+                _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+            }
+            else if(_isArmor)
+            {
+                // アーマーの場合は耐久力を減らす
+                // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
+                _currentTrunk -= other.GetComponent<PlayerAttack>().GetDamage();
+            }
 
             //ヒットストップ処理
             PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
@@ -183,11 +203,13 @@ public class Enemy : EnemyBase
             manager.StopTime(playerAttack.GetHitStopTime());
 
 
-            // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
-            //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
-
             // ダメージエフェクトを生成する
             //Instantiate(_damageEffect, transform.position, Quaternion.identity);
+            if(_currentTrunk <= 0)
+            {
+                _currentTrunk = 0;
+            }
+
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
@@ -215,13 +237,28 @@ public class Enemy : EnemyBase
             //死んだ状態になっている場合はダメージを受けない
             if (_currentState is DeadState) return;
 
-            // プレイヤーにダメージを与える処理
-            _currentHp -= other.GetComponent<PlayerRangedAttack>().GetDamage();
+            if (!_isArmor)
+            {
+                // アーマーでない場合は通常通りダメージを受ける
+                // ダメージを受ける(プレイヤーアタックのダメージを取得する)
+                _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+            }
+            else if (_isArmor)
+            {
+                // アーマーの場合は耐久力を減らす
+                // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
+                _currentTrunk -= other.GetComponent<PlayerAttack>().GetDamage();
+            }
 
             //ヒットストップ処理
             PlayerRangedAttack playerRangedAttack = other.gameObject.GetComponent<PlayerRangedAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.StopTime(playerRangedAttack.GetHitStopTime());
+
+            if (_currentTrunk <= 0)
+            {
+                _currentTrunk = 0;
+            }
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)

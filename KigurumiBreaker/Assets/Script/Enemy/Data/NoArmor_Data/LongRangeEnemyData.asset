@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
-  m_Name: CircleAttackEnemyData
+  m_Name: LongRangeEnemyData
   m_EditorClassIdentifier: 
-  MaxHp: 150
+  MaxHp: 40
   MaxTrunk: 50
-  AttackPower: 3
+  AttackPower: 10
   MoveSpeed: 5
-  DetectionRange: 15
-  AttackRange: 5
+  DetectionRange: 20
+  AttackRange: 10
   IdleToChaseTime: 2
-  ChaseToAttack: 1.5
-  RotateSpeed: 5
+  ChaseToAttack: 3
+  RotateSpeed: 8
   AttackPrefab: {fileID: 0}
