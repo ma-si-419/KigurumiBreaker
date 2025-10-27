@@ -10,7 +10,6 @@ using UnityEngine.Animations;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-
 public class PlayerState : Player<PlayerState>
 {
 
@@ -494,6 +493,14 @@ public class PlayerState : Player<PlayerState>
         private Attack _currentAttackData;
         private int _currentFrame;
         private GameObject _effectObject;
+
+
+        /////////////////////////////////////////////////////////
+
+        private GameObject _attackPart;
+        
+        /////////////////////////////////////////////////////////
+
         // 攻撃を出したかどうか
         bool _isAttack;
         public MeleeAttackState(PlayerState next) : base(next)
@@ -532,7 +539,15 @@ public class PlayerState : Player<PlayerState>
             _currentAttackData = state.SearchAttackData(_currentAttackName);
 
             // 攻撃する部位にエフェクトを出す
-            Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPart);
+            Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            // 攻撃する部位を取得
+            _attackPart = state.GetAttackPart(_currentAttackData.attackPartName);
+
+            //////////////////////////////////////////////////////////////////////////////
+
             // 座標を少しプレイヤーから離す
             Vector3 shiftVec = (effectPos - state.transform.position).normalized;
             effectPos += shiftVec * 0.5f;
@@ -550,10 +565,20 @@ public class PlayerState : Player<PlayerState>
 
             _currentFrame++;
 
+            // 攻撃する部位を大きくする
+            if (_attackPart != null)
+            {
+                Debug.Log("拡大");
+
+                _attackPart.transform.localScale = new Vector3(7.0f, 7.0f, 7.0f);
+               
+
+            }
+
             // エフェクトの位置を更新
             if (_effectObject)
             {
-                Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPart);
+                Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
                 // 座標を少しプレイヤーから離す
                 Vector3 shiftVec = (effectPos - state.transform.position).normalized;
                 // Y座標を計算に入れない
@@ -576,7 +601,7 @@ public class PlayerState : Player<PlayerState>
                 // 攻撃オブジェクトが存在するなら攻撃オブジェクトの座標を更新
                 if (state._currentAttack)
                 {
-                    Vector3 position = state.GetAttackPosition(_currentAttackData.attackPart);
+                    Vector3 position = state.GetAttackPosition(_currentAttackData.attackPartName);
 
                     // ずらす分を加算
                     Vector3 shiftVec = state.transform.forward * _currentAttackData.effectShiftScale;
@@ -647,7 +672,24 @@ public class PlayerState : Player<PlayerState>
                         }
 
                         // 攻撃する部位にエフェクトを出す
-                        Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPart);
+                        Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
+
+
+                        //////////////////////////////////////////////////////////////////////
+
+                        if (_attackPart != null)
+                        {
+
+                            // 攻撃する部位の大きさを元に戻す
+                            _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+                            // 攻撃する部位を取得
+                            _attackPart = state.GetAttackPart(_currentAttackData.attackPartName);
+
+                        }
+
+                        ///////////////////////////////////////////////////////////////////////
+
                         _effectObject = Instantiate(_currentAttackData.attackEffect, effectPos, Quaternion.identity);
 
                         // 次の攻撃アニメーションを再生
@@ -671,6 +713,18 @@ public class PlayerState : Player<PlayerState>
                     _effectObject = null;
                 }
 
+                //////////////////////////////////////////////////////////////////////
+
+                if (_attackPart != null)
+                {
+
+                    // 攻撃する部位の大きさを元に戻す
+                    _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+                }
+
+                ///////////////////////////////////////////////////////////////////////
+
                 state.ChangeState(new IdleState(state));
             }
         }
@@ -688,6 +742,18 @@ public class PlayerState : Player<PlayerState>
                 Destroy(_effectObject);
                 _effectObject = null;
             }
+
+            //////////////////////////////////////////////////////////////////////
+
+            if (_attackPart != null)
+            {
+
+                // 攻撃する部位の大きさを元に戻す
+                _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+            }
+
+            ///////////////////////////////////////////////////////////////////////
         }
     }
 
@@ -1277,7 +1343,7 @@ public class PlayerState : Player<PlayerState>
                     break;
             }
 
-            Debug.Log("ヒットストップ開始" );
+            Debug.Log("ヒットストップ開始");
 
             state._battleManager.GetComponent<BattleManager>().StopTime(stopTime);
 
@@ -1290,11 +1356,11 @@ public class PlayerState : Player<PlayerState>
             if (state._isStop) return;
 
             // ヒットストップが終わってマテリアルが変更されたままだったら
-            if(!_changeMaterial)
+            if (!_changeMaterial)
             {
                 // マテリアルを元に戻す
                 state._playerMeshRenderer.material = state._playerMaterial;
-            
+
                 _changeMaterial = true;
             }
 
@@ -1545,6 +1611,38 @@ public class PlayerState : Player<PlayerState>
         }
         return result;
     }
+    private GameObject GetAttackPart(string partName)
+    {
+        GameObject result = null;
+        // 早期リターン
+        if (partName == "None") return result;
+
+        // 攻撃部位のリグの名前を取得
+        string rigName = null;
+        for (int i = 0; i < _attackPartData.attackDataList.Count; i++)
+        {
+            if (_attackPartData.attackDataList[i].attackPartName == partName)
+            {
+                rigName = _attackPartData.attackDataList[i].objectRigName;
+                break;
+            }
+        }
+
+        // 早期リターン
+        if (rigName == null) return result;
+
+        // リグのTransformを取得
+        Transform[] allChildren = GetComponentsInChildren<Transform>();
+        foreach (Transform t in allChildren)
+        {
+            if (t.name == rigName) // モデルのボーン名
+            {
+                result = t.gameObject;
+            }
+        }
+
+        return result;
+    }
 
     private Vector3 GetAttackPosition(string partName)
     {
@@ -1693,7 +1791,7 @@ public class PlayerState : Player<PlayerState>
         playerAttack.SetPlayerAttackData(attackData);
 
         // 攻撃の位置を設定
-        Vector3 position = GetAttackPosition(data.attackPart);
+        Vector3 position = GetAttackPosition(data.attackPartName);
 
         // 攻撃の座標を設定
         attackObject.GetComponent<PlayerAttack>().SetPlayerPos(position);
@@ -1721,7 +1819,7 @@ public class PlayerState : Player<PlayerState>
         PlayerRangedAttack.RangedAttackData attackData = new PlayerRangedAttack.RangedAttackData();
 
         // 攻撃の座標を設定
-        Vector3 position = GetAttackPosition(data.attackPart);
+        Vector3 position = GetAttackPosition(data.attackPartName);
         attack.transform.position = position;
         // 攻撃の向きを設定
         attack.transform.forward = transform.forward;

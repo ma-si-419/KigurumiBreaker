@@ -49,7 +49,7 @@ public class Attack
     [SerializeField] private int AttackLifeTime;
     [Header("次に出てくる攻撃の名前(コンボ用)")]
     [SerializeField] private string NextAttackName;
-    [Header("攻撃を出す部位")]
+    [Header("攻撃を出す部位の名前")]
     [SerializeField] private string AttackPart;
     [Header("攻撃を出す部位に出すエフェクト")]
     [SerializeField] private GameObject AttackEffect;
@@ -77,7 +77,7 @@ public class Attack
     public float shiftPosZ => ShiftPosZ;
     public int attackLifeTime => AttackLifeTime;
     public string nextAttackName => NextAttackName;
-    public string attackPart => AttackPart;
+    public string attackPartName => AttackPart;
     public GameObject attackEffect => AttackEffect;
     public float effectShiftScale => EffectShiftScale;
     public GameObject hitEffect => HitEffect;
