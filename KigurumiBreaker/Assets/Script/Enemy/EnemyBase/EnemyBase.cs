@@ -25,8 +25,7 @@ public class EnemyBase : MonoBehaviour
     protected float _attackRangeSqr;
 
     // 攻撃オブジェクトのプレハブ
-    [Header("コンポーネント")]
-    [SerializeField] public GameObject attackObjectPrefab;
+    protected GameObject attackObjectPrefab;
 
     // NavMeshAgentの参照
     protected NavMeshAgent _agent;
@@ -89,6 +88,9 @@ public class EnemyBase : MonoBehaviour
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
+
+        // 攻撃オブジェクトのプレハブを設定
+        attackObjectPrefab = _enemyData.attackPrefab;
 
         // 敵データでアーマーかどうかを設定
         _isArmor = _enemyData.isArmor;
