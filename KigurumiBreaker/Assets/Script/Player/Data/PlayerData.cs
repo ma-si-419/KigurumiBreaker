@@ -33,9 +33,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float ForwardAngle;
     [Header("‘O•ûŒü‚Ì“G‚ð”F’m‚·‚é‹——£")]
     [SerializeField] private float ForwardDistance;
-    
-
-
+    [Header("ƒ`ƒƒ[ƒWUŒ‚‚ÅUŒ‚‚·‚é•”ˆÊ‚ðŠg‘å‚·‚é‚Æ‚«‚É‚©‚¯‚éŽžŠÔ")]
+    [SerializeField] private float ChargeAttackPartScaleUpTime;
 
     // “Ç‚ÝŽæ‚èê—p
     public float moveInputLength => MoveInputLength;
@@ -52,4 +51,6 @@ public class PlayerData : ScriptableObject
     public float maxSpecialAttackDamegeCutRate => MaxSpecialAttackDamegeCutRate;
     public float forwardAngle => ForwardAngle;
     public float forwardDistance => ForwardDistance;
+
+    public float chargeAttackPartScaleUpTime => ChargeAttackPartScaleUpTime;
 }
