@@ -17,7 +17,7 @@ public class EnemyAttackCol : MonoBehaviour
     [SerializeField] private float _shotLifeTime; // 弾の寿命
 
     [Header("ヒットダメージ設定")]
-    private float _damage;            // ヒットダメージ
+    [SerializeField] private float _damage;            // ヒットダメージ
     [SerializeField] private AttackType _damageKind;   // ダメージの種類（弱、中、強）
     [SerializeField] private GameObject _hitEffectPrefab;   // ヒットエフェクトのプレハブ
 
@@ -39,7 +39,8 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void Start()
     {
-        _damage = _enemyBase.enemyData.attackPower;
+        // 敵のベースクラスから攻撃力を取得
+        //_damage = _enemyBase.enemyData.attackPower;
 
         // 弾の寿命をフレーム数に変換してセット
         if (CompareTag("EnemyRangedAttack"))

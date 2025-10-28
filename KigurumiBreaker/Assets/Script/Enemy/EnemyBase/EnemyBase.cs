@@ -25,7 +25,7 @@ public class EnemyBase : MonoBehaviour
     protected float _attackRangeSqr;
 
     // 攻撃オブジェクトのプレハブ
-    protected GameObject attackObjectPrefab;
+    [SerializeField] protected GameObject attackObjectPrefab;
 
     // NavMeshAgentの参照
     protected NavMeshAgent _agent;
