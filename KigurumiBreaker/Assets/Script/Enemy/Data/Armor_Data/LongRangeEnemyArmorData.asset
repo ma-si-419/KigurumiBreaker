@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
-  m_Name: PunchEnemyData
+  m_Name: LongRangeEnemyArmorData
   m_EditorClassIdentifier: 
-  MaxHp: 80
-  MaxTrunk: 50
-  AttackPower: 3
+  MaxHp: 40
+  IsArmor: 1
+  MaxTrunk: 60
+  AttackPower: 10
   MoveSpeed: 5
-  DetectionRange: 15
-  AttackRange: 4
+  DetectionRange: 20
+  AttackRange: 10
   IdleToChaseTime: 2
-  ChaseToAttack: 2
-  RotateSpeed: 5
+  ChaseToAttack: 3
+  RotateSpeed: 8
   AttackPrefab: {fileID: 0}

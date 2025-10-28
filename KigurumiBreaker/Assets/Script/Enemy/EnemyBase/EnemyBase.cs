@@ -56,6 +56,9 @@ public class EnemyBase : MonoBehaviour
 
     protected float _animationSpeed = 1.0f;
 
+    // アーマーかどうかのフラグ
+    protected bool _isArmor;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {
@@ -86,6 +89,9 @@ public class EnemyBase : MonoBehaviour
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
+
+        // 敵データでアーマーかどうかを設定
+        _isArmor = _enemyData.isArmor;
 
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();

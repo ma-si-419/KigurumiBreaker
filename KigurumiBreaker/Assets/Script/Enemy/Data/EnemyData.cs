@@ -7,6 +7,8 @@ public class EnemyData : ScriptableObject
 {
     [Header("最大HP")]
     [SerializeField] private float MaxHp;
+    [Header("アーマー装備フラグ")]
+    [SerializeField] private bool IsArmor;
     [Header("耐久力")]
     [SerializeField] private float MaxTrunk;
     [Header("攻撃力")]
@@ -28,6 +30,7 @@ public class EnemyData : ScriptableObject
 
     // 読み取り専用
     public float maxHp => MaxHp;
+    public bool isArmor => IsArmor;
     public float maxTrunk => MaxTrunk;
     public float attackPower => AttackPower;
     public float moveSpeed => MoveSpeed;
