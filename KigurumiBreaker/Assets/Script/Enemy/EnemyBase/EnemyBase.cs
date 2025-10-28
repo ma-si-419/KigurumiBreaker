@@ -58,6 +58,9 @@ public class EnemyBase : MonoBehaviour
     // アーマーかどうかのフラグ
     protected bool _isArmor;
 
+    // デバッグ用停止フラグ
+    protected bool _isDebugStop;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {

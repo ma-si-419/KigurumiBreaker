@@ -3159,7 +3159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!195 &368834851
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5090,6 +5090,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee976d8f6b6520c47a7981d57eb83c8c, type: 3}
+--- !u!1001 &602700533
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.97105646
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 16.558912
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338768037, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5920302078338793605, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
+      propertyPath: m_Name
+      value: CircleAttackEnemy_NoArmor
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8282484043fd64b48a65d3b24a391c4e, type: 3}
 --- !u!1001 &613452952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7176,6 +7233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shootSpeed: 0
   _shotLifeTime: 0
+  _damage: 0
   _damageKind: 2
   _hitEffectPrefab: {fileID: 0}
   _lifeTime: 10
@@ -7305,7 +7363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
   _shootCount: 3
   _maxChaseRange: 20
   MIN_FLEE_DISTANCE: 20
@@ -7722,7 +7780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!195 &916676289
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -7970,7 +8028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!54 &934747051
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8223,7 +8281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 8a93b4921d21f8a44bad7f1afbf266fa, type: 2}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!195 &970350042
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -8635,6 +8693,10 @@ PrefabInstance:
     - target: {fileID: 3602517449851592574, guid: 7e06470f96f14724b908117813ae26bd, type: 3}
       propertyPath: m_Name
       value: PunchEnemy_NoArmor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3602517449851592574, guid: 7e06470f96f14724b908117813ae26bd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4230399729877157316, guid: 7e06470f96f14724b908117813ae26bd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10573,6 +10635,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: a6ae262887e2eed4da4dd7ef23a672a8, type: 2}
+  attackObjectPrefab: {fileID: 0}
   isAttack: 0
   _meleeAttackRange: 5
   _specialAttackRange: 12
@@ -10918,7 +10981,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!195 &1253507466
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -11611,7 +11674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!4 &1286718706 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
@@ -14257,6 +14320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shootSpeed: 0
   _shotLifeTime: 0
+  _damage: 0
   _damageKind: 2
   _hitEffectPrefab: {fileID: 0}
   _lifeTime: 10
@@ -14851,7 +14915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!195 &1597369573
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -15151,7 +15215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!54 &1632475053
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15385,7 +15449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!54 &1678668979
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15827,7 +15891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 08c63e4f05e42bd428c99a5f597250cd, type: 2}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
   _dashSpeed: 3
   _dashTime: 0.3
   _attackDistance: 0.8
@@ -15980,7 +16044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!195 &1746091663
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -16422,7 +16486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
   _shootCount: 3
   _maxChaseRange: 20
   MIN_FLEE_DISTANCE: 20
@@ -16992,7 +17056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
   _shootCount: 3
   _maxChaseRange: 20
   MIN_FLEE_DISTANCE: 5
@@ -17692,7 +17756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
   _dashSpeed: 3
   _dashTime: 0.3
   _attackDistance: 0.8
@@ -17871,7 +17935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
   _dashSpeed: 3
   _dashTime: 0.3
   _attackDistance: 0.8
@@ -18784,7 +18848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 0}
-  _enemyBarUi: {fileID: 0}
+  attackObjectPrefab: {fileID: 0}
 --- !u!195 &1962228523
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -20958,3 +21022,4 @@ SceneRoots:
   - {fileID: 1005794222}
   - {fileID: 373550737}
   - {fileID: 1453951327779595146}
+  - {fileID: 602700533}

@@ -6,17 +6,16 @@ using UnityEngine.UI;
 public class EnemyBar : MonoBehaviour
 {
     private RectTransform foreground = null;
-    private Enemy enemy = null;
+    private Enemy _enemy = null;
 
     private void Start()
     {
-        enemy = transform.parent.GetComponent<Enemy>();
+        _enemy = transform.parent.GetComponent<Enemy>();
 
         foreach (RectTransform child in GetComponentsInChildren<RectTransform>())
         {
             if (child.gameObject.name == "HpBar")
             {
-                
                 foreground = child;
             }
         }
@@ -24,7 +23,7 @@ public class EnemyBar : MonoBehaviour
 
     private void Update()
     {
-        float hpPercentage = enemy.GetCurrentHp() / enemy.enemyData.maxHp;
+        float hpPercentage = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
 
         Image fgImage = foreground.GetComponent<Image>();
         fgImage.fillAmount = hpPercentage;
@@ -34,6 +33,10 @@ public class EnemyBar : MonoBehaviour
         transform.forward = Camera.main.transform.forward;
     }
 
+    public void SetTarget(Enemy enemy)
+    {
+        _enemy = enemy;
+    }
 
     //[Header("UIóvëf")]
     //[SerializeField] private Image _hpBarImage; // HPÉoÅ[âÊëú
