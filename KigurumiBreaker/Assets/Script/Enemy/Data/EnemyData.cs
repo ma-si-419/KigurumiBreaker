@@ -11,7 +11,7 @@ public class EnemyData : ScriptableObject
     [SerializeField] private bool IsArmor;
     [Header("耐久力")]
     [SerializeField] private float MaxTrunk;
-    [Header("攻撃力")]
+    [Header("プレイヤーに与えるダメージ量")]
     [SerializeField] private float AttackPower;
     [Header("移動速度")]
     [SerializeField] private float MoveSpeed;
