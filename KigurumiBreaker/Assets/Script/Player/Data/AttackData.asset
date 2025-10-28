@@ -15,8 +15,8 @@ MonoBehaviour:
   attackDataList:
   - AttackName: Low1
     Damage: 12
-    StartFrame: 11
-    StunFrame: 13
+    StartFrame: 13
+    StunFrame: 15
     CancelFrame: 20
     TotalFrame: 30
     MoveSpeed: 2
@@ -31,16 +31,18 @@ MonoBehaviour:
     AttackKind: 0
     CameraShakeKind: 1
     HitStopFrame: 3
+    AttackPartScale: 12
+    AttackPartShiftScale: 3
   - AttackName: Low2
     Damage: 12
-    StartFrame: 12
+    StartFrame: 9
     StunFrame: 16
-    CancelFrame: 25
+    CancelFrame: 23
     TotalFrame: 35
     MoveSpeed: 2
     Scale: 1
     ShiftPosZ: 1
-    AttackLifeTime: 3
+    AttackLifeTime: 6
     NextAttackName: Low3
     AttackPart: "\u5DE6\u8155"
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
@@ -49,6 +51,8 @@ MonoBehaviour:
     AttackKind: 0
     CameraShakeKind: 1
     HitStopFrame: 3
+    AttackPartScale: 12
+    AttackPartShiftScale: 3
   - AttackName: Low3
     Damage: 24
     StartFrame: 18
@@ -67,10 +71,12 @@ MonoBehaviour:
     AttackKind: 0
     CameraShakeKind: 2
     HitStopFrame: 8
+    AttackPartScale: 9
+    AttackPartShiftScale: 5.5
   - AttackName: LowChargeAttack
     Damage: 20
     StartFrame: 12
-    StunFrame: 12
+    StunFrame: 18
     CancelFrame: 23
     TotalFrame: 33
     MoveSpeed: 0
@@ -85,10 +91,12 @@ MonoBehaviour:
     AttackKind: 1
     CameraShakeKind: 2
     HitStopFrame: 7
+    AttackPartScale: 0
+    AttackPartShiftScale: 0
   - AttackName: ChargeAttack
     Damage: 80
     StartFrame: 10
-    StunFrame: 10
+    StunFrame: 15
     CancelFrame: 23
     TotalFrame: 33
     MoveSpeed: 0
@@ -103,10 +111,12 @@ MonoBehaviour:
     AttackKind: 1
     CameraShakeKind: 3
     HitStopFrame: 12
+    AttackPartScale: 0
+    AttackPartShiftScale: 0
   - AttackName: LowSpecialAttack
     Damage: 50
     StartFrame: 38
-    StunFrame: 12
+    StunFrame: 50
     CancelFrame: 50
     TotalFrame: 60
     MoveSpeed: 0
@@ -121,10 +131,12 @@ MonoBehaviour:
     AttackKind: 3
     CameraShakeKind: 1
     HitStopFrame: 6
+    AttackPartScale: 0
+    AttackPartShiftScale: 0
   - AttackName: SpecialAttack
     Damage: 150
     StartFrame: 81
-    StunFrame: 35
+    StunFrame: 116
     CancelFrame: 120
     TotalFrame: 120
     MoveSpeed: 0
@@ -139,10 +151,12 @@ MonoBehaviour:
     AttackKind: 3
     CameraShakeKind: 3
     HitStopFrame: 12
+    AttackPartScale: 0
+    AttackPartShiftScale: 0
   - AttackName: RangedAttack
     Damage: 10
     StartFrame: 10
-    StunFrame: 5
+    StunFrame: 15
     CancelFrame: 25
     TotalFrame: 25
     MoveSpeed: 0
@@ -157,6 +171,8 @@ MonoBehaviour:
     AttackKind: 2
     CameraShakeKind: 0
     HitStopFrame: 5
+    AttackPartScale: 0
+    AttackPartShiftScale: 0
   meleeAttackGameObject: {fileID: 5016116481081219338, guid: 22781efec99b0064c9a1cf149a4d686a, type: 3}
   chargeAttackAreaGameObject: {fileID: 470787370950120252, guid: a2b47f6aaa2f5ef4e93446234eccde20, type: 3}
   rangedAttackGameObject: {fileID: 3308976924760873119, guid: 7fea45659adf508429936af7309098f2, type: 3}

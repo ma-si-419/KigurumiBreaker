@@ -83,6 +83,15 @@ public class PlayerState : Player<PlayerState>
         // パッシブスキルで出すゲームオブジェクト
         public List<PassiveGameObject> passiveGameObjects;
     }
+
+    private struct ScallingAttackPart
+    {
+        public GameObject attackObj;
+        public float scale;
+        public Vector3 defaultPos;
+        public Vector3 currentPos;
+    }
+
     // プレイヤーのステータス
     [SerializeField] private PlayerStatus _playerStatus;
 
@@ -185,7 +194,9 @@ public class PlayerState : Player<PlayerState>
     // プレイヤーのマテリアル
     private Material _playerMaterial;
 
-    // Start is called before the first frame update
+    // 攻撃時に拡大している攻撃部位
+    private ScallingAttackPart _scallingAttackPart;
+
     void Start()
     {
         // Animatorコンポーネントを取得
@@ -489,23 +500,17 @@ public class PlayerState : Player<PlayerState>
     // 近接攻撃状態
     public class MeleeAttackState : StateBase<PlayerState>
     {
+        // 現在の攻撃名
         private string _currentAttackName;
+
+        // 現在の攻撃データ
         private Attack _currentAttackData;
+
+        // 現在のフレーム数
         private int _currentFrame;
+
+        // 攻撃エフェクトオブジェクト
         private GameObject _effectObject;
-
-
-        /////////////////////////////////////////////////////////
-
-        private GameObject _attackPart;
-
-        private Vector3 _attackPartPos;
-
-        private float _attackPartScale;
-
-        private Vector3 _attackPartDefaultPos;
-
-        /////////////////////////////////////////////////////////
 
         // 攻撃を出したかどうか
         bool _isAttack;
@@ -547,21 +552,8 @@ public class PlayerState : Player<PlayerState>
             // 攻撃する部位にエフェクトを出す
             Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
 
-            //////////////////////////////////////////////////////////////////////////////
-
-            // 攻撃する部位を取得
-            _attackPart = state.GetAttackPart(_currentAttackData.attackPartName);
-
-            // 攻撃する部位の位置を保存
-            _attackPartDefaultPos = _attackPart.transform.localPosition;
-
-            // 攻撃する部位の座標を取得
-            _attackPartPos = _attackPart.transform.localPosition;
-
-            // 攻撃する部位の大きさを保存
-            _attackPartScale = _attackPart.transform.localScale.x;
-
-            //////////////////////////////////////////////////////////////////////////////
+            // 攻撃する部位の情報を設定
+            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
 
             // 座標を少しプレイヤーから離す
             Vector3 shiftVec = (effectPos - state.transform.position).normalized;
@@ -578,29 +570,8 @@ public class PlayerState : Player<PlayerState>
 
             if (state._isStop) return;
 
+            // フレーム数をカウント
             _currentFrame++;
-
-            ////////////////////////////////////////////////////////////////////////////////
-
-            float scale = 10.0f;
-            float vec = 2.0f;
-
-            // 少しずつ大きくする
-            _attackPartScale = Mathf.Lerp(1.0f, scale, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame,0.0f,1.0f));
-
-
-            // 攻撃する部位を大きくする
-            _attackPart.transform.localScale = new Vector3(_attackPartScale, _attackPartScale, _attackPartScale);
-
-            // 少しずつずらす
-            float shiftScale = Mathf.Lerp(1.0f, vec, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
-
-            Debug.Log(shiftScale);
-
-            // 攻撃座標の位置をずらす
-            _attackPart.transform.localPosition = _attackPartPos * shiftScale;
-
-            ////////////////////////////////////////////////////////////////////////////////
 
             // エフェクトの位置を更新
             if (_effectObject)
@@ -645,6 +616,21 @@ public class PlayerState : Player<PlayerState>
                 // 攻撃の入力を受け付ける
                 state._isAbleToAttack = true;
 
+                /// 攻撃部位の縮小処理 ///
+
+                // 大きさの計算
+                float scale = Mathf.Lerp(_currentAttackData.attackPartScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame)  / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                state._scallingAttackPart.scale = scale;
+
+                // 攻撃する部位を大きくする
+                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                // 少しずつずらす
+                float shiftScale = Mathf.Lerp(_currentAttackData.attackPartShiftScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+
+                // 攻撃座標の位置をずらす
+                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+
                 // 硬直フレームの間は回避不可
                 if (_currentFrame <= _currentAttackData.stunFrame)
                 {
@@ -664,6 +650,22 @@ public class PlayerState : Player<PlayerState>
                 // 向いている方向に進む
                 Vector3 attackVelocity = state._currentDirection * _currentAttackData.moveSpeed;
                 state._rigidbody.velocity = attackVelocity;
+
+
+                /// 攻撃部位の拡大処理 ///
+
+                // 大きさの計算
+                float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+                state._scallingAttackPart.scale = scale;
+
+                // 攻撃する部位を大きくする
+                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                // 少しずつずらす
+                float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+
+                // 攻撃座標の位置をずらす
+                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
             }
 
             // 攻撃キャンセルフレームに達した時に攻撃入力があれば次の攻撃に遷移
@@ -701,26 +703,17 @@ public class PlayerState : Player<PlayerState>
                         // 攻撃する部位にエフェクトを出す
                         Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
 
-
-                        //////////////////////////////////////////////////////////////////////
-
-                        if (_attackPart != null)
+                        if (state._scallingAttackPart.attackObj)
                         {
                             // 攻撃する部位の大きさを元に戻す
-                            _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                            state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
                             // 位置を元に戻す
-                            _attackPart.transform.localPosition = _attackPartPos;
+                            state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
 
-                            // 攻撃する部位を取得
-                            _attackPart = state.GetAttackPart(_currentAttackData.attackPartName);
-
-                            // 攻撃する部位の位置を保存
-                            _attackPartPos = _attackPart.transform.localPosition;
-
+                            // 攻撃する部位の情報を設定
+                            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
                         }
-
-                        ///////////////////////////////////////////////////////////////////////
 
                         _effectObject = Instantiate(_currentAttackData.attackEffect, effectPos, Quaternion.identity);
 
@@ -745,20 +738,16 @@ public class PlayerState : Player<PlayerState>
                     _effectObject = null;
                 }
 
-                //////////////////////////////////////////////////////////////////////
-
-                if (_attackPart != null)
+                if (state._scallingAttackPart.attackObj)
                 {
 
                     // 攻撃する部位の大きさを元に戻す
-                    _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
                     // 位置を元に戻す
-                    _attackPart.transform.localPosition = _attackPartPos;
+                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
 
                 }
-
-                ///////////////////////////////////////////////////////////////////////
 
                 state.ChangeState(new IdleState(state));
             }
@@ -778,20 +767,14 @@ public class PlayerState : Player<PlayerState>
                 _effectObject = null;
             }
 
-            //////////////////////////////////////////////////////////////////////
-
-            if (_attackPart != null)
+            if (state._scallingAttackPart.attackObj)
             {
-
                 // 攻撃する部位の大きさを元に戻す
-                _attackPart.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
                 // 位置を元に戻す
-                _attackPart.transform.localPosition = _attackPartPos;
-
+                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
             }
-
-            ///////////////////////////////////////////////////////////////////////
         }
     }
 
@@ -1649,6 +1632,21 @@ public class PlayerState : Player<PlayerState>
         }
         return result;
     }
+    private void SetScallingAttackPart(GameObject attackPart)
+    {
+        // 攻撃する部位を取得
+        _scallingAttackPart.attackObj = attackPart;
+
+        // 攻撃する部位の位置を保存
+        _scallingAttackPart.defaultPos = attackPart.transform.localPosition;
+
+        // 攻撃する部位の座標を取得
+        _scallingAttackPart.currentPos = attackPart.transform.localPosition;
+
+        // 攻撃する部位の大きさを保存
+        _scallingAttackPart.scale = attackPart.transform.localScale.x;
+    }
+
     private GameObject GetAttackPart(string partName)
     {
         GameObject result = null;
@@ -2169,6 +2167,9 @@ public class PlayerState : Player<PlayerState>
 
                 // ダメージエフェクトを生成
                 Instantiate(other.gameObject.GetComponent<EnemyAttackCol>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
+
+                // 攻撃入力をリセット
+                _isAttackInput = false;
 
                 // HPが0以下なら死亡状態に遷移
                 if (_nowHp <= 0)

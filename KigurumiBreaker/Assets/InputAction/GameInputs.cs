@@ -237,6 +237,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""1e90f00d-f22a-4dee-ac92-72c70fc734b3"",
+                    ""path"": ""<Keyboard>/#(F)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MeleeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""036073fc-e852-4223-909b-e036663b5ad4"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",

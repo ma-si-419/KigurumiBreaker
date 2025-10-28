@@ -63,6 +63,10 @@ public class Attack
     [SerializeField] private CameraMove.ShakeKind CameraShakeKind;
     [Header("ヒットストップの長さ")]
     [SerializeField] private int HitStopFrame;
+    [Header("攻撃する部位の拡大率")]
+    [SerializeField] private float AttackPartScale;
+    [Header("攻撃する部位をどれだけ離すか")]
+    [SerializeField] private float AttackPartShiftScale;
 
     // 読み取り専用プロパティ
 
@@ -84,4 +88,6 @@ public class Attack
     public AttackType attackKind => AttackKind;
     public CameraMove.ShakeKind cameraShakeKind => CameraShakeKind;
     public int hitStopFrame => HitStopFrame;
+    public float attackPartScale => AttackPartScale;
+    public float attackPartShiftScale => AttackPartShiftScale;
 }
