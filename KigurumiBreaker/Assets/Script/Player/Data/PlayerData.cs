@@ -33,6 +33,9 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float ForwardAngle;
     [Header("前方向の敵を認知する距離")]
     [SerializeField] private float ForwardDistance;
+    
+
+
 
     // 読み取り専用
     public float moveInputLength => MoveInputLength;
