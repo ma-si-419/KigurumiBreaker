@@ -6,23 +6,31 @@ using UnityEngine.Rendering.VirtualTexturing;
 public class Enemy : EnemyBase
 {
 
-
-    protected float _stateTimer = 0.0f; // 状態遷移するまでのタイマー
-    protected float _attackTimer = 0.0f; // 状態遷移するまでのタイマー
-    protected bool _isAttackRange = false; // プレイヤーを検知したかどうかのフラグ
-    protected bool _isCreateAttack = false; // 攻撃オブジェクトを生成したかどうかのフラグ
-    protected bool _isSearched = false;     // プレイヤーを一度でも検知したかどうかのフラグ
-    protected bool _isStateChange = false;  // 状態遷移フラグ
-
-    protected bool _isHit = false; // 攻撃がヒットしたかどうかのフラグ
-    protected float _hitTimer = 0.5f; // ヒットタイマー
-
-
+    // 状態遷移するまでのタイマー
+    protected float _stateTimer = 0.0f;
+    // 状態遷移するまでのタイマー
+    protected float _attackTimer = 0.0f;
+    // プレイヤーを検知したかどうかのフラグ
+    protected bool _isAttackRange = false;
+    // 攻撃オブジェクトを生成したかどうかのフラグ
+    protected bool _isCreateAttack = false;
+    // プレイヤーを一度でも検知したかどうかのフラグ
+    protected bool _isSearched = false;
+    // 状態遷移フラグ
+    protected bool _isStateChange = false;
+    // 攻撃がヒットしたかどうかのフラグ
+    protected bool _isHit = false;
+    // ヒットタイマー
+    protected float _hitTimer = 0.5f;
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
+        // 敵のバーUiの値を初期化
+        //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
+        //_enemyBarUi.SetTrunk(_currentTrunk, _enemyData.maxTrunk);
 
         //待機状態に設定
         ChangeState(new IdleState(this));
@@ -32,15 +40,14 @@ public class Enemy : EnemyBase
     {
         // デバッグ用に線を引く
         DebugLine();
-        Debug.Log(_currentTrunk);
-        Debug.Log(_currentHp);
-        Debug.Log(_isArmor);
 
-        if(_isArmor && _currentTrunk <= 0)
+        // アーマー状態の管理
+        if (_isArmor && _currentTrunk <= 0)
         {
             _isArmor = false;
         }
 
+        // ヒットストップ処理
         float a = 0.05f;
 
         if (_isStop)
@@ -184,17 +191,19 @@ public class Enemy : EnemyBase
             //死んだ状態になっている場合はダメージを受けない
             if (_currentState is DeadState) return;
 
+            // アーマーでない場合は通常通りダメージを受ける
             if(!_isArmor)
             {
-                // アーマーでない場合は通常通りダメージを受ける
                 // ダメージを受ける(プレイヤーアタックのダメージを取得する)
                 _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+                //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
             }
-            else if(_isArmor)
+            // アーマーの場合は耐久力を減らす
+            else if (_isArmor)
             {
-                // アーマーの場合は耐久力を減らす
                 // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
                 _currentTrunk -= other.GetComponent<PlayerAttack>().GetDamage();
+                //_enemyBarUi.SetHp(_currentTrunk, _enemyData.maxTrunk);
             }
 
             //ヒットストップ処理
@@ -237,17 +246,20 @@ public class Enemy : EnemyBase
             //死んだ状態になっている場合はダメージを受けない
             if (_currentState is DeadState) return;
 
+            // アーマーでない場合は通常通りダメージを受ける
             if (!_isArmor)
             {
-                // アーマーでない場合は通常通りダメージを受ける
                 // ダメージを受ける(プレイヤーアタックのダメージを取得する)
                 _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+                //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
+
             }
+            // アーマーの場合は耐久力を減らす
             else if (_isArmor)
             {
-                // アーマーの場合は耐久力を減らす
                 // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
                 _currentTrunk -= other.GetComponent<PlayerAttack>().GetDamage();
+                //_enemyBarUi.SetHp(_currentTrunk, _enemyData.maxTrunk);
             }
 
             //ヒットストップ処理
