@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_Name
-      value: CircleAttackEnemy
+      value: CircleAttackEnemy_NoArmor
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
       propertyPath: m_IsActive
@@ -199,7 +199,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 122
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!195 &831970485345645683
 NavMeshAgent:
@@ -237,4 +237,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 39f86d7b6f55d524fad6ae47a6903031, type: 2}
   attackObjectPrefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
-  _battleManager: {fileID: 438481137711247578, guid: 1319926cde4b87e409ca71d12e8ed83b, type: 3}

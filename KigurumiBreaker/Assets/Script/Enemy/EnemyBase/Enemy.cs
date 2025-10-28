@@ -23,6 +23,8 @@ public class Enemy : EnemyBase
     // ヒットタイマー
     protected float _hitTimer = 0.5f;
 
+    protected bool _isChasetoIdle = false;
+
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
@@ -40,6 +42,11 @@ public class Enemy : EnemyBase
     {
         // デバッグ用に線を引く
         DebugLine();
+
+        // 敵のY座標だけ固定
+        Vector3 pos = transform.position;
+        pos.y = 0.0f;
+        transform.position = pos;
 
         // アーマー状態の管理
         if (_isArmor && _currentTrunk <= 0)
@@ -132,10 +139,9 @@ public class Enemy : EnemyBase
             _isAttackRange = false;
         }
 
-        if (_isAttackRange && _isAttackRange)
+        if (_isAttackRange)
         {
             _attackTimer += Time.deltaTime;
-
             LookAtPlayer(); // プレイヤーの方向を向く
 
             if (_attackTimer > _enemyData.chaseToAttack)
@@ -155,7 +161,9 @@ public class Enemy : EnemyBase
 
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
-        StopMovement(); // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
+
+        // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
+        StopMovement(); 
 
         //プレイヤーとの位置差を計算
         Vector3 diff = _player.transform.position - transform.position;
@@ -164,6 +172,7 @@ public class Enemy : EnemyBase
         //プレイヤーが検知範囲内にいるかチェック
         if (diff.sqrMagnitude < _attackRangeSqr)
         {
+
             //プレイヤーの方向を向き続ける
             LookAtPlayer();
             //タイマーを進める
@@ -171,12 +180,31 @@ public class Enemy : EnemyBase
 
             if (_stateTimer > _enemyData.chaseToAttack)
             {
-                _agent.isStopped = true; //追跡を停止
+                //追跡を停止
+                _agent.isStopped = true;
 
                 //攻撃状態へ
                 _stateTimer = 0.0f;
                 ChangeState(new AttackState(this));
             }
+
+            _isChasetoIdle = true;
+        }
+        else
+        {
+            _isChasetoIdle = false;
+        }
+
+        //アニメーションの切り替え
+        if (_isChasetoIdle)
+        {
+            _animator.SetBool("Chase", false);
+            _animator.SetBool("Idle", true);
+        }
+        else
+        {
+            _animator.SetBool("Chase", true);
+            _animator.SetBool("Idle", false);
         }
     }
 
@@ -331,6 +359,8 @@ public class Enemy : EnemyBase
         //敵の攻撃範囲を表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
+
+
 
 }
 

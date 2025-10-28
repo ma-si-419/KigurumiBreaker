@@ -27,11 +27,7 @@ public class EnemyAttackCol : MonoBehaviour
 
     private GameObject _attackEnemy;    // 攻撃を行った敵
 
-    //private BattleManager _battleManager;
     private BattleManager _battleManager;
-
-    //敵全体が持っているベースクラス
-    private EnemyBase _enemyBase;
 
     private Vector3 _moveDir = new Vector3(0.0f, 0.0f, 1.0f); // 移動方向ベクトル(仮で前方向を入れておく)
 
