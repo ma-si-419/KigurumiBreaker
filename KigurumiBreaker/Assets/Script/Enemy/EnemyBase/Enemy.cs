@@ -252,10 +252,12 @@ public class Enemy : EnemyBase
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.StopTime(playerAttack.GetHitStopTime());
 
+            //ダメージフラグを立てる
+            _isDamage = true;
 
             // ダメージエフェクトを生成する
             //Instantiate(_damageEffect, transform.position, Quaternion.identity);
-            if(_currentTrunk <= 0)
+            if (_currentTrunk <= 0)
             {
                 _currentTrunk = 0;
             }
@@ -307,6 +309,9 @@ public class Enemy : EnemyBase
             PlayerRangedAttack playerRangedAttack = other.gameObject.GetComponent<PlayerRangedAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.StopTime(playerRangedAttack.GetHitStopTime());
+
+            //ダメージフラグを立てる
+            _isDamage = true;
 
             if (_currentTrunk <= 0)
             {
