@@ -6,8 +6,11 @@ using UnityEngine.AI;
 
 public class EnemyBase : MonoBehaviour
 {
-    //敵のステータスデータ
+    // 敵のステータスデータ
     [SerializeField] protected EnemyData _enemyData;
+
+    // 敵の定数データ
+    [SerializeField] protected EnemyConstantData _enemyConstantData;
 
     // 現在のHP
     protected float _currentHp;
