@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChargeAttackSkillDataList
   m_EditorClassIdentifier: Assembly-CSharp::ChargeAttackSkillDataList
   chargeAttackSkillDataList:
-  - SkillName: "\u708E\u306E\u982D"
+  - SkillName: FIreChargeAttackUp
     SkillElement: 0
     DamageAddRate: 100
     AttackRangeAddRate: 0
@@ -22,8 +22,8 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-    SkillContents: "\u6E9C\u3081\u653B\u6483\u3092\u3057\u305F\u5834\u6240\u306B\u5EF6\u713C\u3092\u6B8B\u3059\u3002"
-  - SkillName: "\u6C34\u306E\u982D"
+    SkillContents: 
+  - SkillName: WaterChargeAttackUp
     SkillElement: 1
     DamageAddRate: 80
     AttackRangeAddRate: 0
@@ -32,8 +32,8 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-    SkillContents: "\u6E9C\u3081\u653B\u6483\u304C\u6575\u3092\u5439\u304D\u98DB\u3070\u3059\u3088\u3046\u306B\u306A\u308A\u3001\u4E0E\u3048\u308B\u30C0\u30E1\u30FC\u30B8\u304C\u5897\u52A0\u3059\u308B\u3002"
-  - SkillName: "\u98A8\u306E\u982D"
+    SkillContents: 
+  - SkillName: WindChargeAttackUp
     SkillElement: 2
     DamageAddRate: 60
     AttackRangeAddRate: 0
@@ -42,8 +42,8 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 1
-    SkillContents: "\u6E9C\u3081\u653B\u6483\u3067\u6575\u306E\u9060\u8DDD\u96E2\u653B\u6483\u3092\u8DF3\u306D\u8FD4\u3059\u3088\u3046\u306B\u306A\u308B\u3002"
-  - SkillName: "\u96F7\u306E\u982D"
+    SkillContents: 
+  - SkillName: ThunderChargeAttackUp
     SkillElement: 3
     DamageAddRate: 60
     AttackRangeAddRate: 0
@@ -52,8 +52,8 @@ MonoBehaviour:
     DebuffType: 4
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-    SkillContents: "\u30D2\u30C3\u30C8\u3057\u305F\u6575\u306E\u6570\u306B\u5FDC\u3058\u3066\u8FD1\u304F\u306E\u6575\u306B\u96F7\u3092\u843D\u3068\u3059\u3002"
-  - SkillName: "\u6C37\u306E\u982D"
+    SkillContents: 
+  - SkillName: FreezeChargeAttackUp
     SkillElement: 4
     DamageAddRate: 60
     AttackRangeAddRate: 0
@@ -62,8 +62,8 @@ MonoBehaviour:
     DebuffType: 0
     ChaseAttack: {fileID: 0}
     IsReflect: 0
-    SkillContents: "\u6E9C\u3081\u653B\u6483\u3067\u6575\u306B\u653B\u6483\u529B\u4F4E\u4E0B\u306E\u72B6\u614B\u7570\u5E38\u3092\u4E0E\u3048\u308B\u3002"
-  - SkillName: "\u6BD2\u306E\u982D"
+    SkillContents: 
+  - SkillName: PoisonChargeAttackUp
     SkillElement: 5
     DamageAddRate: 50
     AttackRangeAddRate: 0
