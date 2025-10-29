@@ -188,7 +188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
-  waveSpawner: {fileID: 3671610531065098586}
 --- !u!1 &1137066557433368789
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +197,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7794069862665147159}
-  - component: {fileID: 8984348647286499910}
   m_Layer: 0
   m_Name: Skill
   m_TagString: Untagged
@@ -221,27 +219,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4133871471427991975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8984348647286499910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1137066557433368789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d17a2bc1d81d343ac487c5118dd9d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillRates:
-  - rewardType: 0
-    customName: 
-    element: 0
-    probability: 56.4
-  - rewardType: 3
-    customName: 
-    element: 0
-    probability: 72.3
 --- !u!1 &1140467511494829167
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +354,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 1
-  waveSpawner: {fileID: 3671610531065098586}
 --- !u!1 &2347648505807871369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1661,30 +1637,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b524093896f408e96a993227ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaCenter: {fileID: 5632449421562164312}
-  areaSize: {x: 28, y: 0, z: 30}
-  enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  stageEnemyInfos:
+  _areaCenter: {fileID: 5632449421562164312}
+  _areaSize: {x: 28, y: 0, z: 28}
+  _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
+  _stageEnemyInfos:
   - enemyGroups:
     - spawnDataList:
-      - {fileID: 11400000, guid: f7a3fa15386e0474f97b4b999a0ae28f, type: 2}
-  spawnInterval: 0.5
-  goalPositions:
+      - {fileID: 11400000, guid: c3b1d51c0bec551449280f595ca1df54, type: 2}
+  _spawnInterval: 0.5
+  _goalPositions:
   - {fileID: 996861402923450367}
   - {fileID: 1624269575112478595}
-  stageProbabilities:
+  _stageProbabilities:
   - eventType: 4
-    probability: 0.6
-  - eventType: 6
-    probability: 0.4
-  skillSelectManager: {fileID: 0}
-  nextSkillElement: 0
-  wallEffects:
+    probability: 0
+  _nextSkillElement: 0
+  _wallEffects:
   - {fileID: 6076127931541242299}
   - {fileID: 8135456338302381769}
-  beforeSkill: 
-  aftereSkill: 
-  stageSpawner: {fileID: 0}
 --- !u!114 &8904450654190285669
 MonoBehaviour:
   m_ObjectHideFlags: 0
