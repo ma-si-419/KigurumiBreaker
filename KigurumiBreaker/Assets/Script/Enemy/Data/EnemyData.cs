@@ -27,6 +27,8 @@ public class EnemyData : ScriptableObject
     [SerializeField] private float RotateSpeed;
     [Header("攻撃の当たり判定プレハブ")]
     [SerializeField] private GameObject AttackPrefab;
+    [Header("敵が何もしなくなるデバッグフラグ")]
+    [SerializeField] private bool IsDebugIdleFlag = false;
 
     // 読み取り専用
     public float maxHp => MaxHp;
@@ -40,6 +42,7 @@ public class EnemyData : ScriptableObject
     public float chaseToAttack => ChaseToAttack;
     public float rotateSpeed => RotateSpeed;
     public GameObject attackPrefab => AttackPrefab;
+    public bool isDebugIdleFlag => IsDebugIdleFlag;
 
 
 }

@@ -22,20 +22,33 @@ public class Enemy : EnemyBase
     protected bool _isHit = false;
     // ヒットタイマー
     protected float _hitTimer = 0.5f;
-
+    // 追跡から待機に戻るフラグ
     protected bool _isChasetoIdle = false;
+    // デバッグ用の待機フラグ
+    protected bool _isDebugIdleFlag = false;
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
 
+        // デバッグ用のフラグを取得
+        _isDebugIdleFlag = enemyData.isDebugIdleFlag;
+
         // 敵のバーUiの値を初期化
         //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
         //_enemyBarUi.SetTrunk(_currentTrunk, _enemyData.maxTrunk);
-
-        //待機状態に設定
-        ChangeState(new IdleState(this));
+        if(_isDebugIdleFlag)
+        {
+            //待機状態へ
+            ChangeState(new DebugIdleState(this));
+            return;
+        }
+        else
+        {
+            //待機状態に設定
+            ChangeState(new IdleState(this));
+        }
     }
 
     protected override void Update()
