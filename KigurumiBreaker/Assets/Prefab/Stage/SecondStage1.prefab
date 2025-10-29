@@ -56,11 +56,11 @@ Transform:
   m_GameObject: {fileID: 447135371896455693}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 7, z: -0.7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -8.643591, y: 2.4764194, z: 5.8810897}
+  m_LocalScale: {x: 3.3333328, y: 3.3333328, z: 3.3333328}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7345528415470597484}
+  m_Father: {fileID: 2653950211119562398}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &497313156850497653
 GameObject:
@@ -1245,7 +1245,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 1
-  waveSpawner: {fileID: 4894323658967430949}
 --- !u!1 &2343621818610193611
 GameObject:
   m_ObjectHideFlags: 0
@@ -2248,38 +2247,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetEffects: []
   _enemyTag: Enemy
---- !u!1 &7279592026714623807
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7345528415470597484}
-  m_Layer: 0
-  m_Name: EnemyPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7345528415470597484
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7279592026714623807}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.64359, y: -20.856913, z: 8.214424}
-  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7485396179046147048}
-  m_Father: {fileID: 2653950211119562398}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7366127717101226114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2467,7 +2434,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
-  waveSpawner: {fileID: 4894323658967430949}
 --- !u!1 &8384985884587314538
 GameObject:
   m_ObjectHideFlags: 0
@@ -2857,7 +2823,7 @@ Transform:
   - {fileID: 986685215435759407}
   - {fileID: 7765147657967535329}
   - {fileID: 5077392519729584094}
-  - {fileID: 7345528415470597484}
+  - {fileID: 7485396179046147048}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4894323658967430949
@@ -2872,33 +2838,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b524093896f408e96a993227ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaCenter: {fileID: 7485396179046147048}
-  areaSize: {x: 40, y: 0, z: 30}
-  enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  stageEnemyInfos:
+  _areaCenter: {fileID: 7485396179046147048}
+  _areaSize: {x: 40, y: 0, z: 30}
+  _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
+  _stageEnemyInfos:
   - enemyGroups:
     - spawnDataList:
       - {fileID: 11400000, guid: 3592ba7146388c84790fa749caa35261, type: 2}
   - enemyGroups:
     - spawnDataList:
       - {fileID: 11400000, guid: 90fcb2f3aa96edf48aea37385d68ae37, type: 2}
-  spawnInterval: 0.5
-  goalPositions:
+  _spawnInterval: 0.5
+  _goalPositions:
   - {fileID: 8179186630091111269}
   - {fileID: 1894430793293860225}
-  stageProbabilities:
+  _stageProbabilities:
   - eventType: 8
-    probability: 0.6
-  - eventType: 6
-    probability: 0.4
-  skillSelectManager: {fileID: 0}
-  nextSkillElement: 0
-  wallEffects:
+    probability: 0.7
+  - eventType: 9
+    probability: 0.3
+  _nextSkillElement: 0
+  _wallEffects:
   - {fileID: 3048760145604805895}
   - {fileID: 4930771217035434684}
-  beforeSkill: 
-  aftereSkill: 
-  stageSpawner: {fileID: 0}
 --- !u!114 &7179100390980364039
 MonoBehaviour:
   m_ObjectHideFlags: 0

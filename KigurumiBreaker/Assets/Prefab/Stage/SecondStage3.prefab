@@ -764,39 +764,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
-  waveSpawner: {fileID: 5189397451757403068}
---- !u!1 &716274142934420363
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6119645066915777587}
-  m_Layer: 0
-  m_Name: EnemyPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6119645066915777587
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 716274142934420363}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.066922, y: -17.209637, z: 16.864298}
-  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5761817754588841471}
-  m_Father: {fileID: 2593340325872842118}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &868550648257737864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1781,7 +1748,7 @@ Transform:
   - {fileID: 6330838116877184347}
   - {fileID: 3569598296389372786}
   - {fileID: 3555329816931954859}
-  - {fileID: 6119645066915777587}
+  - {fileID: 5761817754588841471}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5189397451757403068
@@ -1796,33 +1763,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b524093896f408e96a993227ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaCenter: {fileID: 5761817754588841471}
-  areaSize: {x: 40, y: 0, z: 30}
-  enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  stageEnemyInfos:
-  - enemyGroups:
-    - spawnDataList:
-      - {fileID: 11400000, guid: 90fcb2f3aa96edf48aea37385d68ae37, type: 2}
+  _areaCenter: {fileID: 5761817754588841471}
+  _areaSize: {x: 40, y: 0, z: 30}
+  _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
+  _stageEnemyInfos:
   - enemyGroups:
     - spawnDataList:
       - {fileID: 11400000, guid: 7289c476f556bca44bc2d7c46543d7e1, type: 2}
-  spawnInterval: 0.5
-  goalPositions:
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: 90fcb2f3aa96edf48aea37385d68ae37, type: 2}
+  _spawnInterval: 0.5
+  _goalPositions:
   - {fileID: 405927038507834836}
   - {fileID: 7098949160334464887}
-  stageProbabilities:
-  - eventType: 6
-    probability: 0.3
+  _stageProbabilities:
+  - eventType: 8
+    probability: 0.25
+  - eventType: 4
+    probability: 0.25
+  - eventType: 4
+    probability: 0.25
   - eventType: 7
-    probability: 0.7
-  skillSelectManager: {fileID: 0}
-  nextSkillElement: 0
-  wallEffects:
+    probability: 0.25
+  _nextSkillElement: 0
+  _wallEffects:
   - {fileID: 784641345419367743}
   - {fileID: 6136722122852405327}
-  beforeSkill: 
-  aftereSkill: 
-  stageSpawner: {fileID: 0}
 --- !u!114 &2049974637482684102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2275,11 +2242,11 @@ Transform:
   m_GameObject: {fileID: 5022467828201889924}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 5.7, z: -3.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -9.066922, y: 1.7903613, z: 5.8642983}
+  m_LocalScale: {x: 3.3333328, y: 3.3333328, z: 3.3333328}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6119645066915777587}
+  m_Father: {fileID: 2593340325872842118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5718958634555627602
 GameObject:
@@ -2984,7 +2951,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 1
-  waveSpawner: {fileID: 5189397451757403068}
 --- !u!1 &7594664178986447173
 GameObject:
   m_ObjectHideFlags: 0
