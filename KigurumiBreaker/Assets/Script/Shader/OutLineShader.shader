@@ -5,7 +5,7 @@ Shader "Custom/OutLineShader"
 	   _MainTex("Texture", 2D) = "white"{}
 	   _Color("Color", Color) = (1,1,0.1,0.1)
 	   _Alpha("Alpha Value", Range(0,1)) = 1.0
-	   _OutLineSize("OutLineSize", Range(0,1)) = 0.02
+	   _OutLineSize("OutLineSize", Range(0,100)) = 0.02
    }
 
    SubShader
