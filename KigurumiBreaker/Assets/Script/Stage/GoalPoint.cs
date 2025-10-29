@@ -3,8 +3,8 @@ using UnityEngine;
 public class GoalPoint : MonoBehaviour
 {
     private StageSpawner _stageSpawner;
-    public int goalIndex;
-    public WaveSpawner waveSpawner;
+    [SerializeField]private int goalIndex;
+    private WaveSpawner waveSpawner;
 
     void Start()
     {

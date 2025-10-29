@@ -15,9 +15,9 @@ public class StageSpawner : MonoBehaviour
     [SerializeField] private Transform _player;
 
     [Header("スキル情報")]
-    [SerializeField] public string beforeSkill;   // 現在持っているスキル
-    [SerializeField] public string afterSkill;
-    public List<SkillData.SkillElement> acquiredSkills = new List<SkillData.SkillElement>();
+    private string _beforeSkill;
+    private string _afterSkill;
+    private List<SkillData.SkillElement> _acquiredSkills = new List<SkillData.SkillElement>();
 
     [Header("WaveSpawner用 SkillSelectManager")]
     [SerializeField] private SkillSelectManager _skillSelectManager;
@@ -65,20 +65,17 @@ public class StageSpawner : MonoBehaviour
         WaveSpawner[] waveSpawners = _currentStageInstance.GetComponentsInChildren<WaveSpawner>();
         foreach (var waveSpawner in waveSpawners)
         {
-            if (waveSpawner.skillSelectManager == null && _skillSelectManager != null)
-            {
-                waveSpawner.skillSelectManager = _skillSelectManager;
-                waveSpawner.SetBattleManager(_battleManager);
-            }
+            waveSpawner.SetSkillSelect(_skillSelectManager);
+            waveSpawner.SetBattleManager(_battleManager);
 
             // 前ステージで会得したスキルを渡す
-            if (acquiredSkills.Count > 0)
+            if (_acquiredSkills.Count > 0)
             {
-                waveSpawner.beforeSkill = string.Join(",", acquiredSkills);
+                waveSpawner.SetBeforeSkill(string.Join(",", _acquiredSkills));
             }
 
             // StageSpawner の参照を渡す
-            waveSpawner.stageSpawner = this;
+            waveSpawner.SetStageSpawner(this);
         }
 
         _currentStageIndex = index;
@@ -109,7 +106,7 @@ public class StageSpawner : MonoBehaviour
     /// <param name="selectedSkill"></param>
     public void OnPathSelected(SkillData.SkillElement selectedSkill)
     {
-        beforeSkill = selectedSkill.ToString();
+        _beforeSkill = selectedSkill.ToString();
     }
 
     /// <summary>
@@ -118,10 +115,17 @@ public class StageSpawner : MonoBehaviour
     /// <param name="acquiredSkill"></param>
     public void AcquireSkill(SkillData.SkillElement acquiredSkill)
     {
-        if (!acquiredSkills.Contains(acquiredSkill))
+        if (!_acquiredSkills.Contains(acquiredSkill))
         {
-            acquiredSkills.Add(acquiredSkill);
-            afterSkill = acquiredSkill.ToString();
+            _acquiredSkills.Add(acquiredSkill);
+            _afterSkill = acquiredSkill.ToString();
         }
+    }
+
+    public string GetBeforeSkill()
+    {
+        if (string.IsNullOrEmpty(_beforeSkill)) Debug.Break();
+
+        return _beforeSkill;
     }
 }

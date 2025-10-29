@@ -39,73 +39,73 @@ public enum StageEventType
 public class WaveSpawner : MonoBehaviour
 {
     [Header("全体の出現範囲設定")]
-    [SerializeField] private Transform areaCenter;
-    [SerializeField] private Vector3 areaSize = new Vector3(10, 0, 10);
+    [SerializeField] private Transform _areaCenter;
+    [SerializeField] private Vector3 _areaSize = new Vector3(10, 0, 10);
 
     [Header("敵データ（SpawnData参照用）")]
-    [SerializeField] private SpawnData enemySetData;
+    [SerializeField] private SpawnData _enemySetData;
 
     [Header("ステージごとの敵配置データ")]
-    [SerializeField] private List<StageEnemyInfo> stageEnemyInfos;
+    [SerializeField] private List<StageEnemyInfo> _stageEnemyInfos;
 
-    private StageEnemyInfo currentStageInfo;
-    private List<EnemyGroup> groups = new List<EnemyGroup>();
+    private StageEnemyInfo _currentStageInfo;
+    private List<EnemyGroup> _groups = new List<EnemyGroup>();
 
-    [SerializeField] private float spawnInterval = 0.5f;
+    [SerializeField] private float _spawnInterval = 0.5f;
 
     [Header("GoalPosition 配列")]
-    [SerializeField] private GameObject[] goalPositions;
+    [SerializeField] private GameObject[] _goalPositions;
 
     [Header("StageEvent 確率設定")]
-    [SerializeField] private List<StageProbability> stageProbabilities = new List<StageProbability>();
+    [SerializeField] private List<StageProbability> _stageProbabilities = new List<StageProbability>();
 
     [Header("スキル関連")]
-    public SkillSelectManager skillSelectManager;
-    [HideInInspector] public SkillData.SkillElement nextSkillElement;
+    private SkillSelectManager _skillSelectManager;
+    [SerializeField]private SkillData.SkillElement _nextSkillElement;
 
     [Header("スキル取得後に消す壁エフェクト")]
-    public GameObject[] wallEffects;
+    [SerializeField]private GameObject[] _wallEffects;
 
-    [HideInInspector] private bool skillSelectFinished = false;
+    private bool _skillSelectFinished = false;
 
-    [SerializeField] public string beforeSkill;
-    [SerializeField] public string aftereSkill;
+    private string _beforeSkill;
+    private string _aftereSkill;
     private BattleManager _battleManager;
-    [HideInInspector] public StageSpawner stageSpawner;
+    private StageSpawner stageSpawner;
 
-    private int groupsClearedCount = 0;
-    private Vector3 lastDeadEnemyPos;
+    private int _groupsClearedCount = 0;
+    private Vector3 _lastDeadEnemyPos;
 
     private void Start()
     {
         if (stageSpawner == null)
             stageSpawner = FindObjectOfType<StageSpawner>();
 
-        if (stageSpawner != null && !string.IsNullOrEmpty(stageSpawner.beforeSkill))
+        if (stageSpawner != null)
         {
-            beforeSkill = stageSpawner.beforeSkill;
+            _beforeSkill = stageSpawner.GetBeforeSkill();
         }
 
         AssignSkillsToGoals();
-        if (stageEnemyInfos == null || stageEnemyInfos.Count == 0)
+        if (_stageEnemyInfos == null || _stageEnemyInfos.Count == 0)
             return;
 
-        currentStageInfo = stageEnemyInfos[Random.Range(0, stageEnemyInfos.Count)];
+        _currentStageInfo = _stageEnemyInfos[Random.Range(0, _stageEnemyInfos.Count)];
 
-        StartCoroutine(HandleStageGroups(currentStageInfo));
+        StartCoroutine(HandleStageGroups(_currentStageInfo));
     }
 
     private void AssignSkillsToGoals()
     {
-        if (goalPositions == null || goalPositions.Length == 0) return;
+        if (_goalPositions == null || _goalPositions.Length == 0) return;
 
-        for (int i = 0; i < goalPositions.Length; i++)
+        for (int i = 0; i < _goalPositions.Length; i++)
         {
-            StageProbability sp = i < stageProbabilities.Count ? stageProbabilities[i] : null;
+            StageProbability sp = i < _stageProbabilities.Count ? _stageProbabilities[i] : null;
             if (sp == null) continue;
 
             if (i == 0)
-                nextSkillElement = ConvertStageEventToSkill(sp.eventType);
+                _nextSkillElement = ConvertStageEventToSkill(sp.eventType);
         }
     }
 
@@ -150,7 +150,7 @@ public class WaveSpawner : MonoBehaviour
 
                 foreach (var pop in wave.popEnemies)
                 {
-                    GameObject prefabToSpawn = enemySetData?.GetPrefabByKind(pop.spawnKind);
+                    GameObject prefabToSpawn = _enemySetData?.GetPrefabByKind(pop.spawnKind);
                     if (prefabToSpawn == null) continue;
 
                     Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
@@ -159,7 +159,7 @@ public class WaveSpawner : MonoBehaviour
                     _battleManager.AddEnemy(enemy);
                     enemy.GetComponent<EnemyBase>().SetBattleManager(_battleManager);
 
-                    yield return new WaitForSeconds(spawnInterval);
+                    yield return new WaitForSeconds(_spawnInterval);
                     Debug.Log("Aaaaa");
                 }
 
@@ -185,22 +185,22 @@ public class WaveSpawner : MonoBehaviour
             yield return null;
         }
 
-        lastDeadEnemyPos = lastPos;
+        _lastDeadEnemyPos = lastPos;
     }
 
     private void OnGroupCleared()
     {
-        groupsClearedCount++;
-        if (groupsClearedCount < groups.Count) return;
+        _groupsClearedCount++;
+        if (_groupsClearedCount < _groups.Count) return;
 
-        if (skillSelectManager != null && goalPositions.Length > 0)
+        if (_skillSelectManager != null && _goalPositions.Length > 0)
         {
-            Vector3 spawnPos = lastDeadEnemyPos != Vector3.zero ? lastDeadEnemyPos : areaCenter.position;
+            Vector3 spawnPos = _lastDeadEnemyPos != Vector3.zero ? _lastDeadEnemyPos : _areaCenter.position;
 
             StageEventType stageEventType = StageEventType.Fire;
-            if (!string.IsNullOrEmpty(beforeSkill))
+            if (!string.IsNullOrEmpty(_beforeSkill))
             {
-                if (System.Enum.TryParse(beforeSkill, out StageEventType parsed))
+                if (System.Enum.TryParse(_beforeSkill, out StageEventType parsed))
                 {
                     stageEventType = parsed;
                 }
@@ -209,22 +209,22 @@ public class WaveSpawner : MonoBehaviour
             switch (stageEventType)
             {
                 case StageEventType.Fire:
-                    skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Fire, this);
+                    _skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Fire, this);
                     break;
                 case StageEventType.Water:
-                    skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Water, this);
+                    _skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Water, this);
                     break;
                 case StageEventType.Wind:
-                    skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Wind, this);
+                    _skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Wind, this);
                     break;
                 case StageEventType.Thunder:
-                    skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Thunder, this);
+                    _skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Thunder, this);
                     break;
                 case StageEventType.Freeze:
-                    skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Freeze, this);
+                    _skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Freeze, this);
                     break;
                 case StageEventType.Poison:
-                    skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Poison, this);
+                    _skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Poison, this);
                     break;
                 case StageEventType.Shop:
                     Debug.Log("Shopイベント発生：ショップUIを開く処理をここに実装予定");
@@ -243,24 +243,24 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator WaitForSkillSelectFinish()
     {
-        yield return new WaitUntil(() => skillSelectFinished);
+        yield return new WaitUntil(() => _skillSelectFinished);
 
         if (stageSpawner != null)
-            stageSpawner.AcquireSkill(nextSkillElement);
+            stageSpawner.AcquireSkill(_nextSkillElement);
 
-        skillSelectFinished = false;
-        groupsClearedCount = 0;
-        lastDeadEnemyPos = Vector3.zero;
+        _skillSelectFinished = false;
+        _groupsClearedCount = 0;
+        _lastDeadEnemyPos = Vector3.zero;
     }
 
     private Vector3 GetRandomNavMeshPosition()
     {
         for (int i = 0; i < 30; i++)
         {
-            Vector3 randomPos = areaCenter.position + new Vector3(
-                Random.Range(-areaSize.x / 2, areaSize.x / 2),
+            Vector3 randomPos = _areaCenter.position + new Vector3(
+                Random.Range(-_areaSize.x / 2, _areaSize.x / 2),
                 0f,
-                Random.Range(-areaSize.z / 2, areaSize.z / 2)
+                Random.Range(-_areaSize.z / 2, _areaSize.z / 2)
             );
 
             Collider[] cols = Physics.OverlapSphere(randomPos, 1f);
@@ -276,14 +276,14 @@ public class WaveSpawner : MonoBehaviour
             if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
                 return hit.position;
         }
-        return areaCenter.position;
+        return _areaCenter.position;
     }
 
     public void OnGoalReached(int goalIndex)
     {
-        if (goalPositions == null || goalIndex < 0 || goalIndex >= goalPositions.Length) return;
+        if (_goalPositions == null || goalIndex < 0 || goalIndex >= _goalPositions.Length) return;
 
-        StageEventType eventType = stageProbabilities[goalIndex].eventType;
+        StageEventType eventType = _stageProbabilities[goalIndex].eventType;
         SkillData.SkillElement selectedSkill = ConvertStageEventToSkill(eventType);
 
         if (stageSpawner != null)
@@ -292,9 +292,9 @@ public class WaveSpawner : MonoBehaviour
 
     public void OnSkillSelectFinished()
     {
-        skillSelectFinished = true;
+        _skillSelectFinished = true;
 
-        foreach (var wall in wallEffects)
+        foreach (var wall in _wallEffects)
         {
             if (wall != null)
             {
@@ -307,15 +307,27 @@ public class WaveSpawner : MonoBehaviour
     {
         _battleManager = manager;
     }
+    public void SetBeforeSkill(string skillName)
+    {
+        _beforeSkill = skillName;
+    }
+    public void SetStageSpawner(StageSpawner spawner)
+    {
+        stageSpawner = spawner;
+    }
 
+    public void SetSkillSelect(SkillSelectManager selectManager)
+    {
+        _skillSelectManager = FindObjectOfType<SkillSelectManager>();
+    }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (areaCenter == null) return;
+        if (_areaCenter == null) return;
         Gizmos.color = new Color(0, 1, 0, 0.2f);
-        Gizmos.DrawCube(areaCenter.position, areaSize);
+        Gizmos.DrawCube(_areaCenter.position, _areaSize);
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(areaCenter.position, areaSize);
+        Gizmos.DrawWireCube(_areaCenter.position, _areaSize);
     }
 #endif
 }
