@@ -79,7 +79,7 @@ public class Enemy : EnemyBase
         }
 
         // ヒットストップ処理
-        float a = 0.05f;
+        float a = _enemyConstantData.shakeMagnitude;
 
         if (_isStop)
         {
