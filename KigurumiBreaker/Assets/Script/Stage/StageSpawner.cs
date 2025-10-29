@@ -124,7 +124,6 @@ public class StageSpawner : MonoBehaviour
 
     public string GetBeforeSkill()
     {
-        if (string.IsNullOrEmpty(_beforeSkill)) Debug.Break();
 
         return _beforeSkill;
     }
