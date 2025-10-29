@@ -619,10 +619,10 @@ public class PlayerState : Player<PlayerState>
                 /// 攻撃部位の縮小処理 ///
 
                 // 大きさの計算
-                float scale = Mathf.Lerp(_currentAttackData.attackPartScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame)  / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                float scale = Mathf.Lerp(_currentAttackData.attackPartScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
                 state._scallingAttackPart.scale = scale;
 
-                // 攻撃する部位を大きくする
+                // 攻撃する部位を小さくする
                 state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
 
                 // 少しずつずらす
@@ -893,13 +893,15 @@ public class PlayerState : Player<PlayerState>
 
         bool _isShowAttackRange = false;
 
-        bool _isLowChargeAttack = false;
+        bool _isHighChargeAttack = false;
 
         GameObject _attackArea;
 
         float _attackScale;
 
         GameObject _chargeEffect;
+
+        Attack _currentAttackData;
 
         public ChargeState(PlayerState next) : base(next)
         {
@@ -928,7 +930,14 @@ public class PlayerState : Player<PlayerState>
                 // 通常チャージアニメーションを再生
                 state._animator.SetTrigger("NormalCharge");
 
-                _attackScale = state.SearchAttackData("LowChargeAttack").scale;
+                // 攻撃情報を設定
+                _currentAttackData = state.SearchAttackData("LowChargeAttack");
+
+                // 攻撃範囲のスケールを弱チャージ攻撃のものに設定
+                _attackScale = _currentAttackData.scale;
+
+                // 攻撃を行う部位を設定
+                state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
             }
 
 
@@ -1007,19 +1016,68 @@ public class PlayerState : Player<PlayerState>
 
                         _isShowAttackRange = true;
                     }
-                }
 
-                // チャージ時間が50％以上なら強チャージ攻撃の攻撃範囲に変更
-                if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
-                {
-                    // 強チャージ攻撃の攻撃範囲に変更
-                    if (!_isLowChargeAttack)
+                    // チャージ時間が50％以上なら強チャージ攻撃の攻撃範囲に変更
+                    if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
                     {
-                        _attackScale = state.SearchAttackData("ChargeAttack").scale;
+                        // 強チャージ攻撃の攻撃範囲に変更
+                        if (!_isHighChargeAttack)
+                        {
+                            _attackScale = state.SearchAttackData("ChargeAttack").scale;
 
-                        _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
+                            _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
 
-                        _isLowChargeAttack = true;
+                            _isHighChargeAttack = true;
+
+                            _currentAttackData = state.SearchAttackData("ChargeAttack");
+
+                            // 攻撃する部位を変更
+                            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
+                        }
+
+                        /// 攻撃部位の拡大処理 ///
+
+                        // 強チャージ攻撃に入ってから何フレームたったか
+                        float frame = (float)(state._normalChargeTime - state._playerData.maxChargeAttackTime / 2);
+
+                        // 大きさの計算
+                        float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+
+                        // 弱チャージ攻撃の拡大率よりも小さくならないようにする
+                        scale = Mathf.Clamp(scale, state._scallingAttackPart.scale, _currentAttackData.attackPartScale);
+
+                        // 攻撃する部位を大きくする
+                        state._scallingAttackPart.scale = scale;
+                        state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                        // 少しずつずらす
+                        float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+
+                        // 攻撃座標の位置をずらす
+                        state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                    }
+                    // 弱チャージ攻撃の攻撃範囲の時
+                    else
+                    {
+                        /// 攻撃部位の拡大処理 ///
+
+                        // 弱チャージ攻撃に入ってから何フレームたったか
+                        float frame = (float)(state._normalChargeTime - state._playerData.chargeAttackTime);
+
+
+                        // 大きさの計算
+                        float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                        Debug.Log("拡大率" + scale);
+                        state._scallingAttackPart.scale = scale;
+
+                        // 攻撃する部位を大きくする
+                        state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                        // 少しずつずらす
+                        float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+
+                        // 攻撃座標の位置をずらす
+                        state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
                     }
                 }
 
@@ -1117,6 +1175,28 @@ public class PlayerState : Player<PlayerState>
                 // チャージ時間をリセット
                 state._normalChargeTime = 0;
             }
+            // 攻撃の硬直のあと
+            else if (_currentFrame > _currentAttackData.stunFrame)
+            {
+                if (state._scallingAttackPart.attackObj)
+                {
+                    /// 攻撃部位の縮小処理 ///
+
+                    // 大きさの計算
+                    float scale = Mathf.Lerp(_currentAttackData.attackPartScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    state._scallingAttackPart.scale = scale;
+
+                    // 攻撃する部位を小さくする
+                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                    // 少しずつずらす
+                    float shiftScale = Mathf.Lerp(_currentAttackData.attackPartShiftScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+
+                    // 攻撃座標の位置をずらす
+                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                }
+            }
+
 
             // 攻撃のキャンセルフレームに達したときに回避でキャンセルできるようにする
             if (_currentFrame >= _currentAttackData.cancelFrame)
@@ -1148,6 +1228,14 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger(_currentAttackData.attackName);
             // チャージ時間をリセット
             state._normalChargeTime = 0;
+            // 攻撃する部位の大きさを元に戻す
+            if (state._scallingAttackPart.attackObj)
+            {
+                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                // 位置を元に戻す
+                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
+            }
+
         }
     }
 

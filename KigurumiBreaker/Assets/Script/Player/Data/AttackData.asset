@@ -71,8 +71,8 @@ MonoBehaviour:
     AttackKind: 0
     CameraShakeKind: 2
     HitStopFrame: 8
-    AttackPartScale: 9
-    AttackPartShiftScale: 5.5
+    AttackPartScale: 9.5
+    AttackPartShiftScale: 6.5
   - AttackName: LowChargeAttack
     Damage: 20
     StartFrame: 12
@@ -91,12 +91,12 @@ MonoBehaviour:
     AttackKind: 1
     CameraShakeKind: 2
     HitStopFrame: 7
-    AttackPartScale: 0
-    AttackPartShiftScale: 0
+    AttackPartScale: 1.5
+    AttackPartShiftScale: 0.8
   - AttackName: ChargeAttack
     Damage: 80
     StartFrame: 10
-    StunFrame: 15
+    StunFrame: 18
     CancelFrame: 23
     TotalFrame: 33
     MoveSpeed: 0
@@ -111,8 +111,8 @@ MonoBehaviour:
     AttackKind: 1
     CameraShakeKind: 3
     HitStopFrame: 12
-    AttackPartScale: 0
-    AttackPartShiftScale: 0
+    AttackPartScale: 2
+    AttackPartShiftScale: 1.3
   - AttackName: LowSpecialAttack
     Damage: 50
     StartFrame: 38
