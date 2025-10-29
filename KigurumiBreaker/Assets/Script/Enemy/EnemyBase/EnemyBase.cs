@@ -7,10 +7,16 @@ using UnityEngine.AI;
 public class EnemyBase : MonoBehaviour
 {
     // 敵のステータスデータ
+    [Header("敵のステータスデータ")]
     [SerializeField] protected EnemyData _enemyData;
 
     // 敵の定数データ
+    [Header("敵の定数データ")]
     [SerializeField] protected EnemyConstantData _enemyConstantData;
+
+    // 攻撃オブジェクトのプレハブ
+    [Header("敵の攻撃プレハブ")]
+    [SerializeField] protected GameObject attackObjectPrefab;
 
     // 現在のHP
     protected float _currentHp;
@@ -26,9 +32,6 @@ public class EnemyBase : MonoBehaviour
 
     //攻撃範囲の二乗
     protected float _attackRangeSqr;
-
-    // 攻撃オブジェクトのプレハブ
-    [SerializeField] protected GameObject attackObjectPrefab;
 
     // NavMeshAgentの参照
     protected NavMeshAgent _agent;
@@ -90,17 +93,13 @@ public class EnemyBase : MonoBehaviour
         //索敵範囲と攻撃範囲の二乗を計算して保存
         _detectRangeSqr = _enemyData.detectionRange * _enemyData.detectionRange;
         _attackRangeSqr = _enemyData.attackRange * _enemyData.attackRange;
-
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
-
         // 攻撃オブジェクトのプレハブを設定
         attackObjectPrefab = _enemyData.attackPrefab;
-
         // 敵データでアーマーかどうかを設定
         _isArmor = _enemyData.isArmor;
-
         // NavMeshAgentコンポーネントを取得
         _agent = GetComponent<NavMeshAgent>();
         // Animatorコンポーネントを取得
@@ -146,8 +145,6 @@ public class EnemyBase : MonoBehaviour
         // 新しいステートの開始処理を呼び出す
         _currentState?.Init();
     }
-
-
 
     // 敵がプレイヤーを向く方向を計算して回転
     public void LookAtPlayer()
