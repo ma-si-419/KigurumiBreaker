@@ -27,35 +27,11 @@ public class Enemy : EnemyBase
     protected bool _isChasetoIdle = false;
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
-    
-    // マテリアル
-    protected Material _material;
-    // 発光し始めさせるためのフラグ
-    protected bool _isFlashStarted = false;
-    // 発光し終えたかのフラグ
-    protected bool _isFlashEnded = false;
-    // ターゲットのレンダラー
-    [SerializeField] protected Renderer _targetRenderer;
-    // 発光スピード
-    protected float _flashSpeed = 5.0f;
-    // 発光持続時間
-    protected float flashDuration = 0.2f;
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
-
-        if (_targetRenderer == null)
-        {
-            // 子オブジェクトも含めて Renderer を探す
-            _targetRenderer = GetComponentInChildren<Renderer>();
-        }
-
-        // ターゲットのレンダラーを取得
-        _material = _targetRenderer.material;
-        // 発光を有効化
-        _material.EnableKeyword("_EMISSION");
 
         // デバッグ用のフラグを取得
         _isDebugIdleFlag = enemyData.isDebugIdleFlag;
@@ -63,11 +39,12 @@ public class Enemy : EnemyBase
         // 敵のバーUiの値を初期化
         //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
         //_enemyBarUi.SetTrunk(_currentTrunk, _enemyData.maxTrunk);
-        if(_isDebugIdleFlag)
+
+        // 初期状態を待機状態に設定
+        if (_isDebugIdleFlag)
         {
-            //待機状態へ
+            //デバッグの待機状態に設定
             ChangeState(new DebugIdleState(this));
-            return;
         }
         else
         {
@@ -93,20 +70,21 @@ public class Enemy : EnemyBase
         }
 
         // ヒットストップ処理
-        float a = _enemyConstantData.shakeMagnitude;
+        float shakeMagnitude = _enemyConstantData.shakeMagnitude;
 
         if (_isStop)
         {
             if (_isDamage)
             {
-                _shakeVec.x = Random.Range(-a, a);
-                _shakeVec.z = Random.Range(-a, a);
+                _shakeVec.x = Random.Range(-shakeMagnitude, shakeMagnitude);
+                _shakeVec.z = Random.Range(-shakeMagnitude, shakeMagnitude);
             }
 
             this.transform.position += _shakeVec;
         }
         else
         {
+            // ヒットストップ終了後の位置補正
             if (_shakeVec.sqrMagnitude >= 0.001f)
             {
                 this.transform.position = _stopPos;
@@ -407,18 +385,5 @@ public class Enemy : EnemyBase
         //敵の攻撃範囲を表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
-
-   public IEnumerator FlashMat()
-    {
-        Color baseColor = Color.white;
-
-        // ピカッと光る
-        _material.SetColor("_EmissionColor", baseColor * Mathf.LinearToGammaSpace(_flashSpeed));
-        yield return new WaitForSeconds(flashDuration);
-
-        // スッと消える
-        _material.SetColor("_EmissionColor", Color.black);
-    }
-
 }
 
