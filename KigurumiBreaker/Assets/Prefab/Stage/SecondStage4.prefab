@@ -1609,7 +1609,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
-  waveSpawner: {fileID: 9065277237427963256}
 --- !u!65 &4789153520435329067
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1899,38 +1898,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.35, y: 1, z: 6.1232336e-17}
   m_Center: {x: 0, y: 0, z: 1.5}
---- !u!1 &3122886691278060698
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9085606552958378994}
-  m_Layer: 0
-  m_Name: EnemyPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9085606552958378994
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3122886691278060698}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.0924964, y: 2.637712, z: -3.9836967}
-  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 368290987064971443}
-  m_Father: {fileID: 4115939204200704949}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3336712471802562133
 GameObject:
   m_ObjectHideFlags: 0
@@ -3186,11 +3153,11 @@ Transform:
   m_GameObject: {fileID: 6419831480357737124}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.1, y: -0.79131365, z: 2.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -8.759162, y: 0, z: 4.349635}
+  m_LocalScale: {x: 3.3333328, y: 3.3333328, z: 3.3333328}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9085606552958378994}
+  m_Father: {fileID: 4115939204200704949}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6835531714563489573
 GameObject:
@@ -3359,7 +3326,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 1
-  waveSpawner: {fileID: 9065277237427963256}
 --- !u!65 &8968745970107287257
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3530,7 +3496,7 @@ Transform:
   - {fileID: 2779800490041794407}
   - {fileID: 4289547561663639864}
   - {fileID: 283380991258727005}
-  - {fileID: 9085606552958378994}
+  - {fileID: 368290987064971443}
   - {fileID: 252294156810980632}
   - {fileID: 3085721025954516058}
   - {fileID: 4010910493576164192}
@@ -3551,33 +3517,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b524093896f408e96a993227ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaCenter: {fileID: 368290987064971443}
-  areaSize: {x: 40, y: 0, z: 43}
-  enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  stageEnemyInfos:
+  _areaCenter: {fileID: 368290987064971443}
+  _areaSize: {x: 40, y: 0, z: 45}
+  _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
+  _stageEnemyInfos:
   - enemyGroups:
     - spawnDataList:
-      - {fileID: 11400000, guid: 14404258f7c902a42ab652f8d4f47119, type: 2}
+      - {fileID: 11400000, guid: 3592ba7146388c84790fa749caa35261, type: 2}
   - enemyGroups:
     - spawnDataList:
-      - {fileID: 11400000, guid: 90fcb2f3aa96edf48aea37385d68ae37, type: 2}
-  spawnInterval: 0.5
-  goalPositions:
+      - {fileID: 11400000, guid: d671d47fd14964c4bbad2d86dd485fe3, type: 2}
+  _spawnInterval: 0.5
+  _goalPositions:
   - {fileID: 1901371038696261190}
   - {fileID: 6866221882282747467}
-  stageProbabilities:
+  _stageProbabilities:
   - eventType: 5
-    probability: 0.4
-  - eventType: 8
-    probability: 0.6
-  skillSelectManager: {fileID: 0}
-  nextSkillElement: 0
-  wallEffects:
+    probability: 0.35
+  - eventType: 7
+    probability: 0.3
+  - eventType: 9
+    probability: 0.35
+  _nextSkillElement: 0
+  _wallEffects:
   - {fileID: 2797703722305474277}
   - {fileID: 7728029492488185567}
-  beforeSkill: 
-  aftereSkill: 
-  stageSpawner: {fileID: 0}
 --- !u!114 &7724426924368485173
 MonoBehaviour:
   m_ObjectHideFlags: 0
