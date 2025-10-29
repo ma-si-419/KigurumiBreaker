@@ -26,6 +26,17 @@ public class Enemy : EnemyBase
     protected bool _isChasetoIdle = false;
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
+    
+    // マテリアル
+    protected Material _material;
+    // 発光し始めさせるためのフラグ
+    protected bool _isFlashStarted = false;
+    // 発光し終えたかのフラグ
+    protected bool _isFlashEnded = false;
+    // ターゲットのレンダラー
+    protected Renderer _targetRenderer;
+    // 発光スピード
+    protected float _flashSpeed = 5.0f;
 
     protected override void Start()
     {
@@ -255,6 +266,9 @@ public class Enemy : EnemyBase
             //ダメージフラグを立てる
             _isDamage = true;
 
+            // ヒット時の揺れ用の位置を保存
+            _stopPos = this.transform.position;
+
             // ダメージエフェクトを生成する
             //Instantiate(_damageEffect, transform.position, Quaternion.identity);
             if (_currentTrunk <= 0)
@@ -312,6 +326,9 @@ public class Enemy : EnemyBase
 
             //ダメージフラグを立てる
             _isDamage = true;
+
+            // ヒット時の揺れ用の位置を保存
+            _stopPos = this.transform.position;
 
             if (_currentTrunk <= 0)
             {
