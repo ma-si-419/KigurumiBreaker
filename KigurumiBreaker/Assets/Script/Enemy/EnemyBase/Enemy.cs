@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -34,14 +35,27 @@ public class Enemy : EnemyBase
     // 発光し終えたかのフラグ
     protected bool _isFlashEnded = false;
     // ターゲットのレンダラー
-    protected Renderer _targetRenderer;
+    [SerializeField] protected Renderer _targetRenderer;
     // 発光スピード
     protected float _flashSpeed = 5.0f;
+    // 発光持続時間
+    protected float flashDuration = 0.2f;
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
+        if (_targetRenderer == null)
+        {
+            // 子オブジェクトも含めて Renderer を探す
+            _targetRenderer = GetComponentInChildren<Renderer>();
+        }
+
+        // ターゲットのレンダラーを取得
+        _material = _targetRenderer.material;
+        // 発光を有効化
+        _material.EnableKeyword("_EMISSION");
 
         // デバッグ用のフラグを取得
         _isDebugIdleFlag = enemyData.isDebugIdleFlag;
@@ -365,8 +379,6 @@ public class Enemy : EnemyBase
         _attackTimer = 0.0f;
     }
 
-
-
     public void OnHit()
     {
         //一回だけヒット処理を行う
@@ -376,7 +388,8 @@ public class Enemy : EnemyBase
         _hitTimer = 0.5f;
 
         //今のステート状態のアニメーションにダメージアニメーションを重ねる
-        _animator.CrossFade("Damage", 0.01f);
+        _animator.CrossFade("Damage", 0.0f);
+        //_animator.SetTrigger("Damage");
 
         //なんか演出とかあったらいいよね
 
@@ -395,7 +408,17 @@ public class Enemy : EnemyBase
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
 
+   public IEnumerator FlashMat()
+    {
+        Color baseColor = Color.white;
 
+        // ピカッと光る
+        _material.SetColor("_EmissionColor", baseColor * Mathf.LinearToGammaSpace(_flashSpeed));
+        yield return new WaitForSeconds(flashDuration);
+
+        // スッと消える
+        _material.SetColor("_EmissionColor", Color.black);
+    }
 
 }
 

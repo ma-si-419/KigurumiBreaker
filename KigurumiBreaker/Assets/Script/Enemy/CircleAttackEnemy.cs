@@ -11,6 +11,37 @@ public class CircleAttackEnemy : Enemy
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
+        ////敵のアニメーションが攻撃モーション中かどうか確認
+        //if (stateInfo.IsName("Attack"))
+        //{
+        //    if(stateInfo.normalizedTime >= 0.4 && !_isFlashStarted)
+        //    {
+        //        _isFlashStarted = true;
+        //        StartCoroutine(FlashMat());
+        //    }
+
+        //    if (stateInfo.normalizedTime >= 0.6f && !_isCreateAttack)
+        //    {
+        //        //攻撃判定を一つ生成させる
+        //        _isCreateAttack = true;
+        //        CreateAttack();
+        //    }
+
+        //    if (stateInfo.normalizedTime >= 0.8f)
+        //    {
+        //        //攻撃フラグをリセット
+        //        _isCreateAttack = false;
+        //        //攻撃アニメーションが終了したらIdleStateに遷移
+        //        ChangeState(new IdleState(this));
+        //    }
+        //}
+        //else
+        //{
+        //    _isFlashStarted = false;
+        //    _isCreateAttack = false;
+        //}
+
+
         if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.6f)
         {
             //攻撃判定を一つ生成させる
