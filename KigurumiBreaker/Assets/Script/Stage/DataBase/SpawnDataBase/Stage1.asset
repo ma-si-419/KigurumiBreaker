@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb121ffe5cebd14983e5e9a496742f3, type: 3}
   m_Name: Stage1
   m_EditorClassIdentifier: 
-  _waveEnemyDataList:
-  - _popEnemies: []
-  _index: 0
+  waveEnemyDataList:
+  - popEnemies:
+    - spawnKind: 0
+      spawnPosition: {x: 0, y: 0, z: 0}
+      randomizePosition: 0

@@ -25,13 +25,6 @@ public class EnemyEntry
 [CreateAssetMenu(fileName = "SpawnData", menuName = "Game/Spawn Data")]
 public class SpawnData : ScriptableObject
 {
-
-    ///////////////////////////////////////////////////////////
-    ////ここだけで1つのステージの敵プレハブをすべて管理する////
-    ///////////////////////////////////////////////////////////
-
-
-
     [Header("敵プレハブリスト")]
     [SerializeField] private List<EnemyEntry> _enemies = new List<EnemyEntry>();
 

@@ -2374,21 +2374,17 @@ MonoBehaviour:
   _areaCenter: {fileID: 4485477984533850799}
   _areaSize: {x: 28, y: 0, z: 28}
   _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  _enemyPopPatern:
-  - _enemyPopGroups:
-    - _spawnDataList:
-      - {fileID: 11400000, guid: 320b6969dae915f48b0ed458e5320146, type: 2}
-      _index: 0
-    - _spawnDataList:
-      - {fileID: 11400000, guid: 320b6969dae915f48b0ed458e5320146, type: 2}
-      _index: 1
-    _index: 0
+  _stageEnemyInfos:
+  - enemyGroups:
+    - spawnDataList:
+      - {fileID: 11400000, guid: c3b1d51c0bec551449280f595ca1df54, type: 2}
   _spawnInterval: 0.5
   _goalPositions:
   - {fileID: 5749454913018647715}
   - {fileID: 3270863947345270756}
   _stageProbabilities:
-  - probability: 0
+  - eventType: 4
+    probability: 0
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 8983523608011774930}

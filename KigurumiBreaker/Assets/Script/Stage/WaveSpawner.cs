@@ -2,53 +2,24 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 [System.Serializable]
-public class EnemyPopPatern
+public class StageEnemyInfo
 {
-    [Header("敵の配置データ")]
-    [SerializeField] private List<EnemyPopGroup> _enemyPopGroups;
-
-    [HideInInspector][SerializeField] private int _index = 0;
-
-    public void SetIndex(int index)
-    {
-        _index = index;
-    }
-
-    // 読み取り専用プロパティ
-    public int index => _index;
-    public List<EnemyPopGroup> enemyPopGroups => _enemyPopGroups;
+    public List<EnemyGroup> enemyGroups; // このステージに出現する敵グループ
 }
 
 [System.Serializable]
-public class EnemyPopGroup
+public class EnemyGroup
 {
-    [Header("各敵グループの出現順データ")]           //↓リストじゃなくSpawnData単体にする
-    [SerializeField] private List<SpawnEnemyData> _spawnDataList;
-
-    [HideInInspector][SerializeField] int _index = 0;
-
-    public void SetIndex(int index)
-    {
-        _index = index;
-    }
-
-    // 読み取り専用プロパティ
-    public int index => _index;
-    public List<SpawnEnemyData> spawnDataList => _spawnDataList;
+    public List<SpawnEnemyData> spawnDataList; // すべてのSpawnDataを順に処理する
 }
 
 [System.Serializable]
 public class StageProbability
 {
-    private StageEventType _eventType;
+    public StageEventType eventType;
     [Range(0f, 1f)] public float probability;
-
-
-    // 読み取り専用プロパティ
-    public StageEventType eventType => _eventType;
 }
 
 public enum StageEventType
@@ -74,11 +45,11 @@ public class WaveSpawner : MonoBehaviour
     [Header("敵データ（SpawnData参照用）")]
     [SerializeField] private SpawnData _enemySetData;
 
-    [Header("出てくる敵のパターン(同じステージで別の出現パターンを使用する時増やす)")]
-    [SerializeField] private List<EnemyPopPatern> _enemyPopPatern;
+    [Header("ステージごとの敵配置データ")]
+    [SerializeField] private List<StageEnemyInfo> _stageEnemyInfos;
 
-    private EnemyPopPatern _currentStageInfo;
-    private List<EnemyPopGroup> _groups = new List<EnemyPopGroup>();
+    private StageEnemyInfo _currentStageInfo;
+    private List<EnemyGroup> _groups = new List<EnemyGroup>();
 
     [SerializeField] private float _spawnInterval = 0.5f;
 
@@ -105,29 +76,6 @@ public class WaveSpawner : MonoBehaviour
     private int _groupsClearedCount = 0;
     private Vector3 _lastDeadEnemyPos;
 
-    private void OnValidate()
-    {
-        // エネミーの出現パターン
-        for(int i = 0;i < _enemyPopPatern.Count;i++)
-        {
-            // Indexを設定
-            _enemyPopPatern[i].SetIndex(i);
-
-            // 出現するすべてのグループにIndexを設定
-            for (int j = 0;j < _enemyPopPatern[i].enemyPopGroups.Count;j++)
-            {
-                _enemyPopPatern[i].enemyPopGroups[j].SetIndex(j);
-
-                // 各グループ内のSpawnDataにIndexを設定
-                for (int k = 0;k < _enemyPopPatern[i].enemyPopGroups[j].spawnDataList.Count;k++)
-                {
-                    _enemyPopPatern[i].enemyPopGroups[j].spawnDataList[k].SetIndex(k);
-                }
-            }
-        }
-
-    }
-
     private void Start()
     {
         if (stageSpawner == null)
@@ -139,10 +87,10 @@ public class WaveSpawner : MonoBehaviour
         }
 
         AssignSkillsToGoals();
-        if (_enemyPopPatern == null || _enemyPopPatern.Count == 0)
+        if (_stageEnemyInfos == null || _stageEnemyInfos.Count == 0)
             return;
 
-        _currentStageInfo = _enemyPopPatern[Random.Range(0, _enemyPopPatern.Count)];
+        _currentStageInfo = _stageEnemyInfos[Random.Range(0, _stageEnemyInfos.Count)];
 
         StartCoroutine(HandleStageGroups(_currentStageInfo));
     }
@@ -175,16 +123,16 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
-    private IEnumerator HandleStageGroups(EnemyPopPatern stageInfo)
+    private IEnumerator HandleStageGroups(StageEnemyInfo stageInfo)
     {
         // 各グループを順に処理
-        foreach (var group in stageInfo.enemyPopGroups)
+        foreach (var group in stageInfo.enemyGroups)
         {
             yield return HandleGroupWaves(group);
         }
     }
 
-    private IEnumerator HandleGroupWaves(EnemyPopGroup group)
+    private IEnumerator HandleGroupWaves(EnemyGroup group)
     {
         if (group.spawnDataList == null || group.spawnDataList.Count == 0)
             yield break;
