@@ -12,49 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb121ffe5cebd14983e5e9a496742f3, type: 3}
   m_Name: FirstStage
   m_EditorClassIdentifier: 
-  waveEnemyDataList:
-  - popEnemies:
+  _waveEnemyDataList:
+  - _popEnemies:
     - spawnKind: 0
       spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 3
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 4
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-  - popEnemies:
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-  - popEnemies:
-    - spawnKind: 4
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 1
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
+      randomizePosition: 0
+    - spawnKind: 0
+      spawnPosition: {x: 1.14, y: 0, z: 11.39}
+      randomizePosition: 0
+    - spawnKind: 0
+      spawnPosition: {x: 5.42, y: 0, z: 0}
+      randomizePosition: 0
+  - _popEnemies:
     - spawnKind: 0
       spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 3
+      randomizePosition: 0
+    - spawnKind: 0
+      spawnPosition: {x: 1.14, y: 0, z: 11.39}
+      randomizePosition: 0
+    - spawnKind: 0
+      spawnPosition: {x: 5.42, y: 0, z: 0}
+      randomizePosition: 0
+  - _popEnemies:
+    - spawnKind: 0
       spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
+      randomizePosition: 0
+    - spawnKind: 0
+      spawnPosition: {x: 1.14, y: 0, z: 11.39}
+      randomizePosition: 0
+    - spawnKind: 0
+      spawnPosition: {x: 5.42, y: 0, z: 0}
+      randomizePosition: 0
+  _index: 0
