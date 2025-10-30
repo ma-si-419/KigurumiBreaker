@@ -132,7 +132,7 @@ public class MiddleBoss : BossEnemy
     private void CreateAttack()
     {
         // ゲームオブジェクト生成
-        _attackObject = Instantiate(attackObjectPrefab);
+        _attackObject = Instantiate(_attackObjectPrefab);
         _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
 
     }

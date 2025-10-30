@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BombEnemy : Enemy
 {
-
-
     public override void Attack()
     {
         
@@ -24,8 +22,8 @@ public class BombEnemy : Enemy
             //攻撃フラグをリセット
             _isCreateAttack = false;
         }
-        
 
+        //状態遷移
         if (_isStateChange)
         {
             _isStateChange = false;
@@ -38,7 +36,7 @@ public class BombEnemy : Enemy
     private void CreateAttack()
     {
         // ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(attackObjectPrefab);
+        GameObject attackObject = Instantiate(_attackObjectPrefab);
 
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
 

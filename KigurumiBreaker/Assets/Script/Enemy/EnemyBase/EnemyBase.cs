@@ -15,8 +15,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected EnemyConstantData _enemyConstantData;
 
     // 攻撃オブジェクトのプレハブ
-    [Header("敵の攻撃プレハブ")]
-    [SerializeField] protected GameObject attackObjectPrefab;
+    protected GameObject _attackObjectPrefab;
 
     // 現在のHP
     protected float _currentHp;
@@ -100,7 +99,7 @@ public class EnemyBase : MonoBehaviour
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
         // 攻撃オブジェクトのプレハブを設定
-        attackObjectPrefab = _enemyData.attackPrefab;
+        _attackObjectPrefab = _enemyData.attackPrefab;
         // 敵データでアーマーかどうかを設定
         _isArmor = _enemyData.isArmor;
         // NavMeshAgentコンポーネントを取得
@@ -204,6 +203,7 @@ public class EnemyBase : MonoBehaviour
     {
         _isStop = flag;
     }
+
     public void StopAnimation()
     {
         if (_animator.speed > 0)

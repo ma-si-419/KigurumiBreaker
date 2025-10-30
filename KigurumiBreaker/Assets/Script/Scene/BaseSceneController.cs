@@ -29,7 +29,6 @@ public class BaseSceneController : MonoBehaviour
     [SerializeField] private float _fadeSpeed = 0.5f;   //フェードの速度
 
 
-
     //シーンの種類
     private void Awake()
     {
@@ -44,13 +43,6 @@ public class BaseSceneController : MonoBehaviour
         instance = this;
         //シーンを切り替えても破棄しない
         DontDestroyOnLoad(gameObject);
-
-        //フェード用のCanvasが設定されていなかったら探す
-        //子オブジェクトだったため要らないす
-        //if (fadeCanvas != null)
-        //{
-        //    DontDestroyOnLoad(fadeCanvas.gameObject);
-        //}
 
     }
 
