@@ -27,9 +27,10 @@ public class Enemy : EnemyBase
     protected bool _isChasetoIdle = false;
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
+    
 
-    // アーマー用の処理の変数
-
+    // アーマー用の処理のList変数
+    [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
 
 
     protected override void Start()
@@ -44,17 +45,8 @@ public class Enemy : EnemyBase
         //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
         //_enemyBarUi.SetTrunk(_currentTrunk, _enemyData.maxTrunk);
 
-        // 初期状態を待機状態に設定
-        if (_isDebugIdleFlag)
-        {
-            //デバッグの待機状態に設定
-            ChangeState(new DebugIdleState(this));
-        }
-        else
-        {
-            //待機状態に設定
-            ChangeState(new IdleState(this));
-        }
+        //待機状態に設定
+        ChangeState(new IdleState(this));
     }
 
     protected override void Update()
@@ -74,6 +66,18 @@ public class Enemy : EnemyBase
         if (_isArmor && _currentTrunk <= 0)
         {
             _isArmor = false;
+        }
+
+        if (!_isArmor)
+        {
+            if (_armorSkinedMeshRenderer != null)
+            {
+                for(int i = 0; i < _armorSkinedMeshRenderer.Length; i++)
+                {
+                    // アーマーが壊れたらアーマーメッシュを非表示にする
+                    _armorSkinedMeshRenderer[i].enabled = false;
+                }
+            }
         }
 
         // ヒットストップ処理
@@ -102,15 +106,14 @@ public class Enemy : EnemyBase
 
         if (_isStop) return;
 
-        //// ヒットしたら一定時間ヒット状態を維持
-        //if (_isHit)
-        //{
-        //    _hitTimer -= Time.deltaTime;
-
-        //    if(_hitTimer <= 0.0f)
-        //        _isHit = false;
-        //        return; // ヒット中は他の処理を行わない
-        //}
+        if (_isDead)
+        {
+            // すでに死亡状態なら変更しない
+            if (!(_currentState is DeadState))
+            {
+                ChangeState(new DeadState(this));
+            }
+        }
 
         // 親クラスのUpdate()を呼び出す
         base.Update();
@@ -280,11 +283,12 @@ public class Enemy : EnemyBase
             if (_currentHp <= 0)
             {
                 _currentHp = 0;
-                // すでに死亡状態なら変更しない
-                if (!(_currentState is DeadState))
-                {
-                    ChangeState(new DeadState(this));
-                }
+                _isDead = true;
+                //// すでに死亡状態なら変更しない
+                //if (!(_currentState is DeadState))
+                //{
+                //    ChangeState(new DeadState(this));
+                //}
             }
 
             Debug.Log(playerAttack.GetDamage() + "のダメージ");
@@ -338,11 +342,12 @@ public class Enemy : EnemyBase
             if (_currentHp <= 0)
             {
                 _currentHp = 0;
-                // すでに死亡状態なら変更しない
-                if (!(_currentState is DeadState))
-                {
-                    ChangeState(new DeadState(this));
-                }
+                _isDead = true;
+                //// すでに死亡状態なら変更しない
+                //if (!(_currentState is DeadState))
+                //{
+                //    ChangeState(new DeadState(this));
+                //}
             }
 
             Debug.Log("DestroyInEnemy.cs");
