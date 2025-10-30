@@ -58,6 +58,9 @@ public class Enemy : EnemyBase
         // デバッグ用に線を引く
         DebugLine();
 
+        // デバッグ用のフラグを取得
+        _isDebugIdleFlag = enemyData.isDebugIdleFlag;
+
         // 敵のY座標だけ固定
         Vector3 pos = transform.position;
         pos.y = 0.0f;

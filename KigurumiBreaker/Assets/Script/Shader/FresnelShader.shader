@@ -4,7 +4,7 @@ Shader "Custom/FresnelShader"
     {
         _MainTex("Texture", 2D) = "white"{}
         _Color("Color", Color) = (0.2, 0.8, 1, 1)
-        _FresnelPower("Fresnel Power", Range(0, 1)) = 4
+        _FresnelPower("Fresnel Power", Range(0, 10)) = 4
         _EmissionStrenght("Emission Strenght", Range(0, 10)) = 2
         _Transparency("Tranparency", Range(0, 1)) = 0.5
     }
