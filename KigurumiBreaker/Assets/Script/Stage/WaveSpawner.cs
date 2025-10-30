@@ -2,24 +2,53 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 [System.Serializable]
-public class StageEnemyInfo
+public class EnemyPopPatern
 {
-    public List<EnemyGroup> enemyGroups; // このステージに出現する敵グループ
+    [Header("敵の配置データ")]
+    [SerializeField] private List<EnemyPopGroup> _enemyPopGroups;
+
+    [HideInInspector][SerializeField] private int _index = 0;
+
+    public void SetIndex(int index)
+    {
+        _index = index;
+    }
+
+    // 読み取り専用プロパティ
+    public int index => _index;
+    public List<EnemyPopGroup> enemyPopGroups => _enemyPopGroups;
 }
 
 [System.Serializable]
-public class EnemyGroup
+public class EnemyPopGroup
 {
-    public List<SpawnEnemyData> spawnDataList; // すべてのSpawnDataを順に処理する
+    [Header("各敵グループの出現順データ")]           //↓リストじゃなくSpawnData単体にする
+    [SerializeField] private List<SpawnEnemyData> _spawnDataList;
+
+    [HideInInspector][SerializeField] int _index = 0;
+
+    public void SetIndex(int index)
+    {
+        _index = index;
+    }
+
+    // 読み取り専用プロパティ
+    public int index => _index;
+    public List<SpawnEnemyData> spawnDataList => _spawnDataList;
 }
 
 [System.Serializable]
 public class StageProbability
 {
-    public StageEventType eventType;
+    private StageEventType _eventType;
     [Range(0f, 1f)] public float probability;
+
+
+    // 読み取り専用プロパティ
+    public StageEventType eventType => _eventType;
 }
 
 public enum StageEventType
@@ -45,11 +74,11 @@ public class WaveSpawner : MonoBehaviour
     [Header("敵データ（SpawnData参照用）")]
     [SerializeField] private SpawnData _enemySetData;
 
-    [Header("ステージごとの敵配置データ")]
-    [SerializeField] private List<StageEnemyInfo> _stageEnemyInfos;
+    [Header("出てくる敵のパターン(同じステージで別の出現パターンを使用する時増やす)")]
+    [SerializeField] private List<EnemyPopPatern> _enemyPopPatern;
 
-    private StageEnemyInfo _currentStageInfo;
-    private List<EnemyGroup> _groups = new List<EnemyGroup>();
+    private EnemyPopPatern _currentStageInfo;
+    private List<EnemyPopGroup> _groups = new List<EnemyPopGroup>();
 
     [SerializeField] private float _spawnInterval = 0.5f;
 
@@ -76,6 +105,24 @@ public class WaveSpawner : MonoBehaviour
     private int _groupsClearedCount = 0;
     private Vector3 _lastDeadEnemyPos;
 
+    private void OnValidate()
+    {
+        // エネミーの出現パターン
+        for(int i = 0;i < _enemyPopPatern.Count;i++)
+        {
+            // Indexを設定
+            _enemyPopPatern[i].SetIndex(i);
+
+            // 出現するすべてのグループにIndexを設定
+            for (int j = 0;j < _enemyPopPatern[i].enemyPopGroups.Count;j++)
+            {
+                _enemyPopPatern[i].enemyPopGroups[j].SetIndex(j);
+
+            }
+        }
+
+    }
+
     private void Start()
     {
         if (stageSpawner == null)
@@ -87,10 +134,10 @@ public class WaveSpawner : MonoBehaviour
         }
 
         AssignSkillsToGoals();
-        if (_stageEnemyInfos == null || _stageEnemyInfos.Count == 0)
+        if (_enemyPopPatern == null || _enemyPopPatern.Count == 0)
             return;
 
-        _currentStageInfo = _stageEnemyInfos[Random.Range(0, _stageEnemyInfos.Count)];
+        _currentStageInfo = _enemyPopPatern[Random.Range(0, _enemyPopPatern.Count)];
 
         StartCoroutine(HandleStageGroups(_currentStageInfo));
     }
@@ -123,16 +170,16 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
-    private IEnumerator HandleStageGroups(StageEnemyInfo stageInfo)
+    private IEnumerator HandleStageGroups(EnemyPopPatern stageInfo)
     {
         // 各グループを順に処理
-        foreach (var group in stageInfo.enemyGroups)
+        foreach (var group in stageInfo.enemyPopGroups)
         {
             yield return HandleGroupWaves(group);
         }
     }
 
-    private IEnumerator HandleGroupWaves(EnemyGroup group)
+    private IEnumerator HandleGroupWaves(EnemyPopGroup group)
     {
         if (group.spawnDataList == null || group.spawnDataList.Count == 0)
             yield break;

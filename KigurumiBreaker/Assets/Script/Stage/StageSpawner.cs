@@ -2,29 +2,88 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using JetBrains.Annotations;
 
 [System.Serializable]
 public class StageSet
 {
+    public enum StageKind
+    {
+        [InspectorName("テスト")]
+        Test,
+        [InspectorName("ステージ1　森")]
+        Forest,
+        [InspectorName("ステージ2　洞窟")]
+        Cave
+    }
+
+    private const int SECTIONS_MAX = 5;
+
+    [Header("ステージ情報")]
+    [SerializeField] private StageKind _stageKind;
+
+    [HideInInspector][SerializeField] private int _index;
+
+    [Header("出てくるステージの種類")]
     public GameObject[] stagePrefabs;
+    public void SetIndex(int index)
+    {
+        _index = index;
+    }
+
+    // 読み取り専用プロパティ
+    public StageKind stageKind => _stageKind;
 }
 
 public class StageSpawner : MonoBehaviour
 {
+    [Header("全体のステージすべて")]
     [SerializeField] private StageSet[] _stageSets;
+    [Header("プレイヤーのTransform")]
     [SerializeField] private Transform _player;
 
-    [Header("スキル情報")]
     private string _beforeSkill;
     private string _afterSkill;
     private List<SkillData.SkillElement> _acquiredSkills = new List<SkillData.SkillElement>();
 
-    [Header("WaveSpawner用 SkillSelectManager")]
+    [Header("スキル選択マネージャー")]
     [SerializeField] private SkillSelectManager _skillSelectManager;
+
+    [Header("バトルマネージャー")]
     [SerializeField] private BattleManager _battleManager;
 
     private int _currentStageIndex = 0;
     private GameObject _currentStageInstance;
+
+    // ステージデータのインデックスを設定
+    private void OnValidate()
+    {
+        ///// ステージデータの設定 /////
+        // ステージ森から始める
+        StageSet.StageKind stageKind = StageSet.StageKind.Forest;
+
+        // ステージごとにセクションを設定
+        int sectionNumber = 0;
+
+        for (int i = 0; i < _stageSets.Length; i++)
+        {
+            if (_stageSets[i] != null)
+            {
+                // ステージの種類が変わったらステージ番号を更新し、セクション番号をリセット
+                if (stageKind != _stageSets[i].stageKind)
+                {
+                    stageKind = _stageSets[i].stageKind;
+                    sectionNumber = 0;
+                }
+
+                sectionNumber++;
+                // ステージ1から始めたいので+1する
+                _stageSets[i].SetIndex(sectionNumber);
+            }
+        }
+        ////////////////////////////////
+
+    }
 
     /// <summary>
     /// 指定したインデックスのステージを生成する
