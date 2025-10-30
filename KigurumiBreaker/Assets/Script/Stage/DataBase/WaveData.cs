@@ -4,14 +4,31 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "SpawnEnemyData", menuName = "GameData/SpawnEnemyData")]
 public class SpawnEnemyData : ScriptableObject
 {
-    [Header("敵の出現データ（ウェーブと敵情報まとめ）")]
-    public List<WaveEnemyData> waveEnemyDataList = new List<WaveEnemyData>();
+    [Header("グループ内で出てくる敵まとめ")]
+    [SerializeField] private List<WaveEnemyData> _waveEnemyDataList = new List<WaveEnemyData>();
+
+    [HideInInspector][SerializeField] private int _index = 0;
+
+    public void SetIndex(int index)
+    {
+        _index = index;
+    }
+
+    // 読み取り専用プロパティ
+    public int index => _index;
+
+    public List<WaveEnemyData> waveEnemyDataList => _waveEnemyDataList;
 }
 
 [System.Serializable]
 public class WaveEnemyData
 {
-    public List<PopEnemyData> popEnemies = new List<PopEnemyData>();
+    [Header("出てくる敵の種類と座標")]
+    [SerializeField] private List<PopEnemyData> _popEnemies = new List<PopEnemyData>();
+
+    // 読み取り専用プロパティ
+    public List<PopEnemyData> popEnemies => _popEnemies;
+
 }
 
 [System.Serializable]
