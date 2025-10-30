@@ -28,6 +28,10 @@ public class Enemy : EnemyBase
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
 
+    // アーマー用の処理の変数
+
+
+
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
@@ -98,15 +102,15 @@ public class Enemy : EnemyBase
 
         if (_isStop) return;
 
-        // ヒットしたら一定時間ヒット状態を維持
-        if (_isHit)
-        {
-            _hitTimer -= Time.deltaTime;
+        //// ヒットしたら一定時間ヒット状態を維持
+        //if (_isHit)
+        //{
+        //    _hitTimer -= Time.deltaTime;
 
-            if(_hitTimer <= 0.0f)
-                _isHit = false;
-                return; // ヒット中は他の処理を行わない
-        }
+        //    if(_hitTimer <= 0.0f)
+        //        _isHit = false;
+        //        return; // ヒット中は他の処理を行わない
+        //}
 
         // 親クラスのUpdate()を呼び出す
         base.Update();
@@ -363,14 +367,13 @@ public class Enemy : EnemyBase
     public void OnHit()
     {
         //一回だけヒット処理を行う
-        if (_isHit) return;
+        //if (_isHit) return;
 
-        _isHit = true;
+        //_isHit = true;
         _hitTimer = 0.5f;
 
         //今のステート状態のアニメーションにダメージアニメーションを重ねる
         _animator.CrossFade("Damage", 0.0f);
-        //_animator.SetTrigger("Damage");
 
         //なんか演出とかあったらいいよね
 
