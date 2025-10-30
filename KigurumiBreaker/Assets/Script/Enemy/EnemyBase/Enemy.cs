@@ -27,9 +27,10 @@ public class Enemy : EnemyBase
     protected bool _isChasetoIdle = false;
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
-    
+
 
     // アーマー用の処理のList変数
+    [Header("アーマー用の処理(アーマー無しなら関係なし)")]
     [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
 
 
@@ -284,11 +285,6 @@ public class Enemy : EnemyBase
             {
                 _currentHp = 0;
                 _isDead = true;
-                //// すでに死亡状態なら変更しない
-                //if (!(_currentState is DeadState))
-                //{
-                //    ChangeState(new DeadState(this));
-                //}
             }
 
             Debug.Log(playerAttack.GetDamage() + "のダメージ");
@@ -343,11 +339,6 @@ public class Enemy : EnemyBase
             {
                 _currentHp = 0;
                 _isDead = true;
-                //// すでに死亡状態なら変更しない
-                //if (!(_currentState is DeadState))
-                //{
-                //    ChangeState(new DeadState(this));
-                //}
             }
 
             Debug.Log("DestroyInEnemy.cs");
@@ -371,17 +362,11 @@ public class Enemy : EnemyBase
 
     public void OnHit()
     {
-        //一回だけヒット処理を行う
-        //if (_isHit) return;
-
-        //_isHit = true;
-        _hitTimer = 0.5f;
-
         //今のステート状態のアニメーションにダメージアニメーションを重ねる
         _animator.CrossFade("Damage", 0.0f);
 
-        //なんか演出とかあったらいいよね
-
+        //なんか演出とかあったらいいよね()
+        
     }
 
     //デバッグ用に線を引く
