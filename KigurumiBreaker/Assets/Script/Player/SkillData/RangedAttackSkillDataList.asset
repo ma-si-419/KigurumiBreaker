@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RangedAttackSkillDataList
   m_EditorClassIdentifier: Assembly-CSharp::RangedAttackSkillDataList
   rangedAttackSkillDataList:
-  - SkillName: FireRangedUp
+  - SkillName: "\u708E\u306E\u30AF\u30CA\u30A4"
     SkillElement: 0
     DamageAddRate: 80
     SpeedRate: 2.5
@@ -21,8 +21,8 @@ MonoBehaviour:
     IsHoming: 0
     ChaseAttack: {fileID: 0}
     DebuffType: 4
-    SkillContents: "\u9060\u8DDD\u96E2\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
-  - SkillName: WaterRangedUp
+    SkillContents: "\u30AF\u30CA\u30A4\u306E\u901F\u5EA6\u304C\u65E9\u304F\u306A\u308A\u3001\u6575\u306B\u4E0E\u3048\u308B\u30C0\u30E1\u30FC\u30B8\u304C\u5897\u52A0\u3059\u308B\u3002"
+  - SkillName: "\u6C34\u306E\u30AF\u30CA\u30A4"
     SkillElement: 1
     DamageAddRate: 60
     SpeedRate: 1
@@ -30,8 +30,8 @@ MonoBehaviour:
     IsHoming: 0
     ChaseAttack: {fileID: 0}
     DebuffType: 4
-    SkillContents: "\u9060\u8DDD\u96E2\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
-  - SkillName: WindRangedUp
+    SkillContents: "\u30AF\u30CA\u30A4\u304C\u3042\u305F\u3063\u305F\u5834\u6240\u306B\u6CE2\u3092\u767A\u751F\u3055\u305B\u3001\u6575\u3092\u5439\u304D\u98DB\u3070\u3059\u3088\u3046\u306B\u306A\u308B\u3002"
+  - SkillName: "\u98A8\u306E\u30AF\u30CA\u30A4"
     SkillElement: 2
     DamageAddRate: 60
     SpeedRate: 1
@@ -39,8 +39,8 @@ MonoBehaviour:
     IsHoming: 1
     ChaseAttack: {fileID: 0}
     DebuffType: 4
-    SkillContents: "\u9060\u8DDD\u96E2\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
-  - SkillName: ThunderRangedUp
+    SkillContents: "\u30AF\u30CA\u30A4\u304C\u6575\u3092\u8FFD\u5C3E\u3059\u308B\u3088\u3046\u306B\u306A\u308B\u3002"
+  - SkillName: "\u96F7\u306E\u30AF\u30CA\u30A4"
     SkillElement: 3
     DamageAddRate: 70
     SpeedRate: 1
@@ -48,8 +48,8 @@ MonoBehaviour:
     IsHoming: 0
     ChaseAttack: {fileID: 0}
     DebuffType: 4
-    SkillContents: "\u9060\u8DDD\u96E2\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
-  - SkillName: FreezeRangedUp
+    SkillContents: "\u30AF\u30CA\u30A4\u304C\u6575\u306B\u3042\u305F\u3063\u305F\u6642\u306B\u30E9\u30F3\u30C0\u30E0\u306A\u6575\u306B\u96F7\u3092\u843D\u3068\u3059\u3002"
+  - SkillName: "\u6C37\u306E\u30AF\u30CA\u30A4"
     SkillElement: 4
     DamageAddRate: 50
     SpeedRate: 1
@@ -57,8 +57,8 @@ MonoBehaviour:
     IsHoming: 0
     ChaseAttack: {fileID: 0}
     DebuffType: 1
-    SkillContents: "\u9060\u8DDD\u96E2\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
-  - SkillName: PoisonRangedUp
+    SkillContents: "\u30AF\u30CA\u30A4\u304C\u5F53\u305F\u3063\u305F\u6575\u306B\u9632\u5FA1\u529B\u30C0\u30A6\u30F3\u306E\u72B6\u614B\u7570\u5E38\u3092\u4E0E\u3048\u308B\u3002"
+  - SkillName: "\u6BD2\u306E\u30AF\u30CA\u30A4"
     SkillElement: 5
     DamageAddRate: 50
     SpeedRate: 1
@@ -66,4 +66,4 @@ MonoBehaviour:
     IsHoming: 0
     ChaseAttack: {fileID: 0}
     DebuffType: 3
-    SkillContents: "\u9060\u8DDD\u96E2\u653B\u6483\u304C\u5F37\u304F\u306A\u308B\u3088"
+    SkillContents: "\u30AF\u30CA\u30A4\u304C\u5F53\u305F\u3063\u305F\u6575\u306B\u6BD2\u306E\u72B6\u614B\u7570\u5E38\u3092\u4E0E\u3048\u308B\u3002"
