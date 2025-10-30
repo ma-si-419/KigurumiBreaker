@@ -5,9 +5,14 @@ public enum EnemyKind
 {
     Circle,
     Punch,
-    Suicide,
+    Bomb,
     Tackle,
-    Long
+    Long,
+    ArmorCircle,
+    ArmorPunch,
+    ArmorBomb,
+    ArmorTackle,
+    ArmorLong
 }
 
 [System.Serializable]
