@@ -23,6 +23,7 @@ public class DebugIdleState : IState
 
     public void Update()
     {
+        _enemy.StopMovement(); //ˆÚ“®’âŽ~
     }
 
     public void End()

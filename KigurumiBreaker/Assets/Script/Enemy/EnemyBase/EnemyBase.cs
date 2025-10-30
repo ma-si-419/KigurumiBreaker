@@ -48,6 +48,9 @@ public class EnemyBase : MonoBehaviour
     //バトルマネージャーの参照
     protected BattleManager _battleManager;
 
+    // 死んだかどうかのフラグ
+    protected bool _isDead = false;
+
     // 向きたい方向
     protected Vector3 _direction;
 
