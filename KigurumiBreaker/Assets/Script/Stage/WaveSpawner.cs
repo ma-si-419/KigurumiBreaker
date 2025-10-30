@@ -130,8 +130,6 @@ public class WaveSpawner : MonoBehaviour
         {
             yield return HandleGroupWaves(group);
         }
-
-        Debug.Log("すべてのグループがクリアされました。");
     }
 
     private IEnumerator HandleGroupWaves(EnemyGroup group)
@@ -160,7 +158,6 @@ public class WaveSpawner : MonoBehaviour
                     enemy.GetComponent<EnemyBase>().SetBattleManager(_battleManager);
 
                     yield return new WaitForSeconds(_spawnInterval);
-                    Debug.Log("Aaaaa");
                 }
 
                 yield return StartCoroutine(WaitForWaveClear(spawned));
