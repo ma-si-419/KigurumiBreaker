@@ -14,8 +14,6 @@ public class EnemyBarManager : MonoBehaviour
         //Canvasの子オブジェクトとして敵のHPバーを生成
         var barObject = Instantiate(_enemyBarPrefab, transform);
         var hpBar = barObject.GetComponent<EnemyBar>();
-
-
     }
 
 }

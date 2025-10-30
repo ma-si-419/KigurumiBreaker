@@ -15,12 +15,18 @@ public class TitleSceneController : MonoBehaviour
 
     public void OnStartGame()
     {
+
+
         //ゲームシーンへ
-        BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
+        //BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
+        BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
     }
 
     private void Update()
     {
+        //普通に時間が来たらボタンを押せるようにする
+        //フェード完了時間を代入
+
         OnClick();
     }
 
@@ -28,18 +34,6 @@ public class TitleSceneController : MonoBehaviour
 
     private void OnClick()
     {
-        ////左クリック
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    //ゲームシーンへ
-        //    BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
-        //}
-        ////右クリック
-        //if (Input.GetMouseButtonDown(1))
-        //{
-        //    BaseSceneController.instance.TogglePause();
-        //}
-
 
     }
 }

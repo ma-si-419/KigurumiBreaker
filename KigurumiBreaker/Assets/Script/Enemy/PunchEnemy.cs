@@ -96,7 +96,7 @@ public class PunchEnemy : Enemy
     private void CreateAttack()
     {
         //ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(attackObjectPrefab);
+        GameObject attackObject = Instantiate(_attackObjectPrefab);
 
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
 
