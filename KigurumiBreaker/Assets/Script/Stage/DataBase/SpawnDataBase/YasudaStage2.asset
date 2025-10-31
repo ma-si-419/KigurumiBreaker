@@ -13,32 +13,31 @@ MonoBehaviour:
   m_Name: YasudaStage2
   m_EditorClassIdentifier: 
   waveEnemyDataList:
-  - popEnemies:
-    - spawnKind: 0
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 4
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 4
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-  - popEnemies:
-    - spawnKind: 4
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 2
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 0
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 0
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
+  - _spawnDataList:
+    - popEnemies:
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 0
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 0
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    _index: 0
