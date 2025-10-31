@@ -430,6 +430,21 @@ public class PlayerState : Player<PlayerState>
             // 回避時間をカウント
             _dodgeTime++;
 
+            // 部位が拡大していたら少しずつ縮小する
+            if(state._scallingAttackPart.scale > 1.0f)
+            {
+                float scale = state._scallingAttackPart.scale;
+
+                scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
+
+                scale = Mathf.Max(scale, 1.0f);
+
+                state._scallingAttackPart.scale = scale;
+
+                // 攻撃する部位を縮小する
+                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale,scale,scale);
+            }
+
             // 回避方向に向ける
             if (_dodgeDirection != Vector3.zero)
             {
@@ -494,6 +509,13 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger("Dodge");
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
+
+            // 拡大している攻撃部位があれば元に戻す
+            if (state._scallingAttackPart.attackObj)
+            {
+                state._scallingAttackPart.attackObj.transform.localScale = Vector3.one;
+                state._scallingAttackPart.scale = 1.0f;
+            }
         }
     }
 
@@ -1067,7 +1089,7 @@ public class PlayerState : Player<PlayerState>
 
                         // 大きさの計算
                         float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
-                        Debug.Log("拡大率" + scale);
+                        
                         state._scallingAttackPart.scale = scale;
 
                         // 攻撃する部位を大きくする
@@ -1473,6 +1495,21 @@ public class PlayerState : Player<PlayerState>
                 _changeMaterial = true;
             }
 
+            // 部位が拡大していたら少しずつ縮小する
+            if (state._scallingAttackPart.scale > 1.0f)
+            {
+                float scale = state._scallingAttackPart.scale;
+
+                scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
+
+                scale = Mathf.Max(scale, 1.0f);
+
+                state._scallingAttackPart.scale = scale;
+
+                // 攻撃する部位を縮小する
+                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+            }
+
             // スタン時間をカウントダウン
             _stateTime++;
 
@@ -1520,6 +1557,13 @@ public class PlayerState : Player<PlayerState>
         {
             // ダメージアニメーションを停止
             state._animator.ResetTrigger(_damageAnim);
+
+            // 拡大している攻撃部位があれば元に戻す
+            if (state._scallingAttackPart.attackObj)
+            {
+                state._scallingAttackPart.attackObj.transform.localScale = Vector3.one;
+                state._scallingAttackPart.scale = 1.0f;
+            }
         }
     }
 
@@ -1556,6 +1600,7 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnExitState()
         {
+            
         }
     }
 
@@ -1567,6 +1612,12 @@ public class PlayerState : Player<PlayerState>
 
     private void Dodge(InputAction.CallbackContext constext)
     {
+        if (_isInItemRange)
+        {
+            _isInItemRange = false;
+            return;
+        }
+
         if (_isAbleToDodge)
         {
             // チャージ時間をリセット
@@ -1639,6 +1690,8 @@ public class PlayerState : Player<PlayerState>
 
     private void SpecialCharge(InputAction.CallbackContext context)
     {
+        if(_isInItemRange) return;
+
         if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
         {
             _isSpecialCharge = true;
@@ -2043,6 +2096,11 @@ public class PlayerState : Player<PlayerState>
     public void SetStop(bool flag)
     {
         _isStop = flag;
+    }
+
+    public void SetIsItemRange(bool flag)
+    {
+        _isInItemRange = flag;
     }
 
     public void StopAnimation()

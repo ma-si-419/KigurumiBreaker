@@ -11,6 +11,8 @@ public class SkillGetItem : MonoBehaviour
 
     private bool _isButtonDown = false;
 
+    private bool _isStayPlayer = false;
+
     GameInputs inputActions;
 
     public void Awake()
@@ -20,13 +22,21 @@ public class SkillGetItem : MonoBehaviour
 
         inputActions.Player.GetItem.started += GetItem;
 
+
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            PlayerState playerState = other.gameObject.GetComponent<PlayerState>();
+            playerState.SetIsItemRange(true);
+        }
+
+        _isStayPlayer = true;
     }
 
     private void OnTriggerStay(Collider other)
     {
-
-        Debug.Log(other.tag + "とぶつかっています");
-
         if (other.gameObject.CompareTag("Player"))
         {
             // Yボタンが押されたらスキル選択画面へ
@@ -36,8 +46,18 @@ public class SkillGetItem : MonoBehaviour
                 inputActions.Disable();
                 Destroy(gameObject);
             }
-
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            PlayerState playerState = other.gameObject.GetComponent<PlayerState>();
+            playerState.SetIsItemRange(false);
+        }
+
+        _isStayPlayer = false;
     }
 
     public void SetSkillElement(SkillData.SkillElement element)
@@ -52,6 +72,8 @@ public class SkillGetItem : MonoBehaviour
 
     private void GetItem(InputAction.CallbackContext constext)
     {
+        if (!_isStayPlayer) return;
+
         _isButtonDown = true;
     }
 }
