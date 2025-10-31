@@ -431,7 +431,7 @@ public class PlayerState : Player<PlayerState>
             _dodgeTime++;
 
             // 部位が拡大していたら少しずつ縮小する
-            if(state._scallingAttackPart.scale > 1.0f)
+            if (state._scallingAttackPart.scale > 1.0f)
             {
                 float scale = state._scallingAttackPart.scale;
 
@@ -442,7 +442,7 @@ public class PlayerState : Player<PlayerState>
                 state._scallingAttackPart.scale = scale;
 
                 // 攻撃する部位を縮小する
-                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale,scale,scale);
+                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
             }
 
             // 回避方向に向ける
@@ -1089,7 +1089,7 @@ public class PlayerState : Player<PlayerState>
 
                         // 大きさの計算
                         float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
-                        
+
                         state._scallingAttackPart.scale = scale;
 
                         // 攻撃する部位を大きくする
@@ -1586,8 +1586,11 @@ public class PlayerState : Player<PlayerState>
             // 特殊攻撃不可にする
             state.isAbleToSpecialAttack = false;
 
+            // マテリアルを赤色に変更する
+            state._playerMeshRenderer.material = state._damageData.damageMaterial;
+
             // 重めのヒットストップを行う
-            state._battleManager.GetComponent<BattleManager>().SlowTime(state._playerData.deathSlowTime,state._playerData.deathTimeScale);
+            state._battleManager.GetComponent<BattleManager>().SlowTime(state._playerData.deathSlowTime, state._playerData.deathTimeScale);
 
         }
         public override void OnUpdate()
@@ -1597,13 +1600,16 @@ public class PlayerState : Player<PlayerState>
 
             if (state._isStop) return;
 
-            // ヒットストップが終わってマテリアルが変更されたままだったら
+            // スロー演出が終わってマテリアルが変更されたままだったら
             if (!_changeMaterial)
             {
-                // マテリアルを元に戻す
-                state._playerMeshRenderer.material = state._playerMaterial;
+                if (Time.timeScale == 1.0f)
+                {
+                    // マテリアルを元に戻す
+                    state._playerMeshRenderer.material = state._playerMaterial;
 
-                _changeMaterial = true;
+                    _changeMaterial = true;
+                }
             }
 
             // 移動ベクトルをリセットし続ける
@@ -1611,7 +1617,7 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnExitState()
         {
-            
+
         }
     }
 
@@ -1701,7 +1707,7 @@ public class PlayerState : Player<PlayerState>
 
     private void SpecialCharge(InputAction.CallbackContext context)
     {
-        if(_isInItemRange) return;
+        if (_isInItemRange) return;
 
         if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
         {
