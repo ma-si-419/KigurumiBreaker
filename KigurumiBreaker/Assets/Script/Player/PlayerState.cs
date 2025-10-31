@@ -1473,11 +1473,7 @@ public class PlayerState : Player<PlayerState>
                     stopTime = state._damageData.highHitStop;
                     break;
             }
-
-            Debug.Log("ヒットストップ開始");
-
-            state._battleManager.GetComponent<BattleManager>().StopTime(stopTime);
-
+            state._battleManager.GetComponent<BattleManager>().SetHitStop(stopTime);
         }
         public override void OnUpdate()
         {
@@ -1559,7 +1555,7 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger(_damageAnim);
 
             // 拡大している攻撃部位があれば元に戻す
-            if (state._scallingAttackPart.attackObj)
+            if (state._scallingAttackPart.scale > 1.0f)
             {
                 state._scallingAttackPart.attackObj.transform.localScale = Vector3.one;
                 state._scallingAttackPart.scale = 1.0f;
@@ -1570,6 +1566,8 @@ public class PlayerState : Player<PlayerState>
     // 死亡状態
     public class DeadState : StateBase<PlayerState>
     {
+        bool _changeMaterial = false;
+
         public DeadState(PlayerState next) : base(next)
         {
         }
@@ -1587,6 +1585,10 @@ public class PlayerState : Player<PlayerState>
             state._isAbleToAttack = false;
             // 特殊攻撃不可にする
             state.isAbleToSpecialAttack = false;
+
+            // 重めのヒットストップを行う
+            state._battleManager.GetComponent<BattleManager>().SlowTime(state._playerData.deathSlowTime,state._playerData.deathTimeScale);
+
         }
         public override void OnUpdate()
         {
@@ -1594,6 +1596,15 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             if (state._isStop) return;
+
+            // ヒットストップが終わってマテリアルが変更されたままだったら
+            if (!_changeMaterial)
+            {
+                // マテリアルを元に戻す
+                state._playerMeshRenderer.material = state._playerMaterial;
+
+                _changeMaterial = true;
+            }
 
             // 移動ベクトルをリセットし続ける
             state._rigidbody.velocity = Vector3.zero;
@@ -2316,6 +2327,9 @@ public class PlayerState : Player<PlayerState>
 
                 // 攻撃入力をリセット
                 _isAttackInput = false;
+
+                // 通常攻撃のチャージ時間をリセット
+                _normalChargeTime = 0;
 
                 // HPが0以下なら死亡状態に遷移
                 if (_nowHp <= 0)

@@ -202,7 +202,7 @@ public class ZangiMove : MonoBehaviour
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
 
             // ヒットストップ
-            manager.StopTime(playerAttack.GetHitStopTime());
+            manager.SetHitStop(playerAttack.GetHitStopTime());
 
             _stopPos = this.transform.position;
 

@@ -282,7 +282,7 @@ public class Enemy : EnemyBase
             //ヒットストップ処理
             PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
-            manager.StopTime(playerAttack.GetHitStopTime());
+            manager.SetHitStop(playerAttack.GetHitStopTime());
 
             //ダメージフラグを立てる
             _isDamage = true;
@@ -339,7 +339,7 @@ public class Enemy : EnemyBase
             //ヒットストップ処理
             PlayerRangedAttack playerRangedAttack = other.gameObject.GetComponent<PlayerRangedAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
-            manager.StopTime(playerRangedAttack.GetHitStopTime());
+            manager.SetHitStop(playerRangedAttack.GetHitStopTime());
 
             //ダメージフラグを立てる
             _isDamage = true;

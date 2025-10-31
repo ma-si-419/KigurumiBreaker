@@ -37,6 +37,10 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float ChargeAttackPartScaleUpTime;
     [Header("回避や被弾時等に拡大していた部位を1フレームで縮小する大きさ")]
     [SerializeField] private float ChargeAttackPartScaleDownRatePerFrame;
+    [Header("死亡時のスロー時間")]
+    [SerializeField] private float DeathSlowTime;
+    [Header("死亡時のスローのタイムスケール")]
+    [SerializeField] private float DeathTimeScale;
 
     // 読み取り専用
     public float moveInputLength => MoveInputLength;
@@ -55,4 +59,7 @@ public class PlayerData : ScriptableObject
     public float forwardDistance => ForwardDistance;
     public float chargeAttackPartScaleUpTime => ChargeAttackPartScaleUpTime;
     public float chargeAttackPartScaleDownRatePerFrame => ChargeAttackPartScaleDownRatePerFrame;
+    public float deathSlowTime => DeathSlowTime;
+    public float deathTimeScale => DeathTimeScale;
+
 }
