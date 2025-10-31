@@ -62,10 +62,6 @@ public class Enemy : EnemyBase
         // デバッグ用に線を引く
         DebugLine();
 
-        // HPの表示
-        Debug.Log(_currentHp + " / " + _enemyData.maxHp);
-        Debug.Log(_currentTrunk + " / " + _enemyData.maxTrunk);
-
         // デバッグ用のフラグを取得
         _isDebugIdleFlag = _enemyConstantData.isStopAllAction;
 
@@ -305,7 +301,6 @@ public class Enemy : EnemyBase
                 _isDead = true;
             }
 
-            Debug.Log(playerAttack.GetDamage() + "のダメージ");
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
@@ -359,7 +354,6 @@ public class Enemy : EnemyBase
                 _isDead = true;
             }
 
-            Debug.Log("DestroyInEnemy.cs");
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
