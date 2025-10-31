@@ -13,20 +13,22 @@ MonoBehaviour:
   m_Name: YoshiyamaStage4
   m_EditorClassIdentifier: 
   waveEnemyDataList:
-  - popEnemies:
-    - spawnKind: 4
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 4
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 3
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-  - popEnemies:
-    - spawnKind: 1
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 3
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
+  - _spawnDataList:
+    - popEnemies:
+      - spawnKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    _index: 0
