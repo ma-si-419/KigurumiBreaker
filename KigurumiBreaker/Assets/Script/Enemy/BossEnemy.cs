@@ -129,7 +129,7 @@ public class BossEnemy : EnemyBase
             //ヒットストップ処理
             PlayerAttack playerAttack = other.GetComponent<PlayerAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
-            manager.StopTime(playerAttack.GetHitStopTime());
+            manager.SetHitStop(playerAttack.GetHitStopTime());
 
 
             // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
@@ -170,7 +170,7 @@ public class BossEnemy : EnemyBase
             //ヒットストップ処理
             PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
-            manager.StopTime(playerAttack.GetHitStopTime());
+            manager.SetHitStop(playerAttack.GetHitStopTime());
 
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)

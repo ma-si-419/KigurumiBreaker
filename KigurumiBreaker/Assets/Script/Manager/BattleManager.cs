@@ -21,6 +21,10 @@ public class BattleManager : MonoBehaviour
     private bool _isStop = false;
     private int _stopFrame = 0;
 
+    private bool _isSlow = false;
+
+    private float _slowFrame;
+
     private void Start()
     {
         _playerState = _player.GetComponent<PlayerState>();
@@ -28,9 +32,21 @@ public class BattleManager : MonoBehaviour
         _cameraMove = _camera.GetComponent<CameraMove>();
     }
 
-
     private void FixedUpdate()
     {
+        // スローモーション処理
+        if (_isSlow)
+        {
+            _slowFrame--;
+
+            if (_slowFrame < 0.0f)
+            {
+                _isSlow = false;
+                Time.timeScale = 1.0f;
+            }
+        }
+
+        // ヒットストップ処理
         if (_isStop)
         {
             _stopFrame--;
@@ -90,8 +106,17 @@ public class BattleManager : MonoBehaviour
         Debug.Log("RemoveEnemyAttack:敵の攻撃判定を削除しました。削除前の数:" + enemyNum + "削除後の数:" + enemyNumAfter);
     }
 
+    public void SlowTime(float time, float timeScale)
+    {
+        if (time <= 0) return;
 
-    public void StopTime(int time)
+        _slowFrame = time * timeScale;
+        _isSlow = true;
+
+        Time.timeScale = timeScale;
+    }
+
+    public void SetHitStop(int time)
     {
         if (time <= 0) return;
 
