@@ -1,115 +1,73 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class EnemyBar : MonoBehaviour
 {
-    private RectTransform foreground = null;
-    private Enemy _enemy = null;
+    [Header("HpBar関連")]
+    // 現在のHpを表示するImage
+    [SerializeField] private Image _currentHpImg;
+    // 遅れて減る赤バー
+    [SerializeField] private Image _currentHpDelayedImg;
 
-    private void Start()
-    {
-        _enemy = transform.parent.GetComponent<Enemy>();
+    [Header("TrunkBar関連")]
+    // 現在の耐久力を表示するImage
+    [SerializeField] private Image _currentTrunkImg;
+    // 遅れて減る赤バー
+    [SerializeField] private Image _currentTrunkDelayedImg;
 
-        foreach (RectTransform child in GetComponentsInChildren<RectTransform>())
-        {
-            if (child.gameObject.name == "HpBar")
-            {
-                foreground = child;
-            }
-        }
-    }
+    // 敵の参照
+    private Enemy _enemy;
 
-    private void Update()
-    {
-        float hpPercentage = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
+    // オフセット位置
+    private Vector3 _offset = new Vector3(0, 2.5f, 0);
+    // 補間速度
+    private float _lerpSpeed = 2.0f;
+    // 表示比率
+    private float _displayHpRatio;
+    private float _displayTrunkRatio;
 
-        Image fgImage = foreground.GetComponent<Image>();
-        fgImage.fillAmount = hpPercentage;
-        foreground.localPosition = new Vector3(-100 + 100 * hpPercentage, 0, 0);
-
-        // カメラに向ける
-        transform.forward = Camera.main.transform.forward;
-    }
+    private RectTransform foreground;
 
     public void SetTarget(Enemy enemy)
     {
         _enemy = enemy;
+        // 初期表示比率を設定
+        _displayHpRatio = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
+        _displayTrunkRatio = _enemy.GetCurrentTrunk() / _enemy.enemyData.maxTrunk;
     }
 
-    //[Header("UI要素")]
-    //[SerializeField] private Image _hpBarImage; // HPバー画像
-    //[SerializeField] private Image _hpDelayImage; // HPバー遅れてくる画像
-    //[SerializeField] private Image _trunkBarImage; // 耐久バー画像
-    //[SerializeField] private Image _trunkDelayImage; // 耐久バー遅れてくる画像
-    //[SerializeField] private Vector3 _offset = new Vector3(0, 2.5f, 0); // オフセット
+    private void Update()
+    {
+        // 敵が存在しない場合は自身を破棄
+        if (_enemy == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-    //// ターゲットのTransform
-    //private Transform _target; 
-    //// 敵の参照
-    //private Enemy _enemy;
-    //// ゲームカメラ
-    //private Camera _gameCamera;
-    //// 現在のHP
-    //private float _currentHp;
-    //// Hpの減少量
-    //private float _hpDecrease;
-    //// 現在の耐久力
-    //private float _currentTrunk;
-    //// trunkの減少量
-    //private float _trunkDecrease;
-    //// 敵のレンダラー
-    //private Renderer _renderer; 
+        if (_enemy != null)
+        {
+            Debug.Log($"HP: {_enemy.GetCurrentHp()} / {_enemy.enemyData.maxHp}");
+            Debug.Log($"TRUNK: {_enemy.GetCurrentTrunk()} / {_enemy.enemyData.maxTrunk}");
+            Debug.Log($"fill: {_currentHpImg.fillAmount}");
+            Debug.Log($"fill: {_currentTrunkImg.fillAmount}");
+        }
 
-    //private void Start()
-    //{
-    //    // ゲーム内カメラを取得する
-    //    _gameCamera = Camera.main;
+        // HpBar処理
+        float targetHpRatio = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
+        _currentHpImg.fillAmount = targetHpRatio;
+        _displayHpRatio = Mathf.Lerp(_displayHpRatio, targetHpRatio, Time.deltaTime * _lerpSpeed);
+        _currentHpDelayedImg.fillAmount = _displayHpRatio;
 
-    //    // 敵のポジションを取得する
-    //    _enemy = _target.GetComponent<Enemy>();
+        // TrunkBar処理
+        float targetTrunkRatio = _enemy.GetCurrentTrunk() / _enemy.enemyData.maxTrunk;
+        _currentTrunkImg.fillAmount = targetTrunkRatio;
+        _displayTrunkRatio = Mathf.Lerp(_displayHpRatio, targetHpRatio, Time.deltaTime * _lerpSpeed);
+        _currentTrunkDelayedImg.fillAmount = _displayTrunkRatio;
 
-    //    // 敵のレンダラーを取得する
-    //    _renderer = _target.GetComponentInChildren<Renderer>();
-
-    //    // 敵のHpと耐久力を初期化する
-    //    _currentHp = _hpDecrease = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
-    //    _currentTrunk = _trunkDecrease = _enemy.GetCurrentTrunk() / _enemy.enemyData.maxTrunk;
-    //}
-
-    //private void LateUpdate()
-    //{
-    //    // カメラ外では非表示にする
-    //    bool isVisible = _renderer != null && _renderer.isVisible;
-    //    gameObject.SetActive(isVisible);
-    //    if(!isVisible) return;
-
-    //    // HPと耐久力の現在値を更新する
-    //    _currentHp = Mathf.Lerp(_currentHp, _hpDecrease, Time.deltaTime * 10f);
-    //    _hpBarImage.fillAmount = _currentHp;
-
-    //    _currentTrunk = Mathf.Lerp(_currentTrunk, _trunkDecrease, Time.deltaTime * 10f);
-    //    _trunkBarImage.fillAmount = _currentTrunk;
-
-    //    // HPと耐久力の現在値から少し遅れてくるバーを更新する
-    //    _hpDelayImage.fillAmount = Mathf.Lerp(_hpDelayImage.fillAmount, _hpDecrease, Time.deltaTime * 2f);
-    //    _trunkDelayImage.fillAmount = Mathf.Lerp(_trunkDelayImage.fillAmount, _trunkDecrease, Time.deltaTime * 2f);
-
-    //    // 頭上に追従
-    //    transform.position = _target.position + _offset;
-    //    transform.LookAt(_gameCamera.transform);
-    //    transform.Rotate(0, 180, 0); // 反転
-    //}
-
-    //// Hpバーと耐久力バーの値を更新するメソッド
-    //public void SetHp(float current, float max)
-    //{
-    //    _hpDecrease = Mathf.Clamp01(current / max);
-    //}
-
-    //public void SetTrunk(float current, float max)
-    //{
-    //    _trunkDecrease = Mathf.Clamp01(current / max);
-    //}
+        // 位置・向きを更新
+        transform.position = _enemy.transform.position + _offset;
+        transform.forward = Camera.main.transform.forward;
+    }
 }

@@ -87,7 +87,7 @@ public class EnemyBase : MonoBehaviour
     public Animator animator => _animator;
     // 敵のステータスデータのゲッター
     public EnemyData enemyData => _enemyData;
-
+    public EnemyConstantData enemyConstantData => _enemyConstantData;
     public BattleManager battleManager => _battleManager;
 
     protected virtual void Start()

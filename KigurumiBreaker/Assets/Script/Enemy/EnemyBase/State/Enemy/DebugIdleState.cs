@@ -23,7 +23,14 @@ public class DebugIdleState : IState
 
     public void Update()
     {
+        Debug.Log("DebugIdleState");
+
         _enemy.StopMovement(); //ˆÚ“®’âŽ~
+
+        if (!_enemy.enemyConstantData.isStopAllAction)
+        {
+            _enemy.ChangeState(new IdleState(_enemy));
+        }
     }
 
     public void End()

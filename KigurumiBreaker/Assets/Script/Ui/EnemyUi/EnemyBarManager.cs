@@ -9,11 +9,19 @@ public class EnemyBarManager : MonoBehaviour
     // 敵のHPバーのリスト
     private readonly List<EnemyBar> _enemyBars = new();
 
-    public void CreateEnemyBar()
+    public void CreateEnemyBar(Enemy enemy)
     {
         //Canvasの子オブジェクトとして敵のHPバーを生成
         var barObject = Instantiate(_enemyBarPrefab, transform);
         var hpBar = barObject.GetComponent<EnemyBar>();
+        hpBar.SetTarget(enemy);
+        _enemyBars.Add(hpBar);
+    }
+
+    public void RemoveHpBar(EnemyBar enemybar)
+    {
+        _enemyBars.Remove(enemybar);
+        Destroy(enemybar.gameObject);
     }
 
 }
