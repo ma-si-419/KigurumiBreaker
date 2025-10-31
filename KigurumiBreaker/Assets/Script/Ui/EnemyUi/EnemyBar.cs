@@ -22,7 +22,7 @@ public class EnemyBar : MonoBehaviour
     // オフセット位置
     private Vector3 _offset = new Vector3(0, 2.5f, 0);
     // 補間速度
-    private float _lerpSpeed = 2.0f;
+    private float _lerpSpeed = 1.0f;
     // 表示比率
     private float _displayHpRatio;
     private float _displayTrunkRatio;
@@ -46,20 +46,24 @@ public class EnemyBar : MonoBehaviour
             return;
         }
 
-        // HpBar処理
-        float targetHpRatio = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
-        _currentHpImg.fillAmount = targetHpRatio;
-        _displayHpRatio = Mathf.Lerp(_displayHpRatio, targetHpRatio, Time.deltaTime * _lerpSpeed);
-        _currentHpDelayedImg.fillAmount = _displayHpRatio;
+        // 敵が存在する場合はバーを更新
+        if (_enemy != null)
+        {
+            // HpBar処理
+            float targetHpRatio = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
+            _currentHpImg.fillAmount = targetHpRatio;
+            _displayHpRatio = Mathf.Lerp(_displayHpRatio, targetHpRatio, Time.deltaTime * _lerpSpeed);
+            _currentHpDelayedImg.fillAmount = _displayHpRatio;
 
-        // TrunkBar処理
-        float targetTrunkRatio = _enemy.GetCurrentTrunk() / _enemy.enemyData.maxTrunk;
-        _currentTrunkImg.fillAmount = targetTrunkRatio;
-        _displayTrunkRatio = Mathf.Lerp(_displayHpRatio, targetHpRatio, Time.deltaTime * _lerpSpeed);
-        _currentTrunkDelayedImg.fillAmount = _displayTrunkRatio;
+            // TrunkBar処理
+            float targetTrunkRatio = _enemy.GetCurrentTrunk() / _enemy.enemyData.maxTrunk;
+            _currentTrunkImg.fillAmount = targetTrunkRatio;
+            _displayTrunkRatio = Mathf.Lerp(_displayTrunkRatio, targetTrunkRatio, Time.deltaTime * _lerpSpeed);
+            _currentTrunkDelayedImg.fillAmount = _displayTrunkRatio;
 
-        // 位置・向きを更新
-        transform.position = _enemy.transform.position + _offset;
-        transform.forward = Camera.main.transform.forward;
+            // 位置・向きを更新
+            transform.position = _enemy.transform.position + _offset;
+            transform.forward = Camera.main.transform.forward;
+        }
     }
 }

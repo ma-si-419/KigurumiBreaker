@@ -27,6 +27,8 @@ public class Enemy : EnemyBase
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
 
+    protected bool 
+
     // アーマー用の処理のList変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
     [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
@@ -106,7 +108,11 @@ public class Enemy : EnemyBase
             // ヒットストップ終了後の位置補正
             if (_shakeVec.sqrMagnitude >= 0.001f)
             {
-                this.transform.position = _stopPos;
+                //ダメージを食らっていた敵だけ位置補正を行う
+                if (!_isDamage)
+                {
+                    this.transform.position = _stopPos;
+                }
             }
 
             _shakeVec = Vector3.zero;
@@ -319,7 +325,7 @@ public class Enemy : EnemyBase
             if (!_isArmor)
             {
                 // ダメージを受ける(プレイヤーアタックのダメージを取得する)
-                _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
+                _currentHp -= other.GetComponent<PlayerRangedAttack>().GetDamage();
                 //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
 
             }
@@ -327,7 +333,7 @@ public class Enemy : EnemyBase
             else if (_isArmor)
             {
                 // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
-                _currentTrunk -= other.GetComponent<PlayerAttack>().GetDamage();
+                _currentTrunk -= other.GetComponent<PlayerRangedAttack>().GetDamage();
                 //_enemyBarUi.SetHp(_currentTrunk, _enemyData.maxTrunk);
             }
 
