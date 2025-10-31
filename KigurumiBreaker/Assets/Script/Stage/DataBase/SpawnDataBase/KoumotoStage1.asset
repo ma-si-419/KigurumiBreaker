@@ -10,6 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acb121ffe5cebd14983e5e9a496742f3, type: 3}
-  m_Name: SecondStage 4
+  m_Name: KoumotoStage1
   m_EditorClassIdentifier: 
-  waveEnemyDataList: []
+  waveEnemyDataList:
+  - popEnemies:
+    - spawnKind: 5
+      spawnPosition: {x: 3, y: 0, z: 3}
+      randomizePosition: 0
