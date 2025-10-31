@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using static SpecialAttackCameraMoveData;
 
 [System.Serializable]
 public class EnemyPopPatern
@@ -22,23 +23,7 @@ public class EnemyPopPatern
     public List<EnemyPopGroup> enemyPopGroups => _enemyPopGroups;
 }
 
-[System.Serializable]
-public class EnemyPopGroup
-{
-    [Header("各敵グループの出現順データ")]           //↓リストじゃなくSpawnData単体にする
-    [SerializeField] private List<SpawnEnemyData> _spawnDataList;
 
-    [HideInInspector][SerializeField] int _index = 0;
-
-    public void SetIndex(int index)
-    {
-        _index = index;
-    }
-
-    // 読み取り専用プロパティ
-    public int index => _index;
-    public List<SpawnEnemyData> spawnDataList => _spawnDataList;
-}
 
 [System.Serializable]
 public class StageProbability
@@ -74,10 +59,11 @@ public class WaveSpawner : MonoBehaviour
     [Header("敵データ（SpawnData参照用）")]
     [SerializeField] private SpawnData _enemySetData;
 
-    [Header("出てくる敵のパターン(同じステージで別の出現パターンを使用する時増やす)")]
-    [SerializeField] private List<EnemyPopPatern> _enemyPopPatern;
+    [Header("どのステージデータを呼び出すか")]
+    [SerializeField] private WaveData _waveData; 
 
-    private EnemyPopPatern _currentStageInfo;
+
+    private EnemyPopGroup _currentStageInfo;
     private List<EnemyPopGroup> _groups = new List<EnemyPopGroup>();
 
     [SerializeField] private float _spawnInterval = 0.5f;
@@ -90,10 +76,10 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("スキル関連")]
     private SkillSelectManager _skillSelectManager;
-    [SerializeField]private SkillData.SkillElement _nextSkillElement;
+    [SerializeField] private SkillData.SkillElement _nextSkillElement;
 
     [Header("スキル取得後に消す壁エフェクト")]
-    [SerializeField]private GameObject[] _wallEffects;
+    [SerializeField] private GameObject[] _wallEffects;
 
     private bool _skillSelectFinished = false;
 
@@ -107,37 +93,31 @@ public class WaveSpawner : MonoBehaviour
 
     private void OnValidate()
     {
-        // エネミーの出現パターン
-        for(int i = 0;i < _enemyPopPatern.Count;i++)
+        if (_waveData == null) return;
+
+        var groups = _waveData.waveEnemyDataList;
+        if (groups == null) return;
+
+        for (int i = 0; i < groups.Count; i++)
         {
-            // Indexを設定
-            _enemyPopPatern[i].SetIndex(i);
+            groups[i].SetIndex(i);
 
-            // 出現するすべてのグループにIndexを設定
-            for (int j = 0;j < _enemyPopPatern[i].enemyPopGroups.Count;j++)
-            {
-                _enemyPopPatern[i].enemyPopGroups[j].SetIndex(j);
+            var spawnList = groups[i].spawnDataList;
+            if (spawnList == null) continue;
 
-            }
         }
-
     }
 
     private void Start()
     {
-        if (stageSpawner == null)
-            stageSpawner = FindObjectOfType<StageSpawner>();
-
-        if (stageSpawner != null)
+        if (_waveData == null || _waveData.waveEnemyDataList.Count == 0)
         {
-            _beforeSkill = stageSpawner.GetBeforeSkill();
+            Debug.LogError("WaveData が設定されていないか、waveEnemyDataList が空です");
+            return;
         }
 
-        AssignSkillsToGoals();
-        if (_enemyPopPatern == null || _enemyPopPatern.Count == 0)
-            return;
-
-        _currentStageInfo = _enemyPopPatern[Random.Range(0, _enemyPopPatern.Count)];
+        // ランダムで1つのグループを選択
+        _currentStageInfo = _waveData.waveEnemyDataList[Random.Range(0, _waveData.waveEnemyDataList.Count)];
 
         StartCoroutine(HandleStageGroups(_currentStageInfo));
     }
@@ -170,47 +150,87 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
-    private IEnumerator HandleStageGroups(EnemyPopPatern stageInfo)
+    private IEnumerator HandleStageGroups(EnemyPopGroup group)
     {
-        // 各グループを順に処理
-        foreach (var group in stageInfo.enemyPopGroups)
+        if (group == null || group.spawnDataList == null || group.spawnDataList.Count == 0)
         {
-            yield return HandleGroupWaves(group);
+            Debug.LogWarning("EnemyPopGroup が空です");
+            yield break;
         }
+
+        foreach (var wave in group.spawnDataList)
+        {
+            if (wave == null || wave.popEnemies == null || wave.popEnemies.Count == 0) continue;
+
+            List<GameObject> spawned = new List<GameObject>();
+
+            foreach (var pop in wave.popEnemies)
+            {
+                if (pop == null) continue;
+
+                GameObject prefabToSpawn = _enemySetData?.GetPrefabByKind(pop.spawnKind);
+                if (prefabToSpawn == null) continue;
+
+                Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
+                GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+
+                spawned.Add(enemy);
+
+                _battleManager?.AddEnemy(enemy);
+                enemy.GetComponent<EnemyBase>()?.SetBattleManager(_battleManager);
+
+                yield return new WaitForSeconds(_spawnInterval);
+            }
+
+            yield return StartCoroutine(WaitForWaveClear(spawned));
+        }
+
+        OnGroupCleared();
     }
+
 
     private IEnumerator HandleGroupWaves(EnemyPopGroup group)
     {
-        if (group.spawnDataList == null || group.spawnDataList.Count == 0)
+        if (group == null || group.spawnDataList == null || group.spawnDataList.Count == 0)
             yield break;
 
-        // 複数のSpawnDataすべてを順に処理
-        foreach (var spawnData in group.spawnDataList)
+        // 複数の WaveEnemyData を順に処理
+        foreach (var wave in group.spawnDataList) // WaveEnemyData のリスト
         {
-            if (spawnData == null) continue;
+            if (wave == null || wave.popEnemies == null || wave.popEnemies.Count == 0)
+                continue;
 
-            foreach (var wave in spawnData.waveEnemyDataList)
+            List<GameObject> spawned = new List<GameObject>();
+
+            // 各敵を出現
+            foreach (var pop in wave.popEnemies)
             {
-                List<GameObject> spawned = new List<GameObject>();
+                if (pop == null) continue;
 
-                foreach (var pop in wave.popEnemies)
-                {
-                    GameObject prefabToSpawn = _enemySetData?.GetPrefabByKind(pop.spawnKind);
-                    if (prefabToSpawn == null) continue;
+                GameObject prefabToSpawn = _enemySetData?.GetPrefabByKind(pop.spawnKind);
+                if (prefabToSpawn == null) continue;
 
-                    Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
-                    GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
-                    spawned.Add(enemy);
-                    _battleManager.AddEnemy(enemy);
-                    enemy.GetComponent<EnemyBase>().SetBattleManager(_battleManager);
+                Vector3 spawnPos = pop.randomizePosition ? GetRandomNavMeshPosition() : pop.spawnPosition;
+                GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
 
-                    yield return new WaitForSeconds(_spawnInterval);
-                }
+                spawned.Add(enemy);
 
-                yield return StartCoroutine(WaitForWaveClear(spawned));
+                // バトルマネージャーに追加
+                _battleManager.AddEnemy(enemy);
+
+                // EnemyBase に BattleManager 設定
+                var enemyBase = enemy.GetComponent<EnemyBase>();
+                if (enemyBase != null)
+                    enemyBase.SetBattleManager(_battleManager);
+
+                yield return new WaitForSeconds(_spawnInterval);
             }
+
+            // このウェーブの敵が全滅するまで待機
+            yield return StartCoroutine(WaitForWaveClear(spawned));
         }
 
+        // グループクリア後の処理
         OnGroupCleared();
     }
 
