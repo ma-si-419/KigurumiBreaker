@@ -2,47 +2,56 @@ Shader "Custom/EmissionShader"
 {
      Properties
     {
-        _MainTex ("Base Texture", 2D) = "white" {}
-        _Color ("Main Color", Color) = (1,1,1,1)
-        _Alpha("Alpha Value", Range(0,1)) = 1
-        _EmissionColor ("Emission Color", Color) = (1,1,1,1)
-        _EmissionPower ("Emission Power", Range(0,1)) = 1.0
+        _EmissionColor ("Emission Color", Color) = (1, 1, 1, 1)
+        _EmissionPower ("Emission Power", Range(0, 5)) = 1.0
+        _Alpha ("Alpha", Range(0,1)) = 1.0
     }
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 200
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
+        LOD 100
 
-        //ƒAƒ‹ƒtƒ@‚ğ—LŒø
+        // é€æ˜ã‚„åŠ ç®—ç™ºå…‰ã‚’æœ‰åŠ¹åŒ–
         Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite Off
 
-        CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows
-
-        sampler2D _MainTex;
-        fixed4 _Color;
-        fixed4 _EmissionColor;
-        float _Alpha;
-        half _EmissionPower;
-
-        struct Input
+        Pass
         {
-            float2 uv_MainTex;
-        };
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
 
-        void surf (Input IN, inout SurfaceOutputStandard o)
-        {
-            fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;    //Šî–{FƒeƒNƒXƒ`ƒƒ
-            c.a = _Alpha;
-            o.Albedo = c.rgb;
-            o.Alpha = c.a;
+            float4 _EmissionColor;
+            float _EmissionPower;
+            float _Alpha;
 
-            o.Emission = _EmissionColor.rgb * _EmissionPower;      //”­ŒõƒJƒ‰[
+            struct appdata
+            {
+                float4 vertex : POSITION;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+            };
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                fixed4 col = _EmissionColor * _EmissionPower;
+                col.a = _Alpha;
+                return col;
+            }
+            ENDCG
         }
-        ENDCG
-        
     }
 
-    FallBack "Diffuse"
+    FallBack "Unlit/Color"
 }
