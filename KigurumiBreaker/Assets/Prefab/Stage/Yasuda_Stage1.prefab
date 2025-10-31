@@ -420,6 +420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5701893423001576139}
   - component: {fileID: 7425622294651097787}
+  - component: {fileID: 55367793721534326}
   m_Layer: 0
   m_Name: GoalPoint
   m_TagString: Untagged
@@ -463,6 +464,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5, y: 4, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &55367793721534326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134662797181215240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f4addbd83ce534bb02fa6eab52fca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goalIndex: 0
 --- !u!1 &2176637438069016807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,21 +1250,23 @@ MonoBehaviour:
   _areaCenter: {fileID: 8516121592206372307}
   _areaSize: {x: 25, y: 0, z: 38}
   _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  _stageEnemyInfos:
-  - enemyGroups:
-    - spawnDataList:
-      - {fileID: 11400000, guid: 320b6969dae915f48b0ed458e5320146, type: 2}
-  - enemyGroups:
-    - spawnDataList:
-      - {fileID: 11400000, guid: 320b6969dae915f48b0ed458e5320146, type: 2}
+  _enemyPopPatern:
+  - _enemyPopGroups:
+    - _spawnDataList:
+      - {fileID: 11400000, guid: aee4dc92942ce734daa1ffaf7b175eb1, type: 2}
+      _index: 0
+    _index: 0
+  - _enemyPopGroups:
+    - _spawnDataList:
+      - {fileID: 11400000, guid: aee4dc92942ce734daa1ffaf7b175eb1, type: 2}
+      _index: 0
+    _index: 1
   _spawnInterval: 0.5
   _goalPositions:
   - {fileID: 2134662797181215240}
   _stageProbabilities:
-  - eventType: 5
-    probability: 0.6
-  - eventType: 8
-    probability: 0.4
+  - probability: 0.6
+  - probability: 0.4
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 1720376829829894097}
