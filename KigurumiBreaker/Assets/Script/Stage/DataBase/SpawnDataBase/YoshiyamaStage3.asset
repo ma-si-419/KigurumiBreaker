@@ -13,27 +13,29 @@ MonoBehaviour:
   m_Name: YoshiyamaStage3
   m_EditorClassIdentifier: 
   waveEnemyDataList:
-  - popEnemies:
-    - spawnKind: 3
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 3
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-  - popEnemies:
-    - spawnKind: 1
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 1
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 0
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-  - popEnemies:
-    - spawnKind: 3
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
-    - spawnKind: 1
-      spawnPosition: {x: 0, y: 0, z: 0}
-      randomizePosition: 1
+  - _spawnDataList:
+    - popEnemies:
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 0
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 1
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 3
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    _index: 0
