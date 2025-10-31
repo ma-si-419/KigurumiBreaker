@@ -6,7 +6,6 @@ using UnityEngine.Rendering.VirtualTexturing;
 
 public class Enemy : EnemyBase
 {
-
     // 状態遷移するまでのタイマー
     protected float _stateTimer = 0.0f;
     // 状態遷移するまでのタイマー
@@ -28,26 +27,34 @@ public class Enemy : EnemyBase
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
 
-
     // アーマー用の処理のList変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
     [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
-
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
 
+        // 敵のバーUiの管理クラスを取得
+        var manager = FindObjectOfType<EnemyBarManager>();
+        manager.CreateEnemyBar(this);
+
         // デバッグ用のフラグを取得
-        _isDebugIdleFlag = enemyData.isDebugIdleFlag;
+        _isDebugIdleFlag = _enemyConstantData.isStopAllAction;
 
-        // 敵のバーUiの値を初期化
-        //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
-        //_enemyBarUi.SetTrunk(_currentTrunk, _enemyData.maxTrunk);
-
-        //待機状態に設定
-        ChangeState(new IdleState(this));
+        if(_isDebugIdleFlag)
+        {
+            //待機状態に設定
+            ChangeState(new DebugIdleState(this));
+            return;
+        }
+        else
+        {
+            //待機状態に設定
+            ChangeState(new IdleState(this));
+            return;
+        }
     }
 
     protected override void Update()
@@ -55,8 +62,12 @@ public class Enemy : EnemyBase
         // デバッグ用に線を引く
         DebugLine();
 
+        // HPの表示
+        Debug.Log(_currentHp + " / " + _enemyData.maxHp);
+        Debug.Log(_currentTrunk + " / " + _enemyData.maxTrunk);
+
         // デバッグ用のフラグを取得
-        _isDebugIdleFlag = enemyData.isDebugIdleFlag;
+        _isDebugIdleFlag = _enemyConstantData.isStopAllAction;
 
         // 敵のY座標だけ固定
         Vector3 pos = transform.position;
@@ -123,6 +134,13 @@ public class Enemy : EnemyBase
     //基本待機処理(オーバーライドで変更可)
     public virtual void Idle()
     {
+        // デバッグ用の待機フラグが立っていたら待機状態にする
+        if (_isDebugIdleFlag)
+        {
+            //待機状態に設定
+            ChangeState(new DebugIdleState(this));
+            return;
+        }
 
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
