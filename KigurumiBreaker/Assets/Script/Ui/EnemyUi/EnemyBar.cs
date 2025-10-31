@@ -46,14 +46,6 @@ public class EnemyBar : MonoBehaviour
             return;
         }
 
-        if (_enemy != null)
-        {
-            Debug.Log($"HP: {_enemy.GetCurrentHp()} / {_enemy.enemyData.maxHp}");
-            Debug.Log($"TRUNK: {_enemy.GetCurrentTrunk()} / {_enemy.enemyData.maxTrunk}");
-            Debug.Log($"fill: {_currentHpImg.fillAmount}");
-            Debug.Log($"fill: {_currentTrunkImg.fillAmount}");
-        }
-
         // HpBarèàóù
         float targetHpRatio = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
         _currentHpImg.fillAmount = targetHpRatio;
