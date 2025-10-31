@@ -12,7 +12,7 @@ Shader "Custom/EmissionShader"
         Tags { "Queue"="Transparent" "RenderType"="Transparent" }
         LOD 100
 
-        // “§–¾‚â‰ÁZ”­Œõ‚ğ—LŒø‰»
+        // é€æ˜ã‚„åŠ ç®—ç™ºå…‰ã‚’æœ‰åŠ¹åŒ–
         Blend SrcAlpha OneMinusSrcAlpha
         ZWrite Off
 

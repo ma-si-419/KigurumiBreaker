@@ -23,7 +23,6 @@ public class DebugIdleState : IState
 
     public void Update()
     {
-        Debug.Log("DebugIdleState");
 
         _enemy.StopMovement(); //ˆÚ“®’âŽ~
 
