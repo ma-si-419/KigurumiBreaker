@@ -21,11 +21,11 @@ public class EnemyBar : MonoBehaviour
     private Enemy _enemy;
 
     // オフセット位置
-    private Vector3 _offset = new Vector3(0, 2.5f, 0);
+    private Vector3 _offset;
     // 硬直時間
     private float _delayRigidityTime;
     // 補間速度
-    private float _lerpSpeed = 1.0f;
+    private float _lerpSpeed;
     // 表示比率
     private float _displayHpRatio;
     private float _displayTrunkRatio;
@@ -43,6 +43,8 @@ public class EnemyBar : MonoBehaviour
         _offset.y = _enemy.enemyData.barYPosition;
         // 硬直時間を設定
         _delayRigidityTime = _enemy.enemyConstantData.delayRigidityTime;
+        // 補間速度を設定
+        _lerpSpeed = _enemy.enemyConstantData.lerpSpeed;
 
         // アーマー装備していない場合の処理
         if (!_enemy.enemyData.isArmor)
