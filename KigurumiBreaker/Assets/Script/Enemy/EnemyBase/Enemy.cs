@@ -27,8 +27,6 @@ public class Enemy : EnemyBase
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
 
-    protected bool 
-
     // アーマー用の処理のList変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
     [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
@@ -37,7 +35,7 @@ public class Enemy : EnemyBase
     {
         // 親クラスのStart()を呼び出す
         base.Start();
-
+        
         // 敵のバーUiの管理クラスを取得
         var manager = FindObjectOfType<EnemyBarManager>();
         manager.CreateEnemyBar(this);
@@ -159,7 +157,10 @@ public class Enemy : EnemyBase
             if (!_isSearched)
             {
                 //敵の頭上にビックリマークを出す
+
             }
+
+            
 
             //一度でも攻撃範囲内に入ったらフラグを立て続ける
             _isSearched = true;

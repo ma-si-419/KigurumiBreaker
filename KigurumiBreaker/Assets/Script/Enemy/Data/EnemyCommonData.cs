@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Enemy/EnemyConstantData")]
-public class EnemyConstantData : ScriptableObject
+[CreateAssetMenu(menuName = "Enemy/EnemyCommonData")]
+public class EnemyCommonData : ScriptableObject
 {
     [Header("ヒットストップの揺れる大きさ")]
     [SerializeField] private float ShakeMagnitude;
+    [Header("敵のバーが減少する硬直時間")]
+    [SerializeField] private float DelayRigidityTime;
     [Header("敵全員が行動しなくなるフラグ")]
     [SerializeField] private bool IsStopAllAction;
 
+
     // 読み取り専用
     public float shakeMagnitude => ShakeMagnitude;
+    public float delayRigidityTime => DelayRigidityTime;
     public bool isStopAllAction => IsStopAllAction;
 }

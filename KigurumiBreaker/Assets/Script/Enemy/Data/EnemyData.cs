@@ -27,6 +27,8 @@ public class EnemyData : ScriptableObject
     [SerializeField] private float RotateSpeed;
     [Header("攻撃の当たり判定プレハブ")]
     [SerializeField] private GameObject AttackPrefab;
+    [Header("バーのY座標(ボスは無し)")]
+    [SerializeField] private float BarYPosition;
 
     // 読み取り専用
     public float maxHp => MaxHp;
@@ -40,5 +42,6 @@ public class EnemyData : ScriptableObject
     public float chaseToAttack => ChaseToAttack;
     public float rotateSpeed => RotateSpeed;
     public GameObject attackPrefab => AttackPrefab;
+    public float barYPosition => BarYPosition;
 
 }

@@ -18,6 +18,7 @@ public class EnemyBarManager : MonoBehaviour
         _enemyBars.Add(hpBar);
     }
 
+    // “G‚ÌHPƒo[‚ğíœ(ˆê‰)
     public void RemoveHpBar(EnemyBar enemybar)
     {
         _enemyBars.Remove(enemybar);
