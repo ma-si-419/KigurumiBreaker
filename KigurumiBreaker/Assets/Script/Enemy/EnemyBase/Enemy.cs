@@ -27,7 +27,13 @@ public class Enemy : EnemyBase
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
 
-    protected bool 
+    protected float _dTime;
+
+    // 敵がビックリマークを生成したかどうかのフラグ
+    private bool _isDetectionMark;
+
+    // EnemyUiManagerの参照
+    protected EnemyBarManager _enemyUiManager;
 
     // アーマー用の処理のList変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
@@ -39,13 +45,13 @@ public class Enemy : EnemyBase
         base.Start();
 
         // 敵のバーUiの管理クラスを取得
-        var manager = FindObjectOfType<EnemyBarManager>();
-        manager.CreateEnemyBar(this);
+        _enemyUiManager = FindObjectOfType<EnemyBarManager>();
+        _enemyUiManager.CreateEnemyBar(this);
 
         // デバッグ用のフラグを取得
-        _isDebugIdleFlag = _enemyConstantData.isStopAllAction;
+        _isDebugIdleFlag = _enemyCommonData.isStopAllAction;
 
-        if(_isDebugIdleFlag)
+        if (_isDebugIdleFlag)
         {
             //待機状態に設定
             ChangeState(new DebugIdleState(this));
@@ -65,7 +71,7 @@ public class Enemy : EnemyBase
         DebugLine();
 
         // デバッグ用のフラグを取得
-        _isDebugIdleFlag = _enemyConstantData.isStopAllAction;
+        _isDebugIdleFlag = _enemyCommonData.isStopAllAction;
 
         // 敵のY座標だけ固定
         Vector3 pos = transform.position;
@@ -91,7 +97,7 @@ public class Enemy : EnemyBase
         }
 
         // ヒットストップ処理
-        float shakeMagnitude = _enemyConstantData.shakeMagnitude;
+        float shakeMagnitude = _enemyCommonData.shakeMagnitude;
 
         if (_isStop)
         {
@@ -155,10 +161,12 @@ public class Enemy : EnemyBase
         //プレイヤーが検知範囲内にいるかチェック
         if (diff.sqrMagnitude < _detectRangeSqr || _isSearched)
         {
+
             //プレイヤー発見したら一度だけ呼ばれる
             if (!_isSearched)
             {
-                //敵の頭上にビックリマークを出す
+                // 敵の検知マークを生成
+                OnPlayerDetected();
             }
 
             //一度でも攻撃範囲内に入ったらフラグを立て続ける
@@ -399,5 +407,20 @@ public class Enemy : EnemyBase
         //敵の攻撃範囲を表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
     }
+
+    public bool GetIsSearched()
+    {
+        return _isSearched;
+    }
+
+    private void OnPlayerDetected()
+    {
+        if (_isDetectionMark) return;   // すでにビックリマークが表示されている場合は処理を行わない
+
+        // 敵の検知マークを生成
+        _enemyUiManager.CreateEnemyDetectionMark(this);
+        _isDetectionMark = true;
+    }
+
 }
 

@@ -12,7 +12,7 @@ public class EnemyBase : MonoBehaviour
 
     // 敵の定数データ
     [Header("敵の定数データ")]
-    [SerializeField] protected EnemyConstantData _enemyConstantData;
+    [SerializeField] protected EnemyCommonData _enemyCommonData;
 
     // 攻撃オブジェクトのプレハブ
     protected GameObject _attackObjectPrefab;
@@ -87,7 +87,7 @@ public class EnemyBase : MonoBehaviour
     public Animator animator => _animator;
     // 敵のステータスデータのゲッター
     public EnemyData enemyData => _enemyData;
-    public EnemyConstantData enemyConstantData => _enemyConstantData;
+    public EnemyCommonData enemyConstantData => _enemyCommonData;
     public BattleManager battleManager => _battleManager;
 
     protected virtual void Start()

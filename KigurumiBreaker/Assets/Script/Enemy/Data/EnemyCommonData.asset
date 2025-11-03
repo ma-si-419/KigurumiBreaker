@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43a2d474b14a27f41af6e245006ee8b2, type: 3}
-  m_Name: EnemyConstantData
+  m_Name: EnemyCommonData
   m_EditorClassIdentifier: 
   ShakeMagnitude: 0.05
+  DelayRigidityTime: 0.5
+  LerpSpeed: 1.5
+  DetectionMarkPrefab: {fileID: 9193901216121968426, guid: 6807b61d128ae2b4891841c9703a3e70, type: 3}
   IsStopAllAction: 0
