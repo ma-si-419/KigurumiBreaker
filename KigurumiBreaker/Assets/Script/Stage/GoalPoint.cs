@@ -16,7 +16,7 @@ public class GoalPoint : MonoBehaviour
         if (other.CompareTag("Player") && _stageSpawner != null)
         {
             _stageSpawner.NextStage();
-            waveSpawner.OnGoalReached(goalIndex);
+            //waveSpawner.OnGoalReached(goalIndex);
         }
     }
 }
