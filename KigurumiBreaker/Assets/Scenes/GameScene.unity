@@ -972,6 +972,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBarManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2004009361726001570, guid: 51b1be81b630f4747adb168ea2b3e0aa, type: 3}
+      propertyPath: _bossEnemyBarPrefab
+      value: 
+      objectReference: {fileID: 4137904434316243573, guid: 94d1fa1ee0bc38a42b0311fb89782e8b, type: 3}
     - target: {fileID: 2849063596068569887, guid: 51b1be81b630f4747adb168ea2b3e0aa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1794,6 +1798,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1402647279}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: skillSelectManagerPrefab
       value: 
       objectReference: {fileID: 1796073483}
@@ -1808,6 +1816,10 @@ PrefabInstance:
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[3]._index
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[4]._index
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[0]._stageKind
@@ -1826,13 +1838,21 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[4]._stageKind
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[4].stagePrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: stageSets.Array.data[0].stagePrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 8457745352734132792, guid: bb8763f8366e5e14bbb33203c3443610, type: 3}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[0].stagePrefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 472436984685136396, guid: 74bad9633f045f740a20578a365dc9df, type: 3}
+      objectReference: {fileID: 9008062010747989271, guid: 2433e6540df734f41876620c46904b92, type: 3}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[1].stagePrefabs.Array.data[0]
       value: 
@@ -1869,6 +1889,10 @@ PrefabInstance:
       propertyPath: _stageSets.Array.data[3].stagePrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 6031836147938086388, guid: 9441de5290295d240ad43db40c4bb71a, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[4].stagePrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 9008062010747989271, guid: 2433e6540df734f41876620c46904b92, type: 3}
     - target: {fileID: 5423860653554385116, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: m_Name
       value: StageManager
