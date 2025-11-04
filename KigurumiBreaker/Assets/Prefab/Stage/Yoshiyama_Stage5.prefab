@@ -21932,13 +21932,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _areaCenter: {fileID: 7866681528208393215}
   _areaSize: {x: 35, y: 0, z: 45}
-  _enemySetData: {fileID: 0}
-  _waveData: {fileID: 0}
+  _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
+  _waveData: {fileID: 11400000, guid: 98c7366d84436d34d91ab9a709a06162, type: 2}
   _spawnInterval: 0.5
-  _goalPositions: []
-  _stageProbabilities: []
+  _goalPositions:
+  - {fileID: 2479114809626902004}
+  - {fileID: 5139388078054390387}
+  _stageProbabilities:
+  - probability: 0
+  - probability: 0
+  - probability: 0
   _nextSkillElement: 0
-  _wallEffects: []
+  _wallEffects:
+  - {fileID: 2491365523365436453}
+  - {fileID: 8917095700978271174}
 --- !u!114 &5754542287923505950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39298,6 +39305,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
+--- !u!1 &5139388078054390387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8995161013194592139, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
+  m_PrefabInstance: {fileID: 4289675837431035384}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6145399438316584169 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7984641659547257105, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
@@ -39442,6 +39454,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
+--- !u!1 &2479114809626902004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8995161013194592139, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
+  m_PrefabInstance: {fileID: 6823708253047796351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3494102578525453166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7984641659547257105, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
