@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
 using JetBrains.Annotations;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class StageSet
@@ -156,11 +157,16 @@ public class StageSpawner : MonoBehaviour
     public void NextStage()
     {
         int nextIndex = _currentStageIndex + 1;
+
+        // 配列の範囲外なら → シーン遷移
         if (nextIndex >= _stageSets.Length)
         {
+            Debug.Log("すべてのステージが終了しました。リザルトシーンへ遷移します。");
+            SceneManager.LoadScene("ResultScene"); // 
             return;
         }
 
+        // まだステージが残っているなら次を生成
         SpawnStage(nextIndex);
     }
 
