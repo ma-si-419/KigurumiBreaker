@@ -23,14 +23,6 @@ public class MiddleBoss : BossEnemy
     public override void MeleeAttack()
     {
 
-        _stateTimer += Time.deltaTime;
-        //一旦
-        if (_stateTimer >= 1)
-        {
-            _stateTimer = 0.0f;
-            ChangeState(new BossIdleState(this));
-        }
-
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("MeleeAttack") && stateInfo.normalizedTime >= 0.6f)
@@ -87,9 +79,10 @@ public class MiddleBoss : BossEnemy
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.8f)
+        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.6f)
         {
             StopMovement();
+            agent.enabled = true;
             _isCreateAttack = false;
             ChangeState(new BossIdleState(this));
         }
@@ -124,9 +117,7 @@ public class MiddleBoss : BossEnemy
         GameObject attackObject = Instantiate(meleeAttackPrefab);
         //攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
-        _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-
-
+        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 
     private void CreateAttack()
