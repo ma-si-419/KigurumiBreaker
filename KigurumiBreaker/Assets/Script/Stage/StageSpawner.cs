@@ -93,23 +93,33 @@ public class StageSpawner : MonoBehaviour
     {
         if (index < 0 || index >= _stageSets.Length) return;
 
-        // 前ステージを破棄
+        // === 前ステージの削除 ===
         if (_currentStageInstance != null)
         {
+            // 旧ステージの NavMeshSurface を完全クリア
+            var oldSurfaces = _currentStageInstance.GetComponentsInChildren<NavMeshSurface>();
+            foreach (var s in oldSurfaces)
+            {
+                s.RemoveData();
+            }
+
             Destroy(_currentStageInstance);
         }
 
+        // === 新ステージ生成 ===
         StageSet stageSet = _stageSets[index];
-
-        // ランダムでPrefab選択
         int prefabIndex = Random.Range(0, stageSet.stagePrefabs.Length);
         _currentStageInstance = Instantiate(stageSet.stagePrefabs[prefabIndex]);
 
-        // NavMesh再生成
-        var navMeshSurface = _currentStageInstance.GetComponent<NavMeshSurface>();
-        if (navMeshSurface != null)
+        // === NavMesh 再生成 ===
+        var newSurfaces = _currentStageInstance.GetComponentsInChildren<NavMeshSurface>();
+        foreach (var surface in newSurfaces)
         {
-            navMeshSurface.BuildNavMesh();
+            // 念のため古いデータを削除
+            surface.RemoveData();
+
+            // Bake
+            surface.BuildNavMesh();
         }
 
         // Player初期位置設定
