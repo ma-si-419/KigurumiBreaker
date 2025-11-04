@@ -9,10 +9,16 @@ public class EnemyBarManager : MonoBehaviour
     // 敵のビックリマークのプレハブ
     [SerializeField] private GameObject _detectionMarkPrefab;
 
+    // ボスのHPバーのプレハブ
+    [SerializeField] private GameObject _bossEnemyBarPrefab;
+
     // 敵のHPバーのリスト
     private readonly List<EnemyBar> _enemyBars = new();
     // 敵のビックリマークのリスト
     private readonly List<DetectionMark> _detectionMarks = new();
+
+    // ボスのHPバーのリスト
+    private readonly List<BossEnemyBar> _bossEnemyBars = new();
 
     public void CreateEnemyBar(Enemy enemy)
     {
@@ -21,13 +27,6 @@ public class EnemyBarManager : MonoBehaviour
         var hpBar = barObject.GetComponent<EnemyBar>();
         hpBar.SetTarget(enemy);
         _enemyBars.Add(hpBar);
-    }
-
-    // 敵のHPバーを削除(一応)
-    public void RemoveHpBar(EnemyBar enemybar)
-    {
-        _enemyBars.Remove(enemybar);
-        Destroy(enemybar.gameObject);
     }
 
     // ビックリマークの生成
@@ -40,10 +39,12 @@ public class EnemyBarManager : MonoBehaviour
         _detectionMarks.Add(detectionMark);
     }
 
-    // 敵のビックリマークを削除(一応)
-    public void RemoveEnemyDetectionMark(DetectionMark detection)
+    public void CreateBossEnemyBar(BossEnemy bossenemy)
     {
-        _detectionMarks.Remove(detection);
-        Destroy(detection.gameObject);
+        //Canvasの子オブジェクトとしてボスのHPバーを生成
+        var barObject = Instantiate(_bossEnemyBarPrefab, transform);
+        var bossHpBar = barObject.GetComponent<BossEnemyBar>();
+        bossHpBar.SetTarget(bossenemy);
+        _bossEnemyBars.Add(bossHpBar);
     }
 }

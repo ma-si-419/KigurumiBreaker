@@ -45,6 +45,10 @@ public class BossEnemy : EnemyBase
         // 親クラスのStart()を呼び出す
         base.Start();
 
+        // ボス専用のUIバーを作成
+        _enemyUiManager.CreateBossEnemyBar(this);
+
+        // 攻撃範囲の二乗を計算して保存
         _meleeAttackRangeSqr = _meleeAttackRange * _meleeAttackRange;
         _specialAttackRangeSqr = _specialAttackRange * _specialAttackRange;
 

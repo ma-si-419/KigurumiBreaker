@@ -42,9 +42,9 @@ public class EnemyBar : MonoBehaviour
         // バーの高さをエネミーごとに調整
         _offset.y = _enemy.enemyData.barYPosition;
         // 硬直時間を設定
-        _delayRigidityTime = _enemy.enemyConstantData.delayRigidityTime;
+        _delayRigidityTime = _enemy.enemyCommonData.delayRigidityTime;
         // 補間速度を設定
-        _lerpSpeed = _enemy.enemyConstantData.lerpSpeed;
+        _lerpSpeed = _enemy.enemyCommonData.lerpSpeed;
 
         // アーマー装備していない場合の処理
         if (!_enemy.enemyData.isArmor)
@@ -64,7 +64,7 @@ public class EnemyBar : MonoBehaviour
 
     private void Update()
     {
-        // 敵が存在しない場合は自身を破棄
+        // 敵が存在しない場合はUIを破棄
         if (_enemy == null)
         {
             Destroy(gameObject);

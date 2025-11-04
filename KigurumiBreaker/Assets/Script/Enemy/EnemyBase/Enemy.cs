@@ -32,8 +32,7 @@ public class Enemy : EnemyBase
     // 敵がビックリマークを生成したかどうかのフラグ
     private bool _isDetectionMark;
 
-    // EnemyUiManagerの参照
-    protected EnemyBarManager _enemyUiManager;
+
 
     // アーマー用の処理のList変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
@@ -45,7 +44,6 @@ public class Enemy : EnemyBase
         base.Start();
 
         // 敵のバーUiの管理クラスを取得
-        _enemyUiManager = FindObjectOfType<EnemyBarManager>();
         _enemyUiManager.CreateEnemyBar(this);
 
         // デバッグ用のフラグを取得
