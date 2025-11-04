@@ -26,7 +26,7 @@ public class DebugIdleState : IState
 
         _enemy.StopMovement(); //ˆÚ“®’âŽ~
 
-        if (!_enemy.enemyConstantData.isStopAllAction)
+        if (!_enemy.enemyCommonData.isStopAllAction)
         {
             _enemy.ChangeState(new IdleState(_enemy));
         }

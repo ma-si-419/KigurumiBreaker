@@ -14,6 +14,9 @@ public class EnemyBase : MonoBehaviour
     [Header("敵の定数データ")]
     [SerializeField] protected EnemyCommonData _enemyCommonData;
 
+    // EnemyUiManagerの参照
+    protected EnemyBarManager _enemyUiManager;
+
     // 攻撃オブジェクトのプレハブ
     protected GameObject _attackObjectPrefab;
 
@@ -87,7 +90,7 @@ public class EnemyBase : MonoBehaviour
     public Animator animator => _animator;
     // 敵のステータスデータのゲッター
     public EnemyData enemyData => _enemyData;
-    public EnemyCommonData enemyConstantData => _enemyCommonData;
+    public EnemyCommonData enemyCommonData => _enemyCommonData;
     public BattleManager battleManager => _battleManager;
 
     protected virtual void Start()
@@ -108,6 +111,9 @@ public class EnemyBase : MonoBehaviour
         _animator = GetComponent<Animator>();
         // Rigidbodyコンポーネントを取得
         _rigidbody = GetComponent<Rigidbody>();
+
+        // EnemyUiManagerの参照を取得
+        _enemyUiManager = FindObjectOfType<EnemyBarManager>();
 
         //ステータスからNavMeshAgentの速度を設定
         if (_agent != null)
