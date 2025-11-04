@@ -12,7 +12,8 @@ public enum EnemyKind
     ArmorPunch,
     ArmorBomb,
     ArmorTackle,
-    ArmorLong
+    ArmorLong,
+    Boss1,
 }
 
 [System.Serializable]
