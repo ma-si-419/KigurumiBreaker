@@ -27,6 +27,8 @@ public class BombEnemy : Enemy
         if (_isStateChange)
         {
             _isStateChange = false;
+            _currentHp = 0; // Ž©•ª‚Ì‘Ì—Í‚ð0‚É‚·‚é
+            _currentTrunk = 0; // Ž©•ª‚Ì‘Ï‹v—Í‚ð0‚É‚·‚é
             ChangeState(new DeadState(this));
         }
 

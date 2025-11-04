@@ -34,14 +34,21 @@ public class Enemy : EnemyBase
 
 
 
-    // アーマー用の処理のList変数
+    // アーマー用のSkinnedMeshRenderer変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
     [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
+    // 攻撃サイン用のSkinnedMeshRenderer変数
+    [Header("全キャラ共通の攻撃サイン用のメッシュ")]
+    [SerializeField] protected SkinnedMeshRenderer _attackSignSkinedMeshRenderer;
+    [Range(0.0f, 1.0f)] protected float _alpha = 0.0f;
+
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
+        //var mat =_attackSignSkinedMeshRenderer.material;
 
         // 敵のバーUiの管理クラスを取得
         _enemyUiManager.CreateEnemyBar(this);
