@@ -6,15 +6,13 @@ public class MiddleBoss : BossEnemy
 {
     //攻撃オブジェクトを一度だけ生成するフラグ
     private bool _isCreateAttack = false;
-    //攻撃クールダウンタイマー
-    //private float _cooldownTimer = 0.0f;
 
-    private float CHARGE_SPEED = 0.4f; // 突進速度
-    private float CHARGE_TIME = 0.1f; // 突進時間
+    private float CHARGE_SPEED = 0.6f; // 突進速度
+    private float CHARGE_TIME = 0.2f; // 突進時間
 
-    private bool _isCharge = false; // 突進中かどうかのフラグ
+    private bool _isCharge = false;    // 突進中かどうかのフラグ
     private float _chargeTimer = 0.0f; // タイマー
-    private GameObject _attackObject; // 攻撃オブジェクト
+    private GameObject _attackObject;  // 攻撃オブジェクト
 
     /* 定数 */
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
@@ -22,7 +20,6 @@ public class MiddleBoss : BossEnemy
 
     public override void MeleeAttack()
     {
-
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("MeleeAttack") && stateInfo.normalizedTime >= 0.6f)
@@ -40,7 +37,6 @@ public class MiddleBoss : BossEnemy
         {
             //攻撃フラグをリセット
             _isCreateAttack = false;
-            isAttack = false;
             //攻撃アニメーションが終了したらIdleStateに遷移
             ChangeState(new BossIdleState(this));
         }
@@ -82,7 +78,7 @@ public class MiddleBoss : BossEnemy
         if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.6f)
         {
             StopMovement();
-            agent.enabled = true;
+            //agent.enabled = true;
             _isCreateAttack = false;
             ChangeState(new BossIdleState(this));
         }
@@ -104,10 +100,9 @@ public class MiddleBoss : BossEnemy
             yield return new WaitForFixedUpdate();
         }
 
-        _rigidbody.velocity = Vector3.zero; // 終了時に停止を保証
+        //_rigidbody.velocity = Vector3.zero; // 終了時に停止を保証
         _isCharge = false;
         _chargeTimer = 0.0f;
-        isAttack = false;
     }
 
     // 攻撃オブジェクトを生成する関数

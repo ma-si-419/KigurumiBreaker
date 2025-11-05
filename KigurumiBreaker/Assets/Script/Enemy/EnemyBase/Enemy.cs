@@ -284,14 +284,12 @@ public class Enemy : EnemyBase
             {
                 // ダメージを受ける(プレイヤーアタックのダメージを取得する)
                 _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
-                //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
             }
             // アーマーの場合は耐久力を減らす
             else if (_isArmor)
             {
                 // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
                 _currentTrunk -= other.GetComponent<PlayerAttack>().GetDamage();
-                //_enemyBarUi.SetHp(_currentTrunk, _enemyData.maxTrunk);
             }
 
             //ヒットストップ処理
@@ -307,6 +305,7 @@ public class Enemy : EnemyBase
 
             // ダメージエフェクトを生成する
             //Instantiate(_damageEffect, transform.position, Quaternion.identity);
+
             if (_currentTrunk <= 0)
             {
                 _currentTrunk = 0;
@@ -339,7 +338,6 @@ public class Enemy : EnemyBase
             {
                 // ダメージを受ける(プレイヤーアタックのダメージを取得する)
                 _currentHp -= other.GetComponent<PlayerRangedAttack>().GetDamage();
-                //_enemyBarUi.SetHp(_currentHp, _enemyData.maxHp);
 
             }
             // アーマーの場合は耐久力を減らす
@@ -347,7 +345,6 @@ public class Enemy : EnemyBase
             {
                 // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
                 _currentTrunk -= other.GetComponent<PlayerRangedAttack>().GetDamage();
-                //_enemyBarUi.SetHp(_currentTrunk, _enemyData.maxTrunk);
             }
 
             //ヒットストップ処理

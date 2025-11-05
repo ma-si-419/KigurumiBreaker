@@ -13,9 +13,6 @@ public class BossEnemy : EnemyBase
     // 攻撃するまでのタイマー
     protected float _attackTimer = 0.0f;
 
-    // プレイヤーが攻撃範囲に入ったら攻撃状態に遷移させるためのフラグ
-    public bool isAttack = false;
-
     // フェーズチェンジしたかどうかのフラグ
     protected bool _isPhaseChanged = false;
 
@@ -59,7 +56,7 @@ public class BossEnemy : EnemyBase
     protected override void Update()
     {
 
-        float a = 0.05f;
+        float a = _enemyCommonData.shakeMagnitude;
 
         if (_isStop)
         {
@@ -73,9 +70,14 @@ public class BossEnemy : EnemyBase
         }
         else
         {
+            // ヒットストップ終了後の位置補正
             if (_shakeVec.sqrMagnitude >= 0.001f)
             {
-                this.transform.position = _stopPos;
+                //ダメージを食らっていた敵だけ位置補正を行う
+                if(!_isDamage)
+                {
+                    this.transform.position = _stopPos;
+                }
             }
 
             _shakeVec = Vector3.zero;
@@ -83,10 +85,17 @@ public class BossEnemy : EnemyBase
 
         if (_isStop) return;
 
+        if (_isDead)
+        {
+            // すでに死亡状態なら変更しない
+            if (!(_currentState is BossDeadState))
+            {
+                ChangeState(new BossDeadState(this));
+            }
+        }
+
         // 親クラスのUpdate()を呼び出す
         base.Update();
-
-
 
         DebugLine();
     }
@@ -111,11 +120,8 @@ public class BossEnemy : EnemyBase
     }
 
     // モデルのリグを取得して攻撃判定を特定のボーンにアタッチする処理
-
-
     public void AttackReset()
     {
-        isAttack = false;
         _attackTimer = 0.0f;
     }
 
@@ -135,9 +141,8 @@ public class BossEnemy : EnemyBase
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.SetHitStop(playerAttack.GetHitStopTime());
 
-
-            // 耐久力を減らす(プレイヤーアタックの耐久力ダメージを取得する)
-            //_currentTrunk -= other.GetComponent<PlayerAttack>().GetTrunkDamage();
+            //ダメージフラグを立てる
+            _isDamage = true;
 
             // ダメージエフェクトを生成する
             //Instantiate(_damageEffect, transform.position, Quaternion.identity);
@@ -146,11 +151,7 @@ public class BossEnemy : EnemyBase
             if (_currentHp <= 0)
             {
                 _currentHp = 0;
-                // すでに死亡状態なら変更しない
-                if (!(_currentState is BossDeadState))
-                {
-                    ChangeState(new BossDeadState(this));
-                }
+                _isDead = true;
             }
 
             //攻撃はいったら攻撃判定を速攻消す
@@ -160,7 +161,6 @@ public class BossEnemy : EnemyBase
             if (_currentState is BossAttackState) return;
             if (_currentState is BossMeleeAttackState) return;
 
-            //OnHit();
         }
 
         if (other.gameObject.CompareTag("PlayerRangedAttack"))
@@ -176,15 +176,14 @@ public class BossEnemy : EnemyBase
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.SetHitStop(playerAttack.GetHitStopTime());
 
+            //ダメージフラグを立てる
+            _isDamage = true;
+
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
             {
                 _currentHp = 0;
-                // すでに死亡状態なら変更しない
-                if (!(_currentState is BossDeadState))
-                {
-                    ChangeState(new BossDeadState(this));
-                }
+                _isDead = true;
             }
 
             //攻撃はいったら攻撃判定を速攻消す
@@ -194,7 +193,6 @@ public class BossEnemy : EnemyBase
             if (_currentState is BossAttackState) return;
             if (_currentState is BossMeleeAttackState) return;
 
-            //OnHit();
         }
 
     }

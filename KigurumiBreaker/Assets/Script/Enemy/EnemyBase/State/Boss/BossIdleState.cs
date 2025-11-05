@@ -9,7 +9,7 @@ public class BossIdleState : IState
 
     private float _stateTimer = 0.0f; //状態遷移用タイマー
 
-
+    private float _idleToAttackDelay = 1.5f; //待機から攻撃への遅延時間
 
     public BossIdleState(BossEnemy boss)
     {
@@ -33,43 +33,39 @@ public class BossIdleState : IState
         //プレイヤーの位置を目的地に設定
         _boss.agent.SetDestination(_boss.player.transform.position);
 
-        Debug.Log("待機");
-
         // 移動を停止
         _boss.StopMovement();
 
-        Vector3 diff = _boss.player.transform.position - _boss.transform.position; //プレイヤーとの位置差を計算
+        //プレイヤーとの位置差を計算
+        Vector3 diff = _boss.player.transform.position - _boss.transform.position;
 
         //タイマーで追跡状態へ移行
         _stateTimer += Time.deltaTime;
 
-        //検知範囲内に入っていなかったら追跡状態へ
-        if(diff.sqrMagnitude < _boss.enemyData.detectionRange || _stateTimer > _boss.enemyData.idleToChaseTime)
-        {
-            _boss.isAttack = false;
-            _stateTimer = 0.0f;
-            _boss.ChangeState(new BossChaseState(_boss));
-        }
 
-        //攻撃フラグ
-        if(_boss.isAttack)
+        /* 攻撃に遷移する処理 */
+        if (_stateTimer > _idleToAttackDelay)
         {
-            _stateTimer = 0.0f;
-
-            //
             if (diff.sqrMagnitude <= _boss.meleeAttackRangeSqr)
             {
                 //近接攻撃へ
+                _stateTimer = 0.0f;
                 _boss.ChangeState(new BossMeleeAttackState(_boss));
             }
             else if (diff.sqrMagnitude <= _boss.specialAttackRangeSqr)
             {
                 //特殊攻撃へ
+                _stateTimer = 0.0f;
                 _boss.ChangeState(new BossAttackState(_boss));
             }
-
         }
 
+        /* 追跡に遷移する処理 */
+        if (diff.sqrMagnitude < _boss.enemyData.detectionRange || _stateTimer > _boss.enemyData.idleToChaseTime)
+        {
+            _stateTimer = 0.0f;
+            _boss.ChangeState(new BossChaseState(_boss));
+        }
     }
 
     public void End()
