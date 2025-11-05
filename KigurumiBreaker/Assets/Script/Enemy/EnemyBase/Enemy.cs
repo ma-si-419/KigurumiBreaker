@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.UI;
 
 public class Enemy : EnemyBase
 {
@@ -41,14 +42,17 @@ public class Enemy : EnemyBase
     [Header("全キャラ共通の攻撃サイン用のメッシュ")]
     [SerializeField] protected SkinnedMeshRenderer _attackSignSkinedMeshRenderer;
     [Range(0.0f, 1.0f)] protected float _alpha = 0.0f;
-
+    // アウトライン用のマテリアル変数
+    [Header("アウトライン用のマテリアル")]
+    [SerializeField] protected SkinnedMeshRenderer[] _outlineSkinedMeshRenderer;
 
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
 
-        //var mat =_attackSignSkinedMeshRenderer.material;
+        // アウトラインの色を設定
+        OutLine();
 
         // 敵のバーUiの管理クラスを取得
         _enemyUiManager.CreateEnemyBar(this);
@@ -74,6 +78,9 @@ public class Enemy : EnemyBase
     {
         // デバッグ用に線を引く
         DebugLine();
+
+        // アウトラインの色を設定
+        OutLine();
 
         // デバッグ用のフラグを取得
         _isDebugIdleFlag = _enemyCommonData.isStopAllAction;
@@ -422,6 +429,22 @@ public class Enemy : EnemyBase
         // 敵の検知マークを生成
         _enemyUiManager.CreateEnemyDetectionMark(this);
         _isDetectionMark = true;
+    }
+
+    private void OutLine()
+    {
+        // アウトラインの色を設定
+        for (int i = 0; i < _outlineSkinedMeshRenderer.Length; i++)
+        {
+            if (_isArmor)
+            {
+                _outlineSkinedMeshRenderer[i].material.color = Color.yellow;
+            }
+            else
+            {
+                _outlineSkinedMeshRenderer[i].material.color = Color.black;
+            }
+        }
     }
 
 }
