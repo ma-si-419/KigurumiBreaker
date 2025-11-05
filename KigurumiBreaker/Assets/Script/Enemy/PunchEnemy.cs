@@ -43,6 +43,7 @@ public class PunchEnemy : Enemy
     public override void Attack()
     {
 
+
         // 攻撃オブジェクトの位置を更新
         if (_attackObject != null)
         {
@@ -63,30 +64,43 @@ public class PunchEnemy : Enemy
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         base.Attack();
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.6f)
+
+        // スキンメッシュレンダラーを表示
+        //_attackSignSkinedMeshRenderer.enabled = true;
+
+        AttackSign(stateInfo.normalizedTime, 0.6f);
+
+        if (stateInfo.IsName("Attack"))
         {
-            //攻撃判定を一つ生成させる
-            if (!_isCreateAttack)
+            AttackSign(stateInfo.normalizedTime, 0.6f);
+
+            // 攻撃判定生成タイミング
+            if (stateInfo.normalizedTime >= 0.6f)
             {
-                // スキンメッシュレンダラーを非表示にする
-                //_attackSignSkinedMeshRenderer.enabled = false;
+                //攻撃判定を一つ生成させる
+                if (!_isCreateAttack)
+                {
+                    // スキンメッシュレンダラーを非表示にする
+                    //_attackSignSkinedMeshRenderer.enabled = false;
 
-                _isCreateAttack = true;
-                CreateAttack();
+                    _isCreateAttack = true;
+                    CreateAttack();
+                }
             }
-        }
 
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.9f)
-        {
-            //攻撃フラグをリセット
-            _isCreateAttack = false;
-            _isDash = false;
-            _isStateChange = true;
+            // 攻撃アニメーション終了後の処理
+            if (stateInfo.normalizedTime >= 0.9f)
+            {
+                //攻撃フラグをリセット
+                _isCreateAttack = false;
+                _isDash = false;
+                _isStateChange = true;
+            }
+
         }
 
         if (_isStateChange)
         {
-
             _isStateChange = false;
             ChangeState(new IdleState(this));
         }
