@@ -44,7 +44,7 @@ public class BossChaseState : IState
         //タイマーを進める(スピード感を出すため一旦除外)
         _stateTimer += Time.deltaTime;
 
-        //if (_stateTimer > _boss.enemyData.chaseToAttack)
+        if (_stateTimer > _boss.enemyData.chaseToAttack)
         {
             //近い距離なら近接攻撃へ
             if (diff.sqrMagnitude < _boss.meleeAttackRangeSqr)

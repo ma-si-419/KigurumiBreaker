@@ -16,7 +16,7 @@ public class DetectionMark : MonoBehaviour
         // 敵の参照
         _enemy = enemy;
         // ビックリマークの表示オフセットを設定
-        _detectionMarkOffset.y = _enemy.enemyData.barYPosition - 1.0f;
+        _detectionMarkOffset.y = _enemy.enemyData.barYPosition;
     }
 
     private void Update()
