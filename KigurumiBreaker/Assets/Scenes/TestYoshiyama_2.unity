@@ -841,6 +841,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 174823833577665198, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 174823833577665198, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 805fd91adbe6d2a42b90c023248fb015, type: 2}
     - target: {fileID: 709167268082460578, guid: 763d464be1ec70941bf2b9819d8506bf, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
@@ -1852,7 +1860,7 @@ PrefabInstance:
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[0].stagePrefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 9008062010747989271, guid: 2433e6540df734f41876620c46904b92, type: 3}
+      objectReference: {fileID: 6117705549778939024, guid: 8f5b8801c4f42324dbc65ade75a77165, type: 3}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[1].stagePrefabs.Array.data[0]
       value: 
