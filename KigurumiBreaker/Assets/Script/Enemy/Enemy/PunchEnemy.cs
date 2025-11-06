@@ -17,40 +17,8 @@ public class PunchEnemy : Enemy
     /* 定数 */
     private const float ATTACK_DISTANCE = 1.0f; // 攻撃判定の距離
 
-    // 攻撃位置調整用変数
-    private Vector3 _attackPos = new Vector3(0, 0, 1);
-
-    protected override void Start()
-    {
-        // 初期化処理
-        base.Start();
-        StopMovement();
-
-        //_attackSignSkinedMeshRenderer.enabled = true;
-        
-        //_mat = _attackSignSkinedMeshRenderer.material;
-
-    }
-
-    public override void Idle()
-    {
-        base.Idle();
-
-
-        // スキンメッシュレンダラーのマテリアルを取得
-        //_mat.SetFloat("_Alpha", 0.0f); // 不透明に設定
-    }
-
     public override void Attack()
     {
-
-        // 攻撃オブジェクトの位置を更新
-        if (_attackObject != null)
-        {
-            // 破棄されていない場合のみ位置を更新
-            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
-        }
-
         // 前進動作
         if (!_isDash)
         {
@@ -62,13 +30,8 @@ public class PunchEnemy : Enemy
         }
 
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
-        base.Attack();
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // スキンメッシュレンダラーを表示
-        //_attackSignSkinedMeshRenderer.enabled = true;
-
-        AttackSign(stateInfo.normalizedTime, 0.6f);
 
         if (stateInfo.IsName("Attack"))
         {

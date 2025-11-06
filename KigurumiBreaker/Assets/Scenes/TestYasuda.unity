@@ -824,7 +824,7 @@ Transform:
   m_GameObject: {fileID: 64544395}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 1.4546525, z: -1.4546525}
+  m_LocalPosition: {x: -0, y: 0.63, z: -1.4546525}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15906,7 +15906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d8c2d5c9707c3254ea8d22d006cec887, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.01
+      value: -0.43
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d8c2d5c9707c3254ea8d22d006cec887, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15974,7 +15974,7 @@ PrefabInstance:
       addedObject: {fileID: 1572461347}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: d8c2d5c9707c3254ea8d22d006cec887, type: 3}
       insertIndex: 3
-      addedObject: {fileID: 1572461346}
+      addedObject: {fileID: 1572461350}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: d8c2d5c9707c3254ea8d22d006cec887, type: 3}
       insertIndex: 4
       addedObject: {fileID: 1572461345}
@@ -16003,28 +16003,6 @@ MonoBehaviour:
   - {fileID: 361477324}
   _attackSignSkinedMeshRenderer:
   - {fileID: 64544397}
---- !u!195 &1572461346
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572461344}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 0
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!136 &1572461347
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16075,6 +16053,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
+--- !u!195 &1572461350
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572461344}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 0
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1584851545
 GameObject:
   m_ObjectHideFlags: 0
@@ -22961,6 +22961,10 @@ PrefabInstance:
     - target: {fileID: 621494178838673121, guid: 7c00bb1063de17349988c19c6d7f16ef, type: 3}
       propertyPath: m_Name
       value: EnemyLaserAttackCol
+      objectReference: {fileID: 0}
+    - target: {fileID: 621494178838673121, guid: 7c00bb1063de17349988c19c6d7f16ef, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7877706312628173094, guid: 7c00bb1063de17349988c19c6d7f16ef, type: 3}
       propertyPath: m_LocalPosition.x

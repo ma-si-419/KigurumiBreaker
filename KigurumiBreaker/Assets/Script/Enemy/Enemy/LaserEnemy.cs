@@ -12,8 +12,19 @@ public class LaserEnemy : Enemy
 
         //カプセルを設定している最大距離まで伸ばす
 
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if(stateInfo.IsName("Attack"))
+        {
+            if(!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                EnemyAttackCreate(1.0f, 1.0f, _attackObjectPrefab);
+            }
+        }
+
         //時間が経ったら攻撃終了
-        if (_laserTimer > 3.0f)
+        if (_laserTimer > 5.0f)
         {
             //攻撃状態へ
             _laserTimer = 0.0f;
