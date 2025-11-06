@@ -22,6 +22,7 @@ public class PauseSceneController : MonoBehaviour
         //ポーズ中は操作できないようにする
         if (BaseSceneController.instance.isOption) return;
 
+        // 左スティックの垂直入力を取得
         float vertical = Input.GetAxis("Vertical");
 
         //クールダウン処理

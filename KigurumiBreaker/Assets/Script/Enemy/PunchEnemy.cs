@@ -43,7 +43,6 @@ public class PunchEnemy : Enemy
     public override void Attack()
     {
 
-
         // 攻撃オブジェクトの位置を更新
         if (_attackObject != null)
         {
@@ -72,7 +71,7 @@ public class PunchEnemy : Enemy
 
         if (stateInfo.IsName("Attack"))
         {
-            AttackSign(stateInfo.normalizedTime, 0.6f);
+            AttackSign(stateInfo.normalizedTime, 0.5f);
 
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= 0.6f)

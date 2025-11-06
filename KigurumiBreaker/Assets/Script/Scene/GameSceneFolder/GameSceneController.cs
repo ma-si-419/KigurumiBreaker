@@ -26,11 +26,11 @@ public class GameSceneController : MonoBehaviour
         if(_time > _maxTime)
         {
             //決定(Aボタン)
-            if (Input.GetButtonDown("Submit"))
-            {
-                BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
-                Debug.Log("Aボタンが押されました");
-            }
+            //if (Input.GetButtonDown("Submit"))
+            //{
+            //    BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
+            //    Debug.Log("Aボタンが押されました");
+            //}
         }
 
         if(Input.GetButtonDown("Start"))

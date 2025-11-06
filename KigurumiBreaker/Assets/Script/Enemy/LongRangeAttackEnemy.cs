@@ -92,18 +92,24 @@ public class LongRangeAttackEnemy : Enemy
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.5f)
+        if (stateInfo.IsName("Attack"))
         {
-            //攻撃判定を一つ生成させる
-            if (!_isCreateAttack)
-            {
-                _isCreateAttack = true;
-                Shoot();
-            }
+            // 攻撃サインの表示
+            AttackSign(stateInfo.normalizedTime, 0.4f);
 
-            _isStateChange = true;
-            //攻撃フラグをリセット
-            _isCreateAttack = false;
+            if (stateInfo.normalizedTime >= 0.5f)
+            {
+                //攻撃判定を一つ生成させる
+                if (!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    Shoot();
+                }
+
+                _isStateChange = true;
+                //攻撃フラグをリセット
+                _isCreateAttack = false;
+            }
         }
 
         if (_isStateChange)
