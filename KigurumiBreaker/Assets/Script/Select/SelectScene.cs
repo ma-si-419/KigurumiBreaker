@@ -19,12 +19,16 @@ public class SelectScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        var menu = _menuUI[0].GetComponent<UnityEngine.UI.Image>();
+        menu.color = Color.red;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //オプション中は操作できないようにする
+        if (BaseSceneController.instance.isOption) return;
+
         _joyStickL = Input.GetAxis("Vertical");
         //if ((_joyStickL != 0))
         //{
@@ -32,7 +36,7 @@ public class SelectScene : MonoBehaviour
         //    Debug.Log(_joyStickL);
         //}
 
-        if(Time.time - _lastInputTime > _inputDelay)
+        if (Time.time - _lastInputTime > _inputDelay)
         {
             //上選択
             if (_joyStickL >= 0.5)
@@ -73,12 +77,12 @@ public class SelectScene : MonoBehaviour
     /// </summary>
     private void UpdateSelection()
     {
-        for(int i = 0; i < _menuUI.Count; i++)
+        for (int i = 0; i < _menuUI.Count; i++)
         {
             var menu = _menuUI[i].GetComponent<UnityEngine.UI.Image>();
-            if(menu != null)
+            if (menu != null)
             {
-                menu.color = (i == _index) ? Color.yellow : Color.white;
+                menu.color = (i == _index) ? Color.red : Color.white;
             }
         }
     }
@@ -98,9 +102,12 @@ public class SelectScene : MonoBehaviour
         }
 
         //オプションボタン
-        if(select == _menuUI[1])
+        if (select == _menuUI[1])
         {
             SceneManager.LoadScene("OptionScene");
+
+            //オプション
+            BaseSceneController.instance.ToggleOption();
         }
 
         //終了ボタン
