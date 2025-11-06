@@ -5,11 +5,18 @@ using UnityEngine;
 
 public class EnemyAttackCol : MonoBehaviour
 {
-    enum AttackType //攻撃の種類
+    enum AttackType //攻撃の強さ
     {
         Low,        //弱攻撃
         Middle,     //中攻撃
         High,       //強攻撃
+    }
+
+    enum AttackKind //攻撃の種類
+    {
+        Normal,     //通常の攻撃用
+        Laser,      //レーザー攻撃用
+        Breath,     //ブレス攻撃用
     }
 
     [Header("ショット敵変数")]
@@ -35,9 +42,6 @@ public class EnemyAttackCol : MonoBehaviour
 
     private void Start()
     {
-        // 敵のベースクラスから攻撃力を取得
-        //_damage = _enemyBase.enemyData.attackPower;
-
         // 弾の寿命をフレーム数に変換してセット
         if (CompareTag("EnemyRangedAttack"))
         {

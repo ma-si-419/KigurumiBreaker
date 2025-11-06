@@ -17,7 +17,8 @@ public class PunchEnemy : Enemy
     /* 定数 */
     private const float ATTACK_DISTANCE = 1.0f; // 攻撃判定の距離
 
-    private Material _mat;
+    // 攻撃位置調整用変数
+    private Vector3 _attackPos = new Vector3(0, 0, 1);
 
     protected override void Start()
     {
@@ -79,11 +80,8 @@ public class PunchEnemy : Enemy
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)
                 {
-                    // スキンメッシュレンダラーを非表示にする
-                    //_attackSignSkinedMeshRenderer.enabled = false;
-
                     _isCreateAttack = true;
-                    CreateAttack();
+                    EnemyAttackCreate(1.0f, 1.0f,_attackObjectPrefab);
                 }
             }
 
@@ -124,21 +122,6 @@ public class PunchEnemy : Enemy
         }
 
     }
-
-    // 攻撃オブジェクトを生成する関数
-    private void CreateAttack()
-    {
-        //ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(_attackObjectPrefab);
-
-        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-
-        float yOffset = 1.0f; // Y軸のオフセット値（必要に応じて調整）
-
-        // 攻撃オブジェクトの位置を調整(Y軸を調整したい)
-        attackObject.transform.position = this.transform.position + this.transform.forward * _attackDistance + Vector3.up * yOffset;
-    }
-
 }
 
 
