@@ -86,9 +86,9 @@ public class Enemy : EnemyBase
         _isDebugIdleFlag = _enemyCommonData.isStopAllAction;
 
         // 敵のY座標だけ固定
-        Vector3 pos = transform.position;
-        pos.y = 0.0f;
-        transform.position = pos;
+        //Vector3 pos = transform.position;
+        //pos.y = 0.0f;
+        //transform.position = pos;
 
         // アーマー状態の管理
         if (_isArmor && _currentTrunk <= 0)

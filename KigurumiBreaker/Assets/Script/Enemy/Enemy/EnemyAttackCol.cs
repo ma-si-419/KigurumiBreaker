@@ -12,13 +12,6 @@ public class EnemyAttackCol : MonoBehaviour
         High,       //強攻撃
     }
 
-    enum AttackKind //攻撃の種類
-    {
-        Normal,     //通常の攻撃用
-        Laser,      //レーザー攻撃用
-        Breath,     //ブレス攻撃用
-    }
-
     [Header("ショット敵変数")]
     [SerializeField] private float _shootSpeed;   // 弾の速度
     [SerializeField] private float _shotLifeTime; // 弾の寿命
@@ -40,6 +33,9 @@ public class EnemyAttackCol : MonoBehaviour
 
     private bool _isStop = false;   // ヒットストップ中に動かないようにするフラグ
 
+    // レーザー用の変数
+    private CapsuleCollider _capsuleCol;
+
     private void Start()
     {
         // 弾の寿命をフレーム数に変換してセット
@@ -47,6 +43,10 @@ public class EnemyAttackCol : MonoBehaviour
         {
             _lifeTime = (int)_shotLifeTime;
         }
+
+        // レーザー用のタグを持っている場合はカプセルコライダーを取得しておく
+        _capsuleCol = GetComponent<CapsuleCollider>();
+
     }
 
     private void FixedUpdate()
