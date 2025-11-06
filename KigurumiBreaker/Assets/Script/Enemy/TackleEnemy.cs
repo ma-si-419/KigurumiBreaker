@@ -23,17 +23,31 @@ public class TackleEnemy : Enemy
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         //攻撃開始
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.3f)
+        if (stateInfo.IsName("Attack"))
         {
-            if (!_isCreateAttack)
+            AttackSign(stateInfo.normalizedTime, 0.2f);
+
+            if (stateInfo.normalizedTime >= 0.3f)
             {
-                _isCreateAttack = true;
-                CreateAttack();
+                if (!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    CreateAttack();
+                }
+
+                if (!_isCharge)
+                {
+                    StartCoroutine(DoCharge());
+                }
             }
 
-            if (!_isCharge)
+            //敵のアニメーションが終わったらIdleStateに遷移
+            if (stateInfo.normalizedTime >= 0.6f)
             {
-                StartCoroutine(DoCharge());
+                StopMovement();
+                agent.enabled = true;
+                _isCreateAttack = false;
+                ChangeState(new IdleState(this));
             }
         }
         else
@@ -46,16 +60,6 @@ public class TackleEnemy : Enemy
             // 破棄されていない場合のみ位置を更新
             _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
         }
-
-        //敵のアニメーションが終わったらIdleStateに遷移
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.6f)
-        {
-            StopMovement();
-            agent.enabled = true;
-            _isCreateAttack = false;
-            ChangeState(new IdleState(this));
-        }
-
     }
 
     private IEnumerator DoCharge()
