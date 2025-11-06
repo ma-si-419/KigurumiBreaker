@@ -1,0 +1,116 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class SelectScene : MonoBehaviour
+{
+    //仮の選択オブジェクト
+    [SerializeField] private GameObject _selectObject;    //選択で動くオブジェク
+    [SerializeField] private List<GameObject> _menuUI;    //メニュー項目をリスト化
+    [SerializeField] private float _inputDelay = 0.25f;   //入力受付の遅延
+    private int _index = 0;                               //選択中のインデックス
+    private float _lastInputTime;                         //最後に入力を受け付けた時間
+    private float _joyStickL;                             //Lスティックの入力取得
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        _joyStickL = Input.GetAxis("Vertical");
+        //if ((_joyStickL != 0))
+        //{
+        //    Debug.Log("Lスティック入力確認");
+        //    Debug.Log(_joyStickL);
+        //}
+
+        if(Time.time - _lastInputTime > _inputDelay)
+        {
+            //上選択
+            if (_joyStickL >= 0.5)
+            {
+                MyMoveSelection(-1);
+            }
+            //下選択
+            if (_joyStickL <= -0.5)
+            {
+                MyMoveSelection(1);
+            }
+        }
+
+        //決定
+        if (Input.GetButton("Submit"))
+        {
+            MyOnSeclect(_menuUI[_index]);
+        }
+    }
+
+    private void MyMoveSelection(int direction)
+    {
+        _lastInputTime = Time.time;
+        //インデックス更新
+        _index += direction;
+
+        //インデックスの範囲制限
+        if (_index < 0) _index = _menuUI.Count - 1;
+        else if (_index >= _menuUI.Count) _index = 0;
+
+        //選択オブジェクト位置更新
+        UpdateSelection();
+    }
+
+
+    /// <summary>
+    /// 視覚的な選択更新
+    /// </summary>
+    private void UpdateSelection()
+    {
+        for(int i = 0; i < _menuUI.Count; i++)
+        {
+            var menu = _menuUI[i].GetComponent<UnityEngine.UI.Image>();
+            if(menu != null)
+            {
+                menu.color = (i == _index) ? Color.yellow : Color.white;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 選択決定時の処理
+    /// </summary>
+    /// <param name="select"></param>
+    private void MyOnSeclect(GameObject select)
+    {
+        Debug.Log(select);
+
+        //プレイボタン
+        if (select == _menuUI[0])
+        {
+            SceneManager.LoadScene("GameScene");
+        }
+
+        //オプションボタン
+        if(select == _menuUI[1])
+        {
+            SceneManager.LoadScene("OptionScene");
+        }
+
+        //終了ボタン
+        if (select == _menuUI[2])
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+    Application.Quit();//ゲームプレイ終了
+#endif
+        }
+    }
+}
