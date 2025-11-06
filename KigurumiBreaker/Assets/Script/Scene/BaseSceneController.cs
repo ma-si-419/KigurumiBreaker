@@ -8,6 +8,7 @@ public enum SceneType
 {
     //シーン名と合わせないとダメ
     TitleScene,         //タイトル
+    SelectScene,        //セレクト
     GameScene,          //ゲーム画面
     SkillSelectScene,   //スキル選択
     ResultScene,        //リザルト
