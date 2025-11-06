@@ -16,8 +16,13 @@ public class ResultSceneFolder : MonoBehaviour
         //決定(Aボタン)
         if (Input.GetButtonDown("Submit"))
         {
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.TitleScene);
+            //BaseSceneController.instance.ChangeSceneWithFade(SceneType.TitleScene);
             Debug.Log("Aボタンが押されました");
+        }
+
+        if (Input.GetButtonDown("Start"))
+        {
+            BaseSceneController.instance.TogglePause();
         }
     }
 }

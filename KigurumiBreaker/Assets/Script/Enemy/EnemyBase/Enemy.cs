@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ProBuilder;
 using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.UI;
 
@@ -43,7 +44,7 @@ public class Enemy : EnemyBase
     [SerializeField] protected SkinnedMeshRenderer[] _outlineSkinedMeshRenderer;
     // 攻撃サイン用のSkinnedMeshRenderer変数
     [Header("全キャラ共通の攻撃サイン用のメッシュ")]
-    [SerializeField] protected SkinnedMeshRenderer _attackSignSkinedMeshRenderer;
+    [SerializeField] protected SkinnedMeshRenderer[] _attackSignSkinedMeshRenderer;
 
     protected override void Start()
     {
@@ -452,17 +453,25 @@ public class Enemy : EnemyBase
         // 現在のアニメーションが攻撃する瞬間の値以下なら
         if (currentAnim < maxAnim)
         {
+            // 経過時間を加算
+            _dTime += Time.deltaTime;
+
             // 現在のアニメーションから攻撃する瞬間の値までの割合を計算
             float fade = Mathf.InverseLerp(0.0f, maxAnim, currentAnim);
-            // 攻撃サインを表示してフェード値を設定
-            _attackSignSkinedMeshRenderer.material.SetFloat("_Alpha", fade);
 
+            for (int i = 0; i < _attackSignSkinedMeshRenderer.Length; i++)
+            {
+                // 攻撃サインを表示してフェード値を設定
+                _attackSignSkinedMeshRenderer[i].material.SetFloat("_Alpha", fade);
+            }
         }
         else
         {
-            // 攻撃サインを非表示にして値をリセット
-            _attackSignSkinedMeshRenderer.material.SetFloat("_Alpha", 0.0f);
-            //_attackSignSkinedMeshRenderer.enabled = false;
+            for (int i = 0; i < _attackSignSkinedMeshRenderer.Length; i++)
+            {
+                // 攻撃サインを表示してフェード値を設定
+                _attackSignSkinedMeshRenderer[i].material.SetFloat("_Alpha", 0.0f);
+            }
         }
     }
 
