@@ -34,7 +34,7 @@ public class Enemy : EnemyBase
     // 敵がビックリマークを生成したかどうかのフラグ
     private bool _isDetectionMark;
 
-
+    protected GameObject _attackObj;
 
     // アーマー用のSkinnedMeshRenderer変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
@@ -473,6 +473,19 @@ public class Enemy : EnemyBase
                 _attackSignSkinedMeshRenderer[i].material.SetFloat("_Alpha", 0.0f);
             }
         }
+    }
+
+    // 敵の攻撃オブジェクトを生成する関数
+    public void EnemyAttackCreate(float distance ,float up,GameObject attackPrefab)
+    {
+        // ゲームオブジェクト生成
+        _attackObj = Instantiate(attackPrefab);
+
+        // 攻撃オブジェクトにバトルマネージャーをセット
+        _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
+
+        // 攻撃オブジェクトの位置を調整
+        _attackObj.transform.position = this.transform.position + this.transform.forward * distance + this.transform.up * up;
     }
 
 }

@@ -12,7 +12,7 @@ public class TackleEnemy : Enemy
 
     /* 定数 */
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
-    private const float ATTACK_DISTANCE = 1.0f; // 攻撃判定の距離
+    private const float ATTACK_DISTANCE = 1.5f; // 攻撃判定の距離
 
 
     public override void Attack()
@@ -32,7 +32,7 @@ public class TackleEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    CreateAttack();
+                    EnemyAttackCreate(1.0f, 0.5f, _attackObjectPrefab);
                 }
 
                 if (!_isCharge)
@@ -55,10 +55,10 @@ public class TackleEnemy : Enemy
             LookAtPlayer();
         }
 
-        if (_attackObject != null)
+        if (_attackObj != null)
         {
             // 破棄されていない場合のみ位置を更新
-            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
+            _attackObj.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE + this.transform.up * 0.5f;
         }
     }
 
