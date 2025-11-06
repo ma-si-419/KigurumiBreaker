@@ -38,13 +38,12 @@ public class Enemy : EnemyBase
     // アーマー用のSkinnedMeshRenderer変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
     [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
-    // 攻撃サイン用のSkinnedMeshRenderer変数
-    [Header("全キャラ共通の攻撃サイン用のメッシュ")]
-    [SerializeField] protected SkinnedMeshRenderer _attackSignSkinedMeshRenderer;
-    [Range(0.0f, 1.0f)] protected float _alpha = 0.0f;
     // アウトライン用のマテリアル変数
     [Header("アウトライン用のマテリアル")]
     [SerializeField] protected SkinnedMeshRenderer[] _outlineSkinedMeshRenderer;
+    // 攻撃サイン用のSkinnedMeshRenderer変数
+    [Header("全キャラ共通の攻撃サイン用のメッシュ")]
+    [SerializeField] protected SkinnedMeshRenderer _attackSignSkinedMeshRenderer;
 
     protected override void Start()
     {
@@ -444,6 +443,26 @@ public class Enemy : EnemyBase
             {
                 _outlineSkinedMeshRenderer[i].material.color = Color.black;
             }
+        }
+    }
+
+    // 攻撃サインの表示処理(現在のアニメーション,攻撃する瞬間の値)
+    public void AttackSign(float currentAnim, float maxAnim)
+    {
+        // 現在のアニメーションが攻撃する瞬間の値以下なら
+        if (currentAnim < maxAnim)
+        {
+            // 現在のアニメーションから攻撃する瞬間の値までの割合を計算
+            float fade = Mathf.InverseLerp(0.0f, maxAnim, currentAnim);
+            // 攻撃サインを表示してフェード値を設定
+            _attackSignSkinedMeshRenderer.material.SetFloat("_Alpha", fade);
+
+        }
+        else
+        {
+            // 攻撃サインを非表示にして値をリセット
+            _attackSignSkinedMeshRenderer.material.SetFloat("_Alpha", 0.0f);
+            //_attackSignSkinedMeshRenderer.enabled = false;
         }
     }
 
