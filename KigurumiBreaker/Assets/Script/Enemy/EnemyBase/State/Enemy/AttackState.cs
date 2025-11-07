@@ -22,9 +22,8 @@ public class AttackState : IState
 
     public void Update()
     {
-        _enemy.Attack(); //UŒ‚ˆ—
-
-
+        //UŒ‚ˆ—
+        _enemy.Attack(); 
     }
 
     public void End()
