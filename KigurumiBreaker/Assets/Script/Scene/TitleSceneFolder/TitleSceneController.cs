@@ -19,7 +19,7 @@ public class TitleSceneController : MonoBehaviour
 
         //ÉQÅ[ÉÄÉVÅ[ÉìÇ÷
         //BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
-        BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
+        BaseSceneController.instance.ChangeSceneWithFade(SceneType.SelectScene);
     }
 
     private void Update()

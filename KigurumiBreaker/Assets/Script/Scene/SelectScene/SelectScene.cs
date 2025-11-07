@@ -98,15 +98,14 @@ public class SelectScene : MonoBehaviour
         //プレイボタン
         if (select == _menuUI[0])
         {
-            SceneManager.LoadScene("GameScene");
+            //安田オリジナルシーン遷移でゲームシーンへ
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
         }
 
         //オプションボタン
         if (select == _menuUI[1])
         {
-            SceneManager.LoadScene("OptionScene");
-
-            //オプション
+            //安田オリジナルシーン遷移でオプションシーンへ
             BaseSceneController.instance.ToggleOption();
         }
 
