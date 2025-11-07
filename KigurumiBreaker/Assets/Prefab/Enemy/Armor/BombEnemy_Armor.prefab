@@ -516,7 +516,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.7
-  m_Height: 1.2
+  m_Height: 0.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &2246302835997742643
@@ -582,6 +582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 5c41a83cf0a4ea6479bc375875734a67, type: 2}
   _enemyCommonData: {fileID: 11400000, guid: 4de280dc11522ed4d9934284009b4a01, type: 2}
+  _isWeakAttack: 0
   _armorSkinedMeshRenderer:
   - {fileID: 7487454069164247351}
   _outlineSkinedMeshRenderer:

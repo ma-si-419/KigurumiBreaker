@@ -20,6 +20,9 @@ public class EnemyBase : MonoBehaviour
     // 攻撃オブジェクトのプレハブ
     protected GameObject _attackObjectPrefab;
 
+    // ドロップする弾のプレハブ
+    protected GameObject _dropBullet;
+
     // 現在のHP
     protected float _currentHp;
 
@@ -73,8 +76,7 @@ public class EnemyBase : MonoBehaviour
     protected bool _isDebugStop;
     // ドロップする弾のリスト
     protected List<int> _dropBullets;
-    // 弾がドロップするまでの時間
-    protected int _dropTime = 100;
+
 
     //敵のデバフ状態
     public enum EnemyDebuff
@@ -107,6 +109,8 @@ public class EnemyBase : MonoBehaviour
         _currentTrunk = _enemyData.maxTrunk;
         // 攻撃オブジェクトのプレハブを設定
         _attackObjectPrefab = _enemyData.attackPrefab;
+        // ドロップする弾のプレハブを設定
+        _dropBullet = _enemyCommonData.dropBullet;
         // 敵データでアーマーかどうかを設定
         _isArmor = _enemyData.isArmor;
         // NavMeshAgentコンポーネントを取得
@@ -148,6 +152,37 @@ public class EnemyBase : MonoBehaviour
     {
         // 現在のステートのUpdateメソッドを呼び出す
         _currentState?.Update();
+
+        // 弾をドロップする
+        for (int i = 0; i < _dropBullets.Count; i++)
+        {
+            if (_dropBullets[i] <= 0)
+            {
+                // ドロップする座標を上側にずらす
+                Vector3 dropPos = this.transform.position;
+                dropPos.y += _enemyCommonData.dropPosShiftY;
+
+                // 弾をドロップする
+                GameObject bullet = Instantiate(_dropBullet, dropPos, Quaternion.identity);
+                Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+                // ランダムな方向に飛ばす
+                float xforce = Random.Range(-0.8f, 0.8f);
+                float zforce = Random.Range(-0.8f, 0.8f);
+
+                Vector3 forceDir = new Vector3(xforce, 1.0f, zforce).normalized;
+
+                rb.AddForce(forceDir * _enemyCommonData.dropBulletForce, ForceMode.Impulse);
+
+                // ドロップした弾をリストから削除する
+                _dropBullets.RemoveAt(i);
+                i--;
+            }
+            else
+            {
+                _dropBullets[i]--;
+            }
+        }
     }
 
     // ステートを変更するメソッド
