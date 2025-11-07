@@ -23,6 +23,7 @@ public class PlayerAttack : MonoBehaviour
         public bool isReflect;
         public CameraMove.ShakeKind shakeKind;
         public int hitStopFrame;
+        public bool isWeakAttack;
     }
 
     private GameObject _camera; // カメラオブジェクトの参照
@@ -90,6 +91,11 @@ public class PlayerAttack : MonoBehaviour
     public int GetHitStopTime()
     {
         return _attackData.hitStopFrame;
+    }
+
+    public bool GetIsWeakAttack()
+    {
+        return _attackData.isWeakAttack;
     }
 
     void OnTriggerEnter(Collider other)

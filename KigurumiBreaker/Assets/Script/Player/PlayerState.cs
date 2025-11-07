@@ -1976,6 +1976,13 @@ public class PlayerState : Player<PlayerState>
         // ヒットストップ時間を設定
         attackData.hitStopFrame = data.hitStopFrame;
 
+        // もし弱攻撃ならば
+        if(data.attackKind == Attack.AttackType.WeakAttack)
+        {
+            // 弱攻撃フラグを立てる
+            attackData.isWeakAttack = true;
+        }
+
         PlayerAttack playerAttack = attackObject.GetComponent<PlayerAttack>();
 
         // カメラを設定
