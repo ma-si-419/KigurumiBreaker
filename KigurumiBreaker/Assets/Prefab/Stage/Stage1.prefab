@@ -2338,7 +2338,7 @@ Transform:
   m_GameObject: {fileID: 8457745352734132792}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -4.7}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -2374,17 +2374,13 @@ MonoBehaviour:
   _areaCenter: {fileID: 4485477984533850799}
   _areaSize: {x: 28, y: 0, z: 28}
   _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  _stageEnemyInfos:
-  - enemyGroups:
-    - spawnDataList:
-      - {fileID: 11400000, guid: c3b1d51c0bec551449280f595ca1df54, type: 2}
+  _waveData: {fileID: 0}
   _spawnInterval: 0.5
   _goalPositions:
   - {fileID: 5749454913018647715}
   - {fileID: 3270863947345270756}
   _stageProbabilities:
-  - eventType: 4
-    probability: 0
+  - probability: 0
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 8983523608011774930}
