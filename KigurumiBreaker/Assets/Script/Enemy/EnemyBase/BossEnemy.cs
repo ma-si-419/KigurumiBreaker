@@ -189,7 +189,7 @@ public class BossEnemy : EnemyBase
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
-            _dropBullets.Add(_dropTime);
+            _dropBullets.Add(_enemyCommonData.dropBulletTime);
 
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is BossAttackState) return;

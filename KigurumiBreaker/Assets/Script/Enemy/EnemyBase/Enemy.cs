@@ -36,6 +36,9 @@ public class Enemy : EnemyBase
 
     protected GameObject _attackObj;
 
+    // 弱攻撃を受けている時のフラグ
+    [SerializeField]protected bool _isWeakAttack = false;
+
     // アーマー用のSkinnedMeshRenderer変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
     [SerializeField] protected SkinnedMeshRenderer[] _armorSkinedMeshRenderer;
@@ -137,6 +140,8 @@ public class Enemy : EnemyBase
         }
 
         if (_isStop) return;
+
+        _isDamage = false; // ダメージフラグをリセット
 
         if (_isDead)
         {
@@ -332,6 +337,9 @@ public class Enemy : EnemyBase
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackState) return;
 
+            if (_isWeakAttack) return;
+
+
             OnHit();
         }
 
@@ -377,14 +385,18 @@ public class Enemy : EnemyBase
                 _isDead = true;
             }
 
+            
+
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
             // ドロップする弾を一つ増やす
-            _dropBullets.Add(_dropTime);
+            _dropBullets.Add(_enemyCommonData.dropBulletTime);
 
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackState) return;
+
+            if (_isWeakAttack) return;
 
             OnHit();
         }
@@ -402,9 +414,6 @@ public class Enemy : EnemyBase
     {
         //今のステート状態のアニメーションにダメージアニメーションを重ねる
         _animator.CrossFade("Damage", 0.0f);
-
-        //なんか演出とかあったらいいよね()
-        
     }
 
     //デバッグ用に線を引く
