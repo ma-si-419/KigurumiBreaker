@@ -380,6 +380,9 @@ public class Enemy : EnemyBase
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
+            // ドロップする弾を一つ増やす
+            _dropBullets.Add(_dropTime);
+
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackState) return;
 

@@ -71,6 +71,10 @@ public class EnemyBase : MonoBehaviour
 
     // デバッグ用停止フラグ
     protected bool _isDebugStop;
+    // ドロップする弾のリスト
+    protected List<int> _dropBullets;
+    // 弾がドロップするまでの時間
+    protected int _dropTime = 100;
 
     //敵のデバフ状態
     public enum EnemyDebuff
@@ -112,6 +116,9 @@ public class EnemyBase : MonoBehaviour
         // Rigidbodyコンポーネントを取得
         _rigidbody = GetComponent<Rigidbody>();
 
+
+        // ドロップする弾のリストを初期化する
+        _dropBullets = new List<int>();
         // EnemyUiManagerの参照を取得
         _enemyUiManager = FindObjectOfType<EnemyBarManager>();
 
