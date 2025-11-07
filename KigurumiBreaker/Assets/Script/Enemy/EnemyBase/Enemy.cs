@@ -29,15 +29,13 @@ public class Enemy : EnemyBase
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
 
-    protected float _dTime;
+    // 攻撃サインの経過時間
+    protected float _attackSignTime;
 
     // 敵がビックリマークを生成したかどうかのフラグ
     private bool _isDetectionMark;
 
     protected GameObject _attackObj;
-
-    // 弱攻撃を受けている時のフラグ
-    [SerializeField]protected bool _isWeakAttack = false;
 
     // アーマー用のSkinnedMeshRenderer変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
@@ -283,6 +281,8 @@ public class Enemy : EnemyBase
     //基本攻撃処理(オーバーライドで変更可)
     public virtual void Attack() { }
 
+    public virtual void Attack2() { }
+
     // 攻撃判定に触れたときの処理
     private void OnTriggerEnter(Collider other)
     {
@@ -466,7 +466,7 @@ public class Enemy : EnemyBase
         if (currentAnim < maxAnim)
         {
             // 経過時間を加算
-            _dTime += Time.deltaTime;
+            _attackSignTime += Time.deltaTime;
 
             // 現在のアニメーションから攻撃する瞬間の値までの割合を計算
             float fade = Mathf.InverseLerp(0.0f, maxAnim, currentAnim);

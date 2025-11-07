@@ -85,6 +85,8 @@ public class BossEnemy : EnemyBase
 
         if (_isStop) return;
 
+        _isDamage = false; // ダメージフラグをリセット
+
         if (_isDead)
         {
             // すでに死亡状態なら変更しない

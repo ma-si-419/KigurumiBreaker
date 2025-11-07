@@ -32,6 +32,9 @@ public class EnemyBase : MonoBehaviour
     // 現在のステート状態
     protected IState _currentState;
 
+    // 前のステート状態を保存する変数
+    protected IState _previousState;
+
     //索敵範囲の二乗
     protected float _detectRangeSqr;
 
@@ -77,6 +80,8 @@ public class EnemyBase : MonoBehaviour
     // ドロップする弾のリスト
     protected List<int> _dropBullets;
 
+    // 弱攻撃を受けている時のフラグ
+    protected bool _isWeakAttack = false;
 
     //敵のデバフ状態
     public enum EnemyDebuff
@@ -119,7 +124,6 @@ public class EnemyBase : MonoBehaviour
         _animator = GetComponent<Animator>();
         // Rigidbodyコンポーネントを取得
         _rigidbody = GetComponent<Rigidbody>();
-
 
         // ドロップする弾のリストを初期化する
         _dropBullets = new List<int>();

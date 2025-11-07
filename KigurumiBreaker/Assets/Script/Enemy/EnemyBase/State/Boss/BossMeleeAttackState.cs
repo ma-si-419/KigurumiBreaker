@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class BossMeleeAttackState : IState
 {
     //ƒ{ƒX“G‚ÌQÆ
-    private BossEnemy _boss;   
+    private BossEnemy _boss;
 
     public BossMeleeAttackState(BossEnemy boss)
     {
