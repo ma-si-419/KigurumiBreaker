@@ -19,6 +19,7 @@ public class Attack
 {
     public enum AttackType
     {
+        WeakAttack,     // ãUŒ‚
         LowAttack,      // ’ÊíUŒ‚
         ChargeAttack,   // —­‚ßUŒ‚
         RangedAttack,   // ‰“‹——£UŒ‚
