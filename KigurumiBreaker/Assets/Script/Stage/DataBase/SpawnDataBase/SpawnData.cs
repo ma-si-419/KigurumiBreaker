@@ -14,6 +14,8 @@ public enum EnemyKind
     ArmorTackle,
     ArmorLong,
     Boss1,
+    Breath,
+    Larser
 }
 
 [System.Serializable]
