@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad81368dd47fa04b8603389648da778, type: 3}
   m_Name: SkillAttackData
   m_EditorClassIdentifier: 
-  attackDataList: []
+  attackDataList:
+  - AttackName: FirePunch
+    Damage: 100
+    Scale: 1
+    AttackLifeTime: 30
+    AttackEffect: {fileID: 0}
+    HitEffect: {fileID: 0}
