@@ -15,9 +15,10 @@ public class AttackState : IState
         _enemy.AttackReset(); //攻撃フラグリセット
 
         _enemy.animator.SetBool("Idle", false); //待機アニメーション終了
+        _enemy.animator.SetBool("Attack", true); //待機アニメーション終了
 
         //攻撃アニメーション開始
-        _enemy.animator.SetTrigger("Attack");
+        //_enemy.animator.SetTrigger("Attack");
     }
 
     public void Update()
@@ -28,6 +29,8 @@ public class AttackState : IState
 
     public void End()
     {
+
+        _enemy.animator.SetBool("Attack", false); //待機アニメーション終了
     }
 
 }

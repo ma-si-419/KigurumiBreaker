@@ -14,17 +14,23 @@ public class LaserEnemy : Enemy
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if(stateInfo.IsName("Attack"))
+        if(stateInfo.IsName("AttackSign"))
         {
-            if(!_isCreateAttack)
+            // 攻撃サインの表示
+            AttackSign(stateInfo.normalizedTime, 0.1f);
+
+            if (stateInfo.normalizedTime >= 0.2f)
             {
-                _isCreateAttack = true;
-                EnemyAttackCreate(1.0f, 1.0f, _attackObjectPrefab);
+                if (!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    EnemyAttackCreate(1.0f, 1.0f, _attackObjectPrefab);
+                }
             }
         }
 
         //時間が経ったら攻撃終了
-        if (_laserTimer > 5.0f)
+        if (_laserTimer > 15.0f)
         {
             Destroy(_attackObj);
 
