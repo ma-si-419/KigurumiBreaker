@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class HitEffectController : MonoBehaviour
 {
+    private int lifeTime = 10;
 
-    private ParticleSystem ps;
 
-    // Start is called before the first frame update
-    void Start()
+    void FixedUpdate()
     {
-        ps = GetComponent<ParticleSystem>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (!ps.IsAlive())
+        lifeTime--;
+        if (lifeTime <= 0)
         {
             Destroy(gameObject);
         }
