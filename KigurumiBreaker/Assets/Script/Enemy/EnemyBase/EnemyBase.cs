@@ -103,6 +103,7 @@ public class EnemyBase : MonoBehaviour
     public EnemyData enemyData => _enemyData;
     public EnemyCommonData enemyCommonData => _enemyCommonData;
     public BattleManager battleManager => _battleManager;
+    public IState previousState => _previousState;
 
     protected virtual void Start()
     {

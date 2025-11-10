@@ -16,9 +16,6 @@ public class DetectionMark : MonoBehaviour
     private float _time = 0.0f; 
 
     private float _lifeTime = 2.0f;
-    private float _fadeDuration = 1.0f;
-
-    //private bool _isFading = false;
 
     public void SetTarget(Enemy enemy)
     {
@@ -55,22 +52,5 @@ public class DetectionMark : MonoBehaviour
         transform.forward = Camera.main.transform.forward;
 
     }
-
-    //private IEnumerator FadeOut()
-    //{
-    //    float fadeTime = 0.0f;
-    //    Color color = _image.color;
-
-    //    while (fadeTime < _fadeDuration)
-    //    {
-    //        fadeTime += Time.deltaTime;
-    //        float alpha = Mathf.Lerp(1.0f, 0.0f, fadeTime / _fadeDuration);
-    //        color.a = alpha;
-    //        _image.color = color;
-    //        yield return null;
-    //    }
-
-    //    Destroy(gameObject);
-    //}
 
 }

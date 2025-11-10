@@ -161,4 +161,19 @@ public class EnemyAttackCol : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        // レーザーのような継続的な攻撃判定の場合
+        if (CompareTag("EnemyContinuousAttack"))
+        {
+            // 将来的に壁に当たった場合レーザーを短くする処理を入れる
+            if (other.CompareTag("Wall"))
+            {
+                
+            }
+
+        }
+    }
+
 }

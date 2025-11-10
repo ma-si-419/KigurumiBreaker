@@ -15,7 +15,8 @@ public class DamageState : IState
     public void Init()
     {
         //ダメージアニメーション開始
-        _enemy.animator.SetTrigger("Damage");
+        _enemy.animator.CrossFade("Damage", 0.0f);
+        //_enemy.animator.SetTrigger("Damage");
     }
 
     public void Update()
@@ -27,14 +28,14 @@ public class DamageState : IState
         var stateInfo = _enemy.animator.GetCurrentAnimatorStateInfo(0);
         if (stateInfo.IsName("Damage") && stateInfo.normalizedTime >= 1.0f)
         {
-            //待機状態に遷移
-            _enemy.ChangeState(new IdleState(_enemy));
+            //前いたステートに戻す
+            _enemy.ChangeState(_enemy.previousState);
         }
     }
 
     public void End()
     {
         //ダメージアニメーション終了
-        _enemy.animator.ResetTrigger("Damage");
+        //_enemy.animator.ResetTrigger("Damage");
     }
 }
