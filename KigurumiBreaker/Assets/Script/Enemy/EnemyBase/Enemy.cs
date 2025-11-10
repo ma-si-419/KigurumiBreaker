@@ -86,11 +86,6 @@ public class Enemy : EnemyBase
         // デバッグ用のフラグを取得
         _isDebugIdleFlag = _enemyCommonData.isStopAllAction;
 
-        // 敵のY座標だけ固定
-        //Vector3 pos = transform.position;
-        //pos.y = 0.0f;
-        //transform.position = pos;
-
         // アーマー状態の管理
         if (_isArmor && _currentTrunk <= 0)
         {
@@ -143,6 +138,13 @@ public class Enemy : EnemyBase
 
         if (_isDead)
         {
+            // 死んだら攻撃サインを非表示にする
+            for (int i = 0; i < _attackSignSkinedMeshRenderer.Length; i++)
+            {
+                // 攻撃サインを表示してフェード値を設定
+                _attackSignSkinedMeshRenderer[i].material.SetFloat("_Alpha", 0.0f);
+            }
+
             // すでに死亡状態なら変更しない
             if (!(_currentState is DeadState))
             {
@@ -228,7 +230,6 @@ public class Enemy : EnemyBase
     //基本移動処理(オーバーライドで変更可)
     public virtual void Chase()
     {
-
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
 
@@ -323,7 +324,6 @@ public class Enemy : EnemyBase
                 _currentTrunk = 0;
             }
 
-
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
             {
@@ -337,6 +337,7 @@ public class Enemy : EnemyBase
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackState) return;
 
+            // 弱攻撃の場合はダメージアニメーションを行わない
             if (_isWeakAttack) return;
 
 
@@ -353,7 +354,6 @@ public class Enemy : EnemyBase
             {
                 // ダメージを受ける(プレイヤーアタックのダメージを取得する)
                 _currentHp -= other.GetComponent<PlayerRangedAttack>().GetDamage();
-
             }
             // アーマーの場合は耐久力を減らす
             else if (_isArmor)
@@ -384,8 +384,6 @@ public class Enemy : EnemyBase
                 _currentHp = 0;
                 _isDead = true;
             }
-
-            
 
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);

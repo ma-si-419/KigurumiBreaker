@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CircleAttackEnemy : Enemy
 {
-
-
     public override void Attack()
     {
 

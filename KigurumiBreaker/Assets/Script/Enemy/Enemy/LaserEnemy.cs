@@ -26,11 +26,18 @@ public class LaserEnemy : Enemy
         //時間が経ったら攻撃終了
         if (_laserTimer > 5.0f)
         {
+            Destroy(_attackObj);
+
             //攻撃状態へ
             _laserTimer = 0.0f;
             ChangeState(new ChaseState(this));
         }
 
+        // レーザー攻撃中の処理
+        if (_attackObj != null)
+        {
+
+        }
 
     }
 
