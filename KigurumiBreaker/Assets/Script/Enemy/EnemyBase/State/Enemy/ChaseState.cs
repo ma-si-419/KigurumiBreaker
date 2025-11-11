@@ -30,7 +30,14 @@ public class ChaseState : IState
     public void End()
     {
         // 待機アニメーションを停止
-        _enemy.animator.SetBool("Chase", false);
+        if(_enemy.isChasetoIdle)
+        {
+            _enemy.animator.SetBool("Idle", false);
+        }
+        else
+        {
+            _enemy.animator.SetBool("Chase", false);
+        }
     }
 
 }

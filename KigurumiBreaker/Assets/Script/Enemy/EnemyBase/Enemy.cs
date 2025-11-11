@@ -47,6 +47,8 @@ public class Enemy : EnemyBase
     [Header("全キャラ共通の攻撃サイン用のメッシュ")]
     [SerializeField] protected SkinnedMeshRenderer[] _attackSignSkinedMeshRenderer;
 
+    public bool isChasetoIdle => _isChasetoIdle;
+
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
@@ -496,6 +498,7 @@ public class Enemy : EnemyBase
 
         // 攻撃オブジェクトの位置を調整
         _attackObj.transform.position = this.transform.position + this.transform.forward * distance + this.transform.up * up;
+        _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
     }
 
 }

@@ -33,9 +33,6 @@ public class EnemyAttackCol : MonoBehaviour
 
     private bool _isStop = false;   // ヒットストップ中に動かないようにするフラグ
 
-    // レーザー用の変数
-    private CapsuleCollider _capsuleCol;
-
     private void Start()
     {
         // 弾の寿命をフレーム数に変換してセット
@@ -43,10 +40,6 @@ public class EnemyAttackCol : MonoBehaviour
         {
             _lifeTime = (int)_shotLifeTime;
         }
-
-        // レーザー用のタグを持っている場合はカプセルコライダーを取得しておく
-        _capsuleCol = GetComponent<CapsuleCollider>();
-
     }
 
     private void FixedUpdate()
@@ -159,20 +152,6 @@ public class EnemyAttackCol : MonoBehaviour
                 Destroy(gameObject);
 
             }
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // レーザーのような継続的な攻撃判定の場合
-        if (CompareTag("EnemyContinuousAttack"))
-        {
-            // 将来的に壁に当たった場合レーザーを短くする処理を入れる
-            if (other.CompareTag("Wall"))
-            {
-                
-            }
-
         }
     }
 
