@@ -82,12 +82,4 @@ public class TackleEnemy : Enemy
         _isCharge = false;
     }
 
-    // 攻撃オブジェクトを生成する関数
-    private void CreateAttack()
-    {
-        // ゲームオブジェクト生成
-        _attackObject = Instantiate(_attackObjectPrefab);
-        _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-    }
-
 }

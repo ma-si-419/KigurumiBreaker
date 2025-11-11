@@ -17,7 +17,7 @@ public class IdleState : IState
         _enemy.agent.isStopped = true; // 追跡を停止
 
         //待機アニメーション開始
-        _enemy.animator.SetBool("Idle", false);
+        _enemy.animator.SetBool("Idle", true);
     }
 
     public void Update()

@@ -1505,7 +1505,7 @@ public class PlayerState : Player<PlayerState>
                 // 攻撃する部位を縮小する
                 state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
             }
-
+            
             // スタン時間をカウントダウン
             _stateTime++;
 
