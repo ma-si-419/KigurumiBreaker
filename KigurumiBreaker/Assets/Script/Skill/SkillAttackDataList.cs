@@ -23,7 +23,15 @@ public class SkillAttackData
     [SerializeField] private GameObject AttackEffect;
     [Header("攻撃があたった時に出すエフェクト")]
     [SerializeField] private GameObject HitEffect;
-    
+    [Header("ノックバックの大きさ")]
+    [SerializeField] private float KnockBackPower;
+    [Header("敵に与えるデバフ")]
+    [SerializeField] private Enemy.EnemyDebuff Debuff;
+    [Header("敵の攻撃を跳ね返すか")]
+    [SerializeField] private bool IsReflect;
+    [Header("弱攻撃ならtrue")]
+    [SerializeField] private bool IsWeakAttack;
+
     // 読み取り専用プロパティ
 
     public string attackName => AttackName;
@@ -32,4 +40,9 @@ public class SkillAttackData
     public int attackLifeTime => AttackLifeTime;
     public GameObject attackEffect => AttackEffect;
     public GameObject hitEffect => HitEffect;
+    public float knockBackPower => KnockBackPower;
+    public Enemy.EnemyDebuff debuff => Debuff;
+    public bool isReflect => IsReflect;
+    public bool isWeakAttack => IsWeakAttack;
+
 }

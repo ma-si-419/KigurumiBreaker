@@ -13,9 +13,23 @@ MonoBehaviour:
   m_Name: SkillAttackData
   m_EditorClassIdentifier: 
   attackDataList:
-  - AttackName: FirePunch
-    Damage: 100
-    Scale: 1
-    AttackLifeTime: 30
-    AttackEffect: {fileID: 0}
-    HitEffect: {fileID: 0}
+  - AttackName: CounterThunder
+    Damage: 50
+    Scale: 5
+    AttackLifeTime: 5
+    AttackEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
+    HitEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
+    KnockBackPower: 0
+    Debuff: 4
+    IsReflect: 0
+    IsWeakAttack: 0
+  - AttackName: FireDash
+    Damage: 50
+    Scale: 8
+    AttackLifeTime: 20
+    AttackEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
+    HitEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
+    KnockBackPower: 0
+    Debuff: 4
+    IsReflect: 0
+    IsWeakAttack: 1

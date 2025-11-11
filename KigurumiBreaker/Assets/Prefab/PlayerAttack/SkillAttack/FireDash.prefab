@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6467479285331734647
+--- !u!1 &4789145914303642869
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6466690646433616819}
-  - component: {fileID: 8494540459324354961}
-  - component: {fileID: 6108403977103609194}
+  - component: {fileID: 4031611208598122579}
+  - component: {fileID: 1053923805719062818}
+  - component: {fileID: 6469556410561288159}
   m_Layer: 0
-  m_Name: CounterThunder
+  m_Name: FireDash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6466690646433616819
+--- !u!4 &4031611208598122579
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6467479285331734647}
+  m_GameObject: {fileID: 4789145914303642869}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4623735934358029531}
+  - {fileID: 757379309753784486}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &8494540459324354961
+--- !u!135 &1053923805719062818
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6467479285331734647}
+  m_GameObject: {fileID: 4789145914303642869}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -53,31 +53,31 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Radius: 8
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6108403977103609194
+--- !u!114 &6469556410561288159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6467479285331734647}
+  m_GameObject: {fileID: 4789145914303642869}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a0ac50c2b6b1c1488f8a2b2ff7c8781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackLifeTime: 5
+  _attackLifeTime: 20
   _damage: 50
   _attackType: 0
   effectShiftScale: 0.5
---- !u!1001 &8899520597982356223
+--- !u!1001 &3542501088333069954
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6466690646433616819}
+    m_TransformParent: {fileID: 4031611208598122579}
     m_Modifications:
     - target: {fileID: 4299738629470430756, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
       propertyPath: m_LocalPosition.x
@@ -128,8 +128,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
---- !u!4 &4623735934358029531 stripped
+--- !u!4 &757379309753784486 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4299738629470430756, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
-  m_PrefabInstance: {fileID: 8899520597982356223}
+  m_PrefabInstance: {fileID: 3542501088333069954}
   m_PrefabAsset: {fileID: 0}
