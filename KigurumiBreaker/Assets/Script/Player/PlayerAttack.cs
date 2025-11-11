@@ -107,7 +107,7 @@ public class PlayerAttack : MonoBehaviour
             if (_attackData.hitEffect != null)
             {
                 // ヒットする位置を計算
-                Vector3 hitPos = other.ClosestPoint(this.transform.position); 
+                Vector3 hitPos = other.ClosestPoint(this.transform.position);
 
                 // 少しだけプレイヤー側にずらす
                 Vector3 shiftVec = (_playerPos - hitPos).normalized;

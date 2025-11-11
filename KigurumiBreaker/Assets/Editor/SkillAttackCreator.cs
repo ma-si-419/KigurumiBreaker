@@ -1,5 +1,4 @@
 using System.IO;
-using System.Reflection.Emit;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,68 +9,85 @@ public class SkillAttackCreator : Editor
     {
         base.OnInspectorGUI();
 
+        // インスペクターのものをキャスト
         SkillAttackCreateData data = (SkillAttackCreateData)target;
 
         EditorGUILayout.Space();
 
+        // ボタンを作成
         if (GUILayout.Button("攻撃プレハブを生成（スクリプト付き）"))
         {
-            CreateAttackPrefab(data);
+            for (int i = 0; i < data.skillDataList.Count; i++)
+            {
+                CreateAttackPrefab(data.skillDataList[i]);
+            }
         }
     }
 
-    private void CreateAttackPrefab(SkillAttackCreateData data)
+    private void CreateAttackPrefab(SkillAttackData data)
     {
-        if (data.effectPrefab == null)
+        if (data.attackEffect == null)
         {
-            Debug.LogError("EffectPrefab が設定されていません。");
+            Debug.LogError("Effect が設定されていません:" + data.attackName);
             return;
         }
 
-        // メモリ上で生成（シーンに出さない）
-        GameObject temp = new GameObject(data.prefabName);
+        // 一時オブジェクト作成
+        GameObject temp = new GameObject(data.attackName);
+
+        // 当たり判定を追加
+        SphereCollider collider = temp.AddComponent<SphereCollider>();
+        collider.isTrigger = true;
+        collider.radius = data.scale;
 
         // 攻撃スクリプトを追加
         PlayerAttack attack = temp.AddComponent<PlayerAttack>();
 
-        // ここで攻撃データを設定
-
+        // 攻撃データを設定
         PlayerAttack.PlayerAttackData attackData = new PlayerAttack.PlayerAttackData();
 
         attackData.damage = data.damage;
-        attackData.attackLifeTime = data.lifeTime;
+        attackData.knockBackPower = data.knockBackPower;
+        attackData.attackLifeTime = data.attackLifeTime;
+        attackData.hitEffect = data.hitEffect;
+        attackData.debuffType = data.debuff;
+        attackData.isReflect = data.isReflect;
+        attackData.isWeakAttack = data.isWeakAttack;
 
         attack.SetPlayerAttackData(attackData);
 
-        ////
-
-
         // エフェクトを子に追加
-        GameObject effectCopy = (GameObject)PrefabUtility.InstantiatePrefab(data.effectPrefab);
+        GameObject effectCopy = (GameObject)PrefabUtility.InstantiatePrefab(data.attackEffect);
         effectCopy.name = "Effect";
         effectCopy.transform.SetParent(temp.transform, false);
 
-        // 保存フォルダ
+        // 保存フォルダ設定
         string folderPath = "Assets/Prefab/PlayerAttack/SkillAttack/";
-
-        // フォルダがなければ作成
         if (!Directory.Exists(folderPath))
         {
             Directory.CreateDirectory(folderPath);
         }
 
-        // 名前重複を避ける
-        string prefabPath = AssetDatabase.GenerateUniqueAssetPath($"{folderPath}{data.prefabName}.prefab");
+        // 保存パス
+        string prefabPath = $"{folderPath}{data.attackName}.prefab";
 
-        // Prefab保存（シーンに出さずに完結）
-        PrefabUtility.SaveAsPrefabAsset(temp, prefabPath);
+        // すでにPrefabが存在する場合 → 上書き保存
+        if (File.Exists(prefabPath))
+        {
+            GameObject existingPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            PrefabUtility.SaveAsPrefabAssetAndConnect(temp, prefabPath, InteractionMode.AutomatedAction);
+            Debug.Log("既存Prefabを上書きしました:" + prefabPath);
+        }
+        else
+        {
+            // 新規作成
+            PrefabUtility.SaveAsPrefabAsset(temp, prefabPath);
+            Debug.Log("新規Prefabを作成しました:" + prefabPath);
+        }
 
         // 一時オブジェクト削除
         Object.DestroyImmediate(temp);
-        Object.DestroyImmediate(effectCopy);
 
         AssetDatabase.Refresh();
-
-        Debug.Log("攻撃プレハブを生成しました" + prefabPath);
     }
 }

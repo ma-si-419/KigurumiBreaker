@@ -268,8 +268,6 @@ public class PlayerState : Player<PlayerState>
 
             // Œ»İ‚ÌŒü‚«‚ğ•Û‘¶
             state._currentDirection = state.transform.forward;
-
-
         }
         public override void OnUpdate()
         {
