@@ -68,7 +68,7 @@ public class LaserEnemy : Enemy
         {
             // レーザー攻撃オブジェクトの位置と回転を更新
             //_attackObj.transform.forward = this.transform.forward;
-            _attackObj.transform.position = this.transform.position + this.transform.forward * 2.0f + this.transform.up * 1.5f;
+            _attackObj.transform.position = this.transform.position + this.transform.forward * 3.5f + this.transform.up * 1.5f;
             _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
 
         }

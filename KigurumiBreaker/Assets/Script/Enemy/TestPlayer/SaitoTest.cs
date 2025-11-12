@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SaitoTest : MonoBehaviour
 {
+    // レーザー攻撃のダメージ処理用変数
     private bool _isLaser = false;
     private float _laserTime = 0.0f;
-    //private float _damage = 10.0f;
     private float _laserInterval = 1.0f;
 
     private void OnTriggerStay(Collider other)
@@ -15,9 +15,11 @@ public class SaitoTest : MonoBehaviour
         if (other.CompareTag("EnemyAttack"))
         {
             // 攻撃がLowタイプの場合の処理として書くしかない？
+
+            // if (_enemyAttackType == AttackType.Middle || _enemyAttackType == AttackType.High) return;
             // if (_enemyAttackType == AttackType.Low)
             // {
-                    if (!_isLaser)
+            if (!_isLaser)
                     {
                         //ここでダメージ処理
                         _isLaser = true;
