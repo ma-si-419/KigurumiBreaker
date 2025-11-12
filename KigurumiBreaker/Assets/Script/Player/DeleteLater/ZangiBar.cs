@@ -25,8 +25,8 @@ public class ZangiBar : MonoBehaviour
         int maxHp = _playerState.GetMaxHp();
         int nowHp = _playerState.GetNowHp();
 
-        float maxSp = _playerState.GetMaxSpecialChargeTime();
-        float nowSp = _playerState.GetNowSpecialChargeTime();
+        float maxSp = _playerState.GetMaxSpecialChargeNum();
+        float nowSp = _playerState.GetNowSpecialChargeNum();
 
         int maxBullet = _playerState.GetMaxBulletNum();
         int nowBullet = _playerState.GetNowBulletNum();

@@ -11,7 +11,6 @@ public class PlayerAttack : MonoBehaviour
 
     [SerializeField] private int _attackLifeTime = 180;
     [SerializeField] private float _damage = 3.0f;
-    [SerializeField] private Attack.AttackType _attackType = Attack.AttackType.WeakAttack;
 
     public struct PlayerAttackData
     {

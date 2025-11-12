@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BattleManager : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class BattleManager : MonoBehaviour
     public List<GameObject> enemies => _enemies;
 
     private List<GameObject> _enemyAttacks = new List<GameObject>();
+
+    private List<GameObject> _playerAttacks = new List<GameObject>();
 
     [SerializeField] private GameObject _player;
 
@@ -90,20 +93,26 @@ public class BattleManager : MonoBehaviour
     {
         _enemies.Remove(enemy);
     }
-
     public void AddEnemyAttack(GameObject enemyAttack)
     {
         _enemyAttacks.Add(enemyAttack);
     }
+    public void AddPlayerAttack(GameObject playerAttack)
+    {
+        _playerAttacks.Add(playerAttack);
+    }
     public void RemoveEnemyAttack(GameObject enemyAttack)
     {
-        int enemyNum = _enemyAttacks.Count;
-
         _enemyAttacks.Remove(enemyAttack);
+    }
+    public void RemovePlayerAttack(GameObject playerAttack)
+    {
+        _playerAttacks.Remove(playerAttack);
+    }
 
-        int enemyNumAfter = _enemyAttacks.Count;
-
-        Debug.Log("RemoveEnemyAttack:“G‚ÌUŒ‚”»’è‚ğíœ‚µ‚Ü‚µ‚½Bíœ‘O‚Ì”:" + enemyNum + "íœŒã‚Ì”:" + enemyNumAfter);
+    public void AddPlayerSpecialGauge(float addNum)
+    {
+        _playerState.AddSpecialGauge(addNum);
     }
 
     public void SlowTime(float time, float timeScale)
