@@ -17,7 +17,10 @@ public enum EnemyKind
     Breath,
     Larser,
     ArmorBreath,
-    ArmorLarser
+    ArmorLarser,
+    Beast,
+    BlueDragon,
+    Spider
 }
 
 [System.Serializable]
