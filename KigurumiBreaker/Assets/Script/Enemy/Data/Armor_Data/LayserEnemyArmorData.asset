@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
   m_Name: LayserEnemyArmorData
   m_EditorClassIdentifier: 
-  MaxHp: 0
+  MaxHp: 100
   IsArmor: 1
-  MaxTrunk: 0
+  MaxTrunk: 50
   AttackPower: 0
-  MoveSpeed: 0
-  DetectionRange: 0
-  AttackRange: 0
-  IdleToChaseTime: 0
-  ChaseToAttack: 0
-  RotateSpeed: 0
-  AttackPrefab: {fileID: 0}
+  MoveSpeed: 3
+  DetectionRange: 5
+  AttackRange: 3
+  IdleToChaseTime: 2
+  ChaseToAttack: 3
+  RotateSpeed: 1
+  AttackPrefab: {fileID: 621494178838673121, guid: 7c00bb1063de17349988c19c6d7f16ef, type: 3}
+  BarYPosition: 2.5

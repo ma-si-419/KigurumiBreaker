@@ -22,12 +22,12 @@ public class BreathEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(2.0f, 2.0f, _attackObjectPrefab);
+                    EnemyAttackCreate(3.0f, 0.0f, _attackObjectPrefab);
                 }
             }
 
             //敵のアニメーション状態を取得
-            if (stateInfo.normalizedTime >= 0.9f)
+            if (stateInfo.normalizedTime >= 0.8f)
             {
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
