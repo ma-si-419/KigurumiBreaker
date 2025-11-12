@@ -5,10 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "EnemyData")]
 public class EnemyData : ScriptableObject
 {
-    [Header("Å‘åHP")]
-    [SerializeField] private float MaxHp;
+    [Header("‹­“G‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO")]
+    [SerializeField] private bool IsStrongEnemy;
     [Header("ƒA[ƒ}[‘•”õƒtƒ‰ƒO")]
     [SerializeField] private bool IsArmor;
+    [Header("Å‘åHP")]
+    [SerializeField] private float MaxHp;
     [Header("‘Ï‹v—Í")]
     [SerializeField] private float MaxTrunk;
     [Header("ƒvƒŒƒCƒ„[‚É—^‚¦‚éƒ_ƒ[ƒW—Ê")]
@@ -23,6 +25,8 @@ public class EnemyData : ScriptableObject
     [SerializeField] private float IdleToChaseTime;
     [Header("’ÇÕó‘Ô‚©‚çUŒ‚ó‘Ô‚É‘JˆÚ‚·‚é‚Ü‚Å‚ÌŽžŠÔ")]
     [SerializeField] private float ChaseToAttack;
+    [Header("UŒ‚”»’è‚ð¶¬‚·‚éŽžŠÔ")]
+    [SerializeField] private float MaxAttackTime;
     [Header("“G‚Ì‰ñ“]‘¬“x")]
     [SerializeField] private float RotateSpeed;
     [Header("UŒ‚‚Ì“–‚½‚è”»’èƒvƒŒƒnƒu")]
@@ -43,5 +47,6 @@ public class EnemyData : ScriptableObject
     public float rotateSpeed => RotateSpeed;
     public GameObject attackPrefab => AttackPrefab;
     public float barYPosition => BarYPosition;
-
+    public bool isStrongEnemy => IsStrongEnemy;
+    public float maxAttackTime => MaxAttackTime;
 }

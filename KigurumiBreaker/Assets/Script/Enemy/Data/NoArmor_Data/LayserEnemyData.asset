@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
   m_Name: LayserEnemyData
   m_EditorClassIdentifier: 
-  MaxHp: 100
+  IsStrongEnemy: 0
   IsArmor: 0
+  MaxHp: 100
   MaxTrunk: 0
   AttackPower: 0
   MoveSpeed: 3
@@ -21,6 +22,7 @@ MonoBehaviour:
   AttackRange: 3
   IdleToChaseTime: 2
   ChaseToAttack: 3
+  MaxAttackTime: 0.8
   RotateSpeed: 1
   AttackPrefab: {fileID: 621494178838673121, guid: 7c00bb1063de17349988c19c6d7f16ef, type: 3}
   BarYPosition: 2.5

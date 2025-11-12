@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class BombEnemy : Enemy
 {
-    public override void Attack()
+    public override void AttackType1()
     {
         
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Attack"))
+        if (stateInfo.IsName("AttackType1"))
         {
             // 攻撃サインの表示
-            AttackSign(stateInfo.normalizedTime, 0.6f);
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if (stateInfo.normalizedTime >= 0.7f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)
@@ -39,17 +39,4 @@ public class BombEnemy : Enemy
         }
 
     }
-
-    // 攻撃オブジェクトを生成する関数
-    private void CreateAttack()
-    {
-        // ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(_attackObjectPrefab);
-
-        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-
-        // 攻撃オブジェクトの位置を調整
-        attackObject.transform.position = this.transform.position;
-    }
-
 }

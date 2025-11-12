@@ -8,7 +8,7 @@ public class LaserEnemy : Enemy
     private bool _isAnim = false;      // アニメーション開始フラグ
 
 
-    public override void Attack()
+    public override void AttackType1()
     {
         _laserTimer += Time.deltaTime;
 
@@ -16,12 +16,12 @@ public class LaserEnemy : Enemy
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if(stateInfo.IsName("Attack"))
+        if(stateInfo.IsName("AttackType1"))
         {
             // 攻撃サインの表示
-            AttackSign(stateInfo.normalizedTime, 0.7f);
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if (stateInfo.normalizedTime >= 0.8f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 if (!_isCreateAttack)
                 {
@@ -36,7 +36,7 @@ public class LaserEnemy : Enemy
                 {
                     _isAnim = true;
 
-                    _animator.ResetTrigger("Attack");
+                    _animator.ResetTrigger("AttackType1");
 
                     // 攻撃中のアニメーションを開始
                     _animator.SetBool("UnderAttack", true);

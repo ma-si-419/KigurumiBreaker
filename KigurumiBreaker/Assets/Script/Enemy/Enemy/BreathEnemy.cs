@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class BreathEnemy : Enemy
 {
-    public override void Attack()
+    public override void AttackType1()
     {
         // “G‚Ì—Í‚ğ~‚ß‚é
         StopMovement();
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Attack"))
+        if (stateInfo.IsName("AttackType1"))
         {
             // UŒ‚ƒTƒCƒ“‚Ì•\¦
-            AttackSign(stateInfo.normalizedTime, 0.2f);
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if (stateInfo.normalizedTime >= 0.3f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 //UŒ‚”»’è‚ğˆê‚Â¶¬‚³‚¹‚é
                 if (!_isCreateAttack)

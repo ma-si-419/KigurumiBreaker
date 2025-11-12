@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class CircleAttackEnemy : Enemy
 {
-    public override void Attack()
+    public override void AttackType1()
     {
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Attack"))
+        if (stateInfo.IsName("AttackType1"))
         {
             // UŒ‚ƒTƒCƒ“‚Ì•\¦
-            AttackSign(stateInfo.normalizedTime, 0.5f);
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if (stateInfo.normalizedTime >= 0.6f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 //UŒ‚”»’è‚ğˆê‚Â¶¬‚³‚¹‚é
                 if (!_isCreateAttack)
