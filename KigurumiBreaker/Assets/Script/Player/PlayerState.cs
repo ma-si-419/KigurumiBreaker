@@ -161,11 +161,8 @@ public class PlayerState : Player<PlayerState>
     // 攻撃ボタンを長押ししている時間
     private int _normalChargeTime;
 
-    // 特殊攻撃のチャージをしている場合trueにする
-    bool _isSpecialCharge;
-
-    // 特殊攻撃のチャージ時間
-    private float _specialChargeTime;
+    // 特殊攻撃のチャージ量
+    private float _specialChargeNum;
 
     // アニメーター
     private Animator _animator;
@@ -936,30 +933,31 @@ public class PlayerState : Player<PlayerState>
             state.isAbleToSpecialAttack = false;
             // 状態をチャージに設定
             state._stateKind = StateKind.CHARGE;
+            /*           
             // 通常チャージと特殊チャージをここで分ける
             if (state._isSpecialCharge)
             {
-                // 特殊チャージアニメーションを再生
-                state._animator.SetTrigger("SpecialCharge");
+            // 特殊チャージアニメーションを再生
+            state._animator.SetTrigger("SpecialCharge");
 
-                // 特殊チャージエフェクトを出す
-                _chargeEffect = Instantiate(state._playerEffectData.specialAttackChargeEffectPrefab, state.transform.position, Quaternion.identity, state.transform);
+            // 特殊チャージエフェクトを出す
+            _chargeEffect = Instantiate(state._playerEffectData.specialAttackChargeEffectPrefab, state.transform.position, Quaternion.identity, state.transform);
             }
             else
             {
-                // 通常チャージアニメーションを再生
-                state._animator.SetTrigger("NormalCharge");
-
-                // 攻撃情報を設定
-                _currentAttackData = state.SearchAttackData("LowChargeAttack");
-
-                // 攻撃範囲のスケールを弱チャージ攻撃のものに設定
-                _attackScale = _currentAttackData.scale;
-
-                // 攻撃を行う部位を設定
-                state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
             }
+            */
+            // 通常チャージアニメーションを再生
+            state._animator.SetTrigger("NormalCharge");
 
+            // 攻撃情報を設定
+            _currentAttackData = state.SearchAttackData("LowChargeAttack");
+
+            // 攻撃範囲のスケールを弱チャージ攻撃のものに設定
+            _attackScale = _currentAttackData.scale;
+
+            // 攻撃を行う部位を設定
+            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
 
             _stateTime = 0;
         }
@@ -974,6 +972,8 @@ public class PlayerState : Player<PlayerState>
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
+
+            /*
 
             //特殊チャージの場合
             if (state._isSpecialCharge)
@@ -1013,92 +1013,94 @@ public class PlayerState : Player<PlayerState>
             // 通常チャージの場合
             else
             {
-                state._normalChargeTime++;
+            }
+            */
 
-                // 攻撃を出すことができる時に
-                if (state._normalChargeTime > state._playerData.chargeAttackTime)
+            state._normalChargeTime++;
+
+            // 攻撃を出すことができる時に
+            if (state._normalChargeTime > state._playerData.chargeAttackTime)
+            {
+                // 攻撃範囲を表示していない場合、攻撃範囲を表示
+                if (!_isShowAttackRange)
                 {
-                    // 攻撃範囲を表示していない場合、攻撃範囲を表示
-                    if (!_isShowAttackRange)
+                    Vector3 AreaPos = state.transform.position;
+
+                    //　ずらす分のベクトル
+                    Vector3 shift = state._playerData.chargeAttackAreaShiftVector;
+                    // プレイヤーの向きに合わせてずらす分を回転させる
+                    shift = Quaternion.Euler(0, state.transform.eulerAngles.y, 0) * shift;
+
+                    AreaPos += shift;
+
+                    _attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
+
+                    _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
+
+                    _isShowAttackRange = true;
+                }
+
+                // チャージ時間が50％以上なら強チャージ攻撃の攻撃範囲に変更
+                if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
+                {
+                    // 強チャージ攻撃の攻撃範囲に変更
+                    if (!_isHighChargeAttack)
                     {
-                        Vector3 AreaPos = state.transform.position;
-
-                        //　ずらす分のベクトル
-                        Vector3 shift = state._playerData.chargeAttackAreaShiftVector;
-                        // プレイヤーの向きに合わせてずらす分を回転させる
-                        shift = Quaternion.Euler(0, state.transform.eulerAngles.y, 0) * shift;
-
-                        AreaPos += shift;
-
-                        _attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
+                        _attackScale = state.SearchAttackData("ChargeAttack").scale;
 
                         _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
 
-                        _isShowAttackRange = true;
+                        _isHighChargeAttack = true;
+
+                        _currentAttackData = state.SearchAttackData("ChargeAttack");
+
+                        // 攻撃する部位を変更
+                        state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
                     }
 
-                    // チャージ時間が50％以上なら強チャージ攻撃の攻撃範囲に変更
-                    if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
-                    {
-                        // 強チャージ攻撃の攻撃範囲に変更
-                        if (!_isHighChargeAttack)
-                        {
-                            _attackScale = state.SearchAttackData("ChargeAttack").scale;
+                    /// 攻撃部位の拡大処理 ///
 
-                            _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
+                    // 強チャージ攻撃に入ってから何フレームたったか
+                    float frame = (float)(state._normalChargeTime - state._playerData.maxChargeAttackTime / 2);
 
-                            _isHighChargeAttack = true;
+                    // 大きさの計算
+                    float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
-                            _currentAttackData = state.SearchAttackData("ChargeAttack");
+                    // 弱チャージ攻撃の拡大率よりも小さくならないようにする
+                    scale = Mathf.Clamp(scale, state._scallingAttackPart.scale, _currentAttackData.attackPartScale);
 
-                            // 攻撃する部位を変更
-                            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
-                        }
+                    // 攻撃する部位を大きくする
+                    state._scallingAttackPart.scale = scale;
+                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
 
-                        /// 攻撃部位の拡大処理 ///
+                    // 少しずつずらす
+                    float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
-                        // 強チャージ攻撃に入ってから何フレームたったか
-                        float frame = (float)(state._normalChargeTime - state._playerData.maxChargeAttackTime / 2);
+                    // 攻撃座標の位置をずらす
+                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                }
+                // 弱チャージ攻撃の攻撃範囲の時
+                else
+                {
+                    /// 攻撃部位の拡大処理 ///
 
-                        // 大きさの計算
-                        float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
-
-                        // 弱チャージ攻撃の拡大率よりも小さくならないようにする
-                        scale = Mathf.Clamp(scale, state._scallingAttackPart.scale, _currentAttackData.attackPartScale);
-
-                        // 攻撃する部位を大きくする
-                        state._scallingAttackPart.scale = scale;
-                        state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
-
-                        // 少しずつずらす
-                        float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
-
-                        // 攻撃座標の位置をずらす
-                        state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
-                    }
-                    // 弱チャージ攻撃の攻撃範囲の時
-                    else
-                    {
-                        /// 攻撃部位の拡大処理 ///
-
-                        // 弱チャージ攻撃に入ってから何フレームたったか
-                        float frame = (float)(state._normalChargeTime - state._playerData.chargeAttackTime);
+                    // 弱チャージ攻撃に入ってから何フレームたったか
+                    float frame = (float)(state._normalChargeTime - state._playerData.chargeAttackTime);
 
 
-                        // 大きさの計算
-                        float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                    // 大きさの計算
+                    float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
-                        state._scallingAttackPart.scale = scale;
+                    state._scallingAttackPart.scale = scale;
 
-                        // 攻撃する部位を大きくする
-                        state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                    // 攻撃する部位を大きくする
+                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
 
-                        // 少しずつずらす
-                        float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                    // 少しずつずらす
+                    float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
-                        // 攻撃座標の位置をずらす
-                        state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
-                    }
+                    // 攻撃座標の位置をずらす
+                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
                 }
 
                 // 最大チャージ時間を超えたらチャージ攻撃に遷移
@@ -1113,6 +1115,7 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnExitState()
         {
+            /*
             if (state._isSpecialCharge)
             {
                 state._animator.ResetTrigger("SpecialCharge");
@@ -1127,8 +1130,10 @@ public class PlayerState : Player<PlayerState>
             }
             else
             {
-                state._animator.ResetTrigger("NormalCharge");
             }
+            */
+
+            state._animator.ResetTrigger("NormalCharge");
 
             // 攻撃範囲オブジェクトを削除
             if (_attackArea)
@@ -1288,18 +1293,27 @@ public class PlayerState : Player<PlayerState>
 
             _stateTime = 0;
 
-            // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
-            if (state._specialChargeTime == state._playerData.maxSpecialChargeTime)
-            {
-                _currentAttackName = "SpecialAttack";
+            float chargeNum = state._specialChargeNum;
 
+            float subNum = state.GetMaxSpecialChargeNum() / 4; //←定数にする
+
+            int count = 0;
+
+            while (chargeNum > subNum)
+            {
+                chargeNum -= subNum;
+                count++;
+            }
+
+            // チャージ時間に応じて攻撃名を設定
+            _currentAttackName = "SpecialAttack" + (count + 1).ToString();
+
+            // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
+            if (count == 4)
+            {
                 // カメラの特殊攻撃中フラグを設定
                 _cameraMove = state._camera.GetComponent<CameraMove>();
                 _cameraMove.SetSpecialAttack(true);
-            }
-            else
-            {
-                _currentAttackName = "LowSpecialAttack";
             }
 
             // 特殊攻撃アニメーションを再生
@@ -1338,10 +1352,6 @@ public class PlayerState : Player<PlayerState>
                 _attackEffect.transform.localScale = new Vector3(effectScale, effectScale, effectScale);
 
                 // TODO : 弾を生成する(特殊攻撃を飛ばす仕様ならば)
-
-                // チャージ時間をリセット
-                state._specialChargeTime = 0;
-
             }
             // 攻撃のトータルフレームに達した時
             if (_stateTime >= _currentAttackData.totalFrame)
@@ -1365,7 +1375,7 @@ public class PlayerState : Player<PlayerState>
             // 攻撃アニメーションを停止
             state._animator.ResetTrigger(_currentAttackName);
             // チャージ時間をリセット
-            state._specialChargeTime = 0;
+            state._specialChargeNum = 0;
 
             if (_cameraMove != null)
             {
@@ -1503,7 +1513,7 @@ public class PlayerState : Player<PlayerState>
                 // 攻撃する部位を縮小する
                 state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
             }
-            
+
             // スタン時間をカウントダウン
             _stateTime++;
 
@@ -1655,7 +1665,6 @@ public class PlayerState : Player<PlayerState>
     {
         if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
         {
-            _isSpecialCharge = false;
             ChangeState(new ChargeState(this));
         }
     }
@@ -1665,8 +1674,6 @@ public class PlayerState : Player<PlayerState>
 
         // チャージ状態以外では何もしない
         if (_stateKind != StateKind.CHARGE) return;
-
-        if (_isSpecialCharge) return;
 
         // 一定時間以上チャージを行っていたらチャージ攻撃に移行
         if (_normalChargeTime > _playerData.chargeAttackTime)
@@ -1707,32 +1714,32 @@ public class PlayerState : Player<PlayerState>
     {
         if (_isInItemRange) return;
 
-        if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
-        {
-            _isSpecialCharge = true;
-            ChangeState(new ChargeState(this));
-        }
+        //if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
+        //{
+        //    _isSpecialCharge = true;
+        //    ChangeState(new ChargeState(this));
+        //}
     }
 
     private void SpecialAttack(InputAction.CallbackContext context)
     {
-        // 特殊攻撃チャージ中なら特殊攻撃状態に遷移
-        if (_stateKind == StateKind.CHARGE && _isSpecialCharge)
-        {
-            // アニメーションが特殊攻撃開始アニメであれば
-            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("SpecialChargeStart"))
-            {
-                // 何もしない
-                return;
-            }
+        //// 特殊攻撃チャージ中なら特殊攻撃状態に遷移
+        //if (_stateKind == StateKind.CHARGE && _isSpecialCharge)
+        //{
+        //    // アニメーションが特殊攻撃開始アニメであれば
+        //    if (_animator.GetCurrentAnimatorStateInfo(0).IsName("SpecialChargeStart"))
+        //    {
+        //        // 何もしない
+        //        return;
+        //    }
 
-            ChangeState(new SpecialAttackState(this));
-        }
-        // 特殊ゲージが最大なら特殊攻撃状態に遷移
-        else if (isAbleToSpecialAttack && _specialChargeTime == _playerData.maxSpecialChargeTime)
-        {
-            ChangeState(new SpecialAttackState(this));
-        }
+        //    ChangeState(new SpecialAttackState(this));
+        //}
+        //// 特殊ゲージが最大なら特殊攻撃状態に遷移
+        //else if (isAbleToSpecialAttack && _specialChargeTime == _playerData.maxSpecialChargeNum)
+        //{
+        //    ChangeState(new SpecialAttackState(this));
+        //}
     }
 
     private Attack SearchAttackData(string attackName)
@@ -1975,7 +1982,7 @@ public class PlayerState : Player<PlayerState>
         attackData.hitStopFrame = data.hitStopFrame;
 
         // もし弱攻撃ならば
-        if(data.attackKind == Attack.AttackType.WeakAttack)
+        if (data.attackKind == Attack.AttackType.WeakAttack)
         {
             // 弱攻撃フラグを立てる
             attackData.isWeakAttack = true;
@@ -2070,6 +2077,11 @@ public class PlayerState : Player<PlayerState>
 
         return moveDirection;
     }
+    public void AddSpecialGauge(float addNum)
+    {
+        _specialChargeNum += addNum;
+    }
+
     public int GetMaxHp()
     {
         return _playerStatus.maxHp + _passiveStatus.maxHpAddNum;
@@ -2086,13 +2098,13 @@ public class PlayerState : Player<PlayerState>
     {
         return _nowBulletNum;
     }
-    public float GetMaxSpecialChargeTime()
+    public float GetMaxSpecialChargeNum()
     {
-        return _playerData.maxSpecialChargeTime;
+        return _playerData.maxSpecialChargeNum;
     }
-    public float GetNowSpecialChargeTime()
+    public float GetNowSpecialChargeNum()
     {
-        return _specialChargeTime;
+        return _specialChargeNum;
     }
     public void SetLowAttackSkill(LowAttackSkillData skill)
     {
@@ -2296,65 +2308,45 @@ public class PlayerState : Player<PlayerState>
             // 攻撃オブジェクトを削除する
             Destroy(other.gameObject);
 
-            // 最大溜めの特殊攻撃を行っているときはダメージ状態に遷移しない
-            if (_stateKind == StateKind.SPECIALATTACK && _specialChargeTime == _playerData.maxSpecialChargeTime)
+            int damage = (int)other.gameObject.GetComponent<EnemyAttackCol>().GetDamage();
+
+            // 被ダメージカット率を計算してダメージを減らす
+            damage = (int)(damage * (1.0f - (_passiveStatus.damageCutRateAddRate / 100.0f)));
+
+            // HPを減らす
+            _nowHp -= damage;
+
+            // ダメージマテリアルに変更
+            _playerMeshRenderer.material = _damageData.damageMaterial;
+
+            // ダメージの種類を取得
+            _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
+
+            // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
+            Vector3 hitPosition = other.ClosestPoint(transform.position);
+
+            // ダメージエフェクトを生成
+            Instantiate(other.gameObject.GetComponent<EnemyAttackCol>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
+
+            // 攻撃入力をリセット
+            _isAttackInput = false;
+
+            // 通常攻撃のチャージ時間をリセット
+            _normalChargeTime = 0;
+
+            // HPが0以下なら死亡状態に遷移
+            if (_nowHp <= 0)
             {
-                // ダメージをカットする
-                int damage = (int)((float)other.gameObject.GetComponent<EnemyAttackCol>().GetDamage() * _playerData.maxSpecialAttackDamegeCutRate);
-
-                // パッシブスキル分の被ダメージカット率を加算
-                damage = (int)(damage * (1.0f - (_passiveStatus.damageCutRateAddRate / 100.0f)));
-
-                _nowHp -= damage;
-
-                // HPを1以下にしない
-                if (_nowHp <= 0)
-                {
-                    _nowHp = 1;
-                }
-
+                _nowHp = 0;
+                ChangeState(new DeadState(this));
+                return;
             }
             else
             {
-                int damage = (int)other.gameObject.GetComponent<EnemyAttackCol>().GetDamage();
-
-                // 被ダメージカット率を計算してダメージを減らす
-                damage = (int)(damage * (1.0f - (_passiveStatus.damageCutRateAddRate / 100.0f)));
-
-                // HPを減らす
-                _nowHp -= damage;
-
-                // ダメージマテリアルに変更
-                _playerMeshRenderer.material = _damageData.damageMaterial;
-
-                // ダメージの種類を取得
-                _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
-
-                // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
-                Vector3 hitPosition = other.ClosestPoint(transform.position);
-
-                // ダメージエフェクトを生成
-                Instantiate(other.gameObject.GetComponent<EnemyAttackCol>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
-
-                // 攻撃入力をリセット
-                _isAttackInput = false;
-
-                // 通常攻撃のチャージ時間をリセット
-                _normalChargeTime = 0;
-
-                // HPが0以下なら死亡状態に遷移
-                if (_nowHp <= 0)
-                {
-                    _nowHp = 0;
-                    ChangeState(new DeadState(this));
-                    return;
-                }
-                else
-                {
-                    // ダメージ状態に遷移
-                    ChangeState(new DamageState(this));
-                }
+                // ダメージ状態に遷移
+                ChangeState(new DamageState(this));
             }
+
         }
 
         // ドロップした弾にあたったら弾を補充

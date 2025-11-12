@@ -23,8 +23,8 @@ public class SpecialGaugeController : MonoBehaviour
     {
         _playerState = _player.GetComponent<PlayerState>();
 
-        _currentGauge = _playerState.GetNowSpecialChargeTime();
-        _maxGauge = _playerState.GetMaxSpecialChargeTime();
+        _currentGauge = _playerState.GetNowSpecialChargeNum();
+        _maxGauge = _playerState.GetMaxSpecialChargeNum();
 
         _auraImage.gameObject.SetActive(false); //オーラを非表示
         _auraImage2.gameObject.SetActive(false); //オーラを非表示
@@ -34,7 +34,7 @@ public class SpecialGaugeController : MonoBehaviour
     void Update()
     {
         //現在のゲージ量を取得
-        _currentGauge = _playerState.GetNowSpecialChargeTime();
+        _currentGauge = _playerState.GetNowSpecialChargeNum();
 
         //ゲージの割合を計算
         float fillAmount = Mathf.Clamp01(_currentGauge / _maxGauge);
