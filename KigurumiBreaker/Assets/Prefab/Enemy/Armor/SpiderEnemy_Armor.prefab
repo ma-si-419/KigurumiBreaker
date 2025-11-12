@@ -1,5 +1,123 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1635036275103352687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7224292705256164147}
+  - component: {fileID: 1340698093411365459}
+  m_Layer: 0
+  m_Name: ArmorMesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7224292705256164147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635036275103352687}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6512746208214475788}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!137 &1340698093411365459
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635036275103352687}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 07ac161a3de83fa4f93c846286e235b3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 4349282696176223812, guid: 8419ae74331b7e244986a3788edb7d65, type: 3}
+  m_Bones:
+  - {fileID: 1694680356919819397}
+  - {fileID: 6621368202667885708}
+  - {fileID: 8275613733884825487}
+  - {fileID: 6132458163346005427}
+  - {fileID: 3203921836693723116}
+  - {fileID: 6418456370183429843}
+  - {fileID: 8169105438627822061}
+  - {fileID: 3654083181668769663}
+  - {fileID: 2815090507613990933}
+  - {fileID: 8708681707944961934}
+  - {fileID: 1353955125721681117}
+  - {fileID: 4325573082302737570}
+  - {fileID: 6615631326232241800}
+  - {fileID: 1139478843762486079}
+  - {fileID: 7362283025156777724}
+  - {fileID: 3852159625294059493}
+  - {fileID: 5616516675911590579}
+  - {fileID: 6348865275756529548}
+  - {fileID: 5491738273393372494}
+  - {fileID: 1354221477258951131}
+  - {fileID: 4115306797890641538}
+  - {fileID: 8560004962254555825}
+  - {fileID: 5191746505201451229}
+  - {fileID: 4656103328885170795}
+  - {fileID: 378859560664983269}
+  - {fileID: 6948578479492684890}
+  - {fileID: 6129231656202888786}
+  - {fileID: 5242811872938001394}
+  - {fileID: 8664622404653709974}
+  - {fileID: 918379789871431193}
+  - {fileID: 5980608807822125121}
+  - {fileID: 4785451797507199893}
+  - {fileID: 8899762333369389291}
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 1694680356919819397}
+  m_AABB:
+    m_Center: {x: -0.018640757, y: 0.16583824, z: 1.1511211}
+    m_Extent: {x: 2.862253, y: 3.2619147, z: 1.2556577}
+  m_DirtyAABB: 0
 --- !u!1 &5016293436164449330
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 6d1edab2a79c6e349bad171199f731e1, type: 2}
     - target: {fileID: 919132149155446097, guid: 8419ae74331b7e244986a3788edb7d65, type: 3}
       propertyPath: m_Name
-      value: SpiderEnemy
+      value: SpiderEnemy_Armor
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8419ae74331b7e244986a3788edb7d65, type: 3}
       propertyPath: m_IsActive
@@ -333,6 +451,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8419ae74331b7e244986a3788edb7d65, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1266176464320113101}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8419ae74331b7e244986a3788edb7d65, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7224292705256164147}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8419ae74331b7e244986a3788edb7d65, type: 3}
       insertIndex: -1
@@ -529,9 +650,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 242ff3136d1571544a0c85d9263f428e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyData: {fileID: 11400000, guid: c36fd13cfbbf5c74fb86451b8f69a88d, type: 2}
+  _enemyData: {fileID: 11400000, guid: 39a0cfe279d3e614ea51595cacfbe819, type: 2}
   _enemyCommonData: {fileID: 11400000, guid: 4de280dc11522ed4d9934284009b4a01, type: 2}
-  _armorSkinedMeshRenderer: []
+  _armorSkinedMeshRenderer:
+  - {fileID: 1340698093411365459}
   _outlineSkinedMeshRenderer:
   - {fileID: 7183715513892789306}
   _attackSignSkinedMeshRenderer:

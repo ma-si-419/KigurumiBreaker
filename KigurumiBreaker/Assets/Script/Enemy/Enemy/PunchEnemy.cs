@@ -17,7 +17,7 @@ public class PunchEnemy : Enemy
     /* 定数 */
     private const float ATTACK_DISTANCE = 1.0f; // 攻撃判定の距離
 
-    public override void Attack()
+    public override void AttackType1()
     {
         // 前進動作
         if (!_isDash)
@@ -33,12 +33,12 @@ public class PunchEnemy : Enemy
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
 
-        if (stateInfo.IsName("Attack"))
+        if (stateInfo.IsName("AttackType1"))
         {
-            AttackSign(stateInfo.normalizedTime, 0.5f);
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
             // 攻撃判定生成タイミング
-            if (stateInfo.normalizedTime >= 0.6f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)
@@ -64,8 +64,6 @@ public class PunchEnemy : Enemy
             _isStateChange = false;
             ChangeState(new IdleState(this));
         }
-        
-
     }
 
     private IEnumerator DoDash()

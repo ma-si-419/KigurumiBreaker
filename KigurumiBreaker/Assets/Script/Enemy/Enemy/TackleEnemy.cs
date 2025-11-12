@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class TackleEnemy : Enemy
 {
+    private bool _isCharge = false; // 突進中かどうかのフラグ
+
+    /* 定数 */
+    private const float ATTACK_DISTANCE = 1.5f; // 攻撃判定の距離
     private float CHARGE_SPEED = 0.1f; // 突進速度
     private float CHARGE_TIME = 0.05f; // 突進時間
 
-    private bool _isCharge = false; // 突進中かどうかのフラグ
-    private GameObject _attackObject; // 攻撃オブジェクト
-
-    /* 定数 */
-    private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
-    private const float ATTACK_DISTANCE = 1.5f; // 攻撃判定の距離
-
-
-    public override void Attack()
+    public override void AttackType1()
     {
         // NavMeshを消す
         agent.enabled = false;
@@ -23,11 +19,11 @@ public class TackleEnemy : Enemy
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         //攻撃開始
-        if (stateInfo.IsName("Attack"))
+        if (stateInfo.IsName("AttackType1"))
         {
-            AttackSign(stateInfo.normalizedTime, 0.2f);
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if (stateInfo.normalizedTime >= 0.3f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 if (!_isCreateAttack)
                 {
@@ -78,7 +74,7 @@ public class TackleEnemy : Enemy
             yield return new WaitForFixedUpdate();
         }
 
-        _rigidbody.velocity = Vector3.zero; // 終了時に停止を保証
+        _rigidbody.velocity = Vector3.zero; // 終了時に停止
         _isCharge = false;
     }
 

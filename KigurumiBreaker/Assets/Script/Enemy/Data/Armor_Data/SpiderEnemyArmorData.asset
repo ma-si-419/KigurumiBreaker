@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
-  m_Name: SpiderEnemyData
+  m_Name: SpiderEnemyArmorData
   m_EditorClassIdentifier: 
   IsStrongEnemy: 0
-  IsArmor: 0
+  IsArmor: 1
   MaxHp: 100
-  MaxTrunk: 0
+  MaxTrunk: 50
   AttackPower: 50
   MoveSpeed: 5
   DetectionRange: 15
   AttackRange: 8
   IdleToChaseTime: 2
   ChaseToAttack: 1.5
-  MaxAttackTime: 0.5
+  MaxAttackTime: 0
   RotateSpeed: 5
   AttackPrefab: {fileID: 8603638642903214138, guid: a8a3688cdaf281b4fbd21c6405c6cb65, type: 3}
   BarYPosition: 3.5

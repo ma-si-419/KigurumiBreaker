@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class AttackState : IState
+public class AttackType1State : IState
 {
     private Enemy _enemy;   //敵の参照
 
-    public AttackState(Enemy enemy) 
+    public AttackType1State(Enemy enemy) 
     {
         //コンストラクタでEnemyの参照を受け取る
         _enemy = enemy;
@@ -16,13 +16,13 @@ public class AttackState : IState
         _enemy.AttackReset(); 
 
         //攻撃アニメーション開始
-        _enemy.animator.SetTrigger("Attack");
+        _enemy.animator.SetTrigger("AttackType1");
     }
 
     public void Update()
     {
         //攻撃処理
-        _enemy.Attack(); 
+        _enemy.AttackType1(); 
     }
 
     public void End()

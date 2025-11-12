@@ -81,23 +81,23 @@ public class LongRangeAttackEnemy : Enemy
         {
             //攻撃状態へ
             _longRangeTimer = 0.0f;
-            ChangeState(new AttackState(this));
+            ChangeState(new AttackType1State(this));
         }
     }
 
-    public override void Attack()
+    public override void AttackType1()
     {
         //プレイヤーの方向を向き続ける
         LookAtPlayer();
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Attack"))
+        if (stateInfo.IsName("AttackType1"))
         {
             // 攻撃サインの表示
-            AttackSign(stateInfo.normalizedTime, 0.4f);
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if (stateInfo.normalizedTime >= 0.5f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)

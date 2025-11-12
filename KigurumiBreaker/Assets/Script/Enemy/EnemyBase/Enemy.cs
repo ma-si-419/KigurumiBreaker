@@ -35,7 +35,11 @@ public class Enemy : EnemyBase
     // 敵がビックリマークを生成したかどうかのフラグ
     private bool _isDetectionMark;
 
+    // 敵の攻撃オブジェクト変数
     protected GameObject _attackObj;
+
+    // 定数
+    protected const float ATTACK_SIGN_DECREASE = 0.1f;
 
     // アーマー用のSkinnedMeshRenderer変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
@@ -223,9 +227,15 @@ public class Enemy : EnemyBase
                 //追跡状態へ
                 _isAttackRange = false; // フラグをリセット
                 _stateTimer = 0.0f;
-                ChangeState(new AttackState(this));
+                ChangeState(new AttackType1State(this));
             }
         }
+
+    }
+
+    // 基本強敵待機処理(オーバーライドで変更可)
+    public virtual void StrongEnemyIdle()
+    {
 
     }
 
@@ -258,7 +268,7 @@ public class Enemy : EnemyBase
 
                 //攻撃状態へ
                 _stateTimer = 0.0f;
-                ChangeState(new AttackState(this));
+                ChangeState(new AttackType1State(this));
             }
 
             _isChasetoIdle = true;
@@ -282,7 +292,7 @@ public class Enemy : EnemyBase
     }
 
     //基本攻撃処理(オーバーライドで変更可)
-    public virtual void Attack() { }
+    public virtual void AttackType1() { }
 
     public virtual void Attack2() { }
 
@@ -337,7 +347,7 @@ public class Enemy : EnemyBase
             Destroy(other.gameObject);
 
             //攻撃状態のときはダメージアニメーションを行わない
-            if (_currentState is AttackState) return;
+            if (_currentState is AttackType1State) return;
 
             // 弱攻撃の場合はダメージアニメーションを行わない
             if (_isWeakAttack) return;
@@ -394,7 +404,7 @@ public class Enemy : EnemyBase
             _dropBullets.Add(_enemyCommonData.dropBulletTime);
 
             //攻撃状態のときはダメージアニメーションを行わない
-            if (_currentState is AttackState) return;
+            if (_currentState is AttackType1State) return;
 
             if (_isWeakAttack) return;
 
