@@ -24,7 +24,7 @@ public class AttackType2State : IState
     public void Update()
     {
         //UŒ‚ˆ—
-        _enemy.AttackType1();
+        _enemy.AttackType2();
     }
 
     public void End()

@@ -863,6 +863,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400104, guid: 3fa06637f7751b44b8e63a9964b181a6, type: 3}
   m_PrefabInstance: {fileID: 7536579813678346135}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7536579813678311723 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100028, guid: 3fa06637f7751b44b8e63a9964b181a6, type: 3}
+  m_PrefabInstance: {fileID: 7536579813678346135}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7536579813678311733 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: 3fa06637f7751b44b8e63a9964b181a6, type: 3}
@@ -952,10 +957,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4aa6b2928c50fc4599da943f73759a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyData: {fileID: 11400000, guid: aceb4873f54102046b54d4ed142ad7eb, type: 2}
+  _enemyData: {fileID: 11400000, guid: 8d0e1dd01d56a0643956fd3fefcca9d7, type: 2}
   _enemyCommonData: {fileID: 11400000, guid: 4de280dc11522ed4d9934284009b4a01, type: 2}
   _armorSkinedMeshRenderer: []
   _outlineSkinedMeshRenderer:
   - {fileID: 4139391641873244813}
   _attackSignSkinedMeshRenderer:
   - {fileID: 8840476403832131592}
+  _headPos: {fileID: 7536579813678311723}

@@ -20,9 +20,11 @@ MonoBehaviour:
   MoveSpeed: 5
   DetectionRange: 20
   AttackRange: 5
+  AttackSwitchRange: 0
   IdleToChaseTime: 2
   ChaseToAttack: 2
-  MaxAttackTime: 0
+  MaxAttackTime: 0.3
   RotateSpeed: 5
-  AttackPrefab: {fileID: 1480296614537264204, guid: 6a9b4e060aba9954db619ad8fe26c75d, type: 3}
+  AttackType1Prefab: {fileID: 1480296614537264204, guid: 6a9b4e060aba9954db619ad8fe26c75d, type: 3}
+  AttackType2Prefab: {fileID: 0}
   BarYPosition: 2

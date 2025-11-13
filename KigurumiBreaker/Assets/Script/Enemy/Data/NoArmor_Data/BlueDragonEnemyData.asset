@@ -18,11 +18,13 @@ MonoBehaviour:
   MaxTrunk: 0
   AttackPower: 50
   MoveSpeed: 6
-  DetectionRange: 10
-  AttackRange: 6
-  IdleToChaseTime: 2
+  DetectionRange: 12
+  AttackRange: 10
+  AttackSwitchRange: 5
+  IdleToChaseTime: 1
   ChaseToAttack: 2
-  MaxAttackTime: 0.6
-  RotateSpeed: 5
-  AttackPrefab: {fileID: 8603638642903214138, guid: 4b3a5f16a5efe9a4baeef98667c14f3c, type: 3}
+  MaxAttackTime: 0.4
+  RotateSpeed: 3
+  AttackType1Prefab: {fileID: 621494178838673121, guid: c7b7c8939f9049e409365ab9bd7145c6, type: 3}
+  AttackType2Prefab: {fileID: 8603638642903214138, guid: 4b3a5f16a5efe9a4baeef98667c14f3c, type: 3}
   BarYPosition: 2.5
