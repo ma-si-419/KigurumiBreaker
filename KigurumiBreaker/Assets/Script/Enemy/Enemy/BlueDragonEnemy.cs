@@ -7,7 +7,7 @@ public class BlueDragonEnemy : Enemy
 {
     // 敵の頭
     [Header("敵の頭のトランスフォーム")]
-    [SerializeField] private Transform _headPos;
+    [SerializeField] private GameObject _headPos;
 
     // 攻撃判定の場所
     private Transform _target;
@@ -16,17 +16,6 @@ public class BlueDragonEnemy : Enemy
 
     public override void AttackType1()
     {
-        // 敵の頭が入っているか
-        if (_headPos != null)
-        {
-            // 頭のTransformを取得
-            _target = _headPos;
-        }
-        else
-        {
-            Debug.Log("頭のトランス入ってないです。");
-        }
-
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -41,9 +30,7 @@ public class BlueDragonEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    //EnemyAttackCreate(3.0f, 1.0f, _attackType1ObjectPrefab);
-                    EnemyBuleDragonAttackCreate(_headPos, _attackType2ObjectPrefab);
-
+                    EnemyAttackCreate(3.0f, 1.0f, _attackType1ObjectPrefab);
                 }
             }
 
@@ -58,7 +45,7 @@ public class BlueDragonEnemy : Enemy
 
         if(_attackObj != null)
         {
-            _attackObj.transform.position = _headPos.transform.position + this.transform.forward * 3.5f + this.transform.up * 1.5f;
+            _attackObj.transform.position = _headPos.transform.position + _headPos.transform.forward * 2.0f /*- _headPos.transform.up * 0.5f*/;
             _attackObj.transform.rotation = _headPos.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
         }
         
@@ -75,17 +62,18 @@ public class BlueDragonEnemy : Enemy
 
     public override void AttackType2()
     {
+        if (!_isD)
+        {
+            _target.position = player.transform.position;
+            _isD = true;
+        }
+
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("AttackType2"))
         {
             AttackSign(stateInfo.normalizedTime, 0.5f - ATTACK_SIGN_DECREASE);
-
-            if (stateInfo.normalizedTime <= 0.2f && !_isD)
-            {
-                _isD = true;
-            }
 
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= 0.4f)
@@ -94,7 +82,6 @@ public class BlueDragonEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    //EnemyAttackCreate(1.0f, 1.0f, _attackType2ObjectPrefab);
                     EnemyBuleDragonAttackCreate(_target, _attackType2ObjectPrefab);
                 }
             }
@@ -109,10 +96,6 @@ public class BlueDragonEnemy : Enemy
             }
         }
 
-        if (!_isD)
-        {
-            _target = player.transform;
-        }
 
         if (_isStateChange)
         {
@@ -122,13 +105,13 @@ public class BlueDragonEnemy : Enemy
         }
 
         StopMovement();
-
     }
 
     public void EnemyBuleDragonAttackCreate(Transform pos, GameObject attackPrefab)
     {
         // ゲームオブジェクト生成
-        _attackObj = Instantiate(attackPrefab, pos);
+        _attackObj = Instantiate(attackPrefab);
+        _attackObj.transform.position = pos.position;
 
         // 攻撃オブジェクトにバトルマネージャーをセット
         _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);

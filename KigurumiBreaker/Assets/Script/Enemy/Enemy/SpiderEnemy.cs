@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SpiderEnemy : Enemy
 {
-    private float _timer = 0;    // タイマー
     private bool _isCharge = false; // 突進中かどうかのフラグ
 
     /* 定数 */
