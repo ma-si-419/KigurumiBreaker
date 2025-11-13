@@ -25,7 +25,7 @@ public class PlayerState : Player<PlayerState>
         CHARGEATTACK,   // チャージ攻撃
         SPECIALATTACK,  // 特殊攻撃
         DAMAGE,         // ダメージ
-        DEAD           // 死亡
+        DEAD            // 死亡
     }
 
     public enum DamageKind
@@ -673,6 +673,9 @@ public class PlayerState : Player<PlayerState>
                     // 現在の攻撃オブジェクトを削除
                     if (state._currentAttack)
                     {
+                        state._battleManager.RemovePlayerAttack(state._currentAttack);
+
+                        Destroy(state._currentAttack);
                         state._currentAttack = null;
                     }
 
@@ -755,15 +758,6 @@ public class PlayerState : Player<PlayerState>
             {
                 Destroy(_effectObject);
                 _effectObject = null;
-            }
-
-            if (state._scallingAttackPart.attackObj)
-            {
-                // 攻撃する部位の大きさを元に戻す
-                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-
-                // 位置を元に戻す
-                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
             }
         }
     }
@@ -894,20 +888,7 @@ public class PlayerState : Player<PlayerState>
         {
             // Stateの情報を設定
             state.SetStateKind(PlayerState.StateKind.CHARGE);
-            /*           
-            // 通常チャージと特殊チャージをここで分ける
-            if (state._isSpecialCharge)
-            {
-            // 特殊チャージアニメーションを再生
-            state._animator.SetTrigger("SpecialCharge");
 
-            // 特殊チャージエフェクトを出す
-            _chargeEffect = Instantiate(state._playerEffectData.specialAttackChargeEffectPrefab, state.transform.position, Quaternion.identity, state.transform);
-            }
-            else
-            {
-            }
-            */
             // 通常チャージアニメーションを再生
             state._animator.SetTrigger("NormalCharge");
 
@@ -933,49 +914,6 @@ public class PlayerState : Player<PlayerState>
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
-
-            /*
-
-            //特殊チャージの場合
-            if (state._isSpecialCharge)
-            {
-                // 特殊攻撃可能
-                state.isAbleToSpecialAttack = true;
-
-                state._camera.GetComponent<CameraMove>().SetSwing();
-
-                // スキルがある場合の処理
-                if (state._playerSkill.specialChargeSkill != null)
-                {
-                    // 溜め速度が早くなっている場合チャージを早める
-                    state._specialChargeTime += state._playerSkill.specialChargeSkill.chargeSpeedRate;
-
-                    // チャージ中に出すスキルを出す
-                    if (state._playerSkill.specialChargeSkill.chargingAttackObject != null &&
-                        _stateTime % state._playerSkill.specialChargeSkill.attackIntervalFrame == 0)
-                    {
-                        Instantiate(state._playerSkill.specialChargeSkill.chargingAttackObject, state.transform.position, Quaternion.identity);
-                    }
-                }
-                else
-                {
-                    state._specialChargeTime++;
-                }
-
-                // 最大チャージ時間を超えたらアイドルに遷移
-                if (state._specialChargeTime >= state._playerData.maxSpecialChargeTime)
-                {
-                    state._specialChargeTime = state._playerData.maxSpecialChargeTime;
-
-                    state.ChangeState(new IdleState(state));
-                    return;
-                }
-            }
-            // 通常チャージの場合
-            else
-            {
-            }
-            */
 
             state._normalChargeTime++;
 
@@ -1076,24 +1014,6 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnExitState()
         {
-            /*
-            if (state._isSpecialCharge)
-            {
-                state._animator.ResetTrigger("SpecialCharge");
-                state._isSpecialCharge = false;
-
-                // チャージエフェクトを削除
-                if (_chargeEffect)
-                {
-                    Destroy(_chargeEffect);
-                    _chargeEffect = null;
-                }
-            }
-            else
-            {
-            }
-            */
-
             state._animator.ResetTrigger("NormalCharge");
 
             // 攻撃範囲オブジェクトを削除
@@ -1245,7 +1165,9 @@ public class PlayerState : Player<PlayerState>
             int chargeLevel = state.GetSpecialChargeLevel();
 
             // チャージ時間に応じて攻撃名を設定
-            _currentAttackName = "SpecialAttack" + chargeLevel.ToString();
+            //            _currentAttackName = "SpecialAttack" + chargeLevel.ToString();
+
+            _currentAttackName = "SpecialAttack";
 
             // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
             if (chargeLevel == state._playerData.specialAttackMaxLevel)
@@ -1429,7 +1351,7 @@ public class PlayerState : Player<PlayerState>
             if (!_changeMaterial)
             {
                 // マテリアルを元に戻す
-                state._playerMeshRenderer.material = state._playerMaterial;
+                state._playerMeshRenderer.material.color = Color.white;
 
                 _changeMaterial = true;
             }
@@ -1447,6 +1369,9 @@ public class PlayerState : Player<PlayerState>
 
                 // 攻撃する部位を縮小する
                 state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                // 位置を元の座標に戻す
+                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
             }
 
             // スタン時間をカウントダウン
@@ -1524,7 +1449,7 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             // マテリアルを赤色に変更する
-            state._playerMeshRenderer.material = state._damageData.damageMaterial;
+            state._playerMeshRenderer.material.color = Color.red;
 
             // 重めのヒットストップを行う
             state._battleManager.GetComponent<BattleManager>().SlowTime(state._playerData.deathSlowTime, state._playerData.deathTimeScale);
@@ -1543,7 +1468,7 @@ public class PlayerState : Player<PlayerState>
                 if (Time.timeScale == 1.0f)
                 {
                     // マテリアルを元に戻す
-                    state._playerMeshRenderer.material = state._playerMaterial;
+                    state._playerMeshRenderer.material.color = Color.white;
 
                     _changeMaterial = true;
                 }
@@ -1642,7 +1567,8 @@ public class PlayerState : Player<PlayerState>
     private void SpecialAttack(InputAction.CallbackContext context)
     {
         int chargeLevel = GetSpecialChargeLevel();
-        if (_isAbleToAttack && _isAbleToSpecialAttack && chargeLevel > 0)
+
+        if (_isAbleToSpecialAttack && chargeLevel > 0)
         {
             ChangeState(new SpecialAttackState(this));
         }
@@ -1906,15 +1832,20 @@ public class PlayerState : Player<PlayerState>
         Vector3 position = GetAttackPosition(data.attackPartName);
 
         // 攻撃の座標を設定
-        attackObject.GetComponent<PlayerAttack>().SetPlayerPos(position);
+        playerAttack.SetPlayerPos(position);
+
+        // バトルマネージャーを設定
+        playerAttack.SetBattleManager(_battleManager);
 
         // ずらす分を加算
         Vector3 shiftVec = transform.forward * data.shiftPosZ;
-
         attackObject.transform.position = position + shiftVec;
 
         // 攻撃の向きを設定
         attackObject.transform.forward = transform.forward;
+
+        // 攻撃オブジェクトをバトルマネージャーに登録
+        _battleManager.AddPlayerAttack(attackObject);
 
         // 攻撃オブジェクトを保存
         _currentAttack = attackObject;
@@ -2250,8 +2181,13 @@ public class PlayerState : Player<PlayerState>
             // HPを減らす
             _nowHp -= damage;
 
+            // ダメージの一定割合を特殊ゲージに加算
+            float specialGaugeAddNum = damage * _playerData.specialAttackChargeRate;
+
+            AddSpecialGauge(specialGaugeAddNum);
+
             // ダメージマテリアルに変更
-            _playerMeshRenderer.material = _damageData.damageMaterial;
+            _playerMeshRenderer.material.color = Color.red;
 
             // ダメージの種類を取得
             _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();

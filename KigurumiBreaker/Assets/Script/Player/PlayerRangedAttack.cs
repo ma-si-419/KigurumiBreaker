@@ -30,7 +30,7 @@ public class PlayerRangedAttack : MonoBehaviour
     [SerializeField] private GameObject _dropBullet;
 
     // 1フレームで変化できる角度
-    [SerializeField] private float _rotateSpeed = 5.0f;
+    [SerializeField] private float _rotateSpeed;
 
     // 移動速度
     [SerializeField] private float _moveSpeed = 5.0f;

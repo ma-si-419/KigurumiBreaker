@@ -29,6 +29,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float MaxSpecialChargeGauge;
     [Header("“ÁŽêUŒ‚‚Ì’iŠK”")]
     [SerializeField] private int SpecialAttackMaxLevel;
+    [Header("“G‚Ìƒ_ƒ[ƒW‚Ì‰½Š„‚ð“ÁŽêUŒ‚‚ÌƒQ[ƒW‚É‰ÁŽZ‚·‚é‚©")]
+    [SerializeField, Range(0.0f, 1.0f)] private float SpecialAttackChargeRate;
     [Header("‘O•ûŒü‚Æ‚·‚éŠp“x")]
     [SerializeField] private float ForwardAngle;
     [Header("‘O•ûŒü‚Ì“G‚ð”F’m‚·‚é‹——£")]
@@ -52,6 +54,7 @@ public class PlayerData : ScriptableObject
     public int chargeAttackTime => ChargeAttackTime;
     public int maxChargeAttackTime => MaxChargeAttackTime;
     public int specialAttackMaxLevel => SpecialAttackMaxLevel;
+    public float specialAttackChargeRate => SpecialAttackChargeRate;
     public Vector3 chargeAttackAreaShiftVector => ChargeAttackAreaShiftVector;
     public float moveDirAngle => MoveDirAngle;
     public float maxSpecialChargeNum => MaxSpecialChargeGauge;

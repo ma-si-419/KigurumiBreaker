@@ -5,8 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player/DamageData")]
 public class DamageData : ScriptableObject
 {
-    [Header("ダメージを受けた際に変化させるマテリアル")]
-    [SerializeField] private Material DamageMaterial;
     [Header("弱攻撃を受けた時の硬直時間")]
     [SerializeField] private int LowStanTime;
     [Header("弱攻撃を受けた時のヒットストップ時間")]
@@ -29,7 +27,6 @@ public class DamageData : ScriptableObject
     [SerializeField] private int HighHitStop;
 
     // 読み取り専用
-    public Material damageMaterial => DamageMaterial;
     public int lowStanTime => LowStanTime;
     public int lowHitStop => LowHitStop;
     public int middleStanTime => MiddleStanTime;

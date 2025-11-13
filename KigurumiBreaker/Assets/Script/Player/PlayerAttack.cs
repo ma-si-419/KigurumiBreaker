@@ -34,6 +34,8 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 _moveVec = Vector3.zero;
 
+    private BattleManager _battleManager;
+
     [SerializeField] private float effectShiftScale = 0.5f;
 
     // Start is called before the first frame update
@@ -56,6 +58,8 @@ public class PlayerAttack : MonoBehaviour
 
         if (_attackLifeTime <= 0)
         {
+            _battleManager.GetComponent<BattleManager>().RemovePlayerAttack(this.gameObject);
+
             //攻撃判定の寿命が来たら消す
             Destroy(this.gameObject);
         }
@@ -69,6 +73,10 @@ public class PlayerAttack : MonoBehaviour
     public void SetCamera(GameObject camera)
     {
         _camera = camera;
+    }
+    public void SetBattleManager(BattleManager battleManager)
+    {
+        _battleManager = battleManager;
     }
 
     public void SetMoveVec(Vector3 vec)
@@ -102,6 +110,9 @@ public class PlayerAttack : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            // プレイヤーの特殊ゲージを増加させる
+            _battleManager.AddPlayerSpecialGauge(3.0f);// TODO:後で調整(定数にするかどうかも悩み中)
+
             //エフェクトを出す
             if (_attackData.hitEffect != null)
             {
