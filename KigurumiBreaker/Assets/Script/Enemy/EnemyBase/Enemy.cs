@@ -10,22 +10,31 @@ public class Enemy : EnemyBase
 {
     // 状態遷移するまでのタイマー
     protected float _stateTimer = 0.0f;
+
     // 状態遷移するまでのタイマー
     protected float _attackTimer = 0.0f;
+
     // プレイヤーを検知したかどうかのフラグ
-    protected bool _isAttackRange = false;
+    protected bool _isAttack = false;
+
     // 攻撃オブジェクトを生成したかどうかのフラグ
     protected bool _isCreateAttack = false;
+
     // プレイヤーを一度でも検知したかどうかのフラグ
     protected bool _isSearched = false;
+
     // 状態遷移フラグ
     protected bool _isStateChange = false;
+
     // 攻撃がヒットしたかどうかのフラグ
     protected bool _isHit = false;
+
     // ヒットタイマー
     protected float _hitTimer = 0.5f;
+
     // 追跡から待機に戻るフラグ
     protected bool _isChasetoIdle = false;
+
     // デバッグ用の待機フラグ
     protected bool _isDebugIdleFlag = false;
 
@@ -209,15 +218,16 @@ public class Enemy : EnemyBase
         if (diff.sqrMagnitude < _attackRangeSqr)
         {
             _isSearched = true;
-            _isAttackRange = true;
+            _isAttack = true;
         }
         else
         {
             _attackTimer = 0.0f;
-            _isAttackRange = false;
+            _isAttack = false;
         }
 
-        if (_isAttackRange)
+        // 攻撃範囲に入っていたらタイマーを進める
+        if (_isAttack)
         {
             _attackTimer += Time.deltaTime;
             LookAtPlayer(); // プレイヤーの方向を向く
@@ -225,17 +235,27 @@ public class Enemy : EnemyBase
             if (_attackTimer > _enemyData.chaseToAttack)
             {
                 //追跡状態へ
-                _isAttackRange = false; // フラグをリセット
+                _isAttack = false; // フラグをリセット
                 _stateTimer = 0.0f;
-                ChangeState(new AttackType1State(this));
+
+                if (_enemyData.isStrongEnemy)
+                {
+                    if (diff.sqrMagnitude < _attackSwitchRangeSqr)
+                    {
+                        ChangeState(new AttackType1State(this));
+                    }
+                    else
+                    {
+                        ChangeState(new AttackType2State(this));
+                    }
+                }
+                else
+                {
+                    //攻撃状態へ
+                    ChangeState(new AttackType1State(this));
+                }
             }
         }
-
-    }
-
-    // 基本強敵待機処理(オーバーライドで変更可)
-    public virtual void StrongEnemyIdle()
-    {
 
     }
 
@@ -255,7 +275,6 @@ public class Enemy : EnemyBase
         //プレイヤーが検知範囲内にいるかチェック
         if (diff.sqrMagnitude < _attackRangeSqr)
         {
-
             //プレイヤーの方向を向き続ける
             LookAtPlayer();
             //タイマーを進める
@@ -268,7 +287,23 @@ public class Enemy : EnemyBase
 
                 //攻撃状態へ
                 _stateTimer = 0.0f;
-                ChangeState(new AttackType1State(this));
+
+                if (_enemyData.isStrongEnemy)
+                {
+                    if (diff.sqrMagnitude < _attackSwitchRangeSqr)
+                    {
+                        ChangeState(new AttackType1State(this));
+                    }
+                    else
+                    {
+                        ChangeState(new AttackType2State(this));
+                    }
+                }
+                else
+                {
+                    //攻撃状態へ
+                    ChangeState(new AttackType1State(this));
+                }
             }
 
             _isChasetoIdle = true;
@@ -294,7 +329,7 @@ public class Enemy : EnemyBase
     //基本攻撃処理(オーバーライドで変更可)
     public virtual void AttackType1() { }
 
-    public virtual void Attack2() { }
+    public virtual void AttackType2() { }
 
     // 攻撃判定に触れたときの処理
     private void OnTriggerEnter(Collider other)
@@ -352,7 +387,6 @@ public class Enemy : EnemyBase
             // 弱攻撃の場合はダメージアニメーションを行わない
             if (_isWeakAttack) return;
 
-
             OnHit();
         }
 
@@ -406,11 +440,11 @@ public class Enemy : EnemyBase
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackType1State) return;
 
+            // 弱攻撃の場合はダメージアニメーションを行わない
             if (_isWeakAttack) return;
 
             OnHit();
         }
-
     }
 
     public void AttackReset()
@@ -437,6 +471,9 @@ public class Enemy : EnemyBase
 
         //敵の攻撃範囲を表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackRangeSqr), Color.red);
+
+        //敵の攻撃を切り替える範囲を表示
+        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(_attackSwitchRangeSqr), Color.green);
     }
 
     public bool GetIsSearched()

@@ -31,7 +31,7 @@ public class SpiderEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(ATTACK_DISTANCE, 1.0f, _attackObjectPrefab);
+                    EnemyAttackCreate(ATTACK_DISTANCE, 1.0f, _attackType1ObjectPrefab);
                 }
 
                 if (!_isCharge)

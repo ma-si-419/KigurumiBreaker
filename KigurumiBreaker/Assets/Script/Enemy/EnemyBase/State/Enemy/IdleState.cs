@@ -22,16 +22,8 @@ public class IdleState : IState
 
     public void Update()
     {
-        if(_enemy.enemyData.isStrongEnemy)
-        {
-            //強敵用待機処理
-            _enemy.StrongEnemyIdle();
-        }
-        else
-        {
-            //基本待機処理
-            _enemy.Idle(); 
-        }
+        //基本待機処理
+        _enemy.Idle();
     }
 
     public void End()

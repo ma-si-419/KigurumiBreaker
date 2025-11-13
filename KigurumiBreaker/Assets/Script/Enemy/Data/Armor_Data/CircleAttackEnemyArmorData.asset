@@ -12,15 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
   m_Name: CircleAttackEnemyArmorData
   m_EditorClassIdentifier: 
-  MaxHp: 150
+  IsStrongEnemy: 0
   IsArmor: 1
+  MaxHp: 150
   MaxTrunk: 100
   AttackPower: 50
   MoveSpeed: 5
   DetectionRange: 15
   AttackRange: 5
+  AttackSwitchRange: 0
   IdleToChaseTime: 2
   ChaseToAttack: 1.5
+  MaxAttackTime: 0.6
   RotateSpeed: 5
-  AttackPrefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
+  AttackType1Prefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
+  AttackType2Prefab: {fileID: 0}
   BarYPosition: 4.5
