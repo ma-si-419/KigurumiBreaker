@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player/AttackPartList")]
 public class AttackPartList : ScriptableObject
 {
-    public List<AttackPart> attackDataList;
+    public List<AttackPart> attackPartList;
 }
 [System.Serializable]
 public class AttackPart

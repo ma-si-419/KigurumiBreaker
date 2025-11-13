@@ -25,8 +25,7 @@ public class PlayerState : Player<PlayerState>
         CHARGEATTACK,   // チャージ攻撃
         SPECIALATTACK,  // 特殊攻撃
         DAMAGE,         // ダメージ
-        DEAD,           // 死亡
-        CINEMATIC,      // 演出中
+        DEAD           // 死亡
     }
 
     public enum DamageKind
@@ -101,14 +100,14 @@ public class PlayerState : Player<PlayerState>
     // プレイヤーが使用する定数データ
     [SerializeField] private PlayerData _playerData;
 
-    // プレイヤーの攻撃部位
-    [SerializeField] private AttackPartList _attackPartData;
-
     // プレイヤーの被弾時のデータ
     [SerializeField] private DamageData _damageData;
 
     // プレイヤーのエフェクトデータ
     [SerializeField] private PlayerEffectData _playerEffectData;
+
+    // プレイヤーのStateごとのデータ
+    [SerializeField] private PlayerStateDataList _playerStateDataList;
 
     // バトルマネージャー
     [SerializeField] private BattleManager _battleManager;
@@ -153,7 +152,7 @@ public class PlayerState : Player<PlayerState>
     private bool _isAbleToAttack;
 
     // 現在特殊攻撃ができるかどうか
-    private bool isAbleToSpecialAttack;
+    private bool _isAbleToSpecialAttack;
 
     // 攻撃入力がされたかどうか
     private bool _isAttackInput;
@@ -214,7 +213,6 @@ public class PlayerState : Player<PlayerState>
         _input.Player.RangedAttack.started += RangedAttack;
         _input.Player.ChargeAttack.started += NormalCharge;
         _input.Player.ChargeAttack.canceled += ChargeAttack;
-        _input.Player.SpecialAttack.started += SpecialCharge;
         _input.Player.SpecialAttack.started += SpecialAttack;
 
         // InputActionを有効化
@@ -247,15 +245,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 待機状態では回避可能
-            state._isAbleToDodge = true;
-            // 待機状態では攻撃可能
-            state._isAbleToAttack = true;
-            // 待機状態では特殊攻撃可能
-            state.isAbleToSpecialAttack = true;
-
-            // 状態を待機に設定
-            state._stateKind = StateKind.IDLE;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.IDLE);
 
             // 待機アニメーションを再生
             state._animator.SetBool("Idle", true);
@@ -304,14 +295,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 移動状態では回避可能
-            state._isAbleToDodge = true;
-            // 移動状態では攻撃可能
-            state._isAbleToAttack = true;
-            // 移動状態では特殊攻撃可能
-            state.isAbleToSpecialAttack = true;
-            // 状態を移動に設定
-            state._stateKind = StateKind.MOVE;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.MOVE);
             // 移動アニメーションを再生
             state._animator.SetBool("Move", true);
         }
@@ -381,14 +366,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 回避中は回避不可
-            state._isAbleToDodge = false;
-            // 回避中は攻撃不可
-            state._isAbleToAttack = false;
-            // 回避中は特殊攻撃不可
-            state.isAbleToSpecialAttack = false;
-            // 状態を回避に設定
-            state._stateKind = StateKind.DODGE;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.DODGE);
             // 回避アニメーションを再生
             state._animator.SetTrigger("Dodge");
             // 回避時間を設定
@@ -537,14 +516,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 回避でキャンセル可能にする
-            state._isAbleToDodge = true;
-            // 攻撃の入力を一時的に無効化
-            state._isAbleToAttack = false;
-            // 特殊攻撃を不可にする
-            state.isAbleToSpecialAttack = false;
-            // 現在のStateKindを近接攻撃に設定
-            state._stateKind = StateKind.MELEEATTACK;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.MELEEATTACK);
 
             // 攻撃する方向をジョイスティックの方向に設定
             if (state._moveInput.magnitude > state._playerData.moveInputLength)
@@ -810,12 +783,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 回避でキャンセル可能にする
-            state._isAbleToDodge = true;
-            // 攻撃の入力を一時的に無効化
-            state._isAbleToAttack = false;
-            // 特殊攻撃を不可にする
-            state.isAbleToSpecialAttack = false;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.RANGEDATTACK);
             // 攻撃する方向をジョイスティックの方向に設定
             if (state._moveInput.magnitude > state._playerData.moveInputLength)
             {
@@ -833,8 +802,6 @@ public class PlayerState : Player<PlayerState>
             // 前方向にいる敵を探す
             _target = state.SearchTargetObject();
 
-            // 現在のStateKindを遠距離攻撃に設定
-            state._stateKind = StateKind.RANGEDATTACK;
             // 遠距離攻撃アニメーションを再生
             state._animator.SetTrigger("RangedAttack");
             // 攻撃の情報を設定
@@ -925,14 +892,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // チャージ中は回避可能
-            state._isAbleToDodge = true;
-            // チャージ中は攻撃不可
-            state._isAbleToAttack = false;
-            // チャージ中は特殊攻撃不可
-            state.isAbleToSpecialAttack = false;
-            // 状態をチャージに設定
-            state._stateKind = StateKind.CHARGE;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.CHARGE);
             /*           
             // 通常チャージと特殊チャージをここで分ける
             if (state._isSpecialCharge)
@@ -1155,14 +1116,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 回避不可能にする
-            state._isAbleToDodge = false;
-            // 攻撃の入力を無効化
-            state._isAbleToAttack = false;
-            // 特殊攻撃を不可にする
-            state.isAbleToSpecialAttack = false;
-            // 現在のStateKindを近接攻撃に設定
-            state._stateKind = StateKind.CHARGEATTACK;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.CHARGEATTACK);
 
             // チャージ時間が50％以上なら強チャージ攻撃、そうでなければ弱チャージ攻撃に設定
             if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
@@ -1282,34 +1237,18 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 回避不可能にする
-            state._isAbleToDodge = false;
-            // 攻撃の入力を無効化
-            state._isAbleToAttack = false;
-            // 特殊攻撃を不可にする
-            state.isAbleToSpecialAttack = false;
-            // 現在のStateKindを近接攻撃に設定
-            state._stateKind = StateKind.SPECIALATTACK;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.SPECIALATTACK);
 
             _stateTime = 0;
 
-            float chargeNum = state._specialChargeNum;
-
-            float subNum = state.GetMaxSpecialChargeNum() / 4; //←定数にする
-
-            int count = 0;
-
-            while (chargeNum > subNum)
-            {
-                chargeNum -= subNum;
-                count++;
-            }
+            int chargeLevel = state.GetSpecialChargeLevel();
 
             // チャージ時間に応じて攻撃名を設定
-            _currentAttackName = "SpecialAttack" + (count + 1).ToString();
+            _currentAttackName = "SpecialAttack" + chargeLevel.ToString();
 
             // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
-            if (count == 4)
+            if (chargeLevel == state._playerData.specialAttackMaxLevel)
             {
                 // カメラの特殊攻撃中フラグを設定
                 _cameraMove = state._camera.GetComponent<CameraMove>();
@@ -1407,12 +1346,8 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // ダメージ中は回避不可
-            state._isAbleToDodge = false;
-            // ダメージ中は攻撃不可
-            state._isAbleToAttack = false;
-            // 状態をダメージに設定
-            state._stateKind = StateKind.DAMAGE;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.DAMAGE);
 
             // ダメージの種類でスタン時間とアニメーションを変更
 
@@ -1581,18 +1516,12 @@ public class PlayerState : Player<PlayerState>
         }
         public override void OnEnterState()
         {
-            // 状態を死亡に設定
-            state._stateKind = StateKind.DEAD;
+            // Stateの情報を設定
+            state.SetStateKind(PlayerState.StateKind.DEAD);
             // 死亡アニメーションを再生
             state._animator.SetTrigger("Dead");
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
-            // 回避不可にする
-            state._isAbleToDodge = false;
-            // 攻撃不可にする
-            state._isAbleToAttack = false;
-            // 特殊攻撃不可にする
-            state.isAbleToSpecialAttack = false;
 
             // マテリアルを赤色に変更する
             state._playerMeshRenderer.material = state._damageData.damageMaterial;
@@ -1710,36 +1639,13 @@ public class PlayerState : Player<PlayerState>
         }
     }
 
-    private void SpecialCharge(InputAction.CallbackContext context)
-    {
-        if (_isInItemRange) return;
-
-        //if (_isAbleToAttack && _stateKind != StateKind.MELEEATTACK)
-        //{
-        //    _isSpecialCharge = true;
-        //    ChangeState(new ChargeState(this));
-        //}
-    }
-
     private void SpecialAttack(InputAction.CallbackContext context)
     {
-        //// 特殊攻撃チャージ中なら特殊攻撃状態に遷移
-        //if (_stateKind == StateKind.CHARGE && _isSpecialCharge)
-        //{
-        //    // アニメーションが特殊攻撃開始アニメであれば
-        //    if (_animator.GetCurrentAnimatorStateInfo(0).IsName("SpecialChargeStart"))
-        //    {
-        //        // 何もしない
-        //        return;
-        //    }
-
-        //    ChangeState(new SpecialAttackState(this));
-        //}
-        //// 特殊ゲージが最大なら特殊攻撃状態に遷移
-        //else if (isAbleToSpecialAttack && _specialChargeTime == _playerData.maxSpecialChargeNum)
-        //{
-        //    ChangeState(new SpecialAttackState(this));
-        //}
+        int chargeLevel = GetSpecialChargeLevel();
+        if (_isAbleToAttack && _isAbleToSpecialAttack && chargeLevel > 0)
+        {
+            ChangeState(new SpecialAttackState(this));
+        }
     }
 
     private Attack SearchAttackData(string attackName)
@@ -1818,11 +1724,11 @@ public class PlayerState : Player<PlayerState>
 
         // 攻撃部位のリグの名前を取得
         string rigName = null;
-        for (int i = 0; i < _attackPartData.attackDataList.Count; i++)
+        for (int i = 0; i < _attackData.attackPartList.attackPartList.Count; i++)
         {
-            if (_attackPartData.attackDataList[i].attackPartName == partName)
+            if (_attackData.attackPartList.attackPartList[i].attackPartName == partName)
             {
-                rigName = _attackPartData.attackDataList[i].objectRigName;
+                rigName = _attackData.attackPartList.attackPartList[i].objectRigName;
                 break;
             }
         }
@@ -1853,11 +1759,11 @@ public class PlayerState : Player<PlayerState>
         // 攻撃部位のリグの名前を取得
         string rigName = null;
 
-        for (int i = 0; i < _attackPartData.attackDataList.Count; i++)
+        for (int i = 0; i < _attackData.attackPartList.attackPartList.Count; i++)
         {
-            if (_attackPartData.attackDataList[i].attackPartName == partName)
+            if (_attackData.attackPartList.attackPartList[i].attackPartName == partName)
             {
-                rigName = _attackPartData.attackDataList[i].objectRigName;
+                rigName = _attackData.attackPartList.attackPartList[i].objectRigName;
                 break;
             }
         }
@@ -2132,6 +2038,16 @@ public class PlayerState : Player<PlayerState>
         _isStop = flag;
     }
 
+    private void SetStateKind(PlayerState.StateKind stateKind)
+    {
+        _stateKind = stateKind;
+
+        // 状態ごとの情報を設定
+        _isAbleToAttack = _playerStateDataList.StateDataList[(int)stateKind].ableToAttack;
+        _isAbleToDodge = _playerStateDataList.StateDataList[(int)stateKind].ableToDodge;
+        _isAbleToSpecialAttack = _playerStateDataList.StateDataList[(int)stateKind].ableToSpecialAttack;
+    }
+
     public void SetIsItemRange(bool flag)
     {
         _isInItemRange = flag;
@@ -2155,6 +2071,24 @@ public class PlayerState : Player<PlayerState>
         // 球数を最大まで回復
         _nowBulletNum = GetMaxBulletNum();
     }
+
+    public int GetSpecialChargeLevel()
+    {
+        float chargeNum = _specialChargeNum;
+
+        float subNum = _playerData.maxSpecialChargeNum / _playerData.specialAttackMaxLevel; //←定数にする
+
+        int count = 0;
+
+        while (chargeNum > subNum)
+        {
+            chargeNum -= subNum;
+            count++;
+        }
+
+        return count;
+    }
+
     public void SetPassiveSkills(List<PassiveSkillData> passiveSkillDatas)
     {
         _playerSkill.passiveSkillDataList = passiveSkillDatas;
