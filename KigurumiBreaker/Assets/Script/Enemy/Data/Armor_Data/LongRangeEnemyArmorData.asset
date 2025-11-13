@@ -12,15 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
   m_Name: LongRangeEnemyArmorData
   m_EditorClassIdentifier: 
-  MaxHp: 40
+  IsStrongEnemy: 0
   IsArmor: 1
+  MaxHp: 40
   MaxTrunk: 60
   AttackPower: 10
   MoveSpeed: 5
   DetectionRange: 20
   AttackRange: 10
+  AttackSwitchRange: 0
   IdleToChaseTime: 2
   ChaseToAttack: 3
+  MaxAttackTime: 0.5
   RotateSpeed: 8
-  AttackPrefab: {fileID: 1116344303506604534, guid: dd10a67aef618c94f9af5fc1a424105f, type: 3}
+  AttackType1Prefab: {fileID: 1116344303506604534, guid: dd10a67aef618c94f9af5fc1a424105f, type: 3}
+  AttackType2Prefab: {fileID: 0}
   BarYPosition: 2.5

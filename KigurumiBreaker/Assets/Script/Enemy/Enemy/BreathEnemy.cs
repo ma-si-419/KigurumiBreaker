@@ -22,7 +22,7 @@ public class BreathEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(3.0f, 0.0f, _attackObjectPrefab);
+                    EnemyAttackCreate(3.0f, 0.0f, _attackType1ObjectPrefab);
                 }
             }
 

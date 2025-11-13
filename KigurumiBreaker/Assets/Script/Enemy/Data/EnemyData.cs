@@ -21,6 +21,8 @@ public class EnemyData : ScriptableObject
     [SerializeField] private float DetectionRange;
     [Header("“G‚ÌUŒ‚‚·‚é”ÍˆÍ")]
     [SerializeField] private float AttackRange;
+    [Header("“G‚ª‚Ç‚¿‚ç‚ÌUŒ‚‚ð‚Æ‚é‚©‚Ì”ÍˆÍ(UŒ‚‚ª•¡”‚Ì“G‚Ì‚Ý)")]
+    [SerializeField] private float AttackSwitchRange;
     [Header("‘Ò‹@ó‘Ô‚©‚ç’ÇÕó‘Ô‚É‘JˆÚ‚·‚é‚Ü‚Å‚ÌŽžŠÔ")]
     [SerializeField] private float IdleToChaseTime;
     [Header("’ÇÕó‘Ô‚©‚çUŒ‚ó‘Ô‚É‘JˆÚ‚·‚é‚Ü‚Å‚ÌŽžŠÔ")]
@@ -29,8 +31,10 @@ public class EnemyData : ScriptableObject
     [SerializeField] private float MaxAttackTime;
     [Header("“G‚Ì‰ñ“]‘¬“x")]
     [SerializeField] private float RotateSpeed;
-    [Header("UŒ‚‚Ì“–‚½‚è”»’èƒvƒŒƒnƒu")]
-    [SerializeField] private GameObject AttackPrefab;
+    [Header("UŒ‚ƒ^ƒCƒv1ƒvƒŒƒnƒu")]
+    [SerializeField] private GameObject AttackType1Prefab;
+    [Header("UŒ‚ƒ^ƒCƒv2ƒvƒŒƒnƒu(ƒUƒR“G‚Í‚È‚µ‚ÅOK)")]
+    [SerializeField] private GameObject AttackType2Prefab;
     [Header("ƒo[‚ÌYÀ•W(ƒ{ƒX‚Í–³‚µ)")]
     [SerializeField] private float BarYPosition;
 
@@ -45,8 +49,10 @@ public class EnemyData : ScriptableObject
     public float idleToChaseTime => IdleToChaseTime;
     public float chaseToAttack => ChaseToAttack;
     public float rotateSpeed => RotateSpeed;
-    public GameObject attackPrefab => AttackPrefab;
+    public GameObject attackType1Prefab => AttackType1Prefab;
+    public GameObject attackType2Prefab => AttackType2Prefab;
     public float barYPosition => BarYPosition;
     public bool isStrongEnemy => IsStrongEnemy;
     public float maxAttackTime => MaxAttackTime;
+    public float attackSwitchRange => AttackSwitchRange;
 }
