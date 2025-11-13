@@ -548,5 +548,7 @@ public class Enemy : EnemyBase
         _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
     }
 
+
+
 }
 
