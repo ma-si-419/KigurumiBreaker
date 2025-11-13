@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
-  m_Name: BlueDragonEnemyData
+  m_Name: BeastEnemyArmorData
   m_EditorClassIdentifier: 
   IsStrongEnemy: 1
-  IsArmor: 0
+  IsArmor: 1
   MaxHp: 100
-  MaxTrunk: 0
+  MaxTrunk: 50
   AttackPower: 50
   MoveSpeed: 6
-  DetectionRange: 12
-  AttackRange: 10
+  DetectionRange: 10
+  AttackRange: 8
   AttackSwitchRange: 5
-  IdleToChaseTime: 1
+  IdleToChaseTime: 2
   ChaseToAttack: 2
-  MaxAttackTime: 0.3
-  RotateSpeed: 3
-  AttackType1Prefab: {fileID: 621494178838673121, guid: c7b7c8939f9049e409365ab9bd7145c6, type: 3}
-  AttackType2Prefab: {fileID: 8603638642903214138, guid: 4b3a5f16a5efe9a4baeef98667c14f3c, type: 3}
+  MaxAttackTime: 0.5
+  RotateSpeed: 5
+  AttackType1Prefab: {fileID: 6967060836913363474, guid: b0992ba06ede45746a79c37289995f31, type: 3}
+  AttackType2Prefab: {fileID: 8603638642903214138, guid: cb082d2d34d34e040a0de7845f19b61a, type: 3}
   BarYPosition: 2.5

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BeastEnemy : Enemy
 {
-    private float _timer = 0;    // タイマー
-
     // 突進中かどうかのフラグ
     private bool _isCharge = false; 
 
@@ -44,7 +42,6 @@ public class BeastEnemy : Enemy
             }
         }
 
-        _timer += Time.deltaTime;
 
         // 状態遷移
         if(_isStateChange)
@@ -129,7 +126,6 @@ public class BeastEnemy : Enemy
         }
 
         StopMovement();
-        _rigidbody.Sleep(); // 慣性を完全に切る
 
         _isCharge = false;
     }
