@@ -28,7 +28,7 @@ public class TackleEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(1.0f, 0.5f, _attackObjectPrefab);
+                    EnemyAttackCreate(1.0f, 0.5f, _attackType1ObjectPrefab);
                 }
 
                 if (!_isCharge)

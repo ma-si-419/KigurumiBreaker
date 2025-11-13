@@ -12,14 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
   m_Name: BreathEnemyArmorData
   m_EditorClassIdentifier: 
-  MaxHp: 100
+  IsStrongEnemy: 0
   IsArmor: 1
+  MaxHp: 100
   MaxTrunk: 90
   AttackPower: 50
-  MoveSpeed: 0
-  DetectionRange: 0
-  AttackRange: 0
-  IdleToChaseTime: 0
-  ChaseToAttack: 0
-  RotateSpeed: 0
-  AttackPrefab: {fileID: 0}
+  MoveSpeed: 3
+  DetectionRange: 8
+  AttackRange: 5
+  AttackSwitchRange: 0
+  IdleToChaseTime: 2
+  ChaseToAttack: 2
+  MaxAttackTime: 0.3
+  RotateSpeed: 5
+  AttackType1Prefab: {fileID: 8603638642903214138, guid: 65cc655a6d2cbef43894e6f8684474ac, type: 3}
+  AttackType2Prefab: {fileID: 0}
+  BarYPosition: 2.5

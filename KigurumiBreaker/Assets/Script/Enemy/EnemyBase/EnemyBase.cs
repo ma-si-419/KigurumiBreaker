@@ -17,8 +17,11 @@ public class EnemyBase : MonoBehaviour
     // EnemyUiManagerの参照
     protected EnemyBarManager _enemyUiManager;
 
-    // 攻撃オブジェクトのプレハブ
-    protected GameObject _attackObjectPrefab;
+    // 攻撃タイプ1オブジェクトのプレハブ
+    protected GameObject _attackType1ObjectPrefab;
+
+    // 攻撃タイプ2オブジェクトのプレハブ
+    protected GameObject _attackType2ObjectPrefab;
 
     // ドロップする弾のプレハブ
     protected GameObject _dropBullet;
@@ -41,6 +44,9 @@ public class EnemyBase : MonoBehaviour
     //攻撃範囲の二乗
     protected float _attackRangeSqr;
 
+    //攻撃切り替え範囲の二乗
+    protected float _attackSwitchRangeSqr;
+
     // NavMeshAgentの参照
     protected NavMeshAgent _agent;
 
@@ -62,14 +68,19 @@ public class EnemyBase : MonoBehaviour
     // 向きたい方向
     protected Vector3 _direction;
 
+    // ヒットストップ用のフラグ
     protected bool _isStop = false;
 
+    // ダメージを受けているかのフラグ
     protected bool _isDamage = false;
 
+    // 震動ベクトル
     protected Vector3 _shakeVec;
 
+    // 停止位置
     protected Vector3 _stopPos;
 
+    // アニメーション速度保存用
     protected float _animationSpeed = 1.0f;
 
     // アーマーかどうかのフラグ
@@ -77,6 +88,7 @@ public class EnemyBase : MonoBehaviour
 
     // デバッグ用停止フラグ
     protected bool _isDebugStop;
+
     // ドロップする弾のリスト
     protected List<int> _dropBullets;
 
@@ -110,11 +122,14 @@ public class EnemyBase : MonoBehaviour
         //索敵範囲と攻撃範囲の二乗を計算して保存
         _detectRangeSqr = _enemyData.detectionRange * _enemyData.detectionRange;
         _attackRangeSqr = _enemyData.attackRange * _enemyData.attackRange;
+        _attackSwitchRangeSqr = _enemyData.attackSwitchRange * _enemyData.attackSwitchRange;
+
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
         // 攻撃オブジェクトのプレハブを設定
-        _attackObjectPrefab = _enemyData.attackPrefab;
+        _attackType1ObjectPrefab = _enemyData.attackType1Prefab;
+        _attackType2ObjectPrefab = _enemyData.attackType2Prefab;
         // ドロップする弾のプレハブを設定
         _dropBullet = _enemyCommonData.dropBullet;
         // 敵データでアーマーかどうかを設定
