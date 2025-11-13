@@ -10,8 +10,8 @@ public class StageSet
 {
     public enum StageKind
     {
-        [InspectorName("テスト")]
-        Test,
+        [InspectorName("チュートリアル")]
+        Tutorial,
         [InspectorName("ステージ1　森")]
         Forest,
         [InspectorName("ステージ2　洞窟")]
