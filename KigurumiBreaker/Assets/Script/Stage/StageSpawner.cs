@@ -163,6 +163,7 @@ public class StageSpawner : MonoBehaviour
         {
             Debug.Log("すべてのステージが終了しました。リザルトシーンへ遷移します。");
             SceneManager.LoadScene("ResultScene"); // 
+            // 今後Fade関係の処理を呼ぶ予定(安田が追加してるっぽい。)
             return;
         }
 
