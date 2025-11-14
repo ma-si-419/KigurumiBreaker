@@ -17,7 +17,7 @@ public class BossMeleeAttackState : IState
     public void Init()
     {
         //通常攻撃アニメーション開始
-        _boss.animator.SetTrigger("MeleeAttack");
+        _boss.animator.SetTrigger("AttackType2");
     }
 
     public void Update()
@@ -28,7 +28,7 @@ public class BossMeleeAttackState : IState
     public void End()
     {
         //通常攻撃アニメーション終了
-        _boss.animator.ResetTrigger("MeleeAttack");
+        _boss.animator.ResetTrigger("AttackType2");
     }
 
 }

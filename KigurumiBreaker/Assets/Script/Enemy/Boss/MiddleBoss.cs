@@ -22,7 +22,7 @@ public class MiddleBoss : BossEnemy
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("MeleeAttack") && stateInfo.normalizedTime >= 0.6f)
+        if (stateInfo.IsName("AttackType2") && stateInfo.normalizedTime >= 0.6f)
         {
             //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
@@ -33,7 +33,7 @@ public class MiddleBoss : BossEnemy
         }
 
         //敵のアニメーション状態を取得
-        if (stateInfo.IsName("MeleeAttack") && stateInfo.normalizedTime >= 0.8f)
+        if (stateInfo.IsName("AttackType2") && stateInfo.normalizedTime >= 0.8f)
         {
             //攻撃フラグをリセット
             _isCreateAttack = false;
@@ -50,7 +50,7 @@ public class MiddleBoss : BossEnemy
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         //攻撃開始
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.5f)
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.5f)
         {
             if(!_isCreateAttack)
             {
@@ -75,10 +75,9 @@ public class MiddleBoss : BossEnemy
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
-        if (stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 0.6f)
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.6f)
         {
             StopMovement();
-            //agent.enabled = true;
             _isCreateAttack = false;
             ChangeState(new BossIdleState(this));
         }
@@ -109,7 +108,7 @@ public class MiddleBoss : BossEnemy
     private void CreateMeleeAttack()
     {
         //ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(meleeAttackPrefab);
+        GameObject attackObject = Instantiate(_attackType2ObjectPrefab);
         //攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);

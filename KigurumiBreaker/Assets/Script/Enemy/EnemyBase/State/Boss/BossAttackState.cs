@@ -25,7 +25,7 @@ public class BossAttackState : IState
         //攻撃フラグリセット
         _boss.AttackReset();
         //攻撃アニメーション開始
-        _boss.animator.SetTrigger("Attack");
+        _boss.animator.SetTrigger("AttackType1");
     }
 
     public void Update()
@@ -39,6 +39,6 @@ public class BossAttackState : IState
         //NavMeshAgent再開
         _boss.agent.enabled = true;
         //攻撃アニメーション終了
-        _boss.animator.ResetTrigger("Attack");
+        _boss.animator.ResetTrigger("AttackType1");
     }
 }

@@ -12,14 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4683e032c27e9341b47de49fce72fa2, type: 3}
   m_Name: BossEnemyData
   m_EditorClassIdentifier: 
-  MaxHp: 750
+  IsStrongEnemy: 0
   IsArmor: 0
+  MaxHp: 750
   MaxTrunk: 0
   AttackPower: 5
   MoveSpeed: 3
   DetectionRange: 12
   AttackRange: 4
+  AttackSwitchRange: 0
   IdleToChaseTime: 1.5
   ChaseToAttack: 2
+  MaxAttackTime: 0
   RotateSpeed: 4
-  AttackPrefab: {fileID: 1480296614537264204, guid: c1e0250d38942364db1628b0adbcd414, type: 3}
+  AttackType1Prefab: {fileID: 1480296614537264204, guid: c1e0250d38942364db1628b0adbcd414, type: 3}
+  AttackType2Prefab: {fileID: 6967060836913363474, guid: 08d6552bffc26ad4f84348e20cfc590a, type: 3}
+  BarYPosition: 0

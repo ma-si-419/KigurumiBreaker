@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.ProBuilder;
@@ -50,6 +51,8 @@ public class Enemy : EnemyBase
     // プレイヤーの前座標
     protected Vector3 _attackTarget;
 
+    protected float _idleTime;
+
     // 定数
     protected const float ATTACK_SIGN_DECREASE = 0.1f;
 
@@ -72,6 +75,9 @@ public class Enemy : EnemyBase
 
         // アウトラインの色を設定
         OutLine();
+
+        // 初速を最高速度
+        _agent.acceleration = 999f;
 
         // 敵のバーUiの管理クラスを取得
         _enemyUiManager.CreateEnemyBar(this);
@@ -188,6 +194,8 @@ public class Enemy : EnemyBase
             return;
         }
 
+        Debug.Log("IDle");
+
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
 
@@ -271,8 +279,14 @@ public class Enemy : EnemyBase
         // プレイヤーの座標を代入し続ける
         _attackTarget = _player.transform.position;
 
-        //プレイヤーの位置を目的地に設定
-        _agent.SetDestination(_player.transform.position);
+        //アニメーションイベントで攻撃判定オブジェクトを生成したい
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("Chase"))
+        {
+            _agent.SetDestination(_player.transform.position);
+            LookAtPlayer();
+        }
 
         // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
         StopMovement(); 
@@ -296,9 +310,11 @@ public class Enemy : EnemyBase
 
                 //攻撃状態へ
                 _stateTimer = 0.0f;
+                _idleTime = 0.0f;
 
                 if (_enemyData.isStrongEnemy)
                 {
+
                     if (diff.sqrMagnitude < _attackSwitchRangeSqr)
                     {
                         ChangeState(new AttackType1State(this));
@@ -325,13 +341,23 @@ public class Enemy : EnemyBase
         //アニメーションの切り替え
         if (_isChasetoIdle)
         {
+            //
+            _agent.enabled = false;
+
             _animator.SetBool("Chase", false);
             _animator.SetBool("Idle", true);
         }
         else
         {
-            _animator.SetBool("Chase", true);
-            _animator.SetBool("Idle", false);
+            _idleTime += Time.deltaTime;
+
+            if (_idleTime > 0.5f)
+            {
+                _agent.enabled = true;
+
+                _animator.SetBool("Chase", true);
+                _animator.SetBool("Idle", false);
+            }
         }
     }
 
