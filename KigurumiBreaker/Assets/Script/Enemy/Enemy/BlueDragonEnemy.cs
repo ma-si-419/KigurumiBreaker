@@ -9,11 +9,6 @@ public class BlueDragonEnemy : Enemy
     [Header("敵の頭のトランスフォーム")]
     [SerializeField] private GameObject _headPos;
 
-    // 攻撃判定の場所
-    private Transform _target;
-
-    private bool _isD = false;
-
     public override void AttackType1()
     {
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
