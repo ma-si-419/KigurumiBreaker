@@ -61,8 +61,37 @@ public class SpiderEnemy : Enemy
             // 破棄されていない場合のみ位置を更新
             _attackObj.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE + this.transform.up * 0.5f;
         }
+    }
 
+    public override void AttackType2()
+    {
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
+        if (stateInfo.IsName("AttackType2"))
+        {
+            // 攻撃サインの表示
+            AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
+
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
+            {
+                //攻撃判定を一つ生成させる
+                if (!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    Shoot();
+                }
+
+                _isStateChange = true;
+                //攻撃フラグをリセット
+                _isCreateAttack = false;
+            }
+        }
+
+        if (_isStateChange)
+        {
+            _isStateChange = false;
+            ChangeState(new IdleState(this));
+        }
     }
 
     private IEnumerator DoCharge()
@@ -83,5 +112,13 @@ public class SpiderEnemy : Enemy
 
         _rigidbody.velocity = Vector3.zero; // 終了時に停止
         _isCharge = false;
+    }
+
+    private void Shoot()
+    {
+        //弾を生成
+        GameObject attackObject = Instantiate(_attackType2ObjectPrefab, this.transform.position + this.transform.up * 0.5f, this.transform.rotation);
+
+        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 }

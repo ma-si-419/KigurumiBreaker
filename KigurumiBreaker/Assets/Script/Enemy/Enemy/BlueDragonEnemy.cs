@@ -62,12 +62,6 @@ public class BlueDragonEnemy : Enemy
 
     public override void AttackType2()
     {
-        if (!_isD)
-        {
-            _target.position = player.transform.position;
-            _isD = true;
-        }
-
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -82,7 +76,7 @@ public class BlueDragonEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyBuleDragonAttackCreate(_target, _attackType2ObjectPrefab);
+                    EnemyBuleDragonAttackCreate(_attackTarget, _attackType2ObjectPrefab, 3);
                 }
             }
 
@@ -90,7 +84,6 @@ public class BlueDragonEnemy : Enemy
             if (stateInfo.normalizedTime >= 0.8f)
             {
                 //攻撃フラグをリセット
-                _isD = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }
@@ -107,11 +100,11 @@ public class BlueDragonEnemy : Enemy
         StopMovement();
     }
 
-    public void EnemyBuleDragonAttackCreate(Transform pos, GameObject attackPrefab)
+    public void EnemyBuleDragonAttackCreate(Vector3 pos, GameObject attackPrefab, int createNum)
     {
         // ゲームオブジェクト生成
         _attackObj = Instantiate(attackPrefab);
-        _attackObj.transform.position = pos.position;
+        _attackObj.transform.position = pos;
 
         // 攻撃オブジェクトにバトルマネージャーをセット
         _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
