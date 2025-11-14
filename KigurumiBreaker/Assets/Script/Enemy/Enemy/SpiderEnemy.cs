@@ -42,6 +42,9 @@ public class SpiderEnemy : Enemy
             // 攻撃アニメーション終了後の処理
             if (stateInfo.normalizedTime >= 0.8f)
             {
+                // アニメーションが終わったら消す
+                Destroy(_attackObj);
+
                 //攻撃フラグをリセット
                 StopMovement();
                 agent.enabled = true;

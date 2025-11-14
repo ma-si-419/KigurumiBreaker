@@ -36,6 +36,9 @@ public class BeastEnemy : Enemy
             // 攻撃アニメーション終了後の処理
             if (stateInfo.normalizedTime >= 0.8f)
             {
+                // アニメーションが終わったら消す
+                Destroy(_attackObj);
+
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
                 _isStateChange = true;
@@ -89,6 +92,9 @@ public class BeastEnemy : Enemy
             // 攻撃アニメーション終了後の処理
             if (stateInfo.normalizedTime >= 0.8f)
             {
+                // アニメーションが終わったら消す
+                Destroy(_attackObj);
+
                 //攻撃フラグをリセット
                 agent.enabled = true;
                 _isCreateAttack = false;
