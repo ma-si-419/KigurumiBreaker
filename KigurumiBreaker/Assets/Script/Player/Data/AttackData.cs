@@ -28,6 +28,15 @@ public class Attack
         SpecialAttack   // 特殊攻撃
     }
 
+    [System.Serializable]
+    public class ScaleAttackPart
+    {
+        public AttackPart.AttackPartKind attackPartKind;
+        public float scale;
+        public float range;
+    }
+
+
 
 
     [Header("名前")]
@@ -52,8 +61,8 @@ public class Attack
     [SerializeField] private int AttackLifeTime;
     [Header("次に出てくる攻撃の名前(コンボ用)")]
     [SerializeField] private string NextAttackName;
-    [Header("攻撃を出す部位の名前")]
-    [SerializeField] private string AttackPart;
+    [Header("攻撃を出す部位の種類")]
+    [SerializeField] private AttackPart.AttackPartKind AttackPart;
     [Header("攻撃を出す部位に出すエフェクト")]
     [SerializeField] private GameObject AttackEffect;
     [Header("エフェクトをプレイヤーから離す距離")]
@@ -66,10 +75,8 @@ public class Attack
     [SerializeField] private CameraMove.ShakeKind CameraShakeKind;
     [Header("ヒットストップの長さ")]
     [SerializeField] private int HitStopFrame;
-    [Header("攻撃する部位の拡大率")]
-    [SerializeField] private float AttackPartScale;
-    [Header("攻撃する部位をどれだけ離すか")]
-    [SerializeField] private float AttackPartShiftScale;
+    [Header("拡大を行う部位")]
+    [SerializeField] private List<ScaleAttackPart> ScaleAttackParts;
 
     // 読み取り専用プロパティ
 
@@ -84,13 +91,12 @@ public class Attack
     public float shiftPosZ => ShiftPosZ;
     public int attackLifeTime => AttackLifeTime;
     public string nextAttackName => NextAttackName;
-    public string attackPartName => AttackPart;
+    public AttackPart.AttackPartKind attackPartKind => AttackPart;
     public GameObject attackEffect => AttackEffect;
     public float effectShiftScale => EffectShiftScale;
     public GameObject hitEffect => HitEffect;
     public AttackType attackKind => AttackKind;
     public CameraMove.ShakeKind cameraShakeKind => CameraShakeKind;
     public int hitStopFrame => HitStopFrame;
-    public float attackPartScale => AttackPartScale;
-    public float attackPartShiftScale => AttackPartShiftScale;
+    public List<ScaleAttackPart> scaleAttackParts => ScaleAttackParts;
 }

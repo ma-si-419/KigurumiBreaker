@@ -12,14 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11676381268e39468adb69c57da755e, type: 3}
   m_Name: AttackPartList
   m_EditorClassIdentifier: 
-  attackPartList:
-  - AttackPartName: "\u53F3\u8155"
-    ObjectRigName: mixamorig:RightHand
-  - AttackPartName: "\u5DE6\u8155"
-    ObjectRigName: mixamorig:LeftHand
-  - AttackPartName: "\u53F3\u8DB3"
-    ObjectRigName: mixamorig:RightFoot
-  - AttackPartName: "\u5DE6\u8DB3"
-    ObjectRigName: mixamorig:LeftFoot
-  - AttackPartName: "\u982D"
+  AttackPartDataList:
+  - AttackPartType: 0
     ObjectRigName: mixamorig:Head
+  - AttackPartType: 1
+    ObjectRigName: mixamorig:LeftHand
+  - AttackPartType: 2
+    ObjectRigName: mixamorig:RightHand
+  - AttackPartType: 3
+    ObjectRigName: mixamorig:LeftForeArm
+  - AttackPartType: 4
+    ObjectRigName: mixamorig:RightForeArm
+  - AttackPartType: 5
+    ObjectRigName: mixamorig:LeftLeg
+  - AttackPartType: 6
+    ObjectRigName: mixamorig:RightFoot

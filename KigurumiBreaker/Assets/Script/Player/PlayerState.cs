@@ -85,6 +85,7 @@ public class PlayerState : Player<PlayerState>
 
     private struct ScallingAttackPart
     {
+        public AttackPart.AttackPartKind attackPartKind;
         public GameObject attackObj;
         public float scale;
         public Vector3 defaultPos;
@@ -191,7 +192,10 @@ public class PlayerState : Player<PlayerState>
     private Material _playerMaterial;
 
     // 攻撃時に拡大している攻撃部位
-    private ScallingAttackPart _scallingAttackPart;
+    private List<ScallingAttackPart> _scallingAttackParts;
+
+    // エラーをとるためのダミー変数
+    private ScallingAttackPart _errorDeleterPart;
 
     void Start()
     {
@@ -232,6 +236,13 @@ public class PlayerState : Player<PlayerState>
 
         // プレイヤーのマテリアルを取得
         _playerMaterial = _playerMeshRenderer.material;
+
+        // ダミー変数の初期化
+        _errorDeleterPart = new ScallingAttackPart();
+
+        // 拡大している攻撃部位リストの初期化
+        _scallingAttackParts = new List<ScallingAttackPart>();
+
     }
 
     // 各Stateクラス
@@ -405,18 +416,27 @@ public class PlayerState : Player<PlayerState>
             _dodgeTime++;
 
             // 部位が拡大していたら少しずつ縮小する
-            if (state._scallingAttackPart.scale > 1.0f)
+            for (int i = 0; i < state._scallingAttackParts.Count; i++)
             {
-                float scale = state._scallingAttackPart.scale;
+                ScallingAttackPart part = state._scallingAttackParts[i];
 
-                scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
+                if (part.scale > 1.0f)
+                {
+                    float scale = part.scale;
 
-                scale = Mathf.Max(scale, 1.0f);
+                    scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
 
-                state._scallingAttackPart.scale = scale;
+                    scale = Mathf.Max(scale, 1.0f);
 
-                // 攻撃する部位を縮小する
-                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                    // 保存しているスケールを更新
+                    part.scale = scale;
+
+                    // 攻撃する部位を縮小する
+                    part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                    // 拡大している部位を元の座標に戻す
+                    part.attackObj.transform.localPosition = part.defaultPos;
+                }
             }
 
             // 回避方向に向ける
@@ -485,10 +505,14 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             // 拡大している攻撃部位があれば元に戻す
-            if (state._scallingAttackPart.attackObj)
+            for (int i = 0; i < state._scallingAttackParts.Count; i++)
             {
-                state._scallingAttackPart.attackObj.transform.localScale = Vector3.one;
-                state._scallingAttackPart.scale = 1.0f;
+                ScallingAttackPart part = state._scallingAttackParts[i];
+                if (part.attackObj)
+                {
+                    part.attackObj.transform.localScale = Vector3.one;
+                    part.scale = 1.0f;
+                }
             }
         }
     }
@@ -540,10 +564,10 @@ public class PlayerState : Player<PlayerState>
             _currentAttackData = state.SearchAttackData(_currentAttackName);
 
             // 攻撃する部位にエフェクトを出す
-            Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
+            Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartKind);
 
             // 攻撃する部位の情報を設定
-            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
+            state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
 
             // 座標を少しプレイヤーから離す
             Vector3 shiftVec = (effectPos - state.transform.position).normalized;
@@ -566,7 +590,7 @@ public class PlayerState : Player<PlayerState>
             // エフェクトの位置を更新
             if (_effectObject)
             {
-                Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
+                Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartKind);
                 // 座標を少しプレイヤーから離す
                 Vector3 shiftVec = (effectPos - state.transform.position).normalized;
                 // Y座標を計算に入れない
@@ -589,7 +613,7 @@ public class PlayerState : Player<PlayerState>
                 // 攻撃オブジェクトが存在するなら攻撃オブジェクトの座標を更新
                 if (state._currentAttack)
                 {
-                    Vector3 position = state.GetAttackPosition(_currentAttackData.attackPartName);
+                    Vector3 position = state.GetAttackPosition(_currentAttackData.attackPartKind);
 
                     // ずらす分を加算
                     Vector3 shiftVec = state.transform.forward * _currentAttackData.effectShiftScale;
@@ -608,18 +632,35 @@ public class PlayerState : Player<PlayerState>
 
                 /// 攻撃部位の縮小処理 ///
 
-                // 大きさの計算
-                float scale = Mathf.Lerp(_currentAttackData.attackPartScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
-                state._scallingAttackPart.scale = scale;
+                for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
+                {
+                    // このループで変更する拡大部位
+                    PlayerState.ScallingAttackPart part = state._errorDeleterPart;
 
-                // 攻撃する部位を小さくする
-                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                    // 拡大している攻撃部位を検索
+                    for (int j = 0; j < state._scallingAttackParts.Count; j++)
+                    {
+                        // 見つかったら保存してループを抜ける
+                        if (state._scallingAttackParts[j].attackPartKind == _currentAttackData.scaleAttackParts[i].attackPartKind)
+                        {
+                            part = state._scallingAttackParts[j];
+                            break;
+                        }
+                    }
 
-                // 少しずつずらす
-                float shiftScale = Mathf.Lerp(_currentAttackData.attackPartShiftScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    // 大きさの計算
+                    float scale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].scale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    part.scale = scale;
 
-                // 攻撃座標の位置をずらす
-                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                    // 攻撃する部位を小さくする
+                    part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                    // 少しずつずらす
+                    float shiftScale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].range, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.cancelFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+
+                    // 攻撃座標の位置をずらす
+                    part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
+                }
 
                 // 硬直フレームの間は回避不可
                 if (_currentFrame <= _currentAttackData.stunFrame)
@@ -644,18 +685,35 @@ public class PlayerState : Player<PlayerState>
 
                 /// 攻撃部位の拡大処理 ///
 
-                // 大きさの計算
-                float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
-                state._scallingAttackPart.scale = scale;
+                for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
+                {
+                    // このループで変更する拡大部位
+                    PlayerState.ScallingAttackPart part = state._errorDeleterPart;
 
-                // 攻撃する部位を大きくする
-                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                    // 拡大している攻撃部位を検索
+                    for (int j = 0; j < state._scallingAttackParts.Count; j++)
+                    {
+                        // 見つかったら保存してループを抜ける
+                        if (state._scallingAttackParts[j].attackPartKind == _currentAttackData.scaleAttackParts[i].attackPartKind)
+                        {
+                            part = state._scallingAttackParts[j];
+                            break;
+                        }
+                    }
 
-                // 少しずつずらす
-                float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+                    // 大きさの計算
+                    float scale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].scale, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+                    part.scale = scale;
 
-                // 攻撃座標の位置をずらす
-                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                    // 攻撃する部位を大きくする
+                    part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                    // 少しずつずらす
+                    float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].range, Mathf.Clamp((float)_currentFrame / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+
+                    // 攻撃座標の位置をずらす
+                    part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
+                }
             }
 
             // 攻撃キャンセルフレームに達した時に攻撃入力があれば次の攻撃に遷移
@@ -694,20 +752,24 @@ public class PlayerState : Player<PlayerState>
                         }
 
                         // 攻撃する部位にエフェクトを出す
-                        Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartName);
+                        Vector3 effectPos = state.GetAttackPosition(_currentAttackData.attackPartKind);
 
-                        if (state._scallingAttackPart.attackObj)
+                        for (int i = 0; i < state._scallingAttackParts.Count; i++)
                         {
-                            // 攻撃する部位の大きさを元に戻す
-                            state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                            PlayerState.ScallingAttackPart part = state._scallingAttackParts[i];
 
-                            // 位置を元に戻す
-                            state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
+                            if (part.attackObj)
+                            {
+                                // 攻撃する部位の大きさを元に戻す
+                                part.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-                            // 攻撃する部位の情報を設定
-                            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
+                                // 位置を元に戻す
+                                part.attackObj.transform.localPosition = part.defaultPos;
+
+                            }
                         }
-
+                        // 攻撃する部位の情報を設定
+                        state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
                         _effectObject = Instantiate(_currentAttackData.attackEffect, effectPos, Quaternion.identity);
 
                         // 次の攻撃アニメーションを再生
@@ -731,15 +793,21 @@ public class PlayerState : Player<PlayerState>
                     _effectObject = null;
                 }
 
-                if (state._scallingAttackPart.attackObj)
+
+
+                for (int i = 0; i < state._scallingAttackParts.Count; i++)
                 {
+                    PlayerState.ScallingAttackPart part = state._scallingAttackParts[i];
 
-                    // 攻撃する部位の大きさを元に戻す
-                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    if (part.attackObj)
+                    {
+                        // 攻撃する部位の大きさを元に戻す
+                        part.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-                    // 位置を元に戻す
-                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
+                        // 位置を元に戻す
+                        part.attackObj.transform.localPosition = part.defaultPos;
 
+                    }
                 }
 
                 state.ChangeState(new IdleState(state));
@@ -899,7 +967,7 @@ public class PlayerState : Player<PlayerState>
             _attackScale = _currentAttackData.scale;
 
             // 攻撃を行う部位を設定
-            state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
+            state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
 
             _stateTime = 0;
         }
@@ -954,7 +1022,7 @@ public class PlayerState : Player<PlayerState>
                         _currentAttackData = state.SearchAttackData("ChargeAttack");
 
                         // 攻撃する部位を変更
-                        state.SetScallingAttackPart(state.GetAttackPart(_currentAttackData.attackPartName));
+                        state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
                     }
 
                     /// 攻撃部位の拡大処理 ///
@@ -962,21 +1030,37 @@ public class PlayerState : Player<PlayerState>
                     // 強チャージ攻撃に入ってから何フレームたったか
                     float frame = (float)(state._normalChargeTime - state._playerData.maxChargeAttackTime / 2);
 
-                    // 大きさの計算
-                    float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                    for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
+                    {
+                        PlayerState.ScallingAttackPart part = state._errorDeleterPart;
 
-                    // 弱チャージ攻撃の拡大率よりも小さくならないようにする
-                    scale = Mathf.Clamp(scale, state._scallingAttackPart.scale, _currentAttackData.attackPartScale);
+                        // 拡大している攻撃部位を検索
+                        for (int j = 0; j < state._scallingAttackParts.Count; j++)
+                        {
+                            // 見つかったら保存してループを抜ける
+                            if (state._scallingAttackParts[j].attackPartKind == _currentAttackData.scaleAttackParts[i].attackPartKind)
+                            {
+                                part = state._scallingAttackParts[j];
+                                break;
+                            }
+                        }
 
-                    // 攻撃する部位を大きくする
-                    state._scallingAttackPart.scale = scale;
-                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                        // 大きさの計算
+                        float scale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].scale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
-                    // 少しずつずらす
-                    float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                        // 弱チャージ攻撃の拡大率よりも小さくならないようにする
+                        scale = Mathf.Clamp(scale, part.scale, _currentAttackData.scaleAttackParts[i].scale);
 
-                    // 攻撃座標の位置をずらす
-                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                        // 攻撃する部位を大きくする
+                        part.scale = scale;
+                        part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                        // 少しずつずらす
+                        float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].range, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+
+                        // 攻撃座標の位置をずらす
+                        part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
+                    }
                 }
                 // 弱チャージ攻撃の攻撃範囲の時
                 else
@@ -986,20 +1070,36 @@ public class PlayerState : Player<PlayerState>
                     // 弱チャージ攻撃に入ってから何フレームたったか
                     float frame = (float)(state._normalChargeTime - state._playerData.chargeAttackTime);
 
+                    for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
+                    {
+                        // このループで変更する拡大部位
+                        PlayerState.ScallingAttackPart part = state._errorDeleterPart;
 
-                    // 大きさの計算
-                    float scale = Mathf.Lerp(1.0f, _currentAttackData.attackPartScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                        // 拡大している攻撃部位を検索
+                        for (int j = 0; j < state._scallingAttackParts.Count; j++)
+                        {
+                            // 見つかったら保存してループを抜ける
+                            if (state._scallingAttackParts[j].attackPartKind == _currentAttackData.scaleAttackParts[i].attackPartKind)
+                            {
+                                part = state._scallingAttackParts[j];
+                                break;
+                            }
+                        }
 
-                    state._scallingAttackPart.scale = scale;
+                        // 大きさの計算
+                        float scale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].scale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
-                    // 攻撃する部位を大きくする
-                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                        part.scale = scale;
 
-                    // 少しずつずらす
-                    float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.attackPartShiftScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                        // 攻撃する部位を大きくする
+                        part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
 
-                    // 攻撃座標の位置をずらす
-                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                        // 少しずつずらす
+                        float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].range, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+
+                        // 攻撃座標の位置をずらす
+                        part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
+                    }
                 }
 
                 // 最大チャージ時間を超えたらチャージ攻撃に遷移
@@ -1078,22 +1178,37 @@ public class PlayerState : Player<PlayerState>
             // 攻撃の硬直のあと
             else if (_currentFrame > _currentAttackData.stunFrame)
             {
-                if (state._scallingAttackPart.attackObj)
+
+                /// 攻撃部位の縮小処理 ///
+
+                for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
                 {
-                    /// 攻撃部位の縮小処理 ///
+                    // このループで変更する拡大部位
+                    PlayerState.ScallingAttackPart part = state._errorDeleterPart;
+
+                    // 拡大している攻撃部位を検索
+                    for (int j = 0; j < state._scallingAttackParts.Count; j++)
+                    {
+                        // 見つかったら保存してループを抜ける
+                        if (state._scallingAttackParts[j].attackPartKind == _currentAttackData.scaleAttackParts[i].attackPartKind)
+                        {
+                            part = state._scallingAttackParts[j];
+                            break;
+                        }
+                    }
 
                     // 大きさの計算
-                    float scale = Mathf.Lerp(_currentAttackData.attackPartScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
-                    state._scallingAttackPart.scale = scale;
+                    float scale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].scale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    part.scale = scale;
 
                     // 攻撃する部位を小さくする
-                    state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                    part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
 
                     // 少しずつずらす
-                    float shiftScale = Mathf.Lerp(_currentAttackData.attackPartShiftScale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    float shiftScale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].range, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
 
                     // 攻撃座標の位置をずらす
-                    state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos * shiftScale;
+                    part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
                 }
             }
 
@@ -1129,13 +1244,16 @@ public class PlayerState : Player<PlayerState>
             // チャージ時間をリセット
             state._normalChargeTime = 0;
             // 攻撃する部位の大きさを元に戻す
-            if (state._scallingAttackPart.attackObj)
-            {
-                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                // 位置を元に戻す
-                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
-            }
 
+            for (int i = 0; i < state._scallingAttackParts.Count; i++)
+            {
+                if (state._scallingAttackParts[i].attackObj)
+                {
+                    state._scallingAttackParts[i].attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    // 位置を元に戻す
+                    state._scallingAttackParts[i].attackObj.transform.localPosition = state._scallingAttackParts[i].defaultPos;
+                }
+            }
         }
     }
 
@@ -1357,23 +1475,28 @@ public class PlayerState : Player<PlayerState>
             }
 
             // 部位が拡大していたら少しずつ縮小する
-            if (state._scallingAttackPart.scale > 1.0f)
+
+            for (int i = 0; i < state._scallingAttackParts.Count; i++)
             {
-                float scale = state._scallingAttackPart.scale;
+                PlayerState.ScallingAttackPart part = state._scallingAttackParts[i];
 
-                scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
+                if (part.scale > 1.0f)
+                {
+                    float scale = part.scale;
 
-                scale = Mathf.Max(scale, 1.0f);
+                    scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
 
-                state._scallingAttackPart.scale = scale;
+                    scale = Mathf.Max(scale, 1.0f);
 
-                // 攻撃する部位を縮小する
-                state._scallingAttackPart.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                    part.scale = scale;
 
-                // 位置を元の座標に戻す
-                state._scallingAttackPart.attackObj.transform.localPosition = state._scallingAttackPart.defaultPos;
+                    // 攻撃する部位を縮小する
+                    part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                    // 位置を元の座標に戻す
+                    part.attackObj.transform.localPosition = part.defaultPos;
+                }
             }
-
             // スタン時間をカウントダウン
             _stateTime++;
 
@@ -1423,10 +1546,15 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger(_damageAnim);
 
             // 拡大している攻撃部位があれば元に戻す
-            if (state._scallingAttackPart.scale > 1.0f)
+            for (int i = 0; i < state._scallingAttackParts.Count; i++)
             {
-                state._scallingAttackPart.attackObj.transform.localScale = Vector3.one;
-                state._scallingAttackPart.scale = 1.0f;
+                PlayerState.ScallingAttackPart part = state._scallingAttackParts[i];
+
+                if (part.scale > 1.0f)
+                {
+                    part.attackObj.transform.localScale = Vector3.one;
+                    part.scale = 1.0f;
+                }
             }
         }
     }
@@ -1627,37 +1755,35 @@ public class PlayerState : Player<PlayerState>
         }
         return result;
     }
-    private void SetScallingAttackPart(GameObject attackPart)
+    private void SetScallingAttackPart(List<Attack.ScaleAttackPart> parts)
     {
-        // 攻撃する部位を取得
-        _scallingAttackPart.attackObj = attackPart;
+        // 拡大する攻撃部位のリストをクリア
+        _scallingAttackParts.Clear();
 
-        // 攻撃する部位の位置を保存
-        _scallingAttackPart.defaultPos = attackPart.transform.localPosition;
-
-        // 攻撃する部位の座標を取得
-        _scallingAttackPart.currentPos = attackPart.transform.localPosition;
-
-        // 攻撃する部位の大きさを保存
-        _scallingAttackPart.scale = attackPart.transform.localScale.x;
-    }
-
-    private GameObject GetAttackPart(string partName)
-    {
-        GameObject result = null;
-        // 早期リターン
-        if (partName == "None") return result;
-
-        // 攻撃部位のリグの名前を取得
-        string rigName = null;
-        for (int i = 0; i < _attackData.attackPartList.attackPartList.Count; i++)
+        // 拡大する攻撃部位を追加
+        for (int i = 0; i < parts.Count; i++)
         {
-            if (_attackData.attackPartList.attackPartList[i].attackPartName == partName)
+            // 攻撃部位のゲームオブジェクトを取得
+            PlayerState.ScallingAttackPart scallingPart = _errorDeleterPart;
+
+            GameObject attackPart = GetAttackPart(parts[i].attackPartKind);
+            if (attackPart != null)
             {
-                rigName = _attackData.attackPartList.attackPartList[i].objectRigName;
-                break;
+                scallingPart.attackObj = attackPart;
+                scallingPart.attackPartKind = parts[i].attackPartKind;
+                scallingPart.defaultPos = attackPart.transform.localPosition;
+                scallingPart.scale = parts[i].scale;
+                _scallingAttackParts.Add(scallingPart);
             }
         }
+    }
+
+    private GameObject GetAttackPart(AttackPart.AttackPartKind part)
+    {
+        GameObject result = null;
+
+        // 攻撃部位のリグの名前を取得
+        string rigName = _attackData.attackPartList.attackPartDataList[(int)part].objectRigName;
 
         // 早期リターン
         if (rigName == null) return result;
@@ -1675,27 +1801,12 @@ public class PlayerState : Player<PlayerState>
         return result;
     }
 
-    private Vector3 GetAttackPosition(string partName)
+    private Vector3 GetAttackPosition(AttackPart.AttackPartKind part)
     {
         Vector3 result = Vector3.zero;
 
-        // 早期リターン
-        if (partName == "None") return result;
-
         // 攻撃部位のリグの名前を取得
-        string rigName = null;
-
-        for (int i = 0; i < _attackData.attackPartList.attackPartList.Count; i++)
-        {
-            if (_attackData.attackPartList.attackPartList[i].attackPartName == partName)
-            {
-                rigName = _attackData.attackPartList.attackPartList[i].objectRigName;
-                break;
-            }
-        }
-
-        // 早期リターン
-        if (rigName == null) return result;
+        string rigName = _attackData.attackPartList.attackPartDataList[(int)part].objectRigName;
 
         Vector3 rigPos = Vector3.zero;
 
@@ -1829,7 +1940,7 @@ public class PlayerState : Player<PlayerState>
         playerAttack.SetPlayerAttackData(attackData);
 
         // 攻撃の位置を設定
-        Vector3 position = GetAttackPosition(data.attackPartName);
+        Vector3 position = GetAttackPosition(data.attackPartKind);
 
         // 攻撃の座標を設定
         playerAttack.SetPlayerPos(position);
@@ -1862,7 +1973,7 @@ public class PlayerState : Player<PlayerState>
         PlayerRangedAttack.RangedAttackData attackData = new PlayerRangedAttack.RangedAttackData();
 
         // 攻撃の座標を設定
-        Vector3 position = GetAttackPosition(data.attackPartName);
+        Vector3 position = GetAttackPosition(data.attackPartKind);
         attack.transform.position = position;
         // 攻撃の向きを設定
         attack.transform.forward = transform.forward;
