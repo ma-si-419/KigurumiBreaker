@@ -47,6 +47,7 @@ public class LaserEnemy : Enemy
         //時間が経ったら攻撃終了
         if (_laserTimer > 5.0f)
         {
+            // アニメーションが終わったら消す
             Destroy(_attackObj);
 
             // 攻撃中のアニメーションを終了

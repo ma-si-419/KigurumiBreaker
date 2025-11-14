@@ -29,6 +29,9 @@ public class BreathEnemy : Enemy
             //敵のアニメーション状態を取得
             if (stateInfo.normalizedTime >= 0.8f)
             {
+                // アニメーションが終わったら消す
+                Destroy(_attackObj);
+
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
 

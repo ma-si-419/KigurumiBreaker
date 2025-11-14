@@ -51,6 +51,9 @@ public class PunchEnemy : Enemy
             // 攻撃アニメーション終了後の処理
             if (stateInfo.normalizedTime >= 0.9f)
             {
+                // アニメーションが終わったら消す
+                Destroy(_attackObj);
+
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
                 _isDash = false;

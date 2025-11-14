@@ -40,6 +40,9 @@ public class TackleEnemy : Enemy
             //敵のアニメーションが終わったらIdleStateに遷移
             if (stateInfo.normalizedTime >= 0.6f)
             {
+                // アニメーションが終わったら消す
+                Destroy(_attackObj);
+
                 StopMovement();
                 agent.enabled = true;
                 _isCreateAttack = false;
