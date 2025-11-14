@@ -47,6 +47,9 @@ public class Enemy : EnemyBase
     // 敵の攻撃オブジェクト変数
     protected GameObject _attackObj;
 
+    // プレイヤーの前座標
+    protected Vector3 _attackTarget;
+
     // 定数
     protected const float ATTACK_SIGN_DECREASE = 0.1f;
 
@@ -174,6 +177,9 @@ public class Enemy : EnemyBase
     //基本待機処理(オーバーライドで変更可)
     public virtual void Idle()
     {
+        // プレイヤーの座標を代入し続ける
+        _attackTarget = _player.transform.position;
+
         // デバッグ用の待機フラグが立っていたら待機状態にする
         if (_isDebugIdleFlag)
         {
@@ -262,6 +268,9 @@ public class Enemy : EnemyBase
     //基本移動処理(オーバーライドで変更可)
     public virtual void Chase()
     {
+        // プレイヤーの座標を代入し続ける
+        _attackTarget = _player.transform.position;
+
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
 
