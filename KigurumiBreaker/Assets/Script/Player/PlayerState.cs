@@ -83,7 +83,7 @@ public class PlayerState : Player<PlayerState>
         public List<PassiveGameObject> passiveGameObjects;
     }
 
-    private struct ScallingAttackPart
+    private class ScallingAttackPart
     {
         public AttackPart.AttackPartKind attackPartKind;
         public GameObject attackObj;
@@ -192,7 +192,7 @@ public class PlayerState : Player<PlayerState>
     private Material _playerMaterial;
 
     // 攻撃時に拡大している攻撃部位
-    private List<ScallingAttackPart> _scallingAttackParts;
+    private List<ScallingAttackPart> _scallingAttackParts = new List<ScallingAttackPart>();
 
     // エラーをとるためのダミー変数
     private ScallingAttackPart _errorDeleterPart;
@@ -239,10 +239,6 @@ public class PlayerState : Player<PlayerState>
 
         // ダミー変数の初期化
         _errorDeleterPart = new ScallingAttackPart();
-
-        // 拡大している攻撃部位リストの初期化
-        _scallingAttackParts = new List<ScallingAttackPart>();
-
     }
 
     // 各Stateクラス
@@ -424,12 +420,13 @@ public class PlayerState : Player<PlayerState>
                 {
                     float scale = part.scale;
 
+
                     scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
 
                     scale = Mathf.Max(scale, 1.0f);
 
                     // 保存しているスケールを更新
-                    part.scale = scale;
+                    state._scallingAttackParts[i].scale = scale;
 
                     // 攻撃する部位を縮小する
                     part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
@@ -1757,6 +1754,17 @@ public class PlayerState : Player<PlayerState>
     }
     private void SetScallingAttackPart(List<Attack.ScaleAttackPart> parts)
     {
+        // 拡大している部位をすべて元に戻す
+        for (int i = 0; i < _scallingAttackParts.Count; i++)
+        {
+            if (_scallingAttackParts[i].attackObj)
+            {
+                _scallingAttackParts[i].attackObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                // 位置を元に戻す
+                _scallingAttackParts[i].attackObj.transform.localPosition = _scallingAttackParts[i].defaultPos;
+            }
+        }
+
         // 拡大する攻撃部位のリストをクリア
         _scallingAttackParts.Clear();
 
