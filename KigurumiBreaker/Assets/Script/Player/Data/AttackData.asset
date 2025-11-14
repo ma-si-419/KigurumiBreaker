@@ -24,15 +24,17 @@ MonoBehaviour:
     ShiftPosZ: 1
     AttackLifeTime: 3
     NextAttackName: Low2
-    AttackPart: "\u53F3\u8155"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.7
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 1
     CameraShakeKind: 0
     HitStopFrame: 2
-    AttackPartScale: 12
-    AttackPartShiftScale: 3
+    ScaleAttackParts:
+    - attackPartKind: 2
+      scale: 12
+      range: 3
   - AttackName: Low2
     Damage: 12
     StartFrame: 9
@@ -44,15 +46,17 @@ MonoBehaviour:
     ShiftPosZ: 1
     AttackLifeTime: 6
     NextAttackName: Low3
-    AttackPart: "\u5DE6\u8155"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.7
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 1
     CameraShakeKind: 0
     HitStopFrame: 2
-    AttackPartScale: 12
-    AttackPartShiftScale: 3
+    ScaleAttackParts:
+    - attackPartKind: 1
+      scale: 12
+      range: 3
   - AttackName: Low3
     Damage: 24
     StartFrame: 18
@@ -64,15 +68,17 @@ MonoBehaviour:
     ShiftPosZ: 1.8
     AttackLifeTime: 6
     NextAttackName: None
-    AttackPart: "\u53F3\u8DB3"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.75
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 1
     CameraShakeKind: 2
     HitStopFrame: 8
-    AttackPartScale: 9.5
-    AttackPartShiftScale: 6.5
+    ScaleAttackParts:
+    - attackPartKind: 6
+      scale: 9.5
+      range: 6.5
   - AttackName: LowChargeAttack
     Damage: 20
     StartFrame: 12
@@ -84,15 +90,14 @@ MonoBehaviour:
     ShiftPosZ: 0
     AttackLifeTime: 8
     NextAttackName: None
-    AttackPart: "\u982D"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.5
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 2
     CameraShakeKind: 2
     HitStopFrame: 7
-    AttackPartScale: 1.7
-    AttackPartShiftScale: 0.8
+    ScaleAttackParts: []
   - AttackName: ChargeAttack
     Damage: 80
     StartFrame: 10
@@ -104,15 +109,14 @@ MonoBehaviour:
     ShiftPosZ: 0
     AttackLifeTime: 8
     NextAttackName: None
-    AttackPart: "\u982D"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 0.5
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 2
     CameraShakeKind: 3
     HitStopFrame: 12
-    AttackPartScale: 2.2
-    AttackPartShiftScale: 1.3
+    ScaleAttackParts: []
   - AttackName: LowSpecialAttack
     Damage: 50
     StartFrame: 38
@@ -124,15 +128,14 @@ MonoBehaviour:
     ShiftPosZ: 2
     AttackLifeTime: 8
     NextAttackName: None
-    AttackPart: "\u53F3\u8155"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 1
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 4
     CameraShakeKind: 1
     HitStopFrame: 6
-    AttackPartScale: 0
-    AttackPartShiftScale: 0
+    ScaleAttackParts: []
   - AttackName: SpecialAttack
     Damage: 150
     StartFrame: 81
@@ -144,15 +147,14 @@ MonoBehaviour:
     ShiftPosZ: 2.5
     AttackLifeTime: 5
     NextAttackName: None
-    AttackPart: "\u53F3\u8155"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 1
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 4
     CameraShakeKind: 3
     HitStopFrame: 15
-    AttackPartScale: 0
-    AttackPartShiftScale: 0
+    ScaleAttackParts: []
   - AttackName: RangedAttack
     Damage: 10
     StartFrame: 10
@@ -164,15 +166,14 @@ MonoBehaviour:
     ShiftPosZ: 0
     AttackLifeTime: 0
     NextAttackName: None
-    AttackPart: "\u53F3\u8155"
+    AttackPart: 0
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
     EffectShiftScale: 1
     HitEffect: {fileID: 5195948674500491528, guid: 3bfbf8b42a281c243b90b10f4365b827, type: 3}
     AttackKind: 3
     CameraShakeKind: 0
     HitStopFrame: 5
-    AttackPartScale: 0
-    AttackPartShiftScale: 0
+    ScaleAttackParts: []
   meleeAttackGameObject: {fileID: 5016116481081219338, guid: 22781efec99b0064c9a1cf149a4d686a, type: 3}
   chargeAttackAreaGameObject: {fileID: 470787370950120252, guid: a2b47f6aaa2f5ef4e93446234eccde20, type: 3}
   rangedAttackGameObject: {fileID: 3308976924760873119, guid: 7fea45659adf508429936af7309098f2, type: 3}
