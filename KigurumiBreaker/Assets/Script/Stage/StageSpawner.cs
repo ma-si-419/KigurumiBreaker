@@ -162,8 +162,9 @@ public class StageSpawner : MonoBehaviour
         if (nextIndex >= _stageSets.Length)
         {
             Debug.Log("すべてのステージが終了しました。リザルトシーンへ遷移します。");
-            SceneManager.LoadScene("ResultScene"); // 
+            //SceneManager.LoadScene("ResultScene"); // 
             // 今後Fade関係の処理を呼ぶ予定(安田が追加してるっぽい。)
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
             return;
         }
 
