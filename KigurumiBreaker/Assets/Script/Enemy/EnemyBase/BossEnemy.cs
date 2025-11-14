@@ -24,7 +24,7 @@ public class BossEnemy : EnemyBase
     [SerializeField] public float _specialAttackRange;
 
     [Header("通常攻撃のプレハブ(仮)")]
-    [SerializeField] protected GameObject _meleeAttackPrefab; 
+    protected GameObject _meleeAttackPrefab; 
 
     // ボスの攻撃データリスト
     //[SerializeField] protected BossAttackData _bossAttackData;

@@ -15,7 +15,14 @@ public class ChaseState : IState
     public void Init()
     {
         //追跡アニメーション開始
-        _enemy.animator.SetBool("Chase", true);
+        if (_enemy.isChasetoIdle)
+        {
+            _enemy.animator.SetBool("Idle", true);
+        }
+        else
+        {
+            _enemy.animator.SetBool("Chase", true);
+        }
         _enemy.agent.isStopped = false; //追跡再開
     }
 
