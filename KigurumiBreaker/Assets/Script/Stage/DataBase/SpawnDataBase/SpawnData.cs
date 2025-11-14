@@ -20,7 +20,10 @@ public enum EnemyKind
     ArmorLarser,
     Beast,
     BlueDragon,
-    Spider
+    Spider,
+    ArmorBeast,
+    ArmorBlueDragon,
+    ArmorSpider
 }
 
 [System.Serializable]
