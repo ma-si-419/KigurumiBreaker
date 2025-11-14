@@ -5,13 +5,15 @@ using UnityEngine;
 public class BeastEnemy : Enemy
 {
     // 突進中かどうかのフラグ
-    private bool _isCharge = false; 
+    private bool _isCharge = false;
+    private Vector3 _chargeDir;
 
     /* 定数 */
     private const float ATTACK_DISTANCE = 3.0f; // 攻撃判定の距離
     private const float ATTACK_UP = 1.0f; // 攻撃判定の距離
-    private const float CHARGE_SPEED = 5.0f; // 突進速度
+    private float CHARGE_SPEED = 8.0f; // 突進速度
     private const float CHARGE_TIME = 0.8f; // 突進時間
+
 
     public override void AttackType1()
     {
@@ -80,6 +82,7 @@ public class BeastEnemy : Enemy
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= 0.5f)
             {
+                StopMovement();
 
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)
@@ -97,6 +100,7 @@ public class BeastEnemy : Enemy
 
                 //攻撃フラグをリセット
                 agent.enabled = true;
+                _isCharge = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }
@@ -131,8 +135,8 @@ public class BeastEnemy : Enemy
             yield return new WaitForFixedUpdate();
         }
 
+        _rigidbody.velocity = Vector3.zero;
         StopMovement();
 
-        _isCharge = false;
     }
 }

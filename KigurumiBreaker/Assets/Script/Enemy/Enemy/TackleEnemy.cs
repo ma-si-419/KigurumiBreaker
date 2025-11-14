@@ -8,8 +8,8 @@ public class TackleEnemy : Enemy
 
     /* 定数 */
     private const float ATTACK_DISTANCE = 1.5f; // 攻撃判定の距離
-    private float CHARGE_SPEED = 0.1f; // 突進速度
-    private float CHARGE_TIME = 0.05f; // 突進時間
+    private float CHARGE_SPEED = 10.0f; // 突進速度
+    private float CHARGE_TIME = 1.5f; // 突進時間
 
     public override void AttackType1()
     {
@@ -46,6 +46,7 @@ public class TackleEnemy : Enemy
                 StopMovement();
                 agent.enabled = true;
                 _isCreateAttack = false;
+                _isCharge = false;
                 ChangeState(new IdleState(this));
             }
         }
@@ -69,16 +70,14 @@ public class TackleEnemy : Enemy
 
         while (timer < CHARGE_TIME && _isCharge)
         {
-            _rigidbody.velocity = dir * CHARGE_SPEED;
-
-            this.transform.position += _rigidbody.velocity;
+            Vector3 nextPos = _rigidbody.position + dir * CHARGE_SPEED * Time.fixedDeltaTime;
+            _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
 
             timer += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
 
-        _rigidbody.velocity = Vector3.zero; // 終了時に停止
-        _isCharge = false;
+        StopMovement();
     }
 
 }

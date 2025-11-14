@@ -8,8 +8,8 @@ public class SpiderEnemy : Enemy
 
     /* 定数 */
     private const float ATTACK_DISTANCE = 2.0f; // 攻撃判定の距離
-    private float CHARGE_SPEED = 0.3f; // 突進速度
-    private float CHARGE_TIME = 0.2f; // 突進時間
+    private float CHARGE_SPEED = 8.0f; // 突進速度
+    private float CHARGE_TIME = 2.0f; // 突進時間
 
     public override void AttackType1()
     {
@@ -48,6 +48,7 @@ public class SpiderEnemy : Enemy
                 //攻撃フラグをリセット
                 StopMovement();
                 agent.enabled = true;
+                _isCharge = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }
@@ -105,16 +106,14 @@ public class SpiderEnemy : Enemy
 
         while (timer < CHARGE_TIME && _isCharge)
         {
-            _rigidbody.velocity = dir * CHARGE_SPEED;
-
-            this.transform.position += _rigidbody.velocity;
+            Vector3 nextPos = _rigidbody.position + dir * CHARGE_SPEED * Time.fixedDeltaTime;
+            _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
 
             timer += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
 
-        _rigidbody.velocity = Vector3.zero; // 終了時に停止
-        _isCharge = false;
+        StopMovement();
     }
 
     private void Shoot()
