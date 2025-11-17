@@ -50,13 +50,13 @@ public class BossChaseState : IState
             if (diff.sqrMagnitude < _boss.meleeAttackRangeSqr)
             {
                 //’ÊíUŒ‚‚ÖˆÚs
-                _boss.ChangeState(new BossMeleeAttackState(_boss));
+                _boss.ChangeState(new BossAttackType2State(_boss));
             }
             //’†‹——£‚È‚ç“ËiUŒ‚‚Ö
             else if (diff.sqrMagnitude < _boss.specialAttackRangeSqr)
             {
                 //“ËiUŒ‚‚ÖˆÚs
-                _boss.ChangeState(new BossAttackState(_boss));
+                _boss.ChangeState(new BossAttackType1State(_boss));
             }
         }
 

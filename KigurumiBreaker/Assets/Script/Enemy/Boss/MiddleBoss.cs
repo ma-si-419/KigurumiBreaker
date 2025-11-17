@@ -18,7 +18,7 @@ public class MiddleBoss : BossEnemy
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
     private const float ATTACK_DISTANCE = 3.0f; // 攻撃判定の距離
 
-    public override void MeleeAttack()
+    public override void AttackType2()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -42,7 +42,7 @@ public class MiddleBoss : BossEnemy
         }
     }
 
-    public override void Attack()
+    public override void AttackType1()
     {
         // ここにタックル攻撃の具体的な処理を追加
         _chargeTimer += Time.deltaTime;

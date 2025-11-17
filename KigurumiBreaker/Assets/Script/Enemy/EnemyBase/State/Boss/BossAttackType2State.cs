@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BossMeleeAttackState : IState
+public class BossAttackType2State : IState
 {
     //ボス敵の参照
     private BossEnemy _boss;
 
-    public BossMeleeAttackState(BossEnemy boss)
+    public BossAttackType2State(BossEnemy boss)
     {
         //コンストラクタでEnemyの参照を受け取る
         _boss = boss;
@@ -22,7 +22,7 @@ public class BossMeleeAttackState : IState
 
     public void Update()
     {
-        _boss.MeleeAttack();
+        _boss.AttackType2();
     }
 
     public void End()

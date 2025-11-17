@@ -50,13 +50,13 @@ public class BossIdleState : IState
             {
                 //‹ßÚUŒ‚‚Ö
                 _stateTimer = 0.0f;
-                _boss.ChangeState(new BossMeleeAttackState(_boss));
+                _boss.ChangeState(new BossAttackType2State(_boss));
             }
             else if (diff.sqrMagnitude <= _boss.specialAttackRangeSqr)
             {
                 //“ÁêUŒ‚‚Ö
                 _stateTimer = 0.0f;
-                _boss.ChangeState(new BossAttackState(_boss));
+                _boss.ChangeState(new BossAttackType1State(_boss));
             }
         }
 

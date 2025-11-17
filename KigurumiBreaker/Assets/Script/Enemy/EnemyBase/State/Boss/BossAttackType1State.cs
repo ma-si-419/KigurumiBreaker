@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class BossAttackState : IState
+public class BossAttackType1State : IState
 {
     //ボス敵の参照
     private BossEnemy _boss;   
 
-    public BossAttackState(BossEnemy boss)
+    public BossAttackType1State(BossEnemy boss)
     {
         //コンストラクタでEnemyの参照を受け取る
         _boss = boss;
@@ -16,10 +16,6 @@ public class BossAttackState : IState
 
     public void Init()
     {
-        //ボスの攻撃アニメーションを開始
-        //_cooldownTimer = 0.0f;
-        // 追跡を停止
-        //_boss.agent.isStopped = true;
         //NavMeshAgent停止
         _boss.agent.enabled = false;
         //攻撃フラグリセット
@@ -31,7 +27,7 @@ public class BossAttackState : IState
     public void Update()
     {
 
-        _boss.Attack();
+        _boss.AttackType1();
     }
 
     public void End()

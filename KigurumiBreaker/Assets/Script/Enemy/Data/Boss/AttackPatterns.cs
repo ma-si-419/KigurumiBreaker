@@ -36,22 +36,22 @@ public class AttackPatterns
         {
             case AttackType.Melee:
                 //boss.MeleeAttack();
-                boss.ChangeState(new BossMeleeAttackState(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
+                boss.ChangeState(new BossAttackType2State(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
                 break;
 
             case AttackType.Ranged:
                 //boss.RangedAttack();
-                boss.ChangeState(new BossMeleeAttackState(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
+                boss.ChangeState(new BossAttackType2State(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
                 break;
 
             case AttackType.Area:
                 //boss.AreaAttack();
-                boss.ChangeState(new BossMeleeAttackState(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
+                boss.ChangeState(new BossAttackType2State(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
                 break;
 
             case AttackType.Special:
                 //boss.SpecialAttack();
-                boss.ChangeState(new BossMeleeAttackState(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
+                boss.ChangeState(new BossAttackType2State(boss));   //‹ßÚUŒ‚ó‘Ô‚É•ÏX
                 break;
         }
 
