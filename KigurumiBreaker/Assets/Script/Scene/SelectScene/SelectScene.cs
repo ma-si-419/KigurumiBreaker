@@ -16,11 +16,14 @@ public class SelectScene : MonoBehaviour
     private float _lastInputTime;                         //最後に入力を受け付けた時間
     private float _joyStickL;                             //Lスティックの入力取得
 
+    private bool _oneBotton;                              //一回ボタンが押されたかどうか
+
     // Start is called before the first frame update
     void Start()
     {
         var menu = _menuUI[0].GetComponent<UnityEngine.UI.Image>();
         menu.color = Color.red;
+        _oneBotton = false;
     }
 
     // Update is called once per frame
@@ -30,11 +33,6 @@ public class SelectScene : MonoBehaviour
         if (BaseSceneController.instance.isOption) return;
 
         _joyStickL = Input.GetAxis("Vertical");
-        //if ((_joyStickL != 0))
-        //{
-        //    Debug.Log("Lスティック入力確認");
-        //    Debug.Log(_joyStickL);
-        //}
 
         if (Time.time - _lastInputTime > _inputDelay)
         {
@@ -53,7 +51,11 @@ public class SelectScene : MonoBehaviour
         //決定
         if (Input.GetButton("Submit"))
         {
-            MyOnSeclect(_menuUI[_index]);
+            if(!_oneBotton)
+            {
+                MyOnSeclect(_menuUI[_index]);
+            }
+           
         }
     }
 
@@ -99,7 +101,11 @@ public class SelectScene : MonoBehaviour
         if (select == _menuUI[0])
         {
             //安田オリジナルシーン遷移でゲームシーンへ
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.TestYoshiyama_2);
+            Debug.Log("ゲームシーンへ移動");
+
+            //一回だけ反応させる
+            _oneBotton = true;
         }
 
         //オプションボタン
