@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FullOpaqueVFX;
 using UnityEngine;
 
 public class TitleCameraMove : MonoBehaviour
@@ -10,10 +11,14 @@ public class TitleCameraMove : MonoBehaviour
     [SerializeField] private float _cameraRotateSpeed = 0.5f;    //カメラの回転速度
     [SerializeField] private float _cameraMoveSpeed = 0.4f;      //カメラの移動速度
     [SerializeField] private int _stopRotation = 2;                 //プレイヤーの周りを回る回数
+    [SerializeField] private CameraShake _cameraShakeData;    //カメラシェイクデータ
     private int _stopCount = 0;
     private bool _isCountFrag = false;                     //回転数カウントフラグ
     private bool _isStopEvent = false;                     //カメラ移動の停止イベントフラグ
     public bool isStop = false;
+
+    private int _shakeTime = 0;            //揺れの時間を保存する変数
+    private float _shakePower = 0.0f;      //揺れの大きさを保存する変数
 
 
     // Start is called before the first frame update
@@ -67,7 +72,17 @@ public class TitleCameraMove : MonoBehaviour
             }
 
             //カメラシェイクを実行
-            //TitleCameraShaker.Instance.MyShakeCamera(20, 3.0f);
+            if(_shakeTime > 0.0f)
+            {
+                _shakeTime--;
+
+                //カメラの向きをランダムに揺らす
+                float shakeX = Random.Range(-_shakePower, _shakePower);
+                float shakeY = Random.Range(-_shakePower, _shakePower);
+                float shakeZ = Random.Range(-_shakePower, _shakePower);
+
+                Vector3 rota = new Vector3(shakeX, shakeY, shakeZ);
+            }
 
             
 

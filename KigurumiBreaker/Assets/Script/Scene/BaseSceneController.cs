@@ -15,6 +15,7 @@ public enum SceneType
     PauseScene,         //ポーズ
     OptionScene,        //オプション
     LoadingScene,       //非同期ロードシーン
+    TestYoshiyama_2,
 }
 
 public class BaseSceneController : MonoBehaviour
