@@ -34,7 +34,7 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 _moveVec = Vector3.zero;
 
-    private BattleManager _battleManager;
+    [SerializeField] private BattleManager _battleManager;
 
     [SerializeField] private float effectShiftScale = 0.5f;
 

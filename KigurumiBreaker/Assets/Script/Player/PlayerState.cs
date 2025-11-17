@@ -397,7 +397,7 @@ public class PlayerState : Player<PlayerState>
                 if (state._playerSkill.dashSkillData.startAttack != null)
                 {
                     // ダッシュ開始時に出すスキルを出す
-                    Instantiate(state._playerSkill.dashSkillData.startAttack, state.transform.position, Quaternion.identity);
+                    state.CreateSkillAttack(state._playerSkill.dashSkillData.startAttack);
                 }
             }
 
@@ -463,7 +463,7 @@ public class PlayerState : Player<PlayerState>
                 // 回避中に出すスキルを出す
                 if (state._playerSkill.dashSkillData.onDashAttack != null)
                 {
-                    Instantiate(state._playerSkill.dashSkillData.onDashAttack, state.transform.position, Quaternion.identity);
+                    state.CreateSkillAttack(state._playerSkill.dashSkillData.onDashAttack);
                 }
             }
 
@@ -476,7 +476,7 @@ public class PlayerState : Player<PlayerState>
                     // 回避終了時に出すスキルを出す
                     if (state._playerSkill.dashSkillData.endAttack != null)
                     {
-                        Instantiate(state._playerSkill.dashSkillData.endAttack, state.transform.position, Quaternion.identity);
+                        state.CreateSkillAttack(state._playerSkill.dashSkillData.endAttack);
                     }
                 }
 
@@ -1830,6 +1830,22 @@ public class PlayerState : Player<PlayerState>
 
         result = rigPos;
         return result;
+    }
+
+    private void CreateSkillAttack(GameObject skillAttack)
+    {
+        // ゲームオブジェクトを生成
+        GameObject attack = Instantiate(skillAttack);
+
+        PlayerAttack playerAttack = attack.GetComponent<PlayerAttack>();
+        // カメラを設定
+        playerAttack.SetCamera(_camera);
+
+        // バトルマネージャーを設定
+        playerAttack.SetBattleManager(_battleManager);
+
+        // バトルマネージャーに攻撃オブジェクトを登録
+        _battleManager.AddPlayerAttack(attack);
     }
 
     private void CreateAttack(Attack data)
