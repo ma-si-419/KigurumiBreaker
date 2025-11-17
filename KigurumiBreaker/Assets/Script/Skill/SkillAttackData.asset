@@ -17,19 +17,89 @@ MonoBehaviour:
     Damage: 50
     Scale: 5
     AttackLifeTime: 5
-    AttackEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
-    HitEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
     KnockBackPower: 0
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 0
   - AttackName: FireDash
-    Damage: 50
-    Scale: 8
-    AttackLifeTime: 20
-    AttackEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
-    HitEffect: {fileID: 9080140021571130472, guid: d030f9bf9f6b22d49818f49a55da9f68, type: 3}
+    Damage: 5
+    Scale: 0.5
+    AttackLifeTime: 30
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
     KnockBackPower: 0
     Debuff: 4
+    IsReflect: 0
+    IsWeakAttack: 1
+  - AttackName: FireCharge
+    Damage: 5
+    Scale: 5
+    AttackLifeTime: 60
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 0
+    Debuff: 4
+    IsReflect: 0
+    IsWeakAttack: 1
+  - AttackName: PoizonCharge
+    Damage: 10
+    Scale: 5
+    AttackLifeTime: 60
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 0
+    Debuff: 3
+    IsReflect: 0
+    IsWeakAttack: 1
+  - AttackName: WaterDash
+    Damage: 30
+    Scale: 5
+    AttackLifeTime: 5
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 3
+    Debuff: 4
+    IsReflect: 0
+    IsWeakAttack: 0
+  - AttackName: WindDash
+    Damage: 20
+    Scale: 5
+    AttackLifeTime: 5
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 5
+    Debuff: 4
+    IsReflect: 0
+    IsWeakAttack: 0
+  - AttackName: ThunderDash
+    Damage: 50
+    Scale: 5
+    AttackLifeTime: 2
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 0
+    Debuff: 4
+    IsReflect: 0
+    IsWeakAttack: 0
+  - AttackName: FreezeDash
+    Damage: 10
+    Scale: 5
+    AttackLifeTime: 60
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 0
+    Debuff: 2
+    IsReflect: 0
+    IsWeakAttack: 1
+  - AttackName: PoizonDash
+    Damage: 10
+    Scale: 5
+    AttackLifeTime: 60
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 0
+    Debuff: 3
     IsReflect: 0
     IsWeakAttack: 1
