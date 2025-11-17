@@ -102,11 +102,14 @@ public class BossEnemy : EnemyBase
         DebugLine();
     }
 
-    // ボス専用の近接攻撃処理(オーバライド)
-    public virtual void MeleeAttack(){}
-
     // ボス専用の特殊攻撃処理(オーバライド)
-    public virtual void Attack(){}
+    public virtual void AttackType1(){}
+    // ボス専用の近接攻撃処理(オーバライド)
+    public virtual void AttackType2(){}
+    // ボス専用の特殊攻撃処理(オーバライド)
+    public virtual void AttackType3() { }
+    // ボス専用の特殊攻撃処理(オーバライド)
+    public virtual void AttackType4() { }
 
     public virtual void Stan()
     {
@@ -160,8 +163,8 @@ public class BossEnemy : EnemyBase
             Destroy(other.gameObject);
 
             //攻撃状態のときはダメージアニメーションを行わない
-            if (_currentState is BossAttackState) return;
-            if (_currentState is BossMeleeAttackState) return;
+            if (_currentState is BossAttackType1State) return;
+            if (_currentState is BossAttackType2State) return;
 
         }
 
@@ -194,8 +197,8 @@ public class BossEnemy : EnemyBase
             _dropBullets.Add(_enemyCommonData.dropBulletTime);
 
             //攻撃状態のときはダメージアニメーションを行わない
-            if (_currentState is BossAttackState) return;
-            if (_currentState is BossMeleeAttackState) return;
+            if (_currentState is BossAttackType1State) return;
+            if (_currentState is BossAttackType2State) return;
 
         }
 
