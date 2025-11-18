@@ -18,6 +18,47 @@ public class MiddleBoss : BossEnemy
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
     private const float ATTACK_DISTANCE = 3.0f; // 攻撃判定の距離
 
+    public override void AttackType1()
+    {
+        // ここにタックル攻撃の具体的な処理を追加
+        _chargeTimer += Time.deltaTime;
+
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //攻撃開始
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.5f)
+        {
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                CreateAttack();
+            }
+
+            if (!_isCharge)
+            {
+                StartCoroutine(DoCharge());
+            }
+        }
+        else
+        {
+            LookAtPlayer();
+        }
+
+        if (_attackObject != null)
+        {
+            // 破棄されていない場合のみ位置を更新
+            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.6f)
+        {
+            StopMovement();
+            _isCreateAttack = false;
+            ChangeState(new BossIdleState(this));
+        }
+    }
+
     public override void AttackType2()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -42,45 +83,12 @@ public class MiddleBoss : BossEnemy
         }
     }
 
-    public override void AttackType1()
+    public override void AttackType3()
     {
-        // ここにタックル攻撃の具体的な処理を追加
-        _chargeTimer += Time.deltaTime;
+    }
 
-        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        //攻撃開始
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.5f)
-        {
-            if(!_isCreateAttack)
-            {
-                _isCreateAttack = true;
-                CreateAttack();
-            }
-
-            if(!_isCharge)
-            {
-                StartCoroutine(DoCharge());
-            }
-        }
-        else
-        {
-            LookAtPlayer();
-        }
-
-        if (_attackObject != null)
-        {
-            // 破棄されていない場合のみ位置を更新
-            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
-        }
-
-        //敵のアニメーションが終わったらIdleStateに遷移
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.6f)
-        {
-            StopMovement();
-            _isCreateAttack = false;
-            ChangeState(new BossIdleState(this));
-        }
+    public override void AttackType4()
+    {
     }
 
     private IEnumerator DoCharge()

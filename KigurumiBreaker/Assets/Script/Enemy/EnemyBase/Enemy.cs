@@ -413,15 +413,19 @@ public class Enemy : EnemyBase
                 _isDead = true;
             }
 
-            //攻撃はいったら攻撃判定を速攻消す
-            Destroy(other.gameObject);
+
 
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackType1State) return;
+            if (_currentState is AttackType2State) return;
 
             // 弱攻撃の場合はダメージアニメーションを行わない
             if (_isWeakAttack) return;
 
+            //攻撃はいったら攻撃判定を速攻消す
+            Destroy(other.gameObject);
+
+            //ヒット処理
             OnHit();
         }
 
@@ -466,18 +470,20 @@ public class Enemy : EnemyBase
                 _isDead = true;
             }
 
-            //攻撃はいったら攻撃判定を速攻消す
-            Destroy(other.gameObject);
-
             // ドロップする弾を一つ増やす
             _dropBullets.Add(_enemyCommonData.dropBulletTime);
 
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackType1State) return;
+            if (_currentState is AttackType2State) return;
 
             // 弱攻撃の場合はダメージアニメーションを行わない
             if (_isWeakAttack) return;
 
+            //攻撃はいったら攻撃判定を速攻消す
+            Destroy(other.gameObject);
+
+            //ヒット処理
             OnHit();
         }
     }
@@ -491,8 +497,21 @@ public class Enemy : EnemyBase
 
     public void OnHit()
     {
+        // プレイヤー→敵 の方向ベクトル
+        Vector3 diff = transform.position - _player.transform.position;
+
+        // 正規化（方向だけ欲しいので）
+        Vector3 knockDir = diff.normalized;
+
+        // ノックバック距離
+        float knockPower = 0.5f;
+
+        // ノックバック（瞬間移動系）
+        transform.position += knockDir * knockPower;
+
         //今のステート状態のアニメーションにダメージアニメーションを重ねる
         _animator.CrossFade("Damage", 0.0f);
+
     }
 
     //デバッグ用に線を引く
