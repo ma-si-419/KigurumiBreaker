@@ -7,7 +7,7 @@ public class MiddleBoss : BossEnemy
     //攻撃オブジェクトを一度だけ生成するフラグ
     private bool _isCreateAttack = false;
 
-    private float CHARGE_SPEED = 0.6f; // 突進速度
+    private float CHARGE_SPEED = 0.75f; // 突進速度
     private float CHARGE_TIME = 0.2f; // 突進時間
 
     private bool _isCharge = false;    // 突進中かどうかのフラグ
@@ -51,7 +51,7 @@ public class MiddleBoss : BossEnemy
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.6f)
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.7f)
         {
             StopMovement();
             _isCreateAttack = false;
@@ -127,7 +127,6 @@ public class MiddleBoss : BossEnemy
         // ゲームオブジェクト生成
         _attackObject = Instantiate(_attackType1ObjectPrefab);
         _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-
     }
 
 
