@@ -460,10 +460,13 @@ public class PlayerState : Player<PlayerState>
             // スキル処理
             if (state._playerSkill.dashSkillData != null)
             {
-                // 回避中に出すスキルを出す
-                if (state._playerSkill.dashSkillData.onDashAttack != null)
+                if (_dodgeTime % state._playerData.dodgeSkillInterval == 0)
                 {
-                    state.CreateSkillAttack(state._playerSkill.dashSkillData.onDashAttack);
+                    // 回避中に出すスキルを出す
+                    if (state._playerSkill.dashSkillData.onDashAttack != null)
+                    {
+                        state.CreateSkillAttack(state._playerSkill.dashSkillData.onDashAttack);
+                    }
                 }
             }
 
@@ -1394,6 +1397,7 @@ public class PlayerState : Player<PlayerState>
                 _stunDuration = state._damageData.lowStanTime;
                 _knockbackTime = 0;
                 _knockBackScale = 0;
+                state._lowDamageInvincibleTime = state._damageData.lowInvincibleTime;
 
                 // 軽ダメージアニメーションを再生
                 _damageAnim = "LowHit";
@@ -1404,6 +1408,7 @@ public class PlayerState : Player<PlayerState>
                 _stunDuration = state._damageData.middleStanTime;
                 _knockbackTime = state._damageData.middleKnockBackTime;
                 _knockBackScale = state._damageData.middleKnockBackScale;
+                state._normalDamageInvincibleTime = state._damageData.middleInvincibleTime;
 
                 // ダメージを前から受けたかどうかでアニメーションを変える
                 if (state._isFrontDamage)
@@ -1421,6 +1426,7 @@ public class PlayerState : Player<PlayerState>
                 _stunDuration = state._damageData.highStanTime;
                 _knockbackTime = state._damageData.highKnockBackTime;
                 _knockBackScale = state._damageData.highKnockBackScale;
+                state._normalDamageInvincibleTime = state._damageData.highInvincibleTime;
 
                 // ダメージを前から受けたかどうかでアニメーションを変える
                 if (state._isFrontDamage)
@@ -2255,12 +2261,17 @@ public class PlayerState : Player<PlayerState>
         if (other.gameObject.CompareTag("EnemyAttack") ||
             other.gameObject.CompareTag("EnemyRangedAttack"))
         {
+            // 無敵時間がある間は処理を行わない
+            if (_normalDamageInvincibleTime > 0) return;
             // 死亡時はダメージを受けない
             if (_stateKind == StateKind.DEAD) return;
             // 回避中はダメージを受けない
             if (_stateKind == StateKind.DODGE) return;
             // 被弾中はダメージを受けない
             if (_stateKind == StateKind.DAMAGE) return;
+            // ダメージの種類が弱ならば何もしない
+            if (other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind() == DamageKind.LOW) return;
+
 
             // 回避率を計算して回避できたらダメージを受けない
             int randNum = Random.Range(0, 100);
@@ -2283,6 +2294,10 @@ public class PlayerState : Player<PlayerState>
             toEnemy.y = 0; // y成分を無視して水平面での方向を考える
             toEnemy.Normalize();
             float dot = Vector3.Dot(transform.forward, toEnemy);
+
+            // ダメージの種類を取得
+            _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
+            
             if (dot > 0)
             {
                 _isFrontDamage = true;
@@ -2327,8 +2342,6 @@ public class PlayerState : Player<PlayerState>
             // ダメージマテリアルに変更
             _playerMeshRenderer.material.color = Color.red;
 
-            // ダメージの種類を取得
-            _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
 
             // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
             Vector3 hitPosition = other.ClosestPoint(transform.position);
@@ -2367,6 +2380,91 @@ public class PlayerState : Player<PlayerState>
             Destroy(other.transform.parent.gameObject);
         }
 
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("EnemyAttack") ||
+            other.CompareTag("EnemyRangedAttack"))
+        {
+            // 無敵時間がある間は処理を行わない
+            if (_normalDamageInvincibleTime > 0) return;
+            // 弱攻撃の無敵時間がある場合も処理を行わない
+            if (_lowDamageInvincibleTime > 0) return;
+
+            // 弱攻撃の処理を行う
+            EnemyAttackCol enemyAttackCol = other.GetComponent<EnemyAttackCol>();
+            if (enemyAttackCol.GetDamageKind() == DamageKind.LOW)
+            {
+                // 死亡時はダメージを受けない
+                if (_stateKind == StateKind.DEAD) return;
+                // 回避中はダメージを受けない
+                if (_stateKind == StateKind.DODGE) return;
+                // 被弾中はダメージを受けない
+                if (_stateKind == StateKind.DAMAGE) return;
+
+                // 回避率を計算して回避できたらダメージを受けない
+                int randNum = Random.Range(0, 100);
+                if (randNum < _passiveStatus.dodgeRateAddRate)
+                {
+                    foreach (PassiveGameObject obj in _passiveStatus.passiveGameObjects)
+                    {
+                        if (obj.popTiming == PassiveSkillData.GameObjectPopTiming.Dodge)
+                        {
+                            Instantiate(obj.gameObject, transform.position, Quaternion.identity);
+                        }
+                    }
+
+                    return;
+                }
+
+                int damage = (int)other.gameObject.GetComponent<EnemyAttackCol>().GetDamage();
+
+                // 被ダメージカット率を計算してダメージを減らす
+                damage = (int)(damage * (1.0f - (_passiveStatus.damageCutRateAddRate / 100.0f)));
+
+                // HPを減らす
+                _nowHp -= damage;
+
+                // ダメージの一定割合を特殊ゲージに加算
+                float specialGaugeAddNum = damage * _playerData.specialAttackChargeRate;
+
+                AddSpecialGauge(specialGaugeAddNum);
+
+                // ダメージマテリアルに変更
+                _playerMeshRenderer.material.color = Color.red;
+
+                // ダメージの種類を取得
+                _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
+
+                // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
+                Vector3 hitPosition = other.ClosestPoint(transform.position);
+
+                // ダメージエフェクトを生成
+                Instantiate(other.gameObject.GetComponent<EnemyAttackCol>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
+
+                // 攻撃入力をリセット
+                _isAttackInput = false;
+
+                // 通常攻撃のチャージ時間をリセット
+                _normalChargeTime = 0;
+
+                // HPが0以下なら死亡状態に遷移
+                if (_nowHp <= 0)
+                {
+                    _nowHp = 0;
+                    ChangeState(new DeadState(this));
+                    return;
+                }
+                else
+                {
+                    // ダメージ状態に遷移
+                    ChangeState(new DamageState(this));
+                }
+
+
+            }
+        }
     }
 }
 
