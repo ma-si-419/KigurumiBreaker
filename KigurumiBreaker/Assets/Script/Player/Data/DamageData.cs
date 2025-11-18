@@ -9,6 +9,8 @@ public class DamageData : ScriptableObject
     [SerializeField] private int LowStanTime;
     [Header("ŽãUŒ‚‚ðŽó‚¯‚½Žž‚ÌƒqƒbƒgƒXƒgƒbƒvŽžŠÔ")]
     [SerializeField] private int LowHitStop;
+    [Header("ŽãUŒ‚‚ðŽó‚¯‚½Žž‚Ì–³“GŽžŠÔ")]
+    [SerializeField] private int LowInvincibleTime;
     [Header("’†UŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
     [SerializeField] private int MiddleStanTime;
     [Header("’†UŒ‚‚ðŽó‚¯‚½Žž‚ÌƒmƒbƒNƒoƒbƒN‚Ì‘å‚«‚³")]
@@ -17,6 +19,8 @@ public class DamageData : ScriptableObject
     [SerializeField] private int MiddleKnockBackTime;
     [Header("’†UŒ‚‚ðŽó‚¯‚½Žž‚ÌƒqƒbƒgƒXƒgƒbƒvŽžŠÔ")]
     [SerializeField] private int MiddleHitStop;
+    [Header("’†UŒ‚‚ðŽó‚¯‚½Žž‚Ì–³“GŽžŠÔ")]
+    [SerializeField] private int MiddleInvincibleTime;
     [Header("‹­UŒ‚‚ðŽó‚¯‚½Žž‚Ìd’¼ŽžŠÔ")]
     [SerializeField] private int HighStanTime;
     [Header("‹­UŒ‚‚ðŽó‚¯‚½Žž‚ÌƒmƒbƒNƒoƒbƒN‚Ì‘å‚«‚³")]
@@ -25,16 +29,21 @@ public class DamageData : ScriptableObject
     [SerializeField] private int HighKnockBackTime;
     [Header("‹­UŒ‚‚ðŽó‚¯‚½Žž‚ÌƒqƒbƒgƒXƒgƒbƒvŽžŠÔ")]
     [SerializeField] private int HighHitStop;
+    [Header("‹­UŒ‚‚ðŽó‚¯‚½Žž‚Ì–³“GŽžŠÔ")]
+    [SerializeField] private int HighInvincibleTime;
 
     // “Ç‚ÝŽæ‚èê—p
     public int lowStanTime => LowStanTime;
     public int lowHitStop => LowHitStop;
+    public int lowInvincibleTime => LowInvincibleTime;
     public int middleStanTime => MiddleStanTime;
     public int middleKnockBackScale => MiddleKnockBackScale;
     public int middleKnockBackTime => MiddleKnockBackTime;
     public int middleHitStop => MiddleHitStop;
+    public int middleInvincibleTime => MiddleInvincibleTime;
     public int highStanTime => HighStanTime;
     public int highKnockBackScale => HighKnockBackScale;
     public int highKnockBackTime => HighKnockBackTime;
     public int highHitStop => HighHitStop;
+    public int highInvincibleTime => HighInvincibleTime;
 }

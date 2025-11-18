@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Player<T> : MonoBehaviour where T : Player<T>
@@ -12,6 +13,11 @@ public class Player<T> : MonoBehaviour where T : Player<T>
     //Ÿ‚Ìó‘Ô
     private StateBase<T> _nextState;
 
+    // ãUŒ‚‚ğó‚¯‚½Œã‚Ì–³“GŠÔ
+    protected int _lowDamageInvincibleTime;
+
+    // “G‚©‚çãUŒ‚ˆÈŠO‚ğó‚¯‚½Œã‚Ì–³“GŠÔ
+    protected int _normalDamageInvincibleTime;
 
     /// <summary>
     /// ó‘Ô‚ğ•ÏX‚·‚éŠÖ”
@@ -59,6 +65,10 @@ public class Player<T> : MonoBehaviour where T : Player<T>
         { 
             //XVˆ—‚ğs‚¤
             _currentState.OnUpdate();
+
+            // –³“GŠÔ‚ğŒ¸‚ç‚µ‚Ä‚¢‚­
+            _lowDamageInvincibleTime--;
+            _normalDamageInvincibleTime--;
         }
     }
 }

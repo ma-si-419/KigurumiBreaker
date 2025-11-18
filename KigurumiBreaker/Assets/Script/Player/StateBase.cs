@@ -11,6 +11,8 @@ public class StateBase<T> where T : Player<T>
         state = next;
     }
 
+    protected int frameCount = 0;
+
     // ó‘Ô‚É“ü‚é‚Æ‚«‚Ìˆ—
     public virtual void OnEnterState() { }
     // ó‘Ô‚ÌXVˆ—
