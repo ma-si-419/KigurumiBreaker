@@ -1837,6 +1837,9 @@ public class PlayerState : Player<PlayerState>
         // ゲームオブジェクトを生成
         GameObject attack = Instantiate(skillAttack);
 
+        // 座標を自身の位置に設定
+        attack.transform.position = transform.position;
+
         PlayerAttack playerAttack = attack.GetComponent<PlayerAttack>();
         // カメラを設定
         playerAttack.SetCamera(_camera);

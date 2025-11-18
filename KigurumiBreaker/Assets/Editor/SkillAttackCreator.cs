@@ -40,6 +40,14 @@ public class SkillAttackCreator : Editor
         collider.isTrigger = true;
         collider.radius = data.scale;
 
+        // リギッドボディを追加
+        Rigidbody rb = temp.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.isKinematic = false;
+
+        // タグ設定
+        temp.tag = "PlayerAttack";
+
         // 攻撃スクリプトを追加
         PlayerAttack attack = temp.AddComponent<PlayerAttack>();
 
