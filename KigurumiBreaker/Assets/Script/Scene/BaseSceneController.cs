@@ -14,7 +14,7 @@ public enum SceneType
     ResultScene,        //リザルト
     PauseScene,         //ポーズ
     OptionScene,        //オプション
-    LoadingScene,       //非同期ロードシーン
+    LoadingScene,       //非同期ロードシーン(欲しいよね)
     TestYoshiyama_2,
 }
 

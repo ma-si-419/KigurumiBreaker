@@ -26,12 +26,6 @@ public class BossEnemy : EnemyBase
     [Header("通常攻撃のプレハブ(仮)")]
     protected GameObject _meleeAttackPrefab; 
 
-    // ボスの攻撃データリスト
-    //[SerializeField] protected BossAttackData _bossAttackData;
-
-    // Getter
-    //public BossAttackData bossAttackData => _bossAttackData;
-
     public float meleeAttackRangeSqr => _meleeAttackRangeSqr;
     public float specialAttackRangeSqr => _specialAttackRangeSqr;
 
@@ -135,8 +129,10 @@ public class BossEnemy : EnemyBase
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            //死んだ状態になっている場合はダメージを受けない
+            // 死んだ状態になっている場合はダメージを受けない
             if (_currentState is BossDeadState) return;
+            // フェーズに入っている間は無敵時間
+            if (_currentState is BossPhaseState) return;
 
             // ダメージを受ける(プレイヤーアタックのダメージを取得する)
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
@@ -172,6 +168,8 @@ public class BossEnemy : EnemyBase
         {
             //死んだ状態になっている場合はダメージを受けない
             if (_currentState is BossDeadState) return;
+            // フェーズに入っている間は無敵時間
+            if (_currentState is BossPhaseState) return;
 
             // プレイヤーにダメージを与える処理
             _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
