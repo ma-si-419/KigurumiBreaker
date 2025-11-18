@@ -55,7 +55,7 @@ MonoBehaviour:
     IsWeakAttack: 1
   - AttackName: WaterDash
     Damage: 30
-    Scale: 5
+    Scale: 2.3
     AttackLifeTime: 5
     AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
     HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
@@ -65,7 +65,7 @@ MonoBehaviour:
     IsWeakAttack: 0
   - AttackName: WindDash
     Damage: 20
-    Scale: 5
+    Scale: 2.3
     AttackLifeTime: 5
     AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
     HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
@@ -75,7 +75,7 @@ MonoBehaviour:
     IsWeakAttack: 0
   - AttackName: ThunderDash
     Damage: 50
-    Scale: 5
+    Scale: 2.3
     AttackLifeTime: 2
     AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
     HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
@@ -83,23 +83,23 @@ MonoBehaviour:
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 0
-  - AttackName: FreezeDash
-    Damage: 10
-    Scale: 5
-    AttackLifeTime: 60
-    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
-    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
-    KnockBackPower: 0
-    Debuff: 2
-    IsReflect: 0
-    IsWeakAttack: 1
   - AttackName: PoizonDash
     Damage: 10
-    Scale: 5
+    Scale: 2.3
     AttackLifeTime: 60
     AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
     HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
     KnockBackPower: 0
     Debuff: 3
+    IsReflect: 0
+    IsWeakAttack: 1
+  - AttackName: FreezeDash
+    Damage: 10
+    Scale: 2.3
+    AttackLifeTime: 60
+    AttackEffect: {fileID: 7854051150163640387, guid: 60867c28a1b1e7c4a9c35c1bce5e82f7, type: 3}
+    HitEffect: {fileID: 4868687725247855291, guid: 57b7a5ac72219724ca84a5776b654cba, type: 3}
+    KnockBackPower: 0
+    Debuff: 2
     IsReflect: 0
     IsWeakAttack: 1

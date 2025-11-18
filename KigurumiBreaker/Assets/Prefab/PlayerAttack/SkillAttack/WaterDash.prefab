@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5538580752395871224}
   - component: {fileID: 4641746090253365504}
+  - component: {fileID: 99150496774198635}
   - component: {fileID: 8360137828134195348}
   m_Layer: 0
   m_Name: WaterDash
-  m_TagString: Untagged
+  m_TagString: PlayerAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,8 +54,35 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Radius: 2.3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &99150496774198635
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408564410685748223}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &8360137828134195348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,6 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackLifeTime: 5
   _damage: 30
+  _battleManager: {fileID: 0}
   effectShiftScale: 0.5
 --- !u!1001 &2364188493054664201
 PrefabInstance:
