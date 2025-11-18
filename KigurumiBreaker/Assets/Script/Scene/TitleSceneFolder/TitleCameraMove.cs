@@ -11,7 +11,7 @@ public class TitleCameraMove : MonoBehaviour
     [SerializeField] private float _cameraRotateSpeed = 0.5f;    //カメラの回転速度
     [SerializeField] private float _cameraMoveSpeed = 0.4f;      //カメラの移動速度
     [SerializeField] private int _stopRotation = 2;                 //プレイヤーの周りを回る回数
-    [SerializeField] private CameraShake _cameraShakeData;    //カメラシェイクデータ
+    [SerializeField] private TitleShakeData _cameraShakeData;    //カメラシェイクデータ
     private int _stopCount = 0;
     private bool _isCountFrag = false;                     //回転数カウントフラグ
     private bool _isStopEvent = false;                     //カメラ移動の停止イベントフラグ
@@ -29,6 +29,8 @@ public class TitleCameraMove : MonoBehaviour
 
         //初期のカメラ位置を設定
         transform.position = new Vector3(_playerTr.position.x, _playerTr.position.y + 150, _cameraDistance);
+
+        _shakeTime = _cameraShakeData.time;
     }
 
     private void FixedUpdate()
@@ -72,9 +74,9 @@ public class TitleCameraMove : MonoBehaviour
             }
 
             //カメラシェイクを実行
-            if(_shakeTime > 0.0f)
+            if(_cameraShakeData.time > 0.0f)
             {
-                _shakeTime--;
+                _cameraShakeData.time--;
 
                 //カメラの向きをランダムに揺らす
                 float shakeX = Random.Range(-_shakePower, _shakePower);
@@ -82,6 +84,8 @@ public class TitleCameraMove : MonoBehaviour
                 float shakeZ = Random.Range(-_shakePower, _shakePower);
 
                 Vector3 rota = new Vector3(shakeX, shakeY, shakeZ);
+
+                transform.rotation = Quaternion.Euler(transform.position + rota);
             }
 
             

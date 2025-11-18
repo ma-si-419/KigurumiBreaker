@@ -4,45 +4,129 @@ Shader "Custom/SpotShader"
     {
         _Color("Color", Color) = (1,1,1,1)
         _Intensity("Intensity", Float) = 2.0
-    }
+        _Range("Light Range", Float) = 5.0
+        _Angle("Outer Angle", Range(1,90)) = 30
+        _InnerAngle("Inner Angle", Range(0, 90)) = 20
 
+        _LightPos("Light Pos", Vector) = (0,3,0,1)
+        _LightDir("Light Dir", Vector) = (0, -1, 0, 0)
+    }
 
     SubShader
     {
-       Tags{"RenderType"="Transparent" "Queue"="Transparent"}
-        Blend SrcAlpha One       // 加算
-        Cull Front               // 内側を表示
+        Tags{"Queue" = "Transparent" "RenderType" = "Transparent"}
         ZWrite Off
+        Blend SrcAlpha One           //加算
+        Cull Front                   //内側表示
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            float4 _Color;
+
+            float3 _LightPos;
+            float3 _LightDir;
+
+            float _Intensity;
+            float _Range;
+            float _Angle;
+            float _InnerAngle;
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float2 uv : TEXCOORD0;
+
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float3 worldPos : TEXCOORD0;
+            };
+            
+            v2f vert(appdata v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                return o;
+            }
+
+            float4 frag(v2f i) : SV_Target
+            {
+                
+                float3 toPixel = i.worldPos - _LightPos;
+
+                float dist = length(toPixel);
+
+                //距離減衰
+                float disAtt = saturate(1.0 - dist / _Range);
+                disAtt *= disAtt;
+
+                float3 dir = normalize(toPixel);
+
+                float angle = degrees(acos(dot(-dir, _LightDir)));
+
+                //1～0によるスムーズアップの距離減衰
+                float angleAtt = saturate((_Angle - angle) / (_Angle - _InnerAngle));
+
+                //全体的な強度
+                float intensity = angleAtt * disAtt * _Intensity;
+
+                return float4(_Color.rgb * intensity, intensity);
+            }
+
+            ENDCG
+        }
+    }
+
+
+    // SubShader
+    // {
+    //    Tags{"RenderType"="Transparent" "Queue"="Transparent"}
+    //     Blend SrcAlpha One       // 加算
+    //     Cull Front               // 内側を表示
+    //     ZWrite Off
 
         
 
-        CGPROGRAM
-        #pragma surface surf Lambert alpha:fade nofog
+    //     CGPROGRAM
+    //     #pragma surface surf Lambert alpha:fade nofog
 
-        float4 _Color;
-        float _Intensity;
+    //     float4 _Color;
+    //     float _Intensity;
+    //     float _Falloff;
 
-        struct Input
-        {
-            float2 uv_MainTex;
-        }
+    //     struct Input
+    //     {
+    //         float2 uv_MainTex;
+    //     }
 
-        void surf(Input IN, inout SurfaceOutput o)
-        {
-            //円錐の先端を明るくする簡易的なフェード
-            float cone = saturate(1.0 - IN.uv_MainTex.y);
+    //     void surf(Input IN, inout SurfaceOutput o)
+    //     {
+    //         //円錐の先端を明るくする簡易的なフェード
+    //         float cone = saturate(1.0 - IN.uv_MainTex.y);
 
-            //中心軸方向に向かうほど明るく
-            float radial = saturate(1.0 - abs(IN.uv_MainTex.x - 0.5) * 2.0);
+    //         //中心軸方向に向かうほど明るく
+    //         float radial = saturate(1.0 - abs(IN.uv_MainTex.x - 0.5) * 2.0);
 
-            float intensity = cone * radial * _Intensity;
+    //         //距離減衰
+    //         float distanceFalloff = pow(saturate(1.0 - IN.uv_MainTex.y), _Falloff);
 
-            o.Emission = _Color.rgb * Intensity;
-            o.Alpha = Intensity;
-        }
+    //         // 総合的な強度
+    //         float intensity = cone * radial * distanceFalloff * _Intensity;
 
-        ENDCG
-    }
+    //         o.Emission = _Color.rgb * intensity;
+    //         o.Alpha = intensity;
+    //     }
+
+    //     ENDCG
+    // }
 
     // Properties
     // {
