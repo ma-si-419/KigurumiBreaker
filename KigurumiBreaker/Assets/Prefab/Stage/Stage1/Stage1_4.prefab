@@ -15064,6 +15064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 1
+  waveSpawner: {fileID: 6011119022127019098}
 --- !u!65 &7285945160322574581
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -49628,9 +49629,12 @@ MonoBehaviour:
   - {fileID: 5029532488337773856}
   - {fileID: 3192038817624264452}
   _stageProbabilities:
-  - probability: 0
-  - probability: 0
-  - probability: 0
+  - _eventType: 8
+    probability: 0.4
+  - _eventType: 7
+    probability: 0.3
+  - _eventType: 9
+    probability: 0.3
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 6524813210816072460}
@@ -59214,6 +59218,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6096520615295954478}
     m_Modifications:
+    - target: {fileID: 2000102549869326702, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
+      propertyPath: waveSpawner
+      value: 
+      objectReference: {fileID: 6011119022127019098}
     - target: {fileID: 7984641659547257105, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 40

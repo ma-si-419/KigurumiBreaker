@@ -10403,9 +10403,15 @@ MonoBehaviour:
   - {fileID: 6414903720364748770}
   _stageProbabilities:
   - _eventType: 6
-    probability: 0
-  - _eventType: 0
-    probability: 0
+    probability: 0.1
+  - _eventType: 7
+    probability: 0.3
+  - _eventType: 4
+    probability: 0.3
+  - _eventType: 5
+    probability: 0.2
+  - _eventType: 9
+    probability: 0.2
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 6230885544215788558}
@@ -10675,6 +10681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
+  waveSpawner: {fileID: 6715712171549355545}
 --- !u!65 &9009041613073159
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20508,6 +20515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 1
+  waveSpawner: {fileID: 6715712171549355545}
 --- !u!65 &1193609217995527662
 BoxCollider:
   m_ObjectHideFlags: 0

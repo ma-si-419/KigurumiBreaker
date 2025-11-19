@@ -21606,9 +21606,12 @@ MonoBehaviour:
   _goalPositions:
   - {fileID: 8094771301849171581}
   _stageProbabilities:
-  - probability: 0
-  - probability: 0
-  - probability: 0
+  - _eventType: 6
+    probability: 0.4
+  - _eventType: 9
+    probability: 0.3
+  - _eventType: 8
+    probability: 0.3
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 6518073736452121098}
@@ -22624,6 +22627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
+  waveSpawner: {fileID: 894887561688736865}
 --- !u!65 &547042228837752574
 BoxCollider:
   m_ObjectHideFlags: 0
