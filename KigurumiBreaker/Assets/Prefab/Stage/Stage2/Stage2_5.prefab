@@ -24154,7 +24154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f4addbd83ce534bb02fa6eab52fca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goalIndex: 0
+  goalIndex: 1
+  waveSpawner: {fileID: 3981960332081694862}
 --- !u!65 &4575969873232348604
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -41347,6 +41348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
+  waveSpawner: {fileID: 3981960332081694862}
 --- !u!65 &801604721786871770
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -50628,10 +50630,14 @@ MonoBehaviour:
   _spawnInterval: 0.5
   _goalPositions:
   - {fileID: 6990157907805916908}
+  - {fileID: 4304474234661069623}
   _stageProbabilities:
-  - probability: 0
-  - probability: 0
-  - probability: 0
+  - _eventType: 5
+    probability: 0.4
+  - _eventType: 8
+    probability: 0.3
+  - _eventType: 9
+    probability: 0.3
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 6643006447002853929}

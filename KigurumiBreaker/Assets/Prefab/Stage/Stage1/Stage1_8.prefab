@@ -15378,9 +15378,12 @@ MonoBehaviour:
   _goalPositions:
   - {fileID: 8421690526608989172}
   _stageProbabilities:
-  - probability: 0
-  - probability: 0
-  - probability: 0
+  - _eventType: 5
+    probability: 0.4
+  - _eventType: 4
+    probability: 0.3
+  - _eventType: 9
+    probability: 0.3
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 226290101073388335}
@@ -20840,6 +20843,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6549775974488334153}
     m_Modifications:
+    - target: {fileID: 2000102549869326702, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
+      propertyPath: waveSpawner
+      value: 
+      objectReference: {fileID: 8323162587548824438}
     - target: {fileID: 7984641659547257105, guid: 2eccfe1e70e67e443b5948bbb8cb5ca9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 54.8
