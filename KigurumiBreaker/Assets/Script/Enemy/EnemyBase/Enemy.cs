@@ -194,8 +194,6 @@ public class Enemy : EnemyBase
             return;
         }
 
-        Debug.Log("IDle");
-
         //プレイヤーの位置を目的地に設定
         _agent.SetDestination(_player.transform.position);
 
@@ -279,17 +277,19 @@ public class Enemy : EnemyBase
         // プレイヤーの座標を代入し続ける
         _attackTarget = _player.transform.position;
 
-        //アニメーションイベントで攻撃判定オブジェクトを生成したい
-        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        ////アニメーションイベントで攻撃判定オブジェクトを生成したい
+        //var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Chase"))
-        {
-            _agent.SetDestination(_player.transform.position);
-            LookAtPlayer();
-        }
+        //if (stateInfo.IsName("Chase"))
+        //{
+
+        //}
+
+        _agent.SetDestination(_player.transform.position);
+        LookAtPlayer();
 
         // Rigidbodyの移動を停止(プレイヤーと衝突した際に吹っ飛ばされないため)
-        StopMovement(); 
+        StopMovement();
 
         //プレイヤーとの位置差を計算
         Vector3 diff = _player.transform.position - transform.position;
@@ -305,8 +305,6 @@ public class Enemy : EnemyBase
 
             if (_stateTimer > _enemyData.chaseToAttack)
             {
-                //追跡を停止
-                _agent.isStopped = true;
 
                 //攻撃状態へ
                 _stateTimer = 0.0f;
@@ -341,9 +339,6 @@ public class Enemy : EnemyBase
         //アニメーションの切り替え
         if (_isChasetoIdle)
         {
-            //
-            _agent.enabled = false;
-
             _animator.SetBool("Chase", false);
             _animator.SetBool("Idle", true);
         }
@@ -353,8 +348,6 @@ public class Enemy : EnemyBase
 
             if (_idleTime > 0.5f)
             {
-                _agent.enabled = true;
-
                 _animator.SetBool("Chase", true);
                 _animator.SetBool("Idle", false);
             }

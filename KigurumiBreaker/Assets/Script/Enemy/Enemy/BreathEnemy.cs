@@ -10,6 +10,8 @@ public class BreathEnemy : Enemy
 
     public override void AttackType1()
     {
+        StopMovement();
+
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 

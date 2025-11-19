@@ -24,6 +24,8 @@ public class BossPhaseState : IState
     public void Update()
     {
         //_boss.Idle(); //基本待機処理
+        
+        _boss.PhaseChange(); //基本フェーズ変更
     }
 
     public void End()

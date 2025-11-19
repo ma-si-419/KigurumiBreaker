@@ -45,23 +45,25 @@ public class BossIdleState : IState
         //ƒ^ƒCƒ}[‚Å’ÇÕó‘Ô‚ÖˆÚs
         _stateTimer += Time.deltaTime;
 
+        // UŒ‚‚ð‘I‘ð‚·‚éˆ—
+        _boss.AttackSelect();
 
         /* UŒ‚‚É‘JˆÚ‚·‚éˆ— */
-        if (_stateTimer > _idleToAttackDelay)
-        {
-            if (diff.sqrMagnitude <= _boss.meleeAttackRangeSqr)
-            {
-                //‹ßÚUŒ‚‚Ö
-                _stateTimer = 0.0f;
-                _boss.ChangeState(new BossAttackType2State(_boss));
-            }
-            else if (diff.sqrMagnitude <= _boss.specialAttackRangeSqr)
-            {
-                //“ÁŽêUŒ‚‚Ö
-                _stateTimer = 0.0f;
-                _boss.ChangeState(new BossAttackType1State(_boss));
-            }
-        }
+        //if (_stateTimer > _idleToAttackDelay)
+        //{
+        //    if (diff.sqrMagnitude <= _boss.meleeAttackRangeSqr)
+        //    {
+        //        //‹ßÚUŒ‚‚Ö
+        //        _stateTimer = 0.0f;
+        //        _boss.ChangeState(new BossAttackType2State(_boss));
+        //    }
+        //    else if (diff.sqrMagnitude <= _boss.specialAttackRangeSqr)
+        //    {
+        //        //“ÁŽêUŒ‚‚Ö
+        //        _stateTimer = 0.0f;
+        //        _boss.ChangeState(new BossAttackType1State(_boss));
+        //    }
+        //}
 
         /* ’ÇÕ‚É‘JˆÚ‚·‚éˆ— */
         if (diff.sqrMagnitude < _boss.enemyData.detectionRange || _stateTimer > _boss.enemyData.idleToChaseTime)

@@ -12,7 +12,7 @@ public class LaserEnemy : Enemy
     {
         _laserTimer += Time.deltaTime;
 
-        //ƒJƒvƒZƒ‹‚ğİ’è‚µ‚Ä‚¢‚éÅ‘å‹——£‚Ü‚ÅL‚Î‚·
+        StopMovement();
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 

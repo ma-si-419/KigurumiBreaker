@@ -46,21 +46,24 @@ public class BossChaseState : IState
         //タイマーを進める(スピード感を出すため一旦除外)
         _stateTimer += Time.deltaTime;
 
-        if (_stateTimer > _boss.enemyData.chaseToAttack)
-        {
-            //近い距離なら近接攻撃へ
-            if (diff.sqrMagnitude < _boss.meleeAttackRangeSqr)
-            {
-                //通常攻撃へ移行
-                _boss.ChangeState(new BossAttackType2State(_boss));
-            }
-            //中距離なら突進攻撃へ
-            else if (diff.sqrMagnitude < _boss.specialAttackRangeSqr)
-            {
-                //突進攻撃へ移行
-                _boss.ChangeState(new BossAttackType1State(_boss));
-            }
-        }
+        // 攻撃を選択する処理
+        _boss.AttackSelect();
+
+        //if (_stateTimer > _boss.enemyData.chaseToAttack)
+        //{
+        //    //近い距離なら近接攻撃へ
+        //    if (diff.sqrMagnitude < _boss.meleeAttackRangeSqr)
+        //    {
+        //        //通常攻撃へ移行
+        //        _boss.ChangeState(new BossAttackType2State(_boss));
+        //    }
+        //    //中距離なら突進攻撃へ
+        //    else if (diff.sqrMagnitude < _boss.specialAttackRangeSqr)
+        //    {
+        //        //突進攻撃へ移行
+        //        _boss.ChangeState(new BossAttackType1State(_boss));
+        //    }
+        //}
 
     }
 

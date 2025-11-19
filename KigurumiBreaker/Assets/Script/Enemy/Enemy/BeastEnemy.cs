@@ -62,8 +62,6 @@ public class BeastEnemy : Enemy
 
     public override void AttackType2()
     {
-        // NavMeshを消す
-        agent.enabled = false;
 
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -99,7 +97,6 @@ public class BeastEnemy : Enemy
                 Destroy(_attackObj);
 
                 //攻撃フラグをリセット
-                agent.enabled = true;
                 _isCharge = false;
                 _isCreateAttack = false;
                 _isStateChange = true;

@@ -6,6 +6,7 @@ public class CircleAttackEnemy : Enemy
 {
     public override void AttackType1()
     {
+        StopMovement();
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 

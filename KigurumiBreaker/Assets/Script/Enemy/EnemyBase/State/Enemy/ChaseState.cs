@@ -23,7 +23,9 @@ public class ChaseState : IState
         {
             _enemy.animator.SetBool("Chase", true);
         }
-        _enemy.agent.isStopped = false; //’ÇÕÄŠJ
+
+        // ’ÇÕ‚ğÄŠJ
+        _enemy.agent.isStopped = false; 
     }
 
     public void Update()
