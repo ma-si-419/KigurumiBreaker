@@ -13,9 +13,6 @@ public class SpiderEnemy : Enemy
 
     public override void AttackType1()
     {
-        // NavMeshを消す
-        agent.enabled = false;
-
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -47,7 +44,6 @@ public class SpiderEnemy : Enemy
 
                 //攻撃フラグをリセット
                 StopMovement();
-                agent.enabled = true;
                 _isCharge = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
@@ -70,6 +66,8 @@ public class SpiderEnemy : Enemy
     public override void AttackType2()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        StopMovement();
 
         if (stateInfo.IsName("AttackType2"))
         {

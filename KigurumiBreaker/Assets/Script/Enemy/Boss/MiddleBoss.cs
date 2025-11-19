@@ -85,10 +85,84 @@ public class MiddleBoss : BossEnemy
 
     public override void AttackType3()
     {
+        // ここにタックル攻撃の具体的な処理を追加
+        _chargeTimer += Time.deltaTime;
+
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //攻撃開始
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.5f)
+        {
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                CreateAttack();
+            }
+
+            if (!_isCharge)
+            {
+                StartCoroutine(DoCharge());
+            }
+        }
+        else
+        {
+            LookAtPlayer();
+        }
+
+        if (_attackObject != null)
+        {
+            // 破棄されていない場合のみ位置を更新
+            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.7f)
+        {
+            StopMovement();
+            _isCreateAttack = false;
+            ChangeState(new BossIdleState(this));
+        }
     }
 
     public override void AttackType4()
     {
+        // ここにタックル攻撃の具体的な処理を追加
+        _chargeTimer += Time.deltaTime;
+
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //攻撃開始
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.5f)
+        {
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                CreateAttack();
+            }
+
+            if (!_isCharge)
+            {
+                StartCoroutine(DoCharge());
+            }
+        }
+        else
+        {
+            LookAtPlayer();
+        }
+
+        if (_attackObject != null)
+        {
+            // 破棄されていない場合のみ位置を更新
+            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
+        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.7f)
+        {
+            StopMovement();
+            _isCreateAttack = false;
+            ChangeState(new BossIdleState(this));
+        }
     }
 
     private IEnumerator DoCharge()
@@ -107,7 +181,6 @@ public class MiddleBoss : BossEnemy
             yield return new WaitForFixedUpdate();
         }
 
-        //_rigidbody.velocity = Vector3.zero; // 終了時に停止を保証
         _isCharge = false;
         _chargeTimer = 0.0f;
     }

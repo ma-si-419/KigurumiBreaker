@@ -32,7 +32,6 @@ public class PunchEnemy : Enemy
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-
         if (stateInfo.IsName("AttackType1"))
         {
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);

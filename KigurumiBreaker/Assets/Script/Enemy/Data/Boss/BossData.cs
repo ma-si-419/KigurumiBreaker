@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//public class BossAttackDataList : ScriptableObject
-//{
-//    public List<BossAttackData> bossAttackDataList;
-//}
- 
-[CreateAssetMenu(menuName = "BossData")]
+[CreateAssetMenu(menuName = "Boss/BossData")]
 public class BossData : ScriptableObject
 {
     [Header("Ç‹ÇüÇ»ÇÒÇ©êFÅXì¸ÇÍÇÈ")]

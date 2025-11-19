@@ -11,6 +11,8 @@ public class BlueDragonEnemy : Enemy
 
     public override void AttackType1()
     {
+        StopMovement();
+
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -54,12 +56,13 @@ public class BlueDragonEnemy : Enemy
             ChangeState(new IdleState(this));
         }
 
-        StopMovement();
 
     }
 
     public override void AttackType2()
     {
+        StopMovement();
+
         //アニメーションイベントで攻撃判定オブジェクトを生成したい
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
@@ -97,8 +100,6 @@ public class BlueDragonEnemy : Enemy
             _isStateChange = false;
             ChangeState(new IdleState(this));
         }
-
-        StopMovement();
     }
 
     public void EnemyBuleDragonAttackCreate(Vector3 pos, GameObject attackPrefab, int createNum)

@@ -6,7 +6,8 @@ public class BombEnemy : Enemy
 {
     public override void AttackType1()
     {
-        
+        StopMovement();
+
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("AttackType1"))

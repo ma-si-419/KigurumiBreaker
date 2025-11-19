@@ -13,9 +13,6 @@ public class TackleEnemy : Enemy
 
     public override void AttackType1()
     {
-        // NavMesh‚ğÁ‚·
-        agent.enabled = false;
-
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         //UŒ‚ŠJn
@@ -44,7 +41,6 @@ public class TackleEnemy : Enemy
                 Destroy(_attackObj);
 
                 StopMovement();
-                agent.enabled = true;
                 _isCreateAttack = false;
                 _isCharge = false;
                 ChangeState(new IdleState(this));

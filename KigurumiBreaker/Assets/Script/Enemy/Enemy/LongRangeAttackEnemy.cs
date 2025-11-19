@@ -89,6 +89,7 @@ public class LongRangeAttackEnemy : Enemy
     {
         //ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ğŒü‚«‘±‚¯‚é
         LookAtPlayer();
+        StopMovement();
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 

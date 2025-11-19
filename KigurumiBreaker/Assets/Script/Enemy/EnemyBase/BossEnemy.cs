@@ -16,9 +16,18 @@ public class BossEnemy : EnemyBase
     // フェーズチェンジしたかどうかのフラグ
     protected bool _isPhaseChanged = false;
 
+    // フェーズフラグ
+    protected bool _isPhase = false;
+
     // 攻撃範囲の値の二乗
     protected float _meleeAttackRangeSqr;
     protected float _specialAttackRangeSqr;
+
+    // ボスの全攻撃データ
+    [SerializeField] protected BossAttackData _attackData;
+
+    // ランタイム用のクールダウン管理クラスのリスト
+    private List<BossAttackRuntime> _runtimesAttacks = new();
 
     [SerializeField] public float _meleeAttackRange;
     [SerializeField] public float _specialAttackRange;
@@ -43,12 +52,24 @@ public class BossEnemy : EnemyBase
         _meleeAttackRangeSqr = _meleeAttackRange * _meleeAttackRange;
         _specialAttackRangeSqr = _specialAttackRange * _specialAttackRange;
 
+        // 全攻撃データから攻撃データを1つずつ取り出し、管理クラスに変換してリスト化する
+        foreach (var atk in _attackData.bossAttackDataList)
+        {
+            // _runtimesAttacksに攻撃データを追加
+            _runtimesAttacks.Add(new BossAttackRuntime()
+            {
+                bossAttackData = atk,
+                lastUsedTime = -atk.cooldown,
+            });
+        }
+
         // ボス専用の初期化処理をここに追加
         ChangeState(new BossIdleState(this));
     }
 
     protected override void Update()
     {
+
 
         float a = _enemyCommonData.shakeMagnitude;
 
@@ -90,19 +111,30 @@ public class BossEnemy : EnemyBase
             }
         }
 
+        // フェーズに一回チェンジしたらもうフェーズ状態にいかない
+        if (_isPhase && !_isPhaseChanged)
+        {
+            if (!(_currentState is BossPhaseState))
+            {
+                ChangeState(new BossPhaseState(this));
+            }
+        }
+
         // 親クラスのUpdate()を呼び出す
         base.Update();
 
         DebugLine();
     }
 
-    // ボス専用の特殊攻撃処理(オーバライド)
+
+
+    // 攻撃タイプ1処理(オーバライド)
     public virtual void AttackType1(){}
-    // ボス専用の近接攻撃処理(オーバライド)
+    // 攻撃タイプ2処理(オーバライド)
     public virtual void AttackType2(){}
-    // ボス専用の特殊攻撃処理(オーバライド)
+    // 攻撃タイプ3処理(オーバライド)
     public virtual void AttackType3() { }
-    // ボス専用の特殊攻撃処理(オーバライド)
+    // 攻撃タイプ4処理(オーバライド)
     public virtual void AttackType4() { }
 
     public virtual void Stan()
@@ -155,12 +187,14 @@ public class BossEnemy : EnemyBase
                 _isDead = true;
             }
 
+            // Hpが半分以下ならフェーズに入る
+            if (_currentHp <= _currentHp * 0.5f)
+            {
+                _isPhase = true;
+            }
+
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
-
-            //攻撃状態のときはダメージアニメーションを行わない
-            if (_currentState is BossAttackType1State) return;
-            if (_currentState is BossAttackType2State) return;
 
         }
 
@@ -188,16 +222,17 @@ public class BossEnemy : EnemyBase
                 _currentHp = 0;
                 _isDead = true;
             }
+            
+            // Hpが半分以下ならフェーズに入る
+            if (_currentHp <= _currentHp * 0.5f)
+            {
+                _isPhase = true;
+            }
 
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
             _dropBullets.Add(_enemyCommonData.dropBulletTime);
-
-            //攻撃状態のときはダメージアニメーションを行わない
-            if (_currentState is BossAttackType1State) return;
-            if (_currentState is BossAttackType2State) return;
-
         }
 
     }
@@ -210,10 +245,97 @@ public class BossEnemy : EnemyBase
 
         //敵の攻撃範囲を表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(specialAttackRangeSqr), Color.red);
-        
+
         //敵の検知範囲を球で表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(meleeAttackRangeSqr), Color.blue);
 
     }
 
+    // どの攻撃を行うか判別する処理
+    public void AttackSelect()
+    {
+        // その攻撃のステートに移動する
+        Vector3 diff = player.transform.position - transform.position;
+
+        float dist = diff.magnitude;
+        
+        float distSqr = diff.sqrMagnitude;
+
+        float time = Time.time;
+
+        List<BossAttackRuntime> available = new();
+
+        foreach (var atk in _runtimesAttacks)
+        {
+            if (distSqr > atk.bossAttackData.rangeSqr) continue;
+            if (time - atk.lastUsedTime < atk.bossAttackData.cooldown) continue;
+
+            available.Add(atk);
+        }
+
+        // 全ての攻撃が出来なかった場合、待機状態に戻る
+        if (available.Count == 0) return;
+
+        // 攻撃条件が当てはまっているデータ達でランダムに選ぶ
+        var selected = ChooseWeightedRandom(available);
+
+        selected.lastUsedTime = time;
+
+        var next = CreateState(selected.bossAttackData.bossAttackType);
+
+        // 攻撃状態に遷移
+        ChangeState(next);
+    }
+
+    BossAttackRuntime ChooseWeightedRandom(List<BossAttackRuntime> list)
+    {
+        // 合計値の変数
+        float total = 0;
+
+        // 全攻撃データの重さを計算
+        foreach (var atk in list) total += atk.bossAttackData.weight;
+
+        // ランダム値の計算
+        float random = Random.value * total;
+
+        // 
+        foreach (var atk in list)
+        {
+            // 
+            if (random < atk.bossAttackData.weight) return atk;
+
+            random -= atk.bossAttackData.weight;
+        }
+
+        return null;
+    }
+
+    // クラス名で状態クラスを見つける関数
+    private IState CreateState(BossAttackType type)
+    {
+
+        switch (type)
+        {
+            case BossAttackType.Attack1:
+                return new BossAttackType1State(this);
+            case BossAttackType.Attack2:
+                return new BossAttackType2State(this);
+            case BossAttackType.Attack3:
+                return new BossAttackType3State(this);
+            case BossAttackType.Attack4:
+                return new BossAttackType4State(this);
+        }
+
+        return null;
+    }
+
+}
+
+// 
+public class BossAttackRuntime
+{
+    // ボスの攻撃情報
+    public BossAttack bossAttackData;
+    // 最後に使った時間
+    public float lastUsedTime;
 }
