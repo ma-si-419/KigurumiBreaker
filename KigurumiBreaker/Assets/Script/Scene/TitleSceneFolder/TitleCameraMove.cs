@@ -76,7 +76,7 @@ public class TitleCameraMove : MonoBehaviour
             //カメラシェイクを実行
             if(_cameraShakeData.time > 0.0f)
             {
-                //_cameraShakeData.time--;
+                _shakeTime--;
 
                 //カメラの向きをランダムに揺らす
                 float shakeX = Random.Range(-_shakePower, _shakePower);

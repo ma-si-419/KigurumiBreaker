@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+# if UNITY_EDITOR
+using Microsoft.Unity.VisualStudio.Editor;
+#endif
 
 public class SelectScene : MonoBehaviour
 {
