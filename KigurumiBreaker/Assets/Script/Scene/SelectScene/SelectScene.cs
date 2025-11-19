@@ -104,8 +104,8 @@ public class SelectScene : MonoBehaviour
         if (select == _menuUI[0])
         {
             //安田オリジナルシーン遷移でゲームシーンへ
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
-            //BaseSceneController.instance.ChangeSceneWithFade(SceneType.TestYoshiyama_2);
+            //BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.TestYoshiyama_2);
 
             //一回だけ反応させる
             _oneBotton = true;
