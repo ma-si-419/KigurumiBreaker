@@ -28,8 +28,8 @@ public class EnemyPopPatern
 [System.Serializable]
 public class StageProbability
 {
-    private StageEventType _eventType;
-    [Range(0f, 1f)] public float probability;
+    [SerializeField] private StageEventType _eventType;
+    [Range(0f, 1f)]  public float probability;
 
 
     // 読み取り専用プロパティ
@@ -110,6 +110,7 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
+
         if (_waveData == null || _waveData.waveEnemyDataList.Count == 0)
         {
             Debug.LogError("WaveData が設定されていないか、waveEnemyDataList が空です");
@@ -120,10 +121,12 @@ public class WaveSpawner : MonoBehaviour
         _currentStageInfo = _waveData.waveEnemyDataList[Random.Range(0, _waveData.waveEnemyDataList.Count)];
 
         StartCoroutine(HandleStageGroups(_currentStageInfo));
+        AssignSkillsToGoals();
     }
 
     private void AssignSkillsToGoals()
     {
+
         if (_goalPositions == null || _goalPositions.Length == 0) return;
 
         for (int i = 0; i < _goalPositions.Length; i++)
@@ -133,6 +136,7 @@ public class WaveSpawner : MonoBehaviour
 
             if (i == 0)
                 _nextSkillElement = ConvertStageEventToSkill(sp.eventType);
+              Debug.Log("Assign skill: " + sp.eventType);
         }
     }
 
@@ -146,7 +150,10 @@ public class WaveSpawner : MonoBehaviour
             case StageEventType.Thunder: return SkillData.SkillElement.Thunder;
             case StageEventType.Freeze: return SkillData.SkillElement.Freeze;
             case StageEventType.Poison: return SkillData.SkillElement.Poison;
-            default: return SkillData.SkillElement.Fire;
+            default:
+                Debug.LogError("未対応のイベント: " + eventType);
+                return SkillData.SkillElement.Fire;
+
         }
     }
 
@@ -350,6 +357,9 @@ public class WaveSpawner : MonoBehaviour
         StageEventType eventType = _stageProbabilities[goalIndex].eventType;
         SkillData.SkillElement selectedSkill = ConvertStageEventToSkill(eventType);
 
+        //本当にスキルが選択されたのかの確認
+        Debug.Log("GoalReachedで選択されたスキル: " + selectedSkill.ToString());
+
         if (stageSpawner != null)
             stageSpawner.OnPathSelected(selectedSkill);
     }
@@ -374,6 +384,7 @@ public class WaveSpawner : MonoBehaviour
     public void SetBeforeSkill(string skillName)
     {
         _beforeSkill = skillName;
+        Debug.Log("SetBeforeSkill 呼び出し: " + skillName);
     }
     public void SetStageSpawner(StageSpawner spawner)
     {

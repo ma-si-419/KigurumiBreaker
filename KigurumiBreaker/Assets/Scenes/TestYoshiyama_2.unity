@@ -1004,6 +1004,7 @@ GameObject:
   m_Component:
   - component: {fileID: 878051008}
   - component: {fileID: 878051007}
+  - component: {fileID: 878051009}
   m_Layer: 0
   m_Name: SoundTest
   m_TagString: Untagged
@@ -1021,7 +1022,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e2a95482c26948848a5b07e08891e28f, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1122,6 +1123,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &878051009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878051006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64b0aa00aecd9546a53b039aa69be38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmSource: {fileID: 878051007}
+  bgmClips:
+  - {fileID: 8300000, guid: e2a95482c26948848a5b07e08891e28f, type: 3}
+  - {fileID: 8300000, guid: 32b4fd1ea3a7d784dab827000bd5b65b, type: 3}
+  - {fileID: 8300000, guid: e2a95482c26948848a5b07e08891e28f, type: 3}
 --- !u!1001 &884169391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37840,9 +37858,12 @@ MonoBehaviour:
   _goalPositions:
   - {fileID: 1724663790}
   _stageProbabilities:
-  - probability: 0
-  - probability: 0
-  - probability: 0
+  - _eventType: 0
+    probability: 0
+  - _eventType: 0
+    probability: 0
+  - _eventType: 0
+    probability: 0
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 440948412258313455}
