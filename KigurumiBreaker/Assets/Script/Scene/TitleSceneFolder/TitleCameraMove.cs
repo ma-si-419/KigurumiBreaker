@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class TitleCameraMove : MonoBehaviour
 {
-    [SerializeField] private Transform _playerTr;    //プレイヤーのTransform情報
-    [SerializeField] private float _heightAt = 50.0f;    //注視するカメラの高さ
-    [SerializeField] private float _cameraDistance = 50.0f;   //カメラと注視点の距離
-    [SerializeField] private float _cameraRotateSpeed = 0.5f;    //カメラの回転速度
-    [SerializeField] private float _cameraMoveSpeed = 0.4f;      //カメラの移動速度
+    [SerializeField] private GameObject _player;    //プレイヤーのオブジェクト情報
+
+    [SerializeField] private TitleCameraData _titleCameraData;    //タイトルカメラデータ
+
+    private CameraShake _cameraShake; 
+
+    private float _cameraRotateSpeed = 0.0f;    //カメラの回転速度
+    private float _cameraMoveSpeed = 0.0f;      //カメラの移動速度
     [SerializeField] private int _stopRotation = 2;                 //プレイヤーの周りを回る回数
     [SerializeField] private TitleShakeData _cameraShakeData;    //カメラシェイクデータ
     private int _stopCount = 0;
@@ -28,20 +31,29 @@ public class TitleCameraMove : MonoBehaviour
         isStop = false;
 
         //初期のカメラ位置を設定
-        transform.position = new Vector3(_playerTr.position.x, _playerTr.position.y + 150, _cameraDistance);
+        transform.position = new Vector3(_player.transform.position.x, _player.transform.position.y + 150, _titleCameraData.distance);
+
+        //初期のカメラ回転を設定
+        transform.rotation = Quaternion.Euler(_titleCameraData.cameraRotation);
+
+        _cameraShake = Camera.main.GetComponent<CameraShake>();
 
         _shakeTime = _cameraShakeData.time;
+        _shakePower = _cameraShakeData.power;
+        _cameraRotateSpeed = _titleCameraData.rotationSpeed;
+        _cameraMoveSpeed = _titleCameraData.moveSpeed;
     }
 
     private void FixedUpdate()
     {
         //注視点の位置を設定
-        var lookAt = _playerTr.position + Vector3.up * _heightAt;
+        var lookAt = _player.transform.position + Vector3.up * _titleCameraData.lookHeight;
+
         //プレイヤーを注視する
         transform.LookAt(lookAt);
 
         //プレイヤーが画面を殴るまでカメラを移動させる
-        if(!_isStopEvent)
+        if (!_isStopEvent)
         {
             //カメラの位置を更新
             transform.RotateAround(lookAt, new Vector3(0, 1, 0), _cameraRotateSpeed);
@@ -51,7 +63,7 @@ public class TitleCameraMove : MonoBehaviour
             if (_stopCount != 1)
             {
                 //プレイヤーに近づくまで移動させる
-                transform.position = Vector3.MoveTowards(transform.position, lookAt + transform.forward * _cameraDistance, _cameraMoveSpeed);
+                transform.position = Vector3.MoveTowards(transform.position, lookAt + transform.forward * _titleCameraData.distance, _cameraMoveSpeed);
             }
 
         }
@@ -63,6 +75,9 @@ public class TitleCameraMove : MonoBehaviour
             //カメラ移動を止める
             _isStopEvent = true;
 
+            //注視点をプレイヤーにする
+
+
             if (Camera.main.fieldOfView >= 20)
             {
                 //プレイヤーに近づくまで移動させる
@@ -73,19 +88,25 @@ public class TitleCameraMove : MonoBehaviour
                 isStop = true;
             }
 
+            //常にカメラシェイクを行う
+            //transform.rotation = Quaternion.Euler(_titleCameraData.cameraRotation);
+
+
             //カメラシェイクを実行
-            if(_cameraShakeData.time > 0.0f)
+            if (_shakeTime > 0.0f)
             {
                 _shakeTime--;
 
-                //カメラの向きをランダムに揺らす
-                float shakeX = Random.Range(-_shakePower, _shakePower);
-                float shakeY = Random.Range(-_shakePower, _shakePower);
-                float shakeZ = Random.Range(-_shakePower, _shakePower);
+                _cameraShake.Shake(0.2f, _shakePower);
 
-                Vector3 rota = new Vector3(shakeX, shakeY, shakeZ);
+                ////カメラの向きをランダムに揺らす
+                //float shakeX = Random.Range(-_shakePower, _shakePower);
+                //float shakeY = Random.Range(-_shakePower, _shakePower);
+                //float shakeZ = Random.Range(-_shakePower, _shakePower);
 
-                transform.rotation = Quaternion.Euler(transform.position + rota);
+                //Vector3 rota = new Vector3(shakeX, shakeY, shakeZ);
+
+                //transform.rotation = Quaternion.Euler(_titleCameraData.cameraRotation + rota);
             }
 
             
