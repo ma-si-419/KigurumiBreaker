@@ -3,8 +3,8 @@ using UnityEngine;
 public class GoalPoint : MonoBehaviour
 {
     private StageSpawner _stageSpawner;
-    [SerializeField]private int goalIndex;
-    private WaveSpawner waveSpawner;
+    [SerializeField] private int goalIndex;
+    [SerializeField] private WaveSpawner waveSpawner; // Å© SerializeField Ç…Ç∑ÇÈ
 
     void Start()
     {
@@ -15,8 +15,8 @@ public class GoalPoint : MonoBehaviour
     {
         if (other.CompareTag("Player") && _stageSpawner != null)
         {
+            waveSpawner.OnGoalReached(goalIndex);
             _stageSpawner.NextStage();
-            //waveSpawner.OnGoalReached(goalIndex);
         }
     }
 }

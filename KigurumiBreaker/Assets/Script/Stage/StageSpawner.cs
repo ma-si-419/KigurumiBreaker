@@ -56,6 +56,10 @@ public class StageSpawner : MonoBehaviour
     private int _currentStageIndex = 0;
     private GameObject _currentStageInstance;
 
+    //過去に選ばれたPrefabのインデックスリスト
+    private Dictionary<int, HashSet<int>> _usedPrefabs = new Dictionary<int, HashSet<int>>();
+
+
     // ステージデータのインデックスを設定
     private void OnValidate()
     {
@@ -97,29 +101,48 @@ public class StageSpawner : MonoBehaviour
         // === 前ステージの削除 ===
         if (_currentStageInstance != null)
         {
-            // 旧ステージの NavMeshSurface を完全クリア
             var oldSurfaces = _currentStageInstance.GetComponentsInChildren<NavMeshSurface>();
             foreach (var s in oldSurfaces)
-            {
                 s.RemoveData();
-            }
 
             Destroy(_currentStageInstance);
         }
 
         // === 新ステージ生成 ===
         StageSet stageSet = _stageSets[index];
-        int prefabIndex = Random.Range(0, stageSet.stagePrefabs.Length);
+
+        // 過去に選ばれたPrefabの管理
+        if (!_usedPrefabs.ContainsKey(index))
+            _usedPrefabs[index] = new HashSet<int>();
+
+        HashSet<int> used = _usedPrefabs[index];
+
+        // 使用可能なPrefabをリスト化
+        List<int> availableIndexes = new List<int>();
+        for (int i = 0; i < stageSet.stagePrefabs.Length; i++)
+        {
+            if (!used.Contains(i))
+                availableIndexes.Add(i);
+        }
+
+        // すべて使い切った場合はリセット（任意）
+        if (availableIndexes.Count == 0)
+        {
+            used.Clear();
+            for (int i = 0; i < stageSet.stagePrefabs.Length; i++)
+                availableIndexes.Add(i);
+        }
+
+        int prefabIndex = availableIndexes[Random.Range(0, availableIndexes.Count)];
+        used.Add(prefabIndex);
+
         _currentStageInstance = Instantiate(stageSet.stagePrefabs[prefabIndex]);
 
         // === NavMesh 再生成 ===
         var newSurfaces = _currentStageInstance.GetComponentsInChildren<NavMeshSurface>();
         foreach (var surface in newSurfaces)
         {
-            // 念のため古いデータを削除
             surface.RemoveData();
-
-            // Bake
             surface.BuildNavMesh();
         }
 
@@ -138,13 +161,10 @@ public class StageSpawner : MonoBehaviour
             waveSpawner.SetSkillSelect(_skillSelectManager);
             waveSpawner.SetBattleManager(_battleManager);
 
-            // 前ステージで会得したスキルを渡す
-            if (_acquiredSkills.Count > 0)
-            {
-                waveSpawner.SetBeforeSkill(string.Join(",", _acquiredSkills));
-            }
+            if (!string.IsNullOrEmpty(_beforeSkill))
+                waveSpawner.SetBeforeSkill(_beforeSkill); // 
 
-            // StageSpawner の参照を渡す
+
             waveSpawner.SetStageSpawner(this);
         }
 
@@ -170,11 +190,18 @@ public class StageSpawner : MonoBehaviour
 
         // まだステージが残っているなら次を生成
         SpawnStage(nextIndex);
+
+        //　ここでStageSetを取得
+        StageSet nextStage = _stageSets[nextIndex];
+        //StageKindに応じてBGMを変更
+        StageSound.instance.ChangeBGM_ByStageKind(nextStage.stageKind);
     }
 
     private void Start()
     {
         SpawnStage(0);
+        StageSet nextStage = _stageSets[0];
+        StageSound.instance.ChangeBGM_ByStageKind(nextStage.stageKind);
     }
 
     /// <summary>
