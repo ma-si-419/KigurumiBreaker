@@ -10,12 +10,18 @@ public class StageSet
 {
     public enum StageKind
     {
+        [InspectorName("自宅")]
+        Home,
         [InspectorName("チュートリアル")]
         Tutorial,
         [InspectorName("ステージ1　森")]
         Forest,
+        [InspectorName("ステージ1　Boss")]
+        Forest_Boss,
         [InspectorName("ステージ2　洞窟")]
-        Cave
+        Cave,
+        [InspectorName("ステージ2　Boss")]
+        Cave_Boss,
     }
 
     private const int SECTIONS_MAX = 5;
