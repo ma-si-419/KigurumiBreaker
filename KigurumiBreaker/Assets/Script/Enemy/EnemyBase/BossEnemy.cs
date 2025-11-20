@@ -33,11 +33,13 @@ public class BossEnemy : EnemyBase
     [SerializeField] public float _specialAttackRange;
 
     [Header("通常攻撃のプレハブ(仮)")]
-    protected GameObject _meleeAttackPrefab; 
+    protected GameObject _meleeAttackPrefab;
+
+    protected float testRange;
+    protected float testRangeSqr;
 
     public float meleeAttackRangeSqr => _meleeAttackRangeSqr;
     public float specialAttackRangeSqr => _specialAttackRangeSqr;
-
     public GameObject meleeAttackPrefab => _meleeAttackPrefab;
 
     protected override void Start()
@@ -102,23 +104,16 @@ public class BossEnemy : EnemyBase
 
         _isDamage = false; // ダメージフラグをリセット
 
-        if (_isDead)
-        {
-            // すでに死亡状態なら変更しない
-            if (!(_currentState is BossDeadState))
-            {
-                ChangeState(new BossDeadState(this));
-            }
-        }
-
         // フェーズに一回チェンジしたらもうフェーズ状態にいかない
-        if (_isPhase && !_isPhaseChanged)
-        {
-            if (!(_currentState is BossPhaseState))
-            {
-                ChangeState(new BossPhaseState(this));
-            }
-        }
+        //if (_isPhase && !_isPhaseChanged)
+        //{
+        //    if (!(_currentState is BossPhaseState))
+        //    {
+        //        ChangeState(new BossPhaseState(this));
+        //    }
+        //}
+
+        Debug.Log(_currentState);
 
         // 親クラスのUpdate()を呼び出す
         base.Update();
@@ -183,6 +178,12 @@ public class BossEnemy : EnemyBase
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
             {
+                // すでに死亡状態なら変更しない
+                if (!(_currentState is BossDeadState))
+                {
+                    ChangeState(new BossDeadState(this));
+                }
+
                 _currentHp = 0;
                 _isDead = true;
             }
@@ -219,10 +220,16 @@ public class BossEnemy : EnemyBase
             // Hpが0以下なら死亡処理に遷移
             if (_currentHp <= 0)
             {
+                // すでに死亡状態なら変更しない
+                if (!(_currentState is BossDeadState))
+                {
+                    ChangeState(new BossDeadState(this));
+                }
+
                 _currentHp = 0;
                 _isDead = true;
             }
-            
+
             // Hpが半分以下ならフェーズに入る
             if (_currentHp <= _currentHp * 0.5f)
             {
@@ -244,10 +251,10 @@ public class BossEnemy : EnemyBase
         Debug.DrawLine(transform.position, player.transform.position, Color.green);
 
         //敵の攻撃範囲を表示
-        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(specialAttackRangeSqr), Color.red);
+        //Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(specialAttackRangeSqr), Color.red);
 
         //敵の検知範囲を球で表示
-        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(meleeAttackRangeSqr), Color.blue);
+        Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(testRangeSqr), Color.blue);
 
     }
 
@@ -257,17 +264,18 @@ public class BossEnemy : EnemyBase
         // その攻撃のステートに移動する
         Vector3 diff = player.transform.position - transform.position;
 
-        float dist = diff.magnitude;
-        
-        float distSqr = diff.sqrMagnitude;
+        testRange = diff.magnitude;
 
+        testRangeSqr = testRange * testRange;
+
+        // 秒数
         float time = Time.time;
 
         List<BossAttackRuntime> available = new();
 
         foreach (var atk in _runtimesAttacks)
         {
-            if (distSqr > atk.bossAttackData.rangeSqr) continue;
+            if (testRangeSqr > atk.bossAttackData.rangeSqr) continue;
             if (time - atk.lastUsedTime < atk.bossAttackData.cooldown) continue;
 
             available.Add(atk);

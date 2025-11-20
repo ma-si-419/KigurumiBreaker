@@ -49,22 +49,6 @@ public class BossChaseState : IState
         // UŒ‚‚ğ‘I‘ğ‚·‚éˆ—
         _boss.AttackSelect();
 
-        //if (_stateTimer > _boss.enemyData.chaseToAttack)
-        //{
-        //    //‹ß‚¢‹——£‚È‚ç‹ßÚUŒ‚‚Ö
-        //    if (diff.sqrMagnitude < _boss.meleeAttackRangeSqr)
-        //    {
-        //        //’ÊíUŒ‚‚ÖˆÚs
-        //        _boss.ChangeState(new BossAttackType2State(_boss));
-        //    }
-        //    //’†‹——£‚È‚ç“ËiUŒ‚‚Ö
-        //    else if (diff.sqrMagnitude < _boss.specialAttackRangeSqr)
-        //    {
-        //        //“ËiUŒ‚‚ÖˆÚs
-        //        _boss.ChangeState(new BossAttackType1State(_boss));
-        //    }
-        //}
-
     }
 
     public void End()

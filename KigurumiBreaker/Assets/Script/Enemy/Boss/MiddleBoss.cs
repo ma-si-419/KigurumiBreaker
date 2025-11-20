@@ -91,7 +91,7 @@ public class MiddleBoss : BossEnemy
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         //攻撃開始
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.5f)
+        if (stateInfo.IsName("AttackType3") && stateInfo.normalizedTime >= 0.3f)
         {
             if (!_isCreateAttack)
             {
@@ -116,7 +116,7 @@ public class MiddleBoss : BossEnemy
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.7f)
+        if (stateInfo.IsName("AttackType3") && stateInfo.normalizedTime >= 0.8f)
         {
             StopMovement();
             _isCreateAttack = false;
@@ -132,7 +132,7 @@ public class MiddleBoss : BossEnemy
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         //攻撃開始
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.5f)
+        if (stateInfo.IsName("AttackType4") && stateInfo.normalizedTime >= 0.3f)
         {
             if (!_isCreateAttack)
             {
@@ -157,7 +157,7 @@ public class MiddleBoss : BossEnemy
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.7f)
+        if (stateInfo.IsName("AttackType4") && stateInfo.normalizedTime >= 0.8f)
         {
             StopMovement();
             _isCreateAttack = false;

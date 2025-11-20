@@ -18,7 +18,7 @@ public class BossPhaseState : IState
         _boss.agent.isStopped = true; // 追跡を停止
 
         //フェーズアニメーション開始
-        _boss.animator.SetBool("Down", true);
+        //_boss.animator.SetBool("Down", true);
     }
 
     public void Update()
@@ -31,6 +31,6 @@ public class BossPhaseState : IState
     public void End()
     {
         //フェーズアニメーション終了
-        _boss.animator.SetBool("Down", false);
+        //_boss.animator.SetBool("Down", false);
     }
 }
