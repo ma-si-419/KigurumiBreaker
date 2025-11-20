@@ -580,6 +580,7 @@ public class PlayerState : Player<PlayerState>
             if (target != null)
             {
                 Vector3 targetDir = (target.transform.position - state.transform.position).normalized;
+                targetDir.y = 0;
                 state.transform.forward = targetDir;
                 state._currentDirection = targetDir;
             }
@@ -752,6 +753,7 @@ public class PlayerState : Player<PlayerState>
                     if (target != null)
                     {
                         Vector3 targetDir = (target.transform.position - state.transform.position).normalized;
+                        targetDir.y = 0;
                         state.transform.forward = targetDir;
                         state._currentDirection = targetDir;
                     }
