@@ -9,7 +9,7 @@ public class TitleCameraMove : MonoBehaviour
 
     [SerializeField] private TitleCameraData _titleCameraData;    //タイトルカメラデータ
 
-    private CameraShake _cameraShake; 
+    private CameraShake _cameraShake;
 
     private float _cameraRotateSpeed = 0.0f;    //カメラの回転速度
     private float _cameraMoveSpeed = 0.0f;      //カメラの移動速度
@@ -23,6 +23,9 @@ public class TitleCameraMove : MonoBehaviour
     private int _shakeTime = 0;            //揺れの時間を保存する変数
     private float _shakePower = 0.0f;      //揺れの大きさを保存する変数
 
+    [SerializeField] private float _gravityScale = 1.0f;
+
+    private float _lastGravity = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +49,13 @@ public class TitleCameraMove : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        if (_lastGravity != _gravityScale)
+        {
+            Physics.gravity = new Vector3(0.0f, -_gravityScale, 0.0f);
+        }
+        _lastGravity = _gravityScale;
+
         //注視点の位置を設定
         var lookAt = _player.transform.position + Vector3.up * _titleCameraData.lookHeight;
 
@@ -68,9 +78,9 @@ public class TitleCameraMove : MonoBehaviour
 
         }
 
-        
+
         //プレイヤーの前で止まるようにする
-        if(_stopRotation == _stopCount)
+        if (_stopRotation == _stopCount)
         {
             //カメラ移動を止める
             _isStopEvent = true;
@@ -109,19 +119,19 @@ public class TitleCameraMove : MonoBehaviour
                 //transform.rotation = Quaternion.Euler(_titleCameraData.cameraRotation + rota);
             }
 
-            
+
 
         }
         //回転数が満たない時は回転カウント
-        else if(transform.rotation.y >= 0.0f && transform.rotation.y <= 5.0f)
+        else if (transform.rotation.y >= 0.0f && transform.rotation.y <= 5.0f)
         {
-            if(_isCountFrag)
+            if (_isCountFrag)
             {
                 _stopCount++;
                 _isCountFrag = false;
             }
             //回転数が1回の時のカメラ速度調整
-            if(_stopCount == 1)
+            if (_stopCount == 1)
             {
                 _cameraRotateSpeed = 1.5f;
                 _cameraMoveSpeed = 1.0f;
