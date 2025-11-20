@@ -44,6 +44,11 @@ public class LaserEnemy : Enemy
             }
         }
 
+        if (_currentHp <= 0)
+        {
+            Destroy(_attackObj);
+        }
+
         //ŽžŠÔ‚ªŒo‚Á‚½‚çUŒ‚I—¹
         if (_laserTimer > 5.0f)
         {

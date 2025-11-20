@@ -116,6 +116,7 @@ public class EnemyBase : MonoBehaviour
     public EnemyCommonData enemyCommonData => _enemyCommonData;
     public BattleManager battleManager => _battleManager;
     public IState previousState => _previousState;
+    public float attackRangeSqr => _attackRangeSqr;
 
     protected virtual void Start()
     {

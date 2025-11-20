@@ -29,18 +29,16 @@ public class BossEnemy : EnemyBase
     // ランタイム用のクールダウン管理クラスのリスト
     private List<BossAttackRuntime> _runtimesAttacks = new();
 
-    [SerializeField] public float _meleeAttackRange;
-    [SerializeField] public float _specialAttackRange;
-
-    [Header("通常攻撃のプレハブ(仮)")]
-    protected GameObject _meleeAttackPrefab;
+    // 攻撃タイプ3オブジェクトのプレハブ
+    protected GameObject _attackType3ObjectPrefab;
+    // 攻撃タイプ4オブジェクトのプレハブ
+    protected GameObject _attackType4ObjectPrefab;
 
     protected float testRange;
     protected float testRangeSqr;
 
     public float meleeAttackRangeSqr => _meleeAttackRangeSqr;
     public float specialAttackRangeSqr => _specialAttackRangeSqr;
-    public GameObject meleeAttackPrefab => _meleeAttackPrefab;
 
     protected override void Start()
     {
@@ -50,9 +48,10 @@ public class BossEnemy : EnemyBase
         // ボス専用のUIバーを作成
         _enemyUiManager.CreateBossEnemyBar(this);
 
-        // 攻撃範囲の二乗を計算して保存
-        _meleeAttackRangeSqr = _meleeAttackRange * _meleeAttackRange;
-        _specialAttackRangeSqr = _specialAttackRange * _specialAttackRange;
+        // 攻撃オブジェクトのプレハブを設定
+        _attackType3ObjectPrefab = _enemyData.attackType3Prefab;
+        _attackType4ObjectPrefab = _enemyData.attackType4Prefab;
+
 
         // 全攻撃データから攻撃データを1つずつ取り出し、管理クラスに変換してリスト化する
         foreach (var atk in _attackData.bossAttackDataList)

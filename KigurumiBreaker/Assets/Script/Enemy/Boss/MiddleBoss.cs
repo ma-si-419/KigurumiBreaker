@@ -85,82 +85,48 @@ public class MiddleBoss : BossEnemy
 
     public override void AttackType3()
     {
-        // ここにタックル攻撃の具体的な処理を追加
-        _chargeTimer += Time.deltaTime;
-
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        //攻撃開始
-        if (stateInfo.IsName("AttackType3") && stateInfo.normalizedTime >= 0.3f)
+        if (stateInfo.IsName("AttackType3") && stateInfo.normalizedTime >= 0.6f)
         {
+            //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
-                CreateAttack();
-            }
-
-            if (!_isCharge)
-            {
-                StartCoroutine(DoCharge());
+                CreateMeleeAttack();
             }
         }
-        else
-        {
-            LookAtPlayer();
-        }
 
-        if (_attackObject != null)
-        {
-            // 破棄されていない場合のみ位置を更新
-            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
-        }
-
-        //敵のアニメーションが終わったらIdleStateに遷移
+        //敵のアニメーション状態を取得
         if (stateInfo.IsName("AttackType3") && stateInfo.normalizedTime >= 0.8f)
         {
-            StopMovement();
+            //攻撃フラグをリセット
             _isCreateAttack = false;
+            //攻撃アニメーションが終了したらIdleStateに遷移
             ChangeState(new BossIdleState(this));
         }
     }
 
     public override void AttackType4()
     {
-        // ここにタックル攻撃の具体的な処理を追加
-        _chargeTimer += Time.deltaTime;
-
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        //攻撃開始
-        if (stateInfo.IsName("AttackType4") && stateInfo.normalizedTime >= 0.3f)
+        if (stateInfo.IsName("AttackType4") && stateInfo.normalizedTime >= 0.6f)
         {
+            //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
-                CreateAttack();
-            }
-
-            if (!_isCharge)
-            {
-                StartCoroutine(DoCharge());
+                CreateMeleeAttack();
             }
         }
-        else
-        {
-            LookAtPlayer();
-        }
 
-        if (_attackObject != null)
-        {
-            // 破棄されていない場合のみ位置を更新
-            _attackObject.transform.position = this.transform.position + this.transform.forward * ATTACK_DISTANCE;
-        }
-
-        //敵のアニメーションが終わったらIdleStateに遷移
+        //敵のアニメーション状態を取得
         if (stateInfo.IsName("AttackType4") && stateInfo.normalizedTime >= 0.8f)
         {
-            StopMovement();
+            //攻撃フラグをリセット
             _isCreateAttack = false;
+            //攻撃アニメーションが終了したらIdleStateに遷移
             ChangeState(new BossIdleState(this));
         }
     }

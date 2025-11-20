@@ -12,7 +12,8 @@ public class BossChaseState : IState
     private BossEnemy _boss;
     //状態遷移用タイマー
     private float _stateTimer;
-
+    // 追跡から待機に戻るフラグ
+    protected bool _isChasetoIdle = false;
 
     public BossChaseState(BossEnemy boss)
     {
@@ -42,6 +43,15 @@ public class BossChaseState : IState
         //プレイヤーとの位置差を計算
         Vector3 diff = _boss.player.transform.position - _boss.transform.position;
 
+        if (diff.sqrMagnitude < _boss.attackRangeSqr)
+        {
+            _isChasetoIdle = true;
+        }
+        else
+        {
+            _isChasetoIdle = false;
+        }
+
         //追跡を停止
         //タイマーを進める(スピード感を出すため一旦除外)
         _stateTimer += Time.deltaTime;
@@ -49,11 +59,30 @@ public class BossChaseState : IState
         // 攻撃を選択する処理
         _boss.AttackSelect();
 
+        //アニメーションの切り替え
+        if (_isChasetoIdle)
+        {
+            _boss.animator.SetBool("Chase", false);
+            _boss.animator.SetBool("Idle", true);
+        }
+        else
+        {
+            _boss.animator.SetBool("Chase", true);
+            _boss.animator.SetBool("Idle", false);
+        }
+
     }
 
     public void End()
     {
         //待機アニメーション終了
-        _boss.animator.SetBool("Chase", false);
+        if (_isChasetoIdle)
+        {
+            _boss.animator.SetBool("Chase", false);
+        }
+        else
+        {
+            _boss.animator.SetBool("Idle", false);
+        }
     }
 }
