@@ -19,14 +19,19 @@ public class SelectScene : MonoBehaviour
     private float _lastInputTime;                         //最後に入力を受け付けた時間
     private float _joyStickL;                             //Lスティックの入力取得
 
+    private int _bottonCount;                             //最終手段
+
     private bool _oneBotton;                              //一回ボタンが押されたかどうか
 
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("死ね");
+
         var menu = _menuUI[0].GetComponent<UnityEngine.UI.Image>();
         menu.color = Color.red;
         _oneBotton = false;
+        _bottonCount = 0;
     }
 
     // Update is called once per frame
@@ -52,14 +57,14 @@ public class SelectScene : MonoBehaviour
         }
 
         //決定
-        if (Input.GetButton("Submit"))
+        if (Input.GetButton("Submit") && !_oneBotton && _bottonCount == 0)
         {
-            if(!_oneBotton)
-            {
-                MyOnSeclect(_menuUI[_index]);
-            }
-           
+            _oneBotton = true;
+
+            MyOnSelect(_menuUI[_index]);
+
         }
+
     }
 
     private void MyMoveSelection(int direction)
@@ -96,8 +101,12 @@ public class SelectScene : MonoBehaviour
     /// 選択決定時の処理
     /// </summary>
     /// <param name="select"></param>
-    private void MyOnSeclect(GameObject select)
+    private void MyOnSelect(GameObject select)
     {
+
+        //一回だけ反応させる
+        _oneBotton = true;
+
         Debug.Log(select);
 
         //プレイボタン
@@ -107,8 +116,7 @@ public class SelectScene : MonoBehaviour
             //BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
             BaseSceneController.instance.ChangeSceneWithFade(SceneType.TestYoshiyama_2);
 
-            //一回だけ反応させる
-            _oneBotton = true;
+            _bottonCount++;
         }
 
         //オプションボタン
@@ -116,10 +124,14 @@ public class SelectScene : MonoBehaviour
         {
             //安田オリジナルシーン遷移でオプションシーンへ
             BaseSceneController.instance.ToggleOption();
+
+            Debug.Log(_oneBotton);
+
+            _oneBotton = true;
         }
 
         //終了ボタン
-        if (select == _menuUI[2])
+        if (select == _menuUI[2] && !_oneBotton)
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
