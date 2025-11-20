@@ -23,7 +23,8 @@ public enum EnemyKind
     Spider,
     ArmorBeast,
     ArmorBlueDragon,
-    ArmorSpider
+    ArmorSpider,
+    MohikanBoss
 }
 
 [System.Serializable]
