@@ -38,6 +38,19 @@ public class PlayerSkillManager : MonoBehaviour
 
     PlayerState _playerState;
 
+    public static PlayerSkillManager Instance;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Start()
     {
         _playerState = _player.GetComponent<PlayerState>();
