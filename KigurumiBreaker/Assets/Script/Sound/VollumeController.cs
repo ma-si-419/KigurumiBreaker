@@ -9,6 +9,7 @@ public class VolumeController : MonoBehaviour
     [SerializeField] private Slider bgmSlider;
     [SerializeField] private Slider seSlider;
 
+
     [Header("Initial Select")]
     [SerializeField] private GameObject firstSelected;  // ← 最初の選択UI
 
@@ -24,6 +25,20 @@ public class VolumeController : MonoBehaviour
 
     private void Start()
     {
+        if (firstSelected == null)
+        {
+            Debug.LogError("firstSelected が設定されていません！");
+        }
+
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("EventSystem がシーンに存在しません！");
+        }
+
+        if (firstSelected != null && EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(firstSelected);
+        }
         // 最初の選択UIを指定
         if (firstSelected != null)
         {
@@ -55,6 +70,7 @@ public class VolumeController : MonoBehaviour
             {
                 // 最初の1回は即反応
                 MoveSlider(activeSlider, input);
+                Debug.Log("動かしてる。");
                 isHolding = true;
                 holdTimer = Time.time + repeatDelay;
             }
