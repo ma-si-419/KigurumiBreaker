@@ -12,7 +12,7 @@ public class BossIdleState : IState
 
     private float _stateTimer = 0.0f; //状態遷移用タイマー
 
-    private float _idleToAttackDelay = 1.5f; //待機から攻撃への遅延時間
+    //private float _idleToAttackDelay = 1.5f; //待機から攻撃への遅延時間
 
     public BossIdleState(BossEnemy boss)
     {

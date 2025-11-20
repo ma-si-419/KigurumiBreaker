@@ -344,13 +344,8 @@ public class Enemy : EnemyBase
         }
         else
         {
-            _idleTime += Time.deltaTime;
-
-            if (_idleTime > 0.5f)
-            {
-                _animator.SetBool("Chase", true);
-                _animator.SetBool("Idle", false);
-            }
+            _animator.SetBool("Chase", true);
+            _animator.SetBool("Idle", false);
         }
     }
 
