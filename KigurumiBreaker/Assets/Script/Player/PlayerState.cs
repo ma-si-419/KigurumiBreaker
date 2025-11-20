@@ -574,6 +574,16 @@ public class PlayerState : Player<PlayerState>
 
             _effectObject = Instantiate(_currentAttackData.attackEffect, effectPos, Quaternion.identity);
 
+            GameObject target = state.SearchTargetObject();
+
+            // ターゲットがいる場合はターゲットの方向に向ける
+            if (target != null)
+            {
+                Vector3 targetDir = (target.transform.position - state.transform.position).normalized;
+                state.transform.forward = targetDir;
+                state._currentDirection = targetDir;
+            }
+
             _currentFrame = 0;
         }
         public override void OnUpdate()
@@ -734,6 +744,16 @@ public class PlayerState : Player<PlayerState>
 
                         Destroy(state._currentAttack);
                         state._currentAttack = null;
+                    }
+
+                    GameObject target = state.SearchTargetObject();
+
+                    // ターゲットがいる場合はターゲットの方向に向ける
+                    if (target != null)
+                    {
+                        Vector3 targetDir = (target.transform.position - state.transform.position).normalized;
+                        state.transform.forward = targetDir;
+                        state._currentDirection = targetDir;
                     }
 
                     // 次の攻撃データが存在する場合、次の攻撃に遷移
