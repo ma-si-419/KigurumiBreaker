@@ -10,18 +10,27 @@ public class BreakBlock : MonoBehaviour
     [SerializeField] private float _explodeRange = 10f;                         //爆発の範囲
     [SerializeField] private float _breakTime1 = 0.02f;                         //ひび割れタイム
     [SerializeField] private float _breakTime2 = 0.8f;                          //弾けタイム
+    [SerializeField] private TitleCameraMove _titleCameraMove;                  //カメラ動きをとる                        
     private Rigidbody[] rigidbodies;
+
+    public bool breakMoment = false;                                            //壁を破壊する瞬間
 
     void Start()
     {
         rigidbodies = GetComponentsInChildren<Rigidbody>();                    //子のRididbodyを取得しておく
-        StartCoroutine("BreakStart");                                          //動作にディレイをするためのコルーチンを使用
+       
+
+        breakMoment = false;
     }
 
-    //private void Update()
-    //{ 
-
-    //}
+    void Update()
+    {
+        //壁を壊す
+        if(_titleCameraMove.isStop)
+        {
+            StartCoroutine("BreakStart");                                          //動作にディレイをするためのコルーチンを使用
+        }
+    }
 
     IEnumerator BreakStart()
     {
@@ -38,10 +47,10 @@ public class BreakBlock : MonoBehaviour
 
         foreach (Rigidbody rb in rigidbodies)
         {
+
             rb.isKinematic = true;
 
             Debug.Log(rigidbodies);
-
 
         }
 
@@ -49,6 +58,9 @@ public class BreakBlock : MonoBehaviour
 
         foreach (Rigidbody rb in rigidbodies)
         {
+            //画面を揺らすフラグ建て
+            breakMoment = true;
+
             rb.isKinematic = false;
             rb.AddExplosionForce(_explodeForce, transform.position + _explodeVe1, _explodeRange);
 

@@ -14,6 +14,7 @@ public class CameraShaker : MonoBehaviour
     public void Shake(float duration, float magnitude)
     {
         StartCoroutine(ShakeCoroutine(duration, magnitude));
+
     }
 
     private System.Collections.IEnumerator ShakeCoroutine(float duration, float magnitude)
