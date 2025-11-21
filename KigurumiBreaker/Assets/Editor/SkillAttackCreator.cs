@@ -63,11 +63,13 @@ public class SkillAttackCreator : Editor
         attackData.isWeakAttack = data.isWeakAttack;
 
         attack.SetPlayerAttackData(attackData);
-
-        // エフェクトを子に追加
-        GameObject effectCopy = (GameObject)PrefabUtility.InstantiatePrefab(data.attackEffect);
-        effectCopy.name = "Effect";
-        effectCopy.transform.SetParent(temp.transform, false);
+        
+        // エフェクトのスクリプトを追加
+        AttackEffect effectsc = temp.AddComponent<AttackEffect>();
+        effectsc.SetLifeTime(data.attackLifeTime);
+        GameObject effectobj = data.attackEffect;
+        effectobj.AddComponent<AttackEffect>();
+        effectsc.SetGameObject(data.attackEffect);
 
         // 保存フォルダ設定
         string folderPath = "Assets/Prefab/PlayerAttack/SkillAttack/";

@@ -31530,6 +31530,8 @@ GameObject:
   - component: {fileID: 5533045385474147428}
   - component: {fileID: 7464804443783001675}
   - component: {fileID: 7180368867050691908}
+  - component: {fileID: 949005045205438679}
+  - component: {fileID: -9006555912948937955}
   m_Layer: 0
   m_Name: FireDash
   m_TagString: Untagged
@@ -31546,7 +31548,7 @@ Transform:
   m_GameObject: {fileID: 9042584859056320878}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: -1.2494795, y: -0.058318734, z: 17.818373}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -36378,3 +36380,29 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &949005045205438679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9042584859056320878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed48504e32f70aa48a2c6a549de9f5ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effect: {fileID: 0}
+--- !u!114 &-9006555912948937955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9042584859056320878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed48504e32f70aa48a2c6a549de9f5ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effect: {fileID: 0}

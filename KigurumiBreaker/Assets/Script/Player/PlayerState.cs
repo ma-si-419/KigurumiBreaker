@@ -1861,6 +1861,8 @@ public class PlayerState : Player<PlayerState>
 
     private void CreateSkillAttack(GameObject skillAttack)
     {
+        skillAttack.GetComponent<AttackEffect>().SetPos(transform.position);
+
         // ゲームオブジェクトを生成
         GameObject attack = Instantiate(skillAttack);
 
@@ -1868,6 +1870,7 @@ public class PlayerState : Player<PlayerState>
         attack.transform.position = transform.position;
 
         PlayerAttack playerAttack = attack.GetComponent<PlayerAttack>();
+
         // カメラを設定
         playerAttack.SetCamera(_camera);
 
@@ -1962,6 +1965,8 @@ public class PlayerState : Player<PlayerState>
                 attackData.damage = data.damage;
                 break;
         }
+        // ステータスの値を設定
+        attackData.damage = attackData.damage * _playerStatus.attackPower;
 
         // 攻撃の大きさを設定
         attackObject.transform.localScale = new Vector3(scale, scale, scale);
@@ -2057,6 +2062,9 @@ public class PlayerState : Player<PlayerState>
 
         // 遠距離攻撃ダメージ増加率分の効果を追加
         attackData.damage = attackData.damage + (int)(data.damage * (_passiveStatus.rangedAttackDamageAddRate / 100));
+
+        // ステータスの値を設定
+        attackData.damage = (int)((float)attackData.damage * _playerStatus.attackPower);
 
         // 弾のヒットストップ時間を設定
         attackData.hitStopTime = data.hitStopFrame;
