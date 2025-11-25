@@ -31,7 +31,6 @@ public class PassiveSkillData
         Attack
     }
 
-
     [System.Serializable]
     public class UpStatus
     {

@@ -2485,6 +2485,9 @@ public class PlayerState : Player<PlayerState>
                 // HPを減らす
                 _nowHp -= damage;
 
+                // 無敵時間を設定
+                _lowDamageInvincibleTime = _damageData.lowInvincibleTime;
+
                 // ダメージの一定割合を特殊ゲージに加算
                 float specialGaugeAddNum = damage * _playerData.specialAttackChargeRate;
 
@@ -2515,13 +2518,6 @@ public class PlayerState : Player<PlayerState>
                     ChangeState(new DeadState(this));
                     return;
                 }
-                else
-                {
-                    // ダメージ状態に遷移
-                    ChangeState(new DamageState(this));
-                }
-
-
             }
         }
     }
