@@ -136,6 +136,12 @@ public class MohikanBoss : BossEnemy
 
         if (stateInfo.IsName("AttackType4"))
         {
+            // ƒvƒŒƒCƒ„[‚Ì•û‚ğŒü‚­
+            if (stateInfo.normalizedTime <= 0.2f)
+            {
+                LookAtPlayer();
+            }
+
             if (stateInfo.normalizedTime >= 0.4f)
             {
                 //UŒ‚”»’è‚ğˆê‚Â¶¬‚³‚¹‚é
