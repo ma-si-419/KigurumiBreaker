@@ -157,6 +157,9 @@ public class PlayerState : Player<PlayerState>
     // 攻撃入力がされたかどうか
     private bool _isAttackInput;
 
+    // 回避入力がされたか
+    private bool _isDodgeInput;
+
     // 攻撃ボタンを長押ししている時間
     private int _normalChargeTime;
 
@@ -399,7 +402,6 @@ public class PlayerState : Player<PlayerState>
                     state.CreateSkillAttack(state._playerSkill.dashSkillData.startAttack);
                 }
             }
-
         }
         public override void OnUpdate()
         {
@@ -482,8 +484,26 @@ public class PlayerState : Player<PlayerState>
                     }
                 }
 
+                Debug.Log(state._passiveStatus.dashCountAddNum);
+
+                // 回避入力があればもう一度回避状態に遷移
+                if (state._isDodgeInput && state._dodgeCount < state._passiveStatus.dashCountAddNum)
+                {
+                    state._dodgeCount++;
+                    state._isDodgeInput = false;
+                    state.ChangeState(new DodgeState(state));
+                    return;
+                }
+
+                // 回避のクールタイムを設定
+                state._dodgeCoolTime = state._playerData.dodgeCoolTime;
+
                 // 移動入力があれば移動状態に遷移、なければ待機状態に遷移
                 float magnitude = state._moveInput.magnitude;
+
+                // 回避の回数をリセット
+                state._dodgeCount = 0;
+
                 if (magnitude > state._playerData.moveInputLength)
                 {
                     state.ChangeState(new MoveState(state));
@@ -1643,9 +1663,19 @@ public class PlayerState : Player<PlayerState>
 
     private void Dodge(InputAction.CallbackContext constext)
     {
+        if(_stateKind == StateKind.DODGE)
+        {
+            _isDodgeInput = true;
+        }
+
         if (_isInItemRange)
         {
             _isInItemRange = false;
+            return;
+        }
+
+        if(_dodgeCoolTime > 0)
+        {
             return;
         }
 

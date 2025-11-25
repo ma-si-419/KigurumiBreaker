@@ -22,5 +22,4 @@ public class PlayerStatus : ScriptableObject
     public float dodgeSpeed => DodgeSpeed;
     public float attackPower => AttackPower;
     public int maxBulletNum => MaxBulletNum;
-
 }
