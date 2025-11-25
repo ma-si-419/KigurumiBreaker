@@ -19,6 +19,12 @@ public class Player<T> : MonoBehaviour where T : Player<T>
     // “G‚©‚çãUŒ‚ˆÈŠO‚ğó‚¯‚½Œã‚Ì–³“GŠÔ
     protected int _normalDamageInvincibleTime;
 
+    // ‰ñ”ğ‚Ìd’¼ŠÔ
+    protected int _dodgeCoolTime;
+
+    // ‰ñ”ğ‚ğs‚Á‚½‰ñ”
+    protected int _dodgeCount;
+
     /// <summary>
     /// ó‘Ô‚ğ•ÏX‚·‚éŠÖ”
     /// </summary>
@@ -69,6 +75,9 @@ public class Player<T> : MonoBehaviour where T : Player<T>
             // –³“GŠÔ‚ğŒ¸‚ç‚µ‚Ä‚¢‚­
             _lowDamageInvincibleTime--;
             _normalDamageInvincibleTime--;
+
+            // ‰ñ”ğ‚Ìd’¼ŠÔ‚ğŒ¸‚ç‚µ‚Ä‚¢‚­
+            _dodgeCoolTime--;
         }
     }
 }
