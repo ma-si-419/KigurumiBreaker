@@ -1,17 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using JetBrains.Annotations;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerState : Player<PlayerState>
 {
-
     // 状態のenum
     public enum StateKind
     {
@@ -123,6 +115,9 @@ public class PlayerState : Player<PlayerState>
 
     // 一つ前のパッシブスキルのステータス上昇値
     PassiveStatus _lastPassiveStatus;
+
+    // デバッグ用：特殊攻撃のチャージ量
+    public float DEBUG_SpecialAttackGauge;
 
     // 入力情報
     private GameInputs _input;
@@ -269,6 +264,8 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             if (state._isStop) return;
+
+            state._specialChargeNum = state.DEBUG_SpecialAttackGauge;
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
@@ -1301,7 +1298,7 @@ public class PlayerState : Player<PlayerState>
     // 特殊攻撃状態
     public class SpecialAttackState : StateBase<PlayerState>
     {
-        private int _stateTime;
+        private float _stateTime;
 
         private string _currentAttackName;
 
@@ -1328,6 +1325,9 @@ public class PlayerState : Player<PlayerState>
 
             _currentAttackName = "SpecialAttack";
 
+            // 特殊攻撃アニメーションを再生
+            state._animator.SetTrigger(_currentAttackName);
+
             // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
             if (chargeLevel == state._playerData.specialAttackMaxLevel)
             {
@@ -1336,10 +1336,14 @@ public class PlayerState : Player<PlayerState>
                 _cameraMove.SetSpecialAttack(true);
             }
 
-            // 特殊攻撃アニメーションを再生
-            state._animator.SetTrigger(_currentAttackName);
+            // 特殊攻撃のレベルを攻撃名に追加
+            _currentAttackName = _currentAttackName + chargeLevel.ToString();
+
             // 攻撃の情報を設定
             _currentAttackData = state.SearchAttackData(_currentAttackName);
+
+            // 拡大する部位を設定
+            state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
         }
         public override void OnUpdate()
         {
@@ -1352,6 +1356,72 @@ public class PlayerState : Player<PlayerState>
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
+
+            /// 攻撃部位の拡大処理 ///
+
+            // 攻撃を出す前
+            if (_stateTime <= _currentAttackData.startFrame)
+            {
+                for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
+                {
+                    // このループで変更する拡大部位
+                    PlayerState.ScallingAttackPart part = state._errorDeleterPart;
+
+                    // 拡大している攻撃部位を検索
+                    for (int j = 0; j < state._scallingAttackParts.Count; j++)
+                    {
+                        // 見つかったら保存してループを抜ける
+                        if (state._scallingAttackParts[j].attackPartKind == _currentAttackData.scaleAttackParts[i].attackPartKind)
+                        {
+                            part = state._scallingAttackParts[j];
+                            break;
+                        }
+                    }
+
+                    // 大きさの計算
+                    float scale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].scale, Mathf.Clamp(_stateTime / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+
+                    part.scale = scale;
+
+                    // 攻撃する部位を大きくする
+                    part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+
+                    // 少しずつずらす
+                    float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].range, Mathf.Clamp(_stateTime / (float)_currentAttackData.startFrame, 0.0f, 1.0f));
+
+                    // 攻撃座標の位置をずらす
+                    part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
+                }
+            }
+            // 攻撃を出した後
+            else
+            {
+                for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
+                {
+                    // このループで変更する拡大部位
+                    PlayerState.ScallingAttackPart part = state._errorDeleterPart;
+                    // 拡大している攻撃部位を検索
+                    for (int j = 0; j < state._scallingAttackParts.Count; j++)
+                    {
+                        // 見つかったら保存してループを抜ける
+                        if (state._scallingAttackParts[j].attackPartKind == _currentAttackData.scaleAttackParts[i].attackPartKind)
+                        {
+                            part = state._scallingAttackParts[j];
+                            break;
+                        }
+                    }
+                    // 大きさの計算
+                    float scale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].scale, 1.0f, Mathf.Clamp((_stateTime - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    part.scale = scale;
+                    // 攻撃する部位を小さくする
+                    part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                    // 少しずつずらす
+                    float shiftScale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].range, 1.0f, Mathf.Clamp((_stateTime - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    // 攻撃座標の位置をずらす
+                    part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
+                }
+
+            }
 
             // 攻撃オブジェクトを生成するフレームに達したら攻撃オブジェクトを生成
             if (_stateTime == _currentAttackData.startFrame)
@@ -1663,7 +1733,7 @@ public class PlayerState : Player<PlayerState>
 
     private void Dodge(InputAction.CallbackContext constext)
     {
-        if(_stateKind == StateKind.DODGE)
+        if (_stateKind == StateKind.DODGE)
         {
             _isDodgeInput = true;
         }
@@ -1674,7 +1744,7 @@ public class PlayerState : Player<PlayerState>
             return;
         }
 
-        if(_dodgeCoolTime > 0)
+        if (_dodgeCoolTime > 0)
         {
             return;
         }
@@ -2210,11 +2280,11 @@ public class PlayerState : Player<PlayerState>
     {
         float chargeNum = _specialChargeNum;
 
-        float subNum = _playerData.maxSpecialChargeNum / _playerData.specialAttackMaxLevel; //←定数にする
+        float subNum = _playerData.maxSpecialChargeNum / _playerData.specialAttackMaxLevel;
 
         int count = 0;
 
-        while (chargeNum > subNum)
+        while (chargeNum >= subNum)
         {
             chargeNum -= subNum;
             count++;
@@ -2356,7 +2426,7 @@ public class PlayerState : Player<PlayerState>
 
             // ダメージの種類を取得
             _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
-            
+
             if (dot > 0)
             {
                 _isFrontDamage = true;
