@@ -29,6 +29,8 @@ public class PlayerSkillManager : MonoBehaviour
     // パッシブスキルの追加したり削除したりした際にtrueにする
     bool _isChangePassiveSkill = false;
 
+    [SerializeField] private bool DEBUG_isChangeSkill = false;
+
     // 前フレームのスキル名を保存する変数
     private string _lastLowAttackSkillName = "empty";
     private string _lastChargeAttackSkillName = "empty";
@@ -119,7 +121,6 @@ public class PlayerSkillManager : MonoBehaviour
             {
                 _passiveSkillNameList.Remove(skillName);
             }
-
         }
 
         // 名前を更新する
@@ -128,6 +129,14 @@ public class PlayerSkillManager : MonoBehaviour
         _lastSpecialChargeSkillName = _specialChargeSkillName;
         _lastRangedAttackSkillName = _rangedAttackSkillName;
         _lastDashSkillName = _dashSkillName;
+
+        // デバッグ用
+        if (DEBUG_isChangeSkill)
+        {
+            _isChangePassiveSkill = true;
+            DEBUG_isChangeSkill = false;
+        }
+
     }
 
     public void AddPassiveSkill(string skillName)
