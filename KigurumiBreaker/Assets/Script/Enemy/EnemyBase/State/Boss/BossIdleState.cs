@@ -32,9 +32,8 @@ public class BossIdleState : IState
     public void Update()
     {
         // ボス専用の待機処理をここに追加
-        _boss.agent.isStopped = true; // 追跡を停止
-        //プレイヤーの位置を目的地に設定
-        _boss.agent.SetDestination(_boss.player.transform.position);
+        // 追跡を停止
+        _boss.agent.isStopped = true; 
 
         // 移動を停止
         _boss.StopMovement();
@@ -46,7 +45,7 @@ public class BossIdleState : IState
         _stateTimer += Time.deltaTime;
 
         // 攻撃を選択する処理
-        _boss.AttackSelect();
+        //_boss.AttackSelect();
 
         /* 追跡に遷移する処理 */
         if (diff.sqrMagnitude < _boss.enemyData.detectionRange || _stateTimer > _boss.enemyData.idleToChaseTime)

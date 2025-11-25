@@ -40,9 +40,10 @@ public class BossChaseState : IState
         //プレイヤーの方向を向き続ける
         _boss.LookAtPlayer();
 
-        //プレイヤーとの位置差を計算
+        // プレイヤーとの位置差を計算
         Vector3 diff = _boss.player.transform.position - _boss.transform.position;
 
+        // 待機に戻る判定
         if (diff.sqrMagnitude < _boss.attackRangeSqr)
         {
             _isChasetoIdle = true;
@@ -56,20 +57,22 @@ public class BossChaseState : IState
         //タイマーを進める(スピード感を出すため一旦除外)
         _stateTimer += Time.deltaTime;
 
+
         // 攻撃を選択する処理
         _boss.AttackSelect();
 
+
         //アニメーションの切り替え
-        if (_isChasetoIdle)
-        {
-            _boss.animator.SetBool("Chase", false);
-            _boss.animator.SetBool("Idle", true);
-        }
-        else
-        {
-            _boss.animator.SetBool("Chase", true);
-            _boss.animator.SetBool("Idle", false);
-        }
+        //if (_isChasetoIdle)
+        //{
+        //    _boss.animator.SetBool("Chase", false);
+        //    _boss.animator.SetBool("Idle", true);
+        //}
+        //else
+        //{
+        //    _boss.animator.SetBool("Chase", true);
+        //    _boss.animator.SetBool("Idle", false);
+        //}
 
     }
 
@@ -84,5 +87,7 @@ public class BossChaseState : IState
         {
             _boss.animator.SetBool("Idle", false);
         }
+
+        _isChasetoIdle = false;
     }
 }

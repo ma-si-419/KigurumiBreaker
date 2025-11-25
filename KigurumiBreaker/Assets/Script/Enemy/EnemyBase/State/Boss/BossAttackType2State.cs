@@ -16,6 +16,8 @@ public class BossAttackType2State : IState
 
     public void Init()
     {
+        _boss.agent.enabled = false;
+        _boss.AttackReset();
         //通常攻撃アニメーション開始
         _boss.animator.SetTrigger("AttackType2");
     }
@@ -27,6 +29,7 @@ public class BossAttackType2State : IState
 
     public void End()
     {
+        _boss.agent.enabled = true;
         //通常攻撃アニメーション終了
         _boss.animator.ResetTrigger("AttackType2");
     }

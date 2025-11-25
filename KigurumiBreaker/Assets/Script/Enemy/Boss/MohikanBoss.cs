@@ -7,15 +7,20 @@ public class MohikanBoss : BossEnemy
     // 敵の頭
     [Header("敵の頭のトランスフォーム")]
     [SerializeField] private GameObject _headPos;
+    [Header("敵の足のトランスフォーム")]
+    [SerializeField] private GameObject _footPos;
 
     //攻撃オブジェクトを一度だけ生成するフラグ
     private bool _isCreateAttack = false;
 
-    private float CHARGE_SPEED = 0.55f; // 突進速度
-    private float CHARGE_TIME = 0.2f; // 突進時間
+    private float CHARGE_SPEED = 35.0f; // 突進速度
+    private float CHARGE_TIME = 0.6f; // 突進時間
 
     private bool _isCharge = false;    // 突進中かどうかのフラグ
 
+    private float _createTimer = 0.0f; // 攻撃オブジェクト生成タイマー
+
+    // タックル攻撃
     public override void AttackType1()
     {
         // ここにタックル攻撃の具体的な処理を追加
@@ -45,6 +50,9 @@ public class MohikanBoss : BossEnemy
 
             if (stateInfo.normalizedTime >= 0.65f)
             {
+                // 攻撃オブジェクトを破棄
+                Destroy(_attackObj);
+
                 StopMovement();
                 _isCreateAttack = false;
                 _isStateChange = true;
@@ -66,6 +74,7 @@ public class MohikanBoss : BossEnemy
 
     }
 
+    // 乱れ撃ち攻撃
     public override void AttackType2()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -75,19 +84,36 @@ public class MohikanBoss : BossEnemy
             if (stateInfo.normalizedTime >= 0.6f)
             {
                 //攻撃判定を一つ生成させる
-                if (!_isCreateAttack)
-                {
-                    _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.5f, _attackType2ObjectPrefab);
-                }
+
+            }
+
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                //EnemyAttackCreate(0.0f, 0.5f, _attackType2ObjectPrefab);
+                Shoot();
             }
 
             //敵のアニメーション状態を取得
             if (stateInfo.normalizedTime >= 0.8f)
             {
+                // 攻撃オブジェクトを破棄
+                Destroy(_attackObj);
+
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
                 _isStateChange = true;
+            }
+        }
+
+        if (_isCreateAttack)
+        {
+            _createTimer++;
+
+            if (_createTimer >= 5)
+            {
+                _isCreateAttack = false;
+                _createTimer = 0;
             }
         }
 
@@ -98,6 +124,7 @@ public class MohikanBoss : BossEnemy
         }
     }
 
+    // スタンプ攻撃
     public override void AttackType3()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -117,6 +144,9 @@ public class MohikanBoss : BossEnemy
             //敵のアニメーション状態を取得
             if (stateInfo.normalizedTime >= 0.8f)
             {
+                // 攻撃オブジェクトを破棄
+                Destroy(_attackObj);
+
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
                 _isStateChange = true;
@@ -130,6 +160,7 @@ public class MohikanBoss : BossEnemy
         }
     }
 
+    // ビーム攻撃
     public override void AttackType4()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -142,30 +173,31 @@ public class MohikanBoss : BossEnemy
                 LookAtPlayer();
             }
 
-            if (stateInfo.normalizedTime >= 0.4f)
+            if (stateInfo.normalizedTime >= 0.5f)
             {
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)
                 {
+                    Debug.Log("ビーム");
                     _isCreateAttack = true;
-                    EnemyAttackCreate(5.8f, 2.0f, _attackType4ObjectPrefab);
+                    EnemyAttackCreate(6.5f, 1.5f, _attackType4ObjectPrefab);
                 }
+            }
+
+            if (stateInfo.normalizedTime >= 0.7f)
+            {
+                // 攻撃オブジェクトを破棄
+                Destroy(_attackObj);
             }
 
             //敵のアニメーション状態を取得
             if (stateInfo.normalizedTime >= 0.8f)
             {
                 //攻撃フラグをリセット
+                _isCharge = false;
                 _isStateChange = true;
                 _isCreateAttack = false;
             }
-        }
-
-        // 攻撃判定が生成されている時の処理 
-        if (_attackObj != null)
-        {
-            //_attackObj.transform.position = _headPos.transform.position + _headPos.transform.forward * 2.0f;
-            //_attackObj.transform.rotation = _headPos.transform.rotation * Quaternion.Euler(90, 0, 0);
         }
 
         if (_isStateChange)
@@ -183,14 +215,24 @@ public class MohikanBoss : BossEnemy
 
         while (timer < CHARGE_TIME && _isCharge)
         {
-            _rigidbody.velocity = dir * CHARGE_SPEED;
-
-            this.transform.position += _rigidbody.velocity;
+            Vector3 nextPos = _rigidbody.position + dir * CHARGE_SPEED * Time.fixedDeltaTime;
+            _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
 
             timer += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
 
-        _isCharge = false;
+        _rigidbody.velocity = Vector3.zero;
+        StopMovement();
+
+    }
+
+    //弾の生成
+    private void Shoot()
+    {
+        //弾を生成
+        GameObject attackObject = Instantiate(_attackType2ObjectPrefab, _footPos.transform.position + _footPos.transform.up * 0.3f, this.transform.rotation);
+
+        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 }
