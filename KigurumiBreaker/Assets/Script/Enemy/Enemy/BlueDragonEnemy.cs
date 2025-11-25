@@ -45,8 +45,8 @@ public class BlueDragonEnemy : Enemy
 
         if(_attackObj != null)
         {
-            _attackObj.transform.position = _headPos.transform.position + _headPos.transform.forward * 2.0f /*- _headPos.transform.up * 0.5f*/;
-            _attackObj.transform.rotation = _headPos.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
+            _attackObj.transform.position = _headPos.transform.position + _headPos.transform.forward * 2.0f;
+            _attackObj.transform.rotation = _headPos.transform.rotation * Quaternion.Euler(90, 0, 0);
         }
         
         if (_isStateChange)

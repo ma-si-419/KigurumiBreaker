@@ -23,6 +23,12 @@ public class EnemyBase : MonoBehaviour
     // 攻撃タイプ2オブジェクトのプレハブ
     protected GameObject _attackType2ObjectPrefab;
 
+    // 攻撃タイプ3オブジェクトのプレハブ
+    protected GameObject _attackType3ObjectPrefab;
+
+    // 攻撃タイプ4オブジェクトのプレハブ
+    protected GameObject _attackType4ObjectPrefab;
+
     // ドロップする弾のプレハブ
     protected GameObject _dropBullet;
 
@@ -95,6 +101,12 @@ public class EnemyBase : MonoBehaviour
     // 弱攻撃を受けている時のフラグ
     protected bool _isWeakAttack = false;
 
+    // 敵の攻撃オブジェクト変数
+    protected GameObject _attackObj;
+
+    // 状態遷移フラグ
+    protected bool _isStateChange = false;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {
@@ -131,6 +143,8 @@ public class EnemyBase : MonoBehaviour
         // 攻撃オブジェクトのプレハブを設定
         _attackType1ObjectPrefab = _enemyData.attackType1Prefab;
         _attackType2ObjectPrefab = _enemyData.attackType2Prefab;
+        _attackType3ObjectPrefab = _enemyData.attackType3Prefab;
+        _attackType4ObjectPrefab = _enemyData.attackType4Prefab;
         // ドロップする弾のプレハブを設定
         _dropBullet = _enemyCommonData.dropBullet;
         // 敵データでアーマーかどうかを設定
@@ -299,5 +313,19 @@ public class EnemyBase : MonoBehaviour
         Gizmos.color = Color.red;
         float attackRadius = _enemyData != null ? _enemyData.attackRange : 0f;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
+    }
+
+    // 敵の攻撃オブジェクトを生成する関数
+    public void EnemyAttackCreate(float distance, float up, GameObject attackPrefab)
+    {
+        // ゲームオブジェクト生成
+        _attackObj = Instantiate(attackPrefab);
+
+        // 攻撃オブジェクトにバトルマネージャーをセット
+        _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
+
+        // 攻撃オブジェクトの位置を調整
+        _attackObj.transform.position = this.transform.position + this.transform.forward * distance + this.transform.up * up;
+        _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
     }
 }

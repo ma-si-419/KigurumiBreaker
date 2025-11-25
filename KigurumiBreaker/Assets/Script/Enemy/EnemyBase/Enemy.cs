@@ -24,9 +24,6 @@ public class Enemy : EnemyBase
     // プレイヤーを一度でも検知したかどうかのフラグ
     protected bool _isSearched = false;
 
-    // 状態遷移フラグ
-    protected bool _isStateChange = false;
-
     // 攻撃がヒットしたかどうかのフラグ
     protected bool _isHit = false;
 
@@ -45,12 +42,10 @@ public class Enemy : EnemyBase
     // 敵がビックリマークを生成したかどうかのフラグ
     private bool _isDetectionMark;
 
-    // 敵の攻撃オブジェクト変数
-    protected GameObject _attackObj;
-
     // プレイヤーの前座標
     protected Vector3 _attackTarget;
 
+    // ヒットストップ用の揺れベクトル
     protected float _idleTime;
 
     // 定数
@@ -575,22 +570,5 @@ public class Enemy : EnemyBase
             }
         }
     }
-
-    // 敵の攻撃オブジェクトを生成する関数
-    public void EnemyAttackCreate(float distance ,float up,GameObject attackPrefab)
-    {
-        // ゲームオブジェクト生成
-        _attackObj = Instantiate(attackPrefab);
-
-        // 攻撃オブジェクトにバトルマネージャーをセット
-        _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-
-        // 攻撃オブジェクトの位置を調整
-        _attackObj.transform.position = this.transform.position + this.transform.forward * distance + this.transform.up * up;
-        _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
-    }
-
-
-
 }
 
