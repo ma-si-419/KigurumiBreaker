@@ -247,7 +247,6 @@ public class BossEnemy : EnemyBase
             OnHit();
 
         }
-
     }
 
     //デバッグ用に線を引く
