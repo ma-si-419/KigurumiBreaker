@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MiddleBoss : BossEnemy
+public class TheBlueBoss : BossEnemy
 {
     //攻撃オブジェクトを一度だけ生成するフラグ
     private bool _isCreateAttack = false;
