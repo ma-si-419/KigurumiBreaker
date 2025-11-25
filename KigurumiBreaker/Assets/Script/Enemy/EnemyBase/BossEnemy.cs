@@ -196,6 +196,14 @@ public class BossEnemy : EnemyBase
             //攻撃はいったら攻撃判定を速攻消す
             Destroy(other.gameObject);
 
+            if (_currentState is BossAttackType1State ||
+                _currentState is BossAttackType2State ||
+                _currentState is BossAttackType3State ||
+                _currentState is BossAttackType4State) return;
+
+            //ヒット処理
+            OnHit();
+
         }
 
         if (other.gameObject.CompareTag("PlayerRangedAttack"))
@@ -239,6 +247,15 @@ public class BossEnemy : EnemyBase
             Destroy(other.gameObject);
 
             _dropBullets.Add(_enemyCommonData.dropBulletTime);
+            
+            if (_currentState is BossAttackType1State ||
+                _currentState is BossAttackType2State ||
+                _currentState is BossAttackType3State ||
+                _currentState is BossAttackType4State) return;
+
+            //ヒット処理
+            OnHit();
+
         }
 
     }
@@ -336,6 +353,24 @@ public class BossEnemy : EnemyBase
         return null;
     }
 
+    public void OnHit()
+    {
+        // プレイヤー→敵 の方向ベクトル
+        Vector3 diff = transform.position - _player.transform.position;
+
+        // 正規化（方向だけ欲しいので）
+        Vector3 knockDir = diff.normalized;
+
+        // ノックバック距離
+        float knockPower = 0.5f;
+
+        // ノックバック（瞬間移動系）
+        transform.position += knockDir * knockPower;
+
+        //今のステート状態のアニメーションにダメージアニメーションを重ねる
+        _animator.CrossFade("Damage", 0.0f);
+
+    }
 }
 
 // 
@@ -346,3 +381,5 @@ public class BossAttackRuntime
     // 最後に使った時間
     public float lastUsedTime;
 }
+
+
