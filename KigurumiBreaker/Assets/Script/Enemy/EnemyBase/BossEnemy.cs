@@ -120,6 +120,10 @@ public class BossEnemy : EnemyBase
     public virtual void AttackType3() { }
     // 攻撃タイプ4処理(オーバライド)
     public virtual void AttackType4() { }
+    // 攻撃タイプ5処理(オーバライド)
+    public virtual void AttackType5() { }
+    // 攻撃タイプ6処理(オーバライド)
+    public virtual void AttackType6() { }
 
     public virtual void Stan()
     {
@@ -241,7 +245,9 @@ public class BossEnemy : EnemyBase
             if (_currentState is BossAttackType1State ||
                 _currentState is BossAttackType2State ||
                 _currentState is BossAttackType3State ||
-                _currentState is BossAttackType4State) return;
+                _currentState is BossAttackType4State ||
+                _currentState is BossAttackType5State ||
+                _currentState is BossAttackType6State) return;
 
             //ヒット処理
             OnHit();
@@ -260,7 +266,6 @@ public class BossEnemy : EnemyBase
 
         //敵の検知範囲を球で表示
         Debug.DrawLine(transform.position, transform.position + transform.forward * Mathf.Sqrt(testRangeSqr), Color.blue);
-
     }
 
     // どの攻撃を行うか判別する処理
@@ -311,12 +316,13 @@ public class BossEnemy : EnemyBase
         // ランダム値の計算
         float random = Random.value * total;
 
-        // 
+        // 重さに応じて攻撃データを選択
         foreach (var atk in list)
         {
-            // 
+            // 重さで判定
             if (random < atk.bossAttackData.weight) return atk;
 
+            // 重さを引く
             random -= atk.bossAttackData.weight;
         }
 
@@ -326,7 +332,7 @@ public class BossEnemy : EnemyBase
     // クラス名で状態クラスを見つける関数
     private IState CreateState(BossAttackType type)
     {
-
+        // 攻撃タイプに応じて状態クラスを生成して返す
         switch (type)
         {
             case BossAttackType.Attack1:
@@ -337,6 +343,10 @@ public class BossEnemy : EnemyBase
                 return new BossAttackType3State(this);
             case BossAttackType.Attack4:
                 return new BossAttackType4State(this);
+            case BossAttackType.Attack5:
+                return new BossAttackType5State(this);
+            case BossAttackType.Attack6:
+                return new BossAttackType6State(this);
         }
 
         return null;
@@ -360,6 +370,23 @@ public class BossEnemy : EnemyBase
         _animator.CrossFade("Damage", 0.0f);
 
     }
+    protected override void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+
+        // ボスの各攻撃範囲を球で表示
+        if (_runtimesAttacks != null)
+        {
+            foreach (var atk in _runtimesAttacks)
+            {
+                Gizmos.color = Color.cyan;
+                float detectRadius = atk.bossAttackData != null ? Mathf.Sqrt(atk.bossAttackData.rangeSqr) : 0f;
+                Gizmos.DrawWireSphere(transform.position, detectRadius);
+            }
+        }
+    }
+
+
 }
 
 // 

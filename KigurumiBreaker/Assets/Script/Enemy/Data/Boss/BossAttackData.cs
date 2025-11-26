@@ -8,6 +8,8 @@ public enum BossAttackType
     Attack2,
     Attack3,
     Attack4,
+    Attack5,
+    Attack6
 }
 
 [CreateAssetMenu(menuName = "Boss/BossAttackData")]

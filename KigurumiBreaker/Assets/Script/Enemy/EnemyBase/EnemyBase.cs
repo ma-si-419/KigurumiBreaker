@@ -129,6 +129,7 @@ public class EnemyBase : MonoBehaviour
     public BattleManager battleManager => _battleManager;
     public IState previousState => _previousState;
     public float attackRangeSqr => _attackRangeSqr;
+    public GameObject attackObj => _attackObj;
 
     protected virtual void Start()
     {
@@ -302,7 +303,7 @@ public class EnemyBase : MonoBehaviour
     }
 
     // Gizmosを使って検知範囲と攻撃範囲を表示
-    private void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         // 検知範囲（シアン色のワイヤーフレーム球）
         Gizmos.color = Color.yellow;

@@ -44,11 +44,6 @@ public class LaserEnemy : Enemy
             }
         }
 
-        if (_currentHp <= 0)
-        {
-            Destroy(_attackObj);
-        }
-
         //時間が経ったら攻撃終了
         if (_laserTimer > 5.0f)
         {
@@ -73,7 +68,6 @@ public class LaserEnemy : Enemy
         if (_attackObj != null)
         {
             // レーザー攻撃オブジェクトの位置と回転を更新
-            //_attackObj.transform.forward = this.transform.forward;
             _attackObj.transform.position = this.transform.position + this.transform.forward * 3.5f + this.transform.up * 1.5f;
             _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
 

@@ -7,7 +7,7 @@ public class TackleEnemy : Enemy
     private bool _isCharge = false; // 突進中かどうかのフラグ
 
     /* 定数 */
-    private const float ATTACK_DISTANCE = 1.5f; // 攻撃判定の距離
+    private const float ATTACK_DISTANCE = 1.0f; // 攻撃判定の距離
     private float CHARGE_SPEED = 10.0f; // 突進速度
     private float CHARGE_TIME = 1.5f; // 突進時間
 
