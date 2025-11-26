@@ -61,6 +61,8 @@ public class StageSpawner : MonoBehaviour
 
     private int _currentStageIndex = 0;
     private GameObject _currentStageInstance;
+    private int _waveStageIndex = 0;
+    private StageSet.StageKind _previousStageKind;
 
     //過去に選ばれたPrefabのインデックスリスト
     private Dictionary<int, HashSet<int>> _usedPrefabs = new Dictionary<int, HashSet<int>>();
@@ -104,6 +106,8 @@ public class StageSpawner : MonoBehaviour
     {
         if (index < 0 || index >= _stageSets.Length) return;
 
+
+
         // === 前ステージの削除 ===
         if (_currentStageInstance != null)
         {
@@ -116,6 +120,19 @@ public class StageSpawner : MonoBehaviour
 
         // === 新ステージ生成 ===
         StageSet stageSet = _stageSets[index];
+
+        // ★ StageKind が変わったら必ずリセット
+        if (stageSet.stageKind != _previousStageKind)
+        {
+            _waveStageIndex = 0;
+        }
+        else
+        {
+            _waveStageIndex++;
+        }
+
+        // 次回の比較用にセット
+        _previousStageKind = stageSet.stageKind;
 
         // 過去に選ばれたPrefabの管理
         if (!_usedPrefabs.ContainsKey(index))
@@ -134,10 +151,10 @@ public class StageSpawner : MonoBehaviour
         // すべて使い切った場合はリセット（任意）
         if (availableIndexes.Count == 0)
         {
+        
             used.Clear();
             for (int i = 0; i < stageSet.stagePrefabs.Length; i++)
                 availableIndexes.Add(i);
-            Debug.Log("すべてのステージPrefabを使い切ったため、リセットしました。");
         }
 
         int prefabIndex = availableIndexes[Random.Range(0, availableIndexes.Count)];
@@ -188,7 +205,6 @@ public class StageSpawner : MonoBehaviour
         // 配列の範囲外なら → シーン遷移
         if (nextIndex >= _stageSets.Length)
         {
-            Debug.Log("すべてのステージが終了しました。リザルトシーンへ遷移します。");
             //SceneManager.LoadScene("ResultScene"); // 
             // 今後Fade関係の処理を呼ぶ予定(安田が追加してるっぽい。)
             BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
@@ -206,6 +222,7 @@ public class StageSpawner : MonoBehaviour
 
     private void Start()
     {
+        _waveStageIndex = -1;  // 初期値を-1に
         SpawnStage(0);
         StageSet nextStage = _stageSets[0];
         StageSound.instance.ChangeBGM_ByStageKind(nextStage.stageKind);
@@ -237,5 +254,9 @@ public class StageSpawner : MonoBehaviour
     {
 
         return _beforeSkill;
+    }
+    public int GetCurrentStageIndex()
+    {
+        return _waveStageIndex;
     }
 }

@@ -1217,6 +1217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 1
+  waveSpawner: {fileID: 3829471150967781249}
 --- !u!1 &3580881330825069150
 GameObject:
   m_ObjectHideFlags: 0
@@ -1441,6 +1442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalIndex: 0
+  waveSpawner: {fileID: 3829471150967781249}
 --- !u!1 &6153241570622762335
 GameObject:
   m_ObjectHideFlags: 0
@@ -2374,13 +2376,16 @@ MonoBehaviour:
   _areaCenter: {fileID: 4485477984533850799}
   _areaSize: {x: 28, y: 0, z: 28}
   _enemySetData: {fileID: 11400000, guid: baa9bc3671ef94b4486ae18189eb5b22, type: 2}
-  _waveData: {fileID: 0}
+  _waveData: {fileID: 11400000, guid: 2c42aca3c7bf4f346945b98024644a52, type: 2}
   _spawnInterval: 0.5
   _goalPositions:
   - {fileID: 5749454913018647715}
   - {fileID: 3270863947345270756}
   _stageProbabilities:
-  - probability: 0
+  - _eventType: 6
+    probability: 0.36
+  - _eventType: 6
+    probability: 0.36
   _nextSkillElement: 0
   _wallEffects:
   - {fileID: 8983523608011774930}
