@@ -110,7 +110,6 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
-
         if (_waveData == null || _waveData.waveEnemyDataList.Count == 0)
         {
             Debug.LogError("WaveData ‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢‚©AwaveEnemyDataList ‚ª‹ó‚Å‚·");

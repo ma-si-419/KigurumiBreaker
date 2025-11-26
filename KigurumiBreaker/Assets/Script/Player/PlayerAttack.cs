@@ -30,7 +30,7 @@ public class PlayerAttack : MonoBehaviour
     private GameObject _camera; // カメラオブジェクトの参照
 
     private PlayerAttackData _attackData;
-
+    
     private Vector3 _playerPos;
 
     private Vector3 _moveVec = Vector3.zero;

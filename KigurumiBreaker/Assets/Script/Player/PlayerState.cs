@@ -496,8 +496,6 @@ public class PlayerState : Player<PlayerState>
                     }
                 }
 
-                Debug.Log(state._passiveStatus.dashCountAddNum);
-
                 // 回避入力があればもう一度回避状態に遷移
                 if (state._isDodgeInput && state._dodgeCount < state._passiveStatus.dashCountAddNum)
                 {
@@ -2106,6 +2104,9 @@ public class PlayerState : Player<PlayerState>
 
         // ヒットストップ時間を設定
         attackData.hitStopFrame = data.hitStopFrame;
+
+        // 攻撃がぶつかっても消えないかどうかを設定
+        attackData.isHitDelete = false;
 
         // もし弱攻撃ならば
         if (data.attackKind == Attack.AttackType.WeakAttack)

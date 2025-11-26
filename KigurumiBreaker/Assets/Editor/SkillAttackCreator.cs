@@ -72,6 +72,10 @@ public class SkillAttackCreator : Editor
             // エフェクトを子オブジェクトとして追加
             GameObject effectInstance = Instantiate(data.attackEffect, temp.transform);
             effectInstance.name = data.attackEffect.name;
+            effectInstance.transform.SetParent(temp.transform);
+            temp.AddComponent<AttackEffect>();
+            temp.GetComponent<AttackEffect>().SetLifeTime(data.attackLifeTime);
+
         }
         else
         {
