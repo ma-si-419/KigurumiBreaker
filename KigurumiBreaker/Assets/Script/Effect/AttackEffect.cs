@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class AttackEffect : MonoBehaviour
 {
-    private int _lifeTime = 60;
+    [SerializeField] private int _lifeTime = 99999;
 
-    private GameObject _effect;
+    [SerializeField] private GameObject _effect;
+
+    [SerializeField] private bool _isEffectPop = false;
 
     private void Awake()
     {
-        if (_effect != null)
+        if (_isEffectPop)
         {
             _effect.GetComponent<AttackEffect>().SetLifeTime(_lifeTime);
 
@@ -30,7 +32,7 @@ public class AttackEffect : MonoBehaviour
     {
         transform.position = pos;
 
-        if (_effect != null)
+        if (_isEffectPop)
         {
             _effect.transform.position = pos;
         }
@@ -39,6 +41,8 @@ public class AttackEffect : MonoBehaviour
     public void SetGameObject(GameObject obj)
     {
         _effect = obj;
+
+        _isEffectPop = true;
     }
     public void SetLifeTime(int time)
     {

@@ -65,7 +65,6 @@ public class SkillAttackCreator : Editor
 
         attack.SetPlayerAttackData(attackData);
 
-
         // エフェクトと当たり判定を同じにする場合
         if (data.isSameEffectAndCollider)
         {
@@ -80,11 +79,11 @@ public class SkillAttackCreator : Editor
         else
         {
             // エフェクトのスクリプトを追加
-            AttackEffect effectsc = temp.AddComponent<AttackEffect>();
-            effectsc.SetLifeTime(data.attackLifeTime);
+            temp.AddComponent<AttackEffect>();
             GameObject effectobj = data.attackEffect;
             effectobj.AddComponent<AttackEffect>();
-            effectsc.SetGameObject(data.attackEffect);
+            temp.GetComponent<AttackEffect>().SetLifeTime(data.attackLifeTime);
+            temp.GetComponent<AttackEffect>().SetGameObject(effectobj);
         }
 
         // 保存フォルダ設定
