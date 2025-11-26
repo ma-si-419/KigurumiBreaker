@@ -137,6 +137,7 @@ public class StageSpawner : MonoBehaviour
             used.Clear();
             for (int i = 0; i < stageSet.stagePrefabs.Length; i++)
                 availableIndexes.Add(i);
+            Debug.Log("すべてのステージPrefabを使い切ったため、リセットしました。");
         }
 
         int prefabIndex = availableIndexes[Random.Range(0, availableIndexes.Count)];
