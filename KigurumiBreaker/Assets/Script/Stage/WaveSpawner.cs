@@ -111,6 +111,9 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
+        if (_waveData == null) return;
+
+
         // 現在のステージインデックスに基づいてステージ情報を取得
         int index = stageSpawner.GetCurrentStageIndex();
         index =  Mathf.Clamp(index, 0, _waveData.waveEnemyDataList.Count - 1);
