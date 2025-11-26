@@ -8,7 +8,7 @@ using static SpecialAttackCameraMoveData;
 [System.Serializable]
 public class EnemyPopPatern
 {
-    [Header("“G‚Ì”z’uƒf[ƒ^")]
+    [Header("æ•µã®é…ç½®ãƒ‡ãƒ¼ã‚¿")]
     [SerializeField] private List<EnemyPopGroup> _enemyPopGroups;
 
     [HideInInspector][SerializeField] private int _index = 0;
@@ -18,7 +18,7 @@ public class EnemyPopPatern
         _index = index;
     }
 
-    // “Ç‚İæ‚èê—pƒvƒƒpƒeƒB
+    // èª­ã¿å–ã‚Šå°‚ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     public int index => _index;
     public List<EnemyPopGroup> enemyPopGroups => _enemyPopGroups;
 }
@@ -32,7 +32,7 @@ public class StageProbability
     [Range(0f, 1f)]  public float probability;
 
 
-    // “Ç‚İæ‚èê—pƒvƒƒpƒeƒB
+    // èª­ã¿å–ã‚Šå°‚ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     public StageEventType eventType => _eventType;
 }
 
@@ -52,14 +52,14 @@ public enum StageEventType
 
 public class WaveSpawner : MonoBehaviour
 {
-    [Header("‘S‘Ì‚ÌoŒ»”ÍˆÍİ’è")]
+    [Header("å…¨ä½“ã®å‡ºç¾ç¯„å›²è¨­å®š")]
     [SerializeField] private Transform _areaCenter;
     [SerializeField] private Vector3 _areaSize = new Vector3(10, 0, 10);
 
-    [Header("“Gƒf[ƒ^iSpawnDataQÆ—pj")]
+    [Header("æ•µãƒ‡ãƒ¼ã‚¿ï¼ˆSpawnDataå‚ç…§ç”¨ï¼‰")]
     [SerializeField] private SpawnData _enemySetData;
 
-    [Header("‚Ç‚ÌƒXƒe[ƒWƒf[ƒ^‚ğŒÄ‚Ño‚·‚©")]
+    [Header("ã©ã®ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã‚’å‘¼ã³å‡ºã™ã‹")]
     [SerializeField] private WaveData _waveData; 
 
 
@@ -68,17 +68,17 @@ public class WaveSpawner : MonoBehaviour
 
     [SerializeField] private float _spawnInterval = 0.5f;
 
-    [Header("GoalPosition ”z—ñ")]
+    [Header("GoalPosition é…åˆ—")]
     [SerializeField] private GameObject[] _goalPositions;
 
-    [Header("StageEvent Šm—¦İ’è")]
+    [Header("StageEvent ç¢ºç‡è¨­å®š")]
     [SerializeField] private List<StageProbability> _stageProbabilities = new List<StageProbability>();
 
-    [Header("ƒXƒLƒ‹ŠÖ˜A")]
+    [Header("ã‚¹ã‚­ãƒ«é–¢é€£")]
     private SkillSelectManager _skillSelectManager;
     [SerializeField] private SkillData.SkillElement _nextSkillElement;
 
-    [Header("ƒXƒLƒ‹æ“¾Œã‚ÉÁ‚·•ÇƒGƒtƒFƒNƒg")]
+    [Header("ã‚¹ã‚­ãƒ«å–å¾—å¾Œã«æ¶ˆã™å£ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ")]
     [SerializeField] private GameObject[] _wallEffects;
 
     private bool _skillSelectFinished = false;
@@ -90,6 +90,7 @@ public class WaveSpawner : MonoBehaviour
 
     private int _groupsClearedCount = 0;
     private Vector3 _lastDeadEnemyPos;
+
 
     private void OnValidate()
     {
@@ -110,14 +111,13 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (_waveData == null || _waveData.waveEnemyDataList.Count == 0)
-        {
-            Debug.LogError("WaveData ‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢‚©AwaveEnemyDataList ‚ª‹ó‚Å‚·");
-            return;
-        }
+        // ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«åŸºã¥ã„ã¦ã‚¹ãƒ†ãƒ¼ã‚¸æƒ…å ±ã‚’å–å¾—
+        int index = stageSpawner.GetCurrentStageIndex();
+        index =  Mathf.Clamp(index, 0, _waveData.waveEnemyDataList.Count - 1);
+        _currentStageInfo = _waveData.waveEnemyDataList[index];
 
-        // ƒ‰ƒ“ƒ_ƒ€‚Å1‚Â‚ÌƒOƒ‹[ƒv‚ğ‘I‘ğ
-        _currentStageInfo = _waveData.waveEnemyDataList[Random.Range(0, _waveData.waveEnemyDataList.Count)];
+        // ãƒ©ãƒ³ãƒ€ãƒ ã§1ã¤ã®ã‚°ãƒ«ãƒ¼ãƒ—ã‚’é¸æŠ
+        //_currentStageInfo = _waveData.waveEnemyDataList[Random.Range(0, _waveData.waveEnemyDataList.Count)];
 
         StartCoroutine(HandleStageGroups(_currentStageInfo));
         AssignSkillsToGoals();
@@ -135,7 +135,6 @@ public class WaveSpawner : MonoBehaviour
 
             if (i == 0)
                 _nextSkillElement = ConvertStageEventToSkill(sp.eventType);
-              Debug.Log("Assign skill: " + sp.eventType);
         }
     }
 
@@ -150,7 +149,7 @@ public class WaveSpawner : MonoBehaviour
             case StageEventType.Freeze: return SkillData.SkillElement.Freeze;
             case StageEventType.Poison: return SkillData.SkillElement.Poison;
             default:
-                Debug.LogError("–¢‘Î‰‚ÌƒCƒxƒ“ƒg: " + eventType);
+                Debug.LogError("æœªå¯¾å¿œã®ã‚¤ãƒ™ãƒ³ãƒˆ: " + eventType);
                 return SkillData.SkillElement.Fire;
 
         }
@@ -158,12 +157,6 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator HandleStageGroups(EnemyPopGroup group)
     {
-        if (group == null || group.spawnDataList == null || group.spawnDataList.Count == 0)
-        {
-            Debug.LogWarning("EnemyPopGroup ‚ª‹ó‚Å‚·");
-            yield break;
-        }
-
         foreach (var wave in group.spawnDataList)
         {
             if (wave == null || wave.popEnemies == null || wave.popEnemies.Count == 0) continue;
@@ -200,15 +193,15 @@ public class WaveSpawner : MonoBehaviour
         if (group == null || group.spawnDataList == null || group.spawnDataList.Count == 0)
             yield break;
 
-        // •¡”‚Ì WaveEnemyData ‚ğ‡‚Éˆ—
-        foreach (var wave in group.spawnDataList) // WaveEnemyData ‚ÌƒŠƒXƒg
+        // è¤‡æ•°ã® WaveEnemyData ã‚’é †ã«å‡¦ç†
+        foreach (var wave in group.spawnDataList) // WaveEnemyData ã®ãƒªã‚¹ãƒˆ
         {
             if (wave == null || wave.popEnemies == null || wave.popEnemies.Count == 0)
                 continue;
 
             List<GameObject> spawned = new List<GameObject>();
 
-            // Še“G‚ğoŒ»
+            // å„æ•µã‚’å‡ºç¾
             foreach (var pop in wave.popEnemies)
             {
                 if (pop == null) continue;
@@ -221,10 +214,10 @@ public class WaveSpawner : MonoBehaviour
 
                 spawned.Add(enemy);
 
-                // ƒoƒgƒ‹ƒ}ƒl[ƒWƒƒ[‚É’Ç‰Á
+                // ãƒãƒˆãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«è¿½åŠ 
                 _battleManager.AddEnemy(enemy);
 
-                // EnemyBase ‚É BattleManager İ’è
+                // EnemyBase ã« BattleManager è¨­å®š
                 var enemyBase = enemy.GetComponent<EnemyBase>();
                 if (enemyBase != null)
                     enemyBase.SetBattleManager(_battleManager);
@@ -232,11 +225,11 @@ public class WaveSpawner : MonoBehaviour
                 yield return new WaitForSeconds(_spawnInterval);
             }
 
-            // ‚±‚ÌƒEƒF[ƒu‚Ì“G‚ª‘S–Å‚·‚é‚Ü‚Å‘Ò‹@
+            // ã“ã®ã‚¦ã‚§ãƒ¼ãƒ–ã®æ•µãŒå…¨æ»…ã™ã‚‹ã¾ã§å¾…æ©Ÿ
             yield return StartCoroutine(WaitForWaveClear(spawned));
         }
 
-        // ƒOƒ‹[ƒvƒNƒŠƒAŒã‚Ìˆ—
+        // ã‚°ãƒ«ãƒ¼ãƒ—ã‚¯ãƒªã‚¢å¾Œã®å‡¦ç†
         OnGroupCleared();
     }
 
@@ -297,13 +290,13 @@ public class WaveSpawner : MonoBehaviour
                     _skillSelectManager.PopSkillGetObject(spawnPos, SkillData.SkillElement.Poison, this);
                     break;
                 case StageEventType.Shop:
-                    Debug.Log("ShopƒCƒxƒ“ƒg”­¶FƒVƒ‡ƒbƒvUI‚ğŠJ‚­ˆ—‚ğ‚±‚±‚ÉÀ‘•—\’è");
+                    Debug.Log("Shopã‚¤ãƒ™ãƒ³ãƒˆç™ºç”Ÿï¼šã‚·ãƒ§ãƒƒãƒ—UIã‚’é–‹ãå‡¦ç†ã‚’ã“ã“ã«å®Ÿè£…äºˆå®š");
                     break;
                 case StageEventType.Gold:
-                    Debug.Log("GoldƒCƒxƒ“ƒg”­¶FƒS[ƒ‹ƒh•t—^ˆ—");
+                    Debug.Log("Goldã‚¤ãƒ™ãƒ³ãƒˆç™ºç”Ÿï¼šã‚´ãƒ¼ãƒ«ãƒ‰ä»˜ä¸å‡¦ç†");
                     break;
                 case StageEventType.Heal:
-                    Debug.Log("HealƒCƒxƒ“ƒg”­¶FHP‰ñ•œˆ—");
+                    Debug.Log("Healã‚¤ãƒ™ãƒ³ãƒˆç™ºç”Ÿï¼šHPå›å¾©å‡¦ç†");
                     break;
             }
         }
@@ -356,9 +349,7 @@ public class WaveSpawner : MonoBehaviour
         StageEventType eventType = _stageProbabilities[goalIndex].eventType;
         SkillData.SkillElement selectedSkill = ConvertStageEventToSkill(eventType);
 
-        //–{“–‚ÉƒXƒLƒ‹‚ª‘I‘ğ‚³‚ê‚½‚Ì‚©‚ÌŠm”F
-        Debug.Log("GoalReached‚Å‘I‘ğ‚³‚ê‚½ƒXƒLƒ‹: " + selectedSkill.ToString());
-
+        //æœ¬å½“ã«ã‚¹ã‚­ãƒ«ãŒé¸æŠã•ã‚ŒãŸã®ã‹ã®ç¢ºèª
         if (stageSpawner != null)
             stageSpawner.OnPathSelected(selectedSkill);
     }
@@ -383,7 +374,6 @@ public class WaveSpawner : MonoBehaviour
     public void SetBeforeSkill(string skillName)
     {
         _beforeSkill = skillName;
-        Debug.Log("SetBeforeSkill ŒÄ‚Ño‚µ: " + skillName);
     }
     public void SetStageSpawner(StageSpawner spawner)
     {
