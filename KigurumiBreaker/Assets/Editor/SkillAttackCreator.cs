@@ -61,15 +61,27 @@ public class SkillAttackCreator : Editor
         attackData.debuffType = data.debuff;
         attackData.isReflect = data.isReflect;
         attackData.isWeakAttack = data.isWeakAttack;
+        attackData.isHitDelete = data.isDestroyOnHit;
 
         attack.SetPlayerAttackData(attackData);
-        
-        // エフェクトのスクリプトを追加
-        AttackEffect effectsc = temp.AddComponent<AttackEffect>();
-        effectsc.SetLifeTime(data.attackLifeTime);
-        GameObject effectobj = data.attackEffect;
-        effectobj.AddComponent<AttackEffect>();
-        effectsc.SetGameObject(data.attackEffect);
+
+
+        // エフェクトと当たり判定を同じにする場合
+        if (data.isSameEffectAndCollider)
+        {
+            // エフェクトを子オブジェクトとして追加
+            GameObject effectInstance = Instantiate(data.attackEffect, temp.transform);
+            effectInstance.name = data.attackEffect.name;
+        }
+        else
+        {
+            // エフェクトのスクリプトを追加
+            AttackEffect effectsc = temp.AddComponent<AttackEffect>();
+            effectsc.SetLifeTime(data.attackLifeTime);
+            GameObject effectobj = data.attackEffect;
+            effectobj.AddComponent<AttackEffect>();
+            effectsc.SetGameObject(data.attackEffect);
+        }
 
         // 保存フォルダ設定
         string folderPath = "Assets/Prefab/PlayerAttack/SkillAttack/";

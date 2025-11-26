@@ -6,7 +6,7 @@ public class AttackEffect : MonoBehaviour
 {
     private int _lifeTime = 60;
 
-    [SerializeField] private GameObject _effect;
+    private GameObject _effect;
 
     private void Awake()
     {
@@ -29,7 +29,11 @@ public class AttackEffect : MonoBehaviour
     public void SetPos(Vector3 pos)
     {
         transform.position = pos;
-        _effect.transform.position = pos;
+
+        if (_effect != null)
+        {
+            _effect.transform.position = pos;
+        }
     }
 
     public void SetGameObject(GameObject obj)
