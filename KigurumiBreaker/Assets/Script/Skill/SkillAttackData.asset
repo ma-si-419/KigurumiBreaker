@@ -23,6 +23,7 @@ MonoBehaviour:
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 0
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0
   - AttackName: FireDash
     Damage: 5
@@ -34,6 +35,7 @@ MonoBehaviour:
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 1
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0
   - AttackName: FireCharge
     Damage: 5
@@ -45,6 +47,7 @@ MonoBehaviour:
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 1
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0
   - AttackName: PoizonCharge
     Damage: 10
@@ -56,6 +59,7 @@ MonoBehaviour:
     Debuff: 3
     IsReflect: 0
     IsWeakAttack: 1
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0
   - AttackName: WaterDash
     Damage: 30
@@ -67,6 +71,7 @@ MonoBehaviour:
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 0
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0
   - AttackName: WindDash
     Damage: 20
@@ -78,9 +83,10 @@ MonoBehaviour:
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 0
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0
-  - AttackName: ThunderDash
-    Damage: 50
+  - AttackName: ThunderDashAttack
+    Damage: 10
     Scale: 2.3
     AttackLifeTime: 999
     AttackEffect: {fileID: 1171201465392465800, guid: 05b3279c4315fc345bff33093a185411, type: 3}
@@ -89,6 +95,7 @@ MonoBehaviour:
     Debuff: 4
     IsReflect: 0
     IsWeakAttack: 0
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 1
   - AttackName: PoizonDash
     Damage: 10
@@ -100,6 +107,7 @@ MonoBehaviour:
     Debuff: 3
     IsReflect: 0
     IsWeakAttack: 1
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0
   - AttackName: FreezeDash
     Damage: 10
@@ -111,4 +119,5 @@ MonoBehaviour:
     Debuff: 2
     IsReflect: 0
     IsWeakAttack: 1
+    IsDestroyOnHit: 0
     IsSameEffectAndCollider: 0

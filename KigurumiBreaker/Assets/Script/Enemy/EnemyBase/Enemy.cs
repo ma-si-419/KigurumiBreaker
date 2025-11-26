@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -50,6 +51,10 @@ public class Enemy : EnemyBase
 
     // 定数
     protected const float ATTACK_SIGN_DECREASE = 0.1f;
+    protected const int HIT_ATTACK_ID_MAX = 10;
+
+    // 受けた攻撃のIDリスト
+    protected List<int> _hitAttackIds = new List<int>();
 
     // アーマー用のSkinnedMeshRenderer変数
     [Header("アーマー用の処理(アーマー無しなら関係なし)")]
@@ -115,7 +120,7 @@ public class Enemy : EnemyBase
         {
             if (_armorSkinedMeshRenderer != null)
             {
-                for(int i = 0; i < _armorSkinedMeshRenderer.Length; i++)
+                for (int i = 0; i < _armorSkinedMeshRenderer.Length; i++)
                 {
                     // アーマーが壊れたらアーマーメッシュを非表示にする
                     _armorSkinedMeshRenderer[i].enabled = false;
@@ -354,11 +359,15 @@ public class Enemy : EnemyBase
     {
         if (other.CompareTag("PlayerAttack"))
         {
+            // 同じ攻撃判定に何度も触れないようにする
+            if (_hitAttackIds.Contains(other.GetInstanceID())) return;
+
             //死んだ状態になっている場合はダメージを受けない
             if (_currentState is DeadState) return;
 
+
             // アーマーでない場合は通常通りダメージを受ける
-            if(!_isArmor)
+            if (!_isArmor)
             {
                 // ダメージを受ける(プレイヤーアタックのダメージを取得する)
                 _currentHp -= other.GetComponent<PlayerAttack>().GetDamage();
@@ -374,6 +383,15 @@ public class Enemy : EnemyBase
             PlayerAttack playerAttack = other.gameObject.GetComponent<PlayerAttack>();
             BattleManager manager = _battleManager.GetComponent<BattleManager>();
             manager.SetHitStop(playerAttack.GetHitStopTime());
+
+            if(_hitAttackIds.Count > HIT_ATTACK_ID_MAX)
+            {
+                // リストのサイズが固定値を超えたらリストをクリアする
+                _hitAttackIds.Clear();
+            }
+
+            // 受けた攻撃のIDを記録
+            _hitAttackIds.Add(other.GetInstanceID());
 
             //ダメージフラグを立てる
             _isDamage = true;
@@ -396,7 +414,11 @@ public class Enemy : EnemyBase
                 _isDead = true;
             }
 
-
+            if (playerAttack.GetIsHitDelete())
+            {
+                //攻撃はいったら攻撃判定を速攻消す
+                Destroy(other.gameObject);
+            }
 
             //攻撃状態のときはダメージアニメーションを行わない
             if (_currentState is AttackType1State) return;
@@ -404,9 +426,6 @@ public class Enemy : EnemyBase
 
             // 弱攻撃の場合はダメージアニメーションを行わない
             if (_isWeakAttack) return;
-
-            //攻撃はいったら攻撃判定を速攻消す
-            Destroy(other.gameObject);
 
             //ヒット処理
             OnHit();
