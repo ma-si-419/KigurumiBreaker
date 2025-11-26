@@ -23,6 +23,9 @@ public class BossEnemy : EnemyBase
     protected float _meleeAttackRangeSqr;
     protected float _specialAttackRangeSqr;
 
+    // フェーズ用の攻撃オブジェクト
+    protected GameObject _phaseAttackObject;
+
     // ボスの全攻撃データ
     [SerializeField] protected BossAttackData _attackData;
 
@@ -35,10 +38,14 @@ public class BossEnemy : EnemyBase
     public float meleeAttackRangeSqr => _meleeAttackRangeSqr;
     public float specialAttackRangeSqr => _specialAttackRangeSqr;
 
+    protected bool _isWallHit;
+
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
+        _phaseAttackObject = _attackData.phaseAttackObject;
 
         // ボス専用のUIバーを作成
         _enemyUiManager.CreateBossEnemyBar(this);
@@ -101,8 +108,6 @@ public class BossEnemy : EnemyBase
         //        ChangeState(new BossPhaseState(this));
         //    }
         //}
-
-        Debug.Log(_currentState);
 
         // 親クラスのUpdate()を呼び出す
         base.Update();
@@ -252,6 +257,25 @@ public class BossEnemy : EnemyBase
             //ヒット処理
             OnHit();
 
+        }
+
+
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Wall"))
+        {
+            StopMovement();
+            _isWallHit = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Wall"))
+        {
+            _isWallHit = false;
         }
     }
 

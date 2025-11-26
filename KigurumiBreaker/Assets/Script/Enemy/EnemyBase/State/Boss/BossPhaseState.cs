@@ -14,23 +14,22 @@ public class BossPhaseState : IState
 
     public void Init()
     {
-        //_boss.AttackReset(); //攻撃フラグリセット
-        _boss.agent.isStopped = true; // 追跡を停止
-
-        //フェーズアニメーション開始
-        //_boss.animator.SetBool("Down", true);
+        //NavMeshAgent停止
+        _boss.agent.enabled = false;
+        //攻撃アニメーション開始
+        _boss.animator.SetTrigger("Phase");
     }
 
     public void Update()
     {
-        //_boss.Idle(); //基本待機処理
-        
         _boss.PhaseChange(); //基本フェーズ変更
     }
 
     public void End()
     {
+        //NavMeshAgent再開
+        _boss.agent.enabled = true;
         //フェーズアニメーション終了
-        //_boss.animator.SetBool("Down", false);
+        _boss.animator.ResetTrigger("Phase");
     }
 }

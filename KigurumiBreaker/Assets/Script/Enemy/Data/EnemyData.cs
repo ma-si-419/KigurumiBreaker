@@ -41,6 +41,8 @@ public class EnemyData : ScriptableObject
     [SerializeField] private GameObject AttackType3Prefab;
     [Header("攻撃タイプ4プレハブ(ボス以外はなしでOK)")]
     [SerializeField] private GameObject AttackType4Prefab;
+    [Header("フェーズ用の攻撃プレハブ(ボス以外はなしでOK)")]
+    [SerializeField] private GameObject PhaseAttackObject;
 
     // 読み取り専用
     public float maxHp => MaxHp;
@@ -53,12 +55,13 @@ public class EnemyData : ScriptableObject
     public float idleToChaseTime => IdleToChaseTime;
     public float chaseToAttack => ChaseToAttack;
     public float rotateSpeed => RotateSpeed;
-    public GameObject attackType1Prefab => AttackType1Prefab;
-    public GameObject attackType2Prefab => AttackType2Prefab;
-    public GameObject attackType3Prefab => AttackType3Prefab;
-    public GameObject attackType4Prefab => AttackType4Prefab;
     public float barYPosition => BarYPosition;
     public bool isStrongEnemy => IsStrongEnemy;
     public float maxAttackTime => MaxAttackTime;
     public float attackSwitchRange => AttackSwitchRange;
+    public GameObject attackType1Prefab => AttackType1Prefab;
+    public GameObject attackType2Prefab => AttackType2Prefab;
+    public GameObject attackType3Prefab => AttackType3Prefab;
+    public GameObject attackType4Prefab => AttackType4Prefab;
+    public GameObject phaseAttackObject => PhaseAttackObject;
 }
