@@ -102,15 +102,6 @@ public class BossEnemy : EnemyBase
 
         _isDamage = false; // ダメージフラグをリセット
 
-        // フェーズに一回チェンジしたらもうフェーズ状態にいかない
-        if (_isPhase && !_isPhaseChanged)
-        {
-            if (!(_currentState is BossPhaseState))
-            {
-                ChangeState(new BossPhaseState(this));
-            }
-        }
-
         // 親クラスのUpdate()を呼び出す
         base.FixedUpdate();
 
@@ -191,9 +182,12 @@ public class BossEnemy : EnemyBase
             }
 
             // Hpが半分以下ならフェーズに入る
-            if (_currentHp <= _maxHp * 0.5f)
+            if (_currentHp <= _maxHp * 0.5f && !_isPhase)
             {
-                _isPhase = true;
+                if (!(_currentState is BossPhaseState))
+                {
+                    ChangeState(new BossPhaseState(this));
+                }
             }
 
             //攻撃はいったら攻撃判定を速攻消す
@@ -243,9 +237,12 @@ public class BossEnemy : EnemyBase
             }
 
             // Hpが半分以下ならフェーズに入る
-            if (_currentHp <= _maxHp * 0.5f)
+            if (_currentHp <= _maxHp * 0.5f && !_isPhase)
             {
-                _isPhase = true;
+                if (!(_currentState is BossPhaseState))
+                {
+                    ChangeState(new BossPhaseState(this));
+                }
             }
 
             //攻撃はいったら攻撃判定を速攻消す
@@ -264,8 +261,6 @@ public class BossEnemy : EnemyBase
             OnHit();
 
         }
-
-
     }
 
     private void OnTriggerStay(Collider other)
@@ -301,23 +296,39 @@ public class BossEnemy : EnemyBase
     // どの攻撃を行うか判別する処理
     public void AttackSelect()
     {
+        // フェーズチェンジの確認
+        CheckPhase();
+
         // その攻撃のステートに移動する
         Vector3 diff = player.transform.position - transform.position;
 
+        // プレイヤーとの距離を計算
         testRange = diff.magnitude;
 
+        // 距離の二乗を計算
         testRangeSqr = testRange * testRange;
 
         // 秒数
         float time = Time.time;
 
+        // 使用可能な攻撃リスト
         List<BossAttackRuntime> available = new();
+
+        // 現在のフェーズを取得
+        var currentPhase = GetCurrentPhase();
 
         foreach (var atk in _runtimesAttacks)
         {
+            // フェーズ条件を満たしているか確認
+            if (atk.bossAttackData.bossPhase != currentPhase) continue;
+
+            // 射程条件を満たしているか確認
             if (testRangeSqr > atk.bossAttackData.rangeSqr) continue;
+
+            // クールダウン中か確認
             if (time - atk.lastUsedTime < atk.bossAttackData.cooldown) continue;
 
+            // 使用可能な攻撃リストに追加
             available.Add(atk);
         }
 
@@ -327,13 +338,31 @@ public class BossEnemy : EnemyBase
         // 攻撃条件が当てはまっているデータ達でランダムに選ぶ
         var selected = ChooseWeightedRandom(available);
 
+        // 選ばれた攻撃データの最後に使った時間を更新
         selected.lastUsedTime = time;
 
+        // 次の状態を作成
         var next = CreateState(selected.bossAttackData.bossAttackType);
 
         // 攻撃状態に遷移
         ChangeState(next);
     }
+
+    private void CheckPhase()
+    {
+        // Hpが半分以下ならフェーズに入る
+        if (!_isPhase && _currentHp <= _maxHp * 0.5f)
+        {
+            _isPhase = true;
+        }
+    }
+
+    private BossPhase GetCurrentPhase()
+    {
+        // 条件に応じてフェーズを返す
+        return _isPhase ? BossPhase.Phase2 : BossPhase.Phase1;
+    }
+
 
     BossAttackRuntime ChooseWeightedRandom(List<BossAttackRuntime> list)
     {
@@ -415,8 +444,6 @@ public class BossEnemy : EnemyBase
             }
         }
     }
-
-
 }
 
 // 
