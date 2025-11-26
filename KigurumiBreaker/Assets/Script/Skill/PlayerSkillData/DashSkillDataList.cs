@@ -18,6 +18,8 @@ public class DashSkillData
     [SerializeField] private GameObject StartAttack;
     [Header("ダッシュ中に出す攻撃")]
     [SerializeField] private GameObject OnDashAttack;
+    [Header("ダッシュ中に追随する攻撃")]
+    [SerializeField] private GameObject FollowAttack;
     [Header("ダッシュ終了地点に出す攻撃")]
     [SerializeField] private GameObject EndAttack;
     [Header("スキルの説明文")]
@@ -27,6 +29,7 @@ public class DashSkillData
     public SkillData.SkillElement skillElement => SkillElement;
     public GameObject startAttack => StartAttack;
     public GameObject onDashAttack => OnDashAttack;
+    public GameObject followAttack => FollowAttack;
     public GameObject endAttack => EndAttack;
     public string skillContents => SkillContents;
 

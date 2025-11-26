@@ -367,6 +367,9 @@ public class PlayerState : Player<PlayerState>
         // 回避方向
         private Vector3 _dodgeDirection;
 
+        // 回避中追随するスキルオブジェクト
+        private GameObject _followSkillAttack;
+
         public DodgeState(PlayerState next) : base(next)
         {
         }
@@ -397,6 +400,13 @@ public class PlayerState : Player<PlayerState>
                 {
                     // ダッシュ開始時に出すスキルを出す
                     state.CreateSkillAttack(state._playerSkill.dashSkillData.startAttack);
+                }
+
+                // 回避中に追随するスキルがあれば出す
+                if (state._playerSkill.dashSkillData.followAttack != null)
+                {
+                    _followSkillAttack = state.CreateSkillAttack(state._playerSkill.dashSkillData.followAttack);
+                    Debug.Log("スキル発動" + _followSkillAttack);
                 }
             }
         }
@@ -468,6 +478,11 @@ public class PlayerState : Player<PlayerState>
                 }
             }
 
+            // 追随するスキルオブジェクトがあれば位置を更新
+            if (_followSkillAttack != null)
+            {
+                _followSkillAttack.transform.position = state.transform.position;
+            }
 
             // 一定時間経過したら待機状態に遷移
             if (_dodgeTime >= state._playerData.dodgeTime)
@@ -519,6 +534,13 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger("Dodge");
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
+
+            // 追随するスキルオブジェクトがあれば削除
+            if (_followSkillAttack != null)
+            {
+                state._battleManager.RemovePlayerAttack(_followSkillAttack);
+                GameObject.Destroy(_followSkillAttack);
+            }
 
             // 拡大している攻撃部位があれば元に戻す
             for (int i = 0; i < state._scallingAttackParts.Count; i++)
@@ -1959,7 +1981,7 @@ public class PlayerState : Player<PlayerState>
         return result;
     }
 
-    private void CreateSkillAttack(GameObject skillAttack)
+    private GameObject CreateSkillAttack(GameObject skillAttack)
     {
         skillAttack.GetComponent<AttackEffect>().SetPos(transform.position);
 
@@ -1979,6 +2001,8 @@ public class PlayerState : Player<PlayerState>
 
         // バトルマネージャーに攻撃オブジェクトを登録
         _battleManager.AddPlayerAttack(attack);
+
+        return attack;
     }
 
     private void CreateAttack(Attack data)

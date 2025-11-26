@@ -31,6 +31,10 @@ public class SkillAttackData
     [SerializeField] private bool IsReflect;
     [Header("弱攻撃ならtrue")]
     [SerializeField] private bool IsWeakAttack;
+    [Header("敵にあたったら消すならtrue")]
+    [SerializeField] private bool IsDestroyOnHit;
+    [Header("攻撃の当たり判定とエフェクトを同じにするならtrue")]
+    [SerializeField] private bool IsSameEffectAndCollider;
 
     // 読み取り専用プロパティ
 
@@ -44,5 +48,6 @@ public class SkillAttackData
     public Enemy.EnemyDebuff debuff => Debuff;
     public bool isReflect => IsReflect;
     public bool isWeakAttack => IsWeakAttack;
-
+    public bool isDestroyOnHit => IsDestroyOnHit;
+    public bool isSameEffectAndCollider => IsSameEffectAndCollider;
 }
