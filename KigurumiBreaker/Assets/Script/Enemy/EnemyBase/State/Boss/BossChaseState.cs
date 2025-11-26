@@ -31,7 +31,6 @@ public class BossChaseState : IState
 
     public void Update()
     {
-        Debug.Log("追跡中");
 
         //プレイヤーの位置を目的地に設定
         _boss.agent.SetDestination(_boss.player.transform.position);

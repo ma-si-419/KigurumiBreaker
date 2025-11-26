@@ -184,7 +184,7 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
         // 現在のステートのUpdateメソッドを呼び出す
         _currentState?.Update();
