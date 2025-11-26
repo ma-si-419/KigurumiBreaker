@@ -15,10 +15,59 @@ MonoBehaviour:
   waveEnemyDataList:
   - _spawnDataList:
     - popEnemies:
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
       - spawnKind: 3
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 3
+      - spawnKind: 8
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 7
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    _index: 0
+  - _spawnDataList:
+    - popEnemies:
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 7
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 8
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 8
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    - popEnemies:
+      - spawnKind: 7
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 2
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    _index: 1
+  - _spawnDataList:
+    - popEnemies:
+      - spawnKind: 7
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
       - spawnKind: 7
@@ -28,16 +77,23 @@ MonoBehaviour:
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
     - popEnemies:
-      - spawnKind: 6
+      - spawnKind: 8
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
       - spawnKind: 8
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-      - spawnKind: 2
+    - popEnemies:
+      - spawnKind: 7
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
       - spawnKind: 2
         spawnPosition: {x: 0, y: 0, z: 0}
         randomizePosition: 1
-    _index: 0
+      - spawnKind: 4
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+      - spawnKind: 20
+        spawnPosition: {x: 0, y: 0, z: 0}
+        randomizePosition: 1
+    _index: 2
