@@ -17,7 +17,7 @@ public class MohikanBoss : BossEnemy
     private bool _isCreateAttack = false;
 
     // 突進速度
-    private float CHARGE_SPEED = 0.15f; 
+    private float CHARGE_SPEED = 0.8f; 
 
     // 突進時間
     private float CHARGE_TIME = 0.6f; 
@@ -31,9 +31,9 @@ public class MohikanBoss : BossEnemy
     // 弾の生成位置
     private Transform _bulletSpawnPoint;
 
-    private float _shotInterval = 0.05f;
+    private float _shotInterval = 0.025f;
 
-    private float _rotSpeed = 360.0f;
+    private float _rotSpeed = 480.0f;
 
     private float _angle = 0.0f;
 
@@ -47,6 +47,9 @@ public class MohikanBoss : BossEnemy
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
+        //フェーズ移行フラグ
+        _isPhaseChanged = true;
+
         if (stateInfo.IsName("Phase"))
         {
             if (stateInfo.normalizedTime >= 0.5f)
@@ -55,7 +58,7 @@ public class MohikanBoss : BossEnemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _attackType3ObjectPrefab);
+                    EnemyAttackCreate(0.0f, 0.0f, _phaseAttackObject);
                 }
             }
 

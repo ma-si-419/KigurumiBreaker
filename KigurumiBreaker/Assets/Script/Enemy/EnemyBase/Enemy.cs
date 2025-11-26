@@ -99,7 +99,7 @@ public class Enemy : EnemyBase
         }
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         // デバッグ用に線を引く
         DebugLine();
@@ -177,7 +177,7 @@ public class Enemy : EnemyBase
         }
 
         // 親クラスのUpdate()を呼び出す
-        base.Update();
+        base.FixedUpdate();
     }
 
     //基本待機処理(オーバーライドで変更可)

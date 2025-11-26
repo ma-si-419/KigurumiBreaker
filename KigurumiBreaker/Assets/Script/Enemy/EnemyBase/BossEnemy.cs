@@ -40,12 +40,15 @@ public class BossEnemy : EnemyBase
 
     protected bool _isWallHit;
 
+    protected float _maxHp;
+
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
 
-        _phaseAttackObject = _attackData.phaseAttackObject;
+        _phaseAttackObject = _enemyData.phaseAttackObject;
+        _maxHp = _currentHp;
 
         // ボス専用のUIバーを作成
         _enemyUiManager.CreateBossEnemyBar(this);
@@ -65,9 +68,8 @@ public class BossEnemy : EnemyBase
         ChangeState(new BossIdleState(this));
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
-
 
         float a = _enemyCommonData.shakeMagnitude;
 
@@ -101,18 +103,20 @@ public class BossEnemy : EnemyBase
         _isDamage = false; // ダメージフラグをリセット
 
         // フェーズに一回チェンジしたらもうフェーズ状態にいかない
-        //if (_isPhase && !_isPhaseChanged)
-        //{
-        //    if (!(_currentState is BossPhaseState))
-        //    {
-        //        ChangeState(new BossPhaseState(this));
-        //    }
-        //}
+        if (_isPhase && !_isPhaseChanged)
+        {
+            if (!(_currentState is BossPhaseState))
+            {
+                ChangeState(new BossPhaseState(this));
+            }
+        }
 
         // 親クラスのUpdate()を呼び出す
-        base.Update();
+        base.FixedUpdate();
 
         DebugLine();
+
+        Debug.Log(_currentState);
     }
 
 
@@ -187,7 +191,7 @@ public class BossEnemy : EnemyBase
             }
 
             // Hpが半分以下ならフェーズに入る
-            if (_currentHp <= _currentHp * 0.5f)
+            if (_currentHp <= _maxHp * 0.5f)
             {
                 _isPhase = true;
             }
@@ -198,7 +202,9 @@ public class BossEnemy : EnemyBase
             if (_currentState is BossAttackType1State ||
                 _currentState is BossAttackType2State ||
                 _currentState is BossAttackType3State ||
-                _currentState is BossAttackType4State) return;
+                _currentState is BossAttackType4State ||
+                _currentState is BossAttackType5State ||
+                _currentState is BossAttackType6State) return;
 
             //ヒット処理
             OnHit();
@@ -237,7 +243,7 @@ public class BossEnemy : EnemyBase
             }
 
             // Hpが半分以下ならフェーズに入る
-            if (_currentHp <= _currentHp * 0.5f)
+            if (_currentHp <= _maxHp * 0.5f)
             {
                 _isPhase = true;
             }
