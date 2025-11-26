@@ -999,9 +999,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 904377483}
   bgmClips:
+  - {fileID: 8300000, guid: 197cfa80ea35fa64a85d74bb2ff24503, type: 3}
   - {fileID: 8300000, guid: e2a95482c26948848a5b07e08891e28f, type: 3}
-  - {fileID: 8300000, guid: 3519ae7afcfbb7949b8f8f7a37ef4f40, type: 3}
-  - {fileID: 8300000, guid: 3519ae7afcfbb7949b8f8f7a37ef4f40, type: 3}
+  - {fileID: 8300000, guid: 118098988e848c64aa81de4aca7bbb41, type: 3}
+  - {fileID: 8300000, guid: 0c7032b8d22508e4cb09e5e488f70e18, type: 3}
+  - {fileID: 8300000, guid: ca237e1bd10ef5444b07f65841737dfc, type: 3}
 --- !u!82 &904377483
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2141,15 +2143,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[7].stagePrefabs.Array.size
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[8].stagePrefabs.Array.size
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[9].stagePrefabs.Array.size
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[10].stagePrefabs.Array.size
@@ -2396,6 +2398,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6047492190171830214, guid: 645c9454f5678ee4b9750ceaca080c1f, type: 3}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[7].stagePrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 9158657689156313601, guid: 997bb08abf117b045bdca4b39fb89c5b, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[7].stagePrefabs.Array.data[8]
+      value: 
+      objectReference: {fileID: 3114144529781088644, guid: 70e80edb2190eb5498a75222c19b1e3e, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[7].stagePrefabs.Array.data[9]
+      value: 
+      objectReference: {fileID: 4142083197921452804, guid: b17be61d5fd7ab44d81c18b9ba82ad50, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[8].stagePrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 6247146600480745488, guid: f45a3d9611e10eb4092b8bdd4e0700b7, type: 3}
@@ -2423,6 +2437,18 @@ PrefabInstance:
       propertyPath: _stageSets.Array.data[8].stagePrefabs.Array.data[6]
       value: 
       objectReference: {fileID: 6047492190171830214, guid: 645c9454f5678ee4b9750ceaca080c1f, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[8].stagePrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 9158657689156313601, guid: 997bb08abf117b045bdca4b39fb89c5b, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[8].stagePrefabs.Array.data[8]
+      value: 
+      objectReference: {fileID: 3114144529781088644, guid: 70e80edb2190eb5498a75222c19b1e3e, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[8].stagePrefabs.Array.data[9]
+      value: 
+      objectReference: {fileID: 4142083197921452804, guid: b17be61d5fd7ab44d81c18b9ba82ad50, type: 3}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[9].stagePrefabs.Array.data[0]
       value: 
@@ -2452,9 +2478,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6047492190171830214, guid: 645c9454f5678ee4b9750ceaca080c1f, type: 3}
     - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[9].stagePrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 9158657689156313601, guid: 997bb08abf117b045bdca4b39fb89c5b, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[9].stagePrefabs.Array.data[8]
+      value: 
+      objectReference: {fileID: 3114144529781088644, guid: 70e80edb2190eb5498a75222c19b1e3e, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
+      propertyPath: _stageSets.Array.data[9].stagePrefabs.Array.data[9]
+      value: 
+      objectReference: {fileID: 4142083197921452804, guid: b17be61d5fd7ab44d81c18b9ba82ad50, type: 3}
+    - target: {fileID: 4991401918132676813, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: _stageSets.Array.data[10].stagePrefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 6247146600480745488, guid: f45a3d9611e10eb4092b8bdd4e0700b7, type: 3}
+      objectReference: {fileID: 4172621153389450783, guid: 1fc5f48a3bec4574fb79d0593f479c5f, type: 3}
     - target: {fileID: 5423860653554385116, guid: d29e03f152bd1a044a0cc7e43b6c6e35, type: 3}
       propertyPath: m_Name
       value: StageManager
