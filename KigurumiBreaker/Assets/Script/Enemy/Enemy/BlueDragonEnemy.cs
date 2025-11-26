@@ -55,8 +55,6 @@ public class BlueDragonEnemy : Enemy
             _isStateChange = false;
             ChangeState(new IdleState(this));
         }
-
-
     }
 
     public override void AttackType2()
@@ -92,7 +90,6 @@ public class BlueDragonEnemy : Enemy
                 _isStateChange = true;
             }
         }
-
 
         if (_isStateChange)
         {

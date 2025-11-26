@@ -13,8 +13,9 @@ public class AttackType1State : IState
     public void Init()
     {
         //攻撃フラグリセット
-        _enemy.AttackReset(); 
-
+        _enemy.AttackReset();
+        // NavMeshを消す
+        _enemy.agent.enabled = false;
         //攻撃アニメーション開始
         _enemy.animator.SetTrigger("AttackType1");
     }
@@ -27,6 +28,8 @@ public class AttackType1State : IState
 
     public void End()
     {
+        // NavMeshを戻す
+        _enemy.agent.enabled = true;
     }
 
 }

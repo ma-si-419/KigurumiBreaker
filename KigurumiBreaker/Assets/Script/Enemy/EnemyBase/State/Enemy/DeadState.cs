@@ -23,6 +23,8 @@ public class DeadState : IState
         _enemy.StopMovement(); //移動停止
         BattleManager manager = _enemy.battleManager.GetComponent<BattleManager>();
 
+        Object.Destroy(_enemy.attackObj);
+
         //死亡アニメーションが終わったらオブジェクト削除
         var stateInfo = _enemy.animator.GetCurrentAnimatorStateInfo(0);
         if (stateInfo.IsName("Dead") && stateInfo.normalizedTime >= 1.0f)

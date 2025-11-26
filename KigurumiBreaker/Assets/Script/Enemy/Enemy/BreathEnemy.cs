@@ -56,6 +56,5 @@ public class BreathEnemy : Enemy
         }
 
         StopMovement();
-
     }
 }
