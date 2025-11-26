@@ -36,10 +36,10 @@ public class LaserEnemy : Enemy
                 {
                     _isAnim = true;
 
-                    _animator.ResetTrigger("AttackType1");
+                    animator.ResetTrigger("AttackType1");
 
                     // 攻撃中のアニメーションを開始
-                    _animator.SetBool("UnderAttack", true);
+                    animator.SetBool("UnderAttack", true);
                 }
             }
         }
