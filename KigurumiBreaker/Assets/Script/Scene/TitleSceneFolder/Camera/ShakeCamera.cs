@@ -14,6 +14,8 @@ public class ShakeCamera : MonoBehaviour
             transform.position = originalPosition + Random.insideUnitSphere * magnitude;
             elapsed += Time.deltaTime;
             yield return null;
+
+            Debug.Log(duration);
         }
 
         transform.position = originalPosition;
