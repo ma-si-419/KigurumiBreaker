@@ -27,7 +27,7 @@ public class SpiderEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(ATTACK_DISTANCE, 1.0f, _attackType1ObjectPrefab);
+                    EnemyAttackCreate(ATTACK_DISTANCE, 1.0f, _enemyData.attackPrefab[0]);
                 }
 
                 if (!_isCharge)
@@ -117,7 +117,7 @@ public class SpiderEnemy : Enemy
     private void Shoot()
     {
         //íeÇê∂ê¨
-        GameObject attackObject = Instantiate(_attackType2ObjectPrefab, this.transform.position + this.transform.up * 0.5f, this.transform.rotation);
+        GameObject attackObject = Instantiate(_enemyData.attackPrefab[1], this.transform.position + this.transform.up * 0.5f, this.transform.rotation);
 
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }

@@ -31,7 +31,7 @@ public class BeastEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _attackType1ObjectPrefab);
+                    EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
                 }
             }
 
@@ -86,7 +86,7 @@ public class BeastEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(ATTACK_DISTANCE, ATTACK_UP, _attackType2ObjectPrefab);
+                    EnemyAttackCreate(ATTACK_DISTANCE, ATTACK_UP, _enemyData.attackPrefab[1]);
                 }
             }
 

@@ -23,9 +23,6 @@ public class BossEnemy : EnemyBase
     protected float _meleeAttackRangeSqr;
     protected float _specialAttackRangeSqr;
 
-    // フェーズ用の攻撃オブジェクト
-    protected GameObject _phaseAttackObject;
-
     // ボスの全攻撃データ
     [SerializeField] protected BossAttackData _attackData;
 
@@ -42,12 +39,12 @@ public class BossEnemy : EnemyBase
 
     protected float _maxHp;
 
+
     protected override void Start()
     {
         // 親クラスのStart()を呼び出す
         base.Start();
 
-        _phaseAttackObject = _enemyData.phaseAttackObject;
         _maxHp = _currentHp;
 
         // ボス専用のUIバーを作成
@@ -107,6 +104,8 @@ public class BossEnemy : EnemyBase
 
         DebugLine();
 
+        Debug.Log("うんちフラグ" + _isWallHit);
+
         Debug.Log(_currentState);
     }
 
@@ -131,12 +130,9 @@ public class BossEnemy : EnemyBase
         // 一定時間動けなくするなど
     }
 
-    public virtual void PhaseChange()
-    {
-        // ボス専用のフェーズを変える処理をここに追加
-        // 攻撃パターンの変更するフラグを立てるなど
-
-    }
+    // ボス専用のフェーズを変える処理をここに追加
+    // 攻撃パターンの変更するフラグを立てるなど
+    public virtual void PhaseChange() { }
 
     // モデルのリグを取得して攻撃判定を特定のボーンにアタッチする処理
     public void AttackReset()
@@ -147,6 +143,19 @@ public class BossEnemy : EnemyBase
     // 攻撃判定に触れたときの処理
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            StopMovement();
+            _isWallHit = true;
+        }
+
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            Debug.Log("Wall Hitうんち");
+            StopMovement();
+            _isWallHit = true;
+        }
+
         if (other.CompareTag("PlayerAttack"))
         {
             // 死んだ状態になっている場合はダメージを受けない
@@ -205,7 +214,7 @@ public class BossEnemy : EnemyBase
 
         }
 
-        if (other.gameObject.CompareTag("PlayerRangedAttack"))
+        if (other.CompareTag("PlayerRangedAttack"))
         {
             //死んだ状態になっている場合はダメージを受けない
             if (_currentState is BossDeadState) return;
@@ -261,12 +270,17 @@ public class BossEnemy : EnemyBase
             OnHit();
 
         }
+
+
+
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Wall"))
         {
+            Debug.Log("Wall Hit");
+
             StopMovement();
             _isWallHit = true;
         }
@@ -276,7 +290,7 @@ public class BossEnemy : EnemyBase
     {
         if (other.CompareTag("Wall"))
         {
-            _isWallHit = false;
+            //_isWallHit = false;
         }
     }
 

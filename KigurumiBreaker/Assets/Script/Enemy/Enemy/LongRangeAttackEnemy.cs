@@ -125,7 +125,7 @@ public class LongRangeAttackEnemy : Enemy
     private void Shoot()
     {
         //íeÇê∂ê¨
-        GameObject attackObject = Instantiate(_attackType1ObjectPrefab, this.transform.position + this.transform.up * 0.3f , this.transform.rotation);
+        GameObject attackObject = Instantiate(_enemyData.attackPrefab[0], this.transform.position + this.transform.up * 0.3f , this.transform.rotation);
         
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }

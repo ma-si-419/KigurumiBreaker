@@ -13,33 +13,63 @@ MonoBehaviour:
   m_Name: MohikanBossAttackData
   m_EditorClassIdentifier: 
   bossAttackDataList:
-  - AttackName: "\u7A81\u9032\u653B\u6483"
+  - AttackName: "\u7A81\u9032\u653B\u6483(\u30D5\u30A7\u30FC\u30BA1)"
     BossAttackType: 0
     BossPhase: 0
     RangeSqr: 90
     Cooldown: 5
-    Weight: 6
-  - AttackName: "\u4E71\u308C\u6483\u3061\u653B\u6483"
+    Weight: 50
+  - AttackName: "\u4E71\u308C\u6483\u3061\u653B\u6483(\u30D5\u30A7\u30FC\u30BA1)"
     BossAttackType: 1
     BossPhase: 0
     RangeSqr: 140
     Cooldown: 20
     Weight: 2
-  - AttackName: "\u30B9\u30BF\u30F3\u30D7\u653B\u6483"
+  - AttackName: "\u30B9\u30BF\u30F3\u30D7\u653B\u6483(\u30D5\u30A7\u30FC\u30BA1)"
     BossAttackType: 2
     BossPhase: 0
     RangeSqr: 20
     Cooldown: 5
     Weight: 6
-  - AttackName: "\u30D3\u30FC\u30E0\u653B\u6483"
+  - AttackName: "\u30D3\u30FC\u30E0\u653B\u6483(\u30D5\u30A7\u30FC\u30BA1)"
     BossAttackType: 3
     BossPhase: 0
     RangeSqr: 140
     Cooldown: 20
     Weight: 4
-  - AttackName: "\u7A81\u9032\u30B9\u30BF\u30F3\u30D7\u653B\u6483"
+  - AttackName: "\u7A81\u9032\u9023\u7D9A\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
     BossAttackType: 4
     BossPhase: 1
     RangeSqr: 140
     Cooldown: 30
+    Weight: 3
+  - AttackName: "\u30D7\u30EC\u30A4\u30E4\u30FC\u76F4\u6483\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 5
+    BossPhase: 1
+    RangeSqr: 140
+    Cooldown: 30
+    Weight: 3
+  - AttackName: "\u7A81\u9032\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 0
+    BossPhase: 1
+    RangeSqr: 100
+    Cooldown: 5
+    Weight: 6
+  - AttackName: "\u4E71\u308C\u6483\u3061\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 1
+    BossPhase: 1
+    RangeSqr: 140
+    Cooldown: 10
+    Weight: 3
+  - AttackName: "\u30B9\u30BF\u30F3\u30D7\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 2
+    BossPhase: 1
+    RangeSqr: 30
+    Cooldown: 5
+    Weight: 8
+  - AttackName: "\u30D3\u30FC\u30E0\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 3
+    BossPhase: 1
+    RangeSqr: 200
+    Cooldown: 40
     Weight: 3

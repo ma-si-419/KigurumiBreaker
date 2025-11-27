@@ -33,7 +33,10 @@ public class BossIdleState : IState
     {
         // ボス専用の待機処理をここに追加
         // 追跡を停止
-        _boss.agent.isStopped = true; 
+        _boss.agent.isStopped = true;
+
+        // プレイヤーの位置を攻撃ターゲットに設定
+        _boss.AttackTargetPos();
 
         // 移動を停止
         _boss.StopMovement();
