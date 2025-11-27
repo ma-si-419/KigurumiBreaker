@@ -155,7 +155,7 @@ public class TheBlueBoss : BossEnemy
     private void CreateMeleeAttack()
     {
         //ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(_attackType2ObjectPrefab);
+        GameObject attackObject = Instantiate(_enemyData.attackPrefab[0]);
         //攻撃オブジェクトの位置を調整
         attackObject.transform.position = this.transform.position;
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
@@ -164,7 +164,7 @@ public class TheBlueBoss : BossEnemy
     private void CreateAttack()
     {
         // ゲームオブジェクト生成
-        _attackObject = Instantiate(_attackType1ObjectPrefab);
+        _attackObject = Instantiate(_enemyData.attackPrefab[1]);
         _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 

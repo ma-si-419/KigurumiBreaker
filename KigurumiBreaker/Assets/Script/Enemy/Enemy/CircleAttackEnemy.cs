@@ -21,7 +21,7 @@ public class CircleAttackEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _attackType1ObjectPrefab);
+                    EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
                 }
             }
 

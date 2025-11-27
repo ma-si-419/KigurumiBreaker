@@ -26,7 +26,6 @@ public class BossAttackType1State : IState
 
     public void Update()
     {
-
         _boss.AttackType1();
     }
 

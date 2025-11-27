@@ -43,8 +43,7 @@ public class Enemy : EnemyBase
     // 敵がビックリマークを生成したかどうかのフラグ
     private bool _isDetectionMark;
 
-    // プレイヤーの前座標
-    protected Vector3 _attackTarget;
+
 
     // ヒットストップ用の揺れベクトル
     protected float _idleTime;

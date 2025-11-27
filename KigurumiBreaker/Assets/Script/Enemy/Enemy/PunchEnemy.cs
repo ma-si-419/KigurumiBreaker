@@ -43,7 +43,7 @@ public class PunchEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(1.0f, 1.0f,_attackType1ObjectPrefab);
+                    EnemyAttackCreate(1.0f, 1.0f, _enemyData.attackPrefab[0]);
                 }
             }
 

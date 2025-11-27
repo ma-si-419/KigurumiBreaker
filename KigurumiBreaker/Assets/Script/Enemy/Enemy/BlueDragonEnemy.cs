@@ -27,7 +27,7 @@ public class BlueDragonEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(3.0f, 1.0f, _attackType1ObjectPrefab);
+                    EnemyAttackCreate(3.0f, 1.0f, _enemyData.attackPrefab[0]);
                 }
             }
 
@@ -75,7 +75,7 @@ public class BlueDragonEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyBuleDragonAttackCreate(_attackTarget, _attackType2ObjectPrefab, 3);
+                    EnemyBuleDragonAttackCreate(_attackTarget, _enemyData.attackPrefab[1], 3);
                 }
             }
 

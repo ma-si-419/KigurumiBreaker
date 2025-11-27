@@ -26,7 +26,7 @@ public class LaserEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(2.0f, 1.5f, _attackType1ObjectPrefab);
+                    EnemyAttackCreate(2.0f, 1.5f, _enemyData.attackPrefab[0]);
                 }
             }
 

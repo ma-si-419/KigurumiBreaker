@@ -17,18 +17,6 @@ public class EnemyBase : MonoBehaviour
     // EnemyUiManagerの参照
     protected EnemyBarManager _enemyUiManager;
 
-    // 攻撃タイプ1オブジェクトのプレハブ
-    protected GameObject _attackType1ObjectPrefab;
-
-    // 攻撃タイプ2オブジェクトのプレハブ
-    protected GameObject _attackType2ObjectPrefab;
-
-    // 攻撃タイプ3オブジェクトのプレハブ
-    protected GameObject _attackType3ObjectPrefab;
-
-    // 攻撃タイプ4オブジェクトのプレハブ
-    protected GameObject _attackType4ObjectPrefab;
-
     // ドロップする弾のプレハブ
     protected GameObject _dropBullet;
 
@@ -107,6 +95,9 @@ public class EnemyBase : MonoBehaviour
     // 状態遷移フラグ
     protected bool _isStateChange = false;
 
+    // プレイヤーの前座標
+    protected Vector3 _attackTarget;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {
@@ -130,6 +121,7 @@ public class EnemyBase : MonoBehaviour
     public IState previousState => _previousState;
     public float attackRangeSqr => _attackRangeSqr;
     public GameObject attackObj => _attackObj;
+    public Vector3 attackTarget => _attackTarget;
 
     protected virtual void Start()
     {
@@ -141,11 +133,7 @@ public class EnemyBase : MonoBehaviour
         // 体力と耐久力の初期化
         _currentHp = _enemyData.maxHp;
         _currentTrunk = _enemyData.maxTrunk;
-        // 攻撃オブジェクトのプレハブを設定
-        _attackType1ObjectPrefab = _enemyData.attackType1Prefab;
-        _attackType2ObjectPrefab = _enemyData.attackType2Prefab;
-        _attackType3ObjectPrefab = _enemyData.attackType3Prefab;
-        _attackType4ObjectPrefab = _enemyData.attackType4Prefab;
+
         // ドロップする弾のプレハブを設定
         _dropBullet = _enemyCommonData.dropBullet;
         // 敵データでアーマーかどうかを設定
@@ -159,6 +147,7 @@ public class EnemyBase : MonoBehaviour
 
         // ドロップする弾のリストを初期化する
         _dropBullets = new List<int>();
+
         // EnemyUiManagerの参照を取得
         _enemyUiManager = FindObjectOfType<EnemyBarManager>();
 
@@ -286,6 +275,11 @@ public class EnemyBase : MonoBehaviour
     public void SetStop(bool flag)
     {
         _isStop = flag;
+    }
+
+    public void AttackTargetPos()
+    {
+        _attackTarget = _player.transform.position;
     }
 
     public void StopAnimation()

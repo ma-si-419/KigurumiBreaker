@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class MohikanBoss : BossEnemy
 {
@@ -17,16 +18,12 @@ public class MohikanBoss : BossEnemy
     private bool _isCreateAttack = false;
 
     // 突進速度
-    private float CHARGE_SPEED = 0.8f; 
-
-    // 突進時間
-    private float CHARGE_TIME = 0.6f; 
-
-    // 突進中かどうかのフラグ
-    private bool _isCharge = false;    
+    private float _tackleSpeed = 0.8f;
 
     // 弾の生成位置
     private Transform _bulletSpawnPoint;
+
+    private float _circleInterval = 0.75f;
 
     private float _shotInterval = 0.025f;
 
@@ -39,6 +36,8 @@ public class MohikanBoss : BossEnemy
     private float _attackTime = 0.0f;
 
     private Vector3 _dir;
+
+    private int _tackleCount = 0;
 
     public override void PhaseChange()
     {
@@ -56,15 +55,14 @@ public class MohikanBoss : BossEnemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _phaseAttackObject);
+                    EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[6]);
                 }
             }
 
             //敵のアニメーション状態を取得
             if (stateInfo.normalizedTime >= 0.8f)
             {
-                // 攻撃オブジェクトを破棄
-                Destroy(_attackObj);
+
 
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
@@ -75,6 +73,8 @@ public class MohikanBoss : BossEnemy
         if (_isStateChange)
         {
             _isStateChange = false;
+            // 攻撃オブジェクトを破棄
+            Destroy(_attackObj);
             ChangeState(new BossIdleState(this));
         }
     }
@@ -82,12 +82,13 @@ public class MohikanBoss : BossEnemy
     // タックル攻撃
     public override void AttackType1()
     {
-        // ここにタックル攻撃の具体的な処理を追加
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
+
+
         //攻撃開始
-        if(stateInfo.IsName("AttackType1"))
+        if (stateInfo.IsName("AttackType1"))
         {
             if (stateInfo.normalizedTime >= 0.5f)
             {
@@ -108,14 +109,19 @@ public class MohikanBoss : BossEnemy
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
-                EnemyAttackCreate(0.0f, 0.0f, _attackType1ObjectPrefab);
+                EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
             }
 
             if(!_isWallHit)
             {
                 Vector3 dir = transform.forward.normalized;
-                Vector3 nextPos = _rigidbody.position + dir * CHARGE_SPEED;
+                Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
                 _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
+            }
+            else
+            {
+                Vector3 nextPos = _rigidbody.position;
+                _rigidbody.MovePosition(nextPos);
             }
 
         }
@@ -223,7 +229,7 @@ public class MohikanBoss : BossEnemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _attackType3ObjectPrefab);
+                    EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[2]);
                 }
             }
 
@@ -265,7 +271,7 @@ public class MohikanBoss : BossEnemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(9.5f, 1.5f, _attackType4ObjectPrefab);
+                    EnemyAttackCreate(9.5f, 1.5f, _enemyData.attackPrefab[3]);
                 }
             }
 
@@ -279,7 +285,6 @@ public class MohikanBoss : BossEnemy
             if (stateInfo.normalizedTime >= 0.8f)
             {
                 //攻撃フラグをリセット
-                _isCharge = false;
                 _isStateChange = true;
                 _isCreateAttack = false;
             }
@@ -300,49 +305,88 @@ public class MohikanBoss : BossEnemy
 
         if (stateInfo.IsName("AttackType5"))
         {
-            LookAtPlayer();
-
-            //敵のアニメーション状態を取得
-            if (stateInfo.normalizedTime >= 1.0f)
-            {
-                // 攻撃合図のアニメーションが終わったらフラグ
-                if (!_isAnim)
-                {
-                    _isAnim = true;
-
-                    animator.ResetTrigger("AttackType5");
-
-                    animator.SetTrigger("UnderAttackType5");
-                }
-            }
-        }
-
-        if (stateInfo.IsName("UnderAttackType5"))
-        {
-            if (stateInfo.normalizedTime >= 0.6f)
-            {
-                //攻撃判定を一つ生成させる
-                if (!_isCreateAttack)
-                {
-                    _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _attackType3ObjectPrefab);
-                }
-            }
-
-            //敵のアニメーション状態を取得
             if (stateInfo.normalizedTime >= 0.8f)
             {
-                // 攻撃オブジェクトを破棄
-                Destroy(_attackObj);
+                animator.ResetTrigger("AttackType5");
 
-                //攻撃フラグをリセット
-                _isCreateAttack = false;
-                _isStateChange = true;
+                animator.SetTrigger("UnderAttackType5_1");
             }
         }
 
+        //攻撃開始
+        if (stateInfo.IsName("UnderAttackType5_1"))
+        {
+            _attackTime = 0.0f;
+
+            if (stateInfo.normalizedTime >= 0.5f)
+            {
+                animator.ResetTrigger("UnderAttackType5_1");
+
+                animator.SetBool("UnderAttackType5_2", true);
+            }
+
+            LookAtPlayer();
+
+        }
+
+        if (stateInfo.IsName("UnderAttackType5_2"))
+        {
+            _attackTime += Time.deltaTime;
+
+            //攻撃判定を一つ生成させる
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
+            }
+
+            if (!_isWallHit)
+            {
+                Vector3 dir = transform.forward.normalized;
+                Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
+                _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
+            }
+            else
+            {
+                _tackleSpeed = 0.0f;
+                StopMovement();
+            }
+        }
+
+        if (_attackTime > 0.4f)
+        {
+            StopMovement();
+
+            // 攻撃オブジェクトを破棄
+            Destroy(_attackObj);
+
+            _isCreateAttack = false;
+            // 攻撃中のアニメーションを終了
+            animator.SetBool("UnderAttackType5_2", false);
+            animator.SetTrigger("UnderAttackType5_1");
+            _isAnim = false;
+            _attackTime = 0.0f;
+            _tackleCount += 1;
+        }
+
+        if(_tackleCount >= 3)
+        {
+            _tackleCount = 0;
+            _isStateChange = true;
+        }
+
+        if (_attackObj != null)
+        {
+            // 破棄されていない場合のみ位置を更新
+            _attackObj.transform.position = this.transform.position;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
         if (_isStateChange)
         {
+            animator.ResetTrigger("UnderAttackType5_1");
+            animator.SetBool("UnderAttackType5_2", false);
+
             _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
@@ -353,30 +397,49 @@ public class MohikanBoss : BossEnemy
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
+        //攻撃開始
         if (stateInfo.IsName("AttackType6"))
         {
-            if (stateInfo.normalizedTime >= 0.6f)
+            if (stateInfo.normalizedTime >= 0.5f)
             {
-                //攻撃判定を一つ生成させる
-                if (!_isCreateAttack)
-                {
-                    _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _attackType3ObjectPrefab);
-                }
+                animator.ResetTrigger("AttackType6");
+
+                animator.SetBool("UnderAttackType6", true);
             }
 
-            //敵のアニメーション状態を取得
-            if (stateInfo.normalizedTime >= 0.8f)
-            {
-                // 攻撃オブジェクトを破棄
-                Destroy(_attackObj);
+            LookAtPlayer();
 
-                //攻撃フラグをリセット
-                _isCreateAttack = false;
-                _isStateChange = true;
+        }
+
+        if (stateInfo.IsName("UnderAttackType6"))
+        {
+            _attackTime += Time.deltaTime;
+            _timer += Time.deltaTime;
+
+            if (_timer < _circleInterval * 0.5f)
+            {
+                // 攻撃ターゲットをプレイヤーの位置に更新
+                _attackTarget = _player.transform.position;
+            }
+
+            if (_timer > _circleInterval)
+            {
+                _timer = 0f;
+                MohikanCreateAttack(_attackTarget, _enemyData.attackPrefab[5]);
             }
         }
 
+        if (_attackTime > 5.0f)
+        {
+            // 攻撃中のアニメーションを終了
+            animator.SetBool("UnderAttackType6", false);
+            _isAnim = false;
+            _attackTime = 0.0f;
+            _isCreateAttack = false;
+            _isStateChange = true;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
         if (_isStateChange)
         {
             _isStateChange = false;
@@ -390,8 +453,18 @@ public class MohikanBoss : BossEnemy
         Vector3 spawnPos = this.transform.position + _dir;
 
         //弾を生成
-        GameObject attackObject = Instantiate(_attackType2ObjectPrefab, spawnPos + this.transform.up * 0.8f, Quaternion.LookRotation(_dir));
+        GameObject attackObject = Instantiate(_enemyData.attackPrefab[1], spawnPos + this.transform.up * 0.8f, Quaternion.LookRotation(_dir));
 
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
+    }
+
+    private void MohikanCreateAttack(Vector3 pos, GameObject attackPrefab)
+    {
+        // ゲームオブジェクト生成
+        _attackObj = Instantiate(attackPrefab);
+        _attackObj.transform.position = pos;
+
+        // 攻撃オブジェクトにバトルマネージャーをセット
+        _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 }
