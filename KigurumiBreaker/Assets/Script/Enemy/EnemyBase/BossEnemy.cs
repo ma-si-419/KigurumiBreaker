@@ -143,16 +143,9 @@ public class BossEnemy : EnemyBase
     // çUåÇîªíËÇ…êGÇÍÇΩÇ∆Ç´ÇÃèàóù
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            StopMovement();
-            _isWallHit = true;
-        }
 
         if (other.gameObject.CompareTag("Wall"))
         {
-            Debug.Log("Wall HitÇ§ÇÒÇø");
-            StopMovement();
             _isWallHit = true;
         }
 
@@ -279,8 +272,6 @@ public class BossEnemy : EnemyBase
     {
         if (other.CompareTag("Wall"))
         {
-            Debug.Log("Wall Hit");
-
             StopMovement();
             _isWallHit = true;
         }
@@ -290,7 +281,7 @@ public class BossEnemy : EnemyBase
     {
         if (other.CompareTag("Wall"))
         {
-            //_isWallHit = false;
+            _isWallHit = false;
         }
     }
 

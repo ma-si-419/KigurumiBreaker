@@ -17,137 +17,434 @@ public class TyanTwoBoss : BossEnemy
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
     private const float ATTACK_DISTANCE = 3.0f; // 攻撃判定の距離
 
+    // 突進速度
+    private float _tackleSpeed = 0.8f;
+
+    // 弾の生成位置
+    private Transform _bulletSpawnPoint;
+
+    private float _circleInterval = 0.75f;
+
+    private float _shotInterval = 0.025f;
+
+    private float _rotSpeed = 480.0f;
+
+    private float _angle = 0.0f;
+
+    private float _timer = 0.0f;
+
+    private float _attackTime = 0.0f;
+
+    private Vector3 _dir;
+
+    private int _tackleCount = 0;
+
+    private bool _isAnim;
+
+    public override void PhaseChange()
+    {
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //フェーズ移行フラグ
+        _isPhaseChanged = true;
+        _isPhase = true;
+
+        if (stateInfo.IsName("Phase"))
+        {
+            if (stateInfo.normalizedTime >= 0.5f)
+            {
+                //攻撃判定を一つ生成させる
+                if (!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[6]);
+                }
+            }
+
+            //敵のアニメーション状態を取得
+            if (stateInfo.normalizedTime >= 0.8f)
+            {
+                //攻撃フラグをリセット
+                _isCreateAttack = false;
+                _isStateChange = true;
+            }
+        }
+
+        if (_isStateChange)
+        {
+            _isStateChange = false;
+            // 攻撃オブジェクトを破棄
+            Destroy(_attackObj);
+            ChangeState(new BossIdleState(this));
+        }
+    }
+
+    // タックル攻撃
     public override void AttackType1()
     {
+
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.6f)
+
+
+        //攻撃開始
+        if (stateInfo.IsName("AttackType1"))
         {
+            if (stateInfo.normalizedTime >= 0.5f)
+            {
+                animator.ResetTrigger("AttackType1");
+
+                animator.SetBool("UnderAttackType1", true);
+            }
+
+            LookAtPlayer();
+
+        }
+
+        if (stateInfo.IsName("UnderAttackType1"))
+        {
+            _attackTime += Time.deltaTime;
+
             //攻撃判定を一つ生成させる
             if (!_isCreateAttack)
             {
                 _isCreateAttack = true;
-                CreateMeleeAttack();
+                EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
             }
+
+            if (!_isWallHit)
+            {
+                Vector3 dir = transform.forward.normalized;
+                Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
+                _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
+            }
+            else
+            {
+                Vector3 nextPos = _rigidbody.position;
+                _rigidbody.MovePosition(nextPos);
+            }
+
         }
 
-        //敵のアニメーション状態を取得
-        if (stateInfo.IsName("AttackType1") && stateInfo.normalizedTime >= 0.8f)
+        if (_attackTime > 0.5f)
         {
-            //攻撃フラグをリセット
+            StopMovement();
+
+            // 攻撃オブジェクトを破棄
+            Destroy(_attackObj);
+
             _isCreateAttack = false;
-            //攻撃アニメーションが終了したらIdleStateに遷移
+            // 攻撃中のアニメーションを終了
+            animator.SetBool("UnderAttackType1", false);
+            _isAnim = false;
+            _attackTime = 0.0f;
             ChangeState(new BossIdleState(this));
         }
+
+        if (_attackObj != null)
+        {
+            // 破棄されていない場合のみ位置を更新
+            _attackObj.transform.position = this.transform.position;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
+        if (_isStateChange)
+        {
+            _isStateChange = false;
+            ChangeState(new BossIdleState(this));
+        }
+
     }
 
+    // 乱れ撃ち攻撃
     public override void AttackType2()
     {
+
+
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("AttackType2") && stateInfo.normalizedTime >= 0.6f)
+        if (stateInfo.IsName("AttackType2"))
         {
-            //攻撃判定を一つ生成させる
-            if (!_isCreateAttack)
+            LookAtPlayer();
+
+            //敵のアニメーション状態を取得
+            if (stateInfo.normalizedTime >= 1.0f)
             {
-                _isCreateAttack = true;
-                CreateMeleeAttack();
+                // 攻撃合図のアニメーションが終わったらフラグ
+                if (!_isAnim)
+                {
+                    _isAnim = true;
+
+                    animator.ResetTrigger("AttackType2");
+
+                    animator.SetBool("UnderAttackType2", true);
+                }
             }
         }
 
-        //敵のアニメーション状態を取得
-        if (stateInfo.IsName("AttackType2") && stateInfo.normalizedTime >= 0.8f)
+        if (stateInfo.IsName("UnderAttackType2"))
         {
-            //攻撃フラグをリセット
-            _isCreateAttack = false;
-            //攻撃アニメーションが終了したらIdleStateに遷移
+            _timer += Time.deltaTime;
+            _attackTime += Time.deltaTime;
+
+            if (_timer > _shotInterval)
+            {
+                _timer = 0f;
+
+                // 発射方向の角度を計算
+                _angle += _rotSpeed * _shotInterval;
+
+                // 角度を方向ベクトルに変換
+                _dir = new Vector3(Mathf.Cos(_angle * Mathf.Deg2Rad),
+                                    0,
+                                    Mathf.Sin(_angle * Mathf.Deg2Rad));
+
+                Shoot();
+            }
+        }
+
+        if (_attackTime > 5.0f)
+        {
+            // 攻撃中のアニメーションを終了
+            animator.SetBool("UnderAttackType2", false);
+
+            _isAnim = false;
+
+            _attackTime = 0.0f;
+
             ChangeState(new BossIdleState(this));
         }
     }
 
+    // スタンプ攻撃
     public override void AttackType3()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("AttackType3") && stateInfo.normalizedTime >= 0.6f)
+        if (stateInfo.IsName("AttackType3"))
         {
-            //攻撃判定を一つ生成させる
-            if (!_isCreateAttack)
+            if (stateInfo.normalizedTime >= 0.6f)
             {
-                _isCreateAttack = true;
-                CreateMeleeAttack();
+                //攻撃判定を一つ生成させる
+                if (!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[2]);
+                }
+            }
+
+            //敵のアニメーション状態を取得
+            if (stateInfo.normalizedTime >= 0.8f)
+            {
+                // 攻撃オブジェクトを破棄
+                Destroy(_attackObj);
+
+                //攻撃フラグをリセット
+                _isCreateAttack = false;
+                _isStateChange = true;
             }
         }
 
-        //敵のアニメーション状態を取得
-        if (stateInfo.IsName("AttackType3") && stateInfo.normalizedTime >= 0.8f)
+        if (_isStateChange)
         {
-            //攻撃フラグをリセット
-            _isCreateAttack = false;
-            //攻撃アニメーションが終了したらIdleStateに遷移
+            _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
     }
 
+    // ビーム攻撃
     public override void AttackType4()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("AttackType4") && stateInfo.normalizedTime >= 0.6f)
+        if (stateInfo.IsName("AttackType4"))
         {
-            //攻撃判定を一つ生成させる
-            if (!_isCreateAttack)
+            // プレイヤーの方を向く
+            if (stateInfo.normalizedTime <= 0.2f)
             {
-                _isCreateAttack = true;
-                CreateMeleeAttack();
+                LookAtPlayer();
+            }
+
+            if (stateInfo.normalizedTime >= 0.5f)
+            {
+                //攻撃判定を一つ生成させる
+                if (!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    EnemyAttackCreate(9.5f, 1.5f, _enemyData.attackPrefab[3]);
+                }
+            }
+
+            if (stateInfo.normalizedTime >= 0.7f)
+            {
+                // 攻撃オブジェクトを破棄
+                Destroy(_attackObj);
+            }
+
+            //敵のアニメーション状態を取得
+            if (stateInfo.normalizedTime >= 0.8f)
+            {
+                //攻撃フラグをリセット
+                _isStateChange = true;
+                _isCreateAttack = false;
             }
         }
 
-        //敵のアニメーション状態を取得
-        if (stateInfo.IsName("AttackType4") && stateInfo.normalizedTime >= 0.8f)
+        if (_isStateChange)
         {
-            //攻撃フラグをリセット
-            _isCreateAttack = false;
-            //攻撃アニメーションが終了したらIdleStateに遷移
+            _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
     }
 
-    private IEnumerator DoCharge()
+    public override void AttackType5()
     {
-        _isCharge = true;
-        float timer = 0f;
-        Vector3 dir = transform.forward.normalized;
+        // ここにタックル攻撃の具体的な処理を追加
 
-        while (timer < CHARGE_TIME && _isCharge)
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("AttackType5"))
         {
-            _rigidbody.velocity = dir * CHARGE_SPEED;
+            if (stateInfo.normalizedTime >= 0.8f)
+            {
+                animator.ResetTrigger("AttackType5");
 
-            this.transform.position += _rigidbody.velocity;
-
-            timer += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
+                animator.SetTrigger("UnderAttackType5_1");
+            }
         }
 
-        _isCharge = false;
+        //攻撃開始
+        if (stateInfo.IsName("UnderAttackType5_1"))
+        {
+            _attackTime = 0.0f;
+
+            if (stateInfo.normalizedTime >= 0.5f)
+            {
+                animator.ResetTrigger("UnderAttackType5_1");
+
+                animator.SetBool("UnderAttackType5_2", true);
+            }
+
+            LookAtPlayer();
+
+        }
+
+        if (stateInfo.IsName("UnderAttackType5_2"))
+        {
+            _attackTime += Time.deltaTime;
+
+            //攻撃判定を一つ生成させる
+            if (!_isCreateAttack)
+            {
+                _isCreateAttack = true;
+                EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
+            }
+
+            if (!_isWallHit)
+            {
+                Vector3 dir = transform.forward.normalized;
+                Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
+                _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
+            }
+            else
+            {
+                _tackleSpeed = 0.0f;
+                StopMovement();
+            }
+        }
+
+        if (_attackTime > 0.4f)
+        {
+            StopMovement();
+
+            // 攻撃オブジェクトを破棄
+            Destroy(_attackObj);
+
+            _isCreateAttack = false;
+            // 攻撃中のアニメーションを終了
+            animator.SetBool("UnderAttackType5_2", false);
+            animator.SetTrigger("UnderAttackType5_1");
+            _isAnim = false;
+            _attackTime = 0.0f;
+            _tackleCount += 1;
+        }
+
+        if (_tackleCount >= 3)
+        {
+            _tackleCount = 0;
+            _isStateChange = true;
+        }
+
+        if (_attackObj != null)
+        {
+            // 破棄されていない場合のみ位置を更新
+            _attackObj.transform.position = this.transform.position;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
+        if (_isStateChange)
+        {
+            animator.ResetTrigger("UnderAttackType5_1");
+            animator.SetBool("UnderAttackType5_2", false);
+
+            _isStateChange = false;
+            ChangeState(new BossIdleState(this));
+        }
+
     }
 
-    // 攻撃オブジェクトを生成する関数
-    private void CreateMeleeAttack()
+    public override void AttackType6()
     {
-        //ゲームオブジェクト生成
-        GameObject attackObject = Instantiate(_enemyData.attackPrefab[0]);
-        //攻撃オブジェクトの位置を調整
-        attackObject.transform.position = this.transform.position;
-        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-    }
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-    private void CreateAttack()
-    {
-        // ゲームオブジェクト生成
-        _attackObject = Instantiate(_enemyData.attackPrefab[1]);
-        _attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-    }
+        //攻撃開始
+        if (stateInfo.IsName("AttackType6"))
+        {
+            if (stateInfo.normalizedTime >= 0.5f)
+            {
+                animator.ResetTrigger("AttackType6");
 
+                animator.SetBool("UnderAttackType6", true);
+            }
+
+            LookAtPlayer();
+
+        }
+
+        if (stateInfo.IsName("UnderAttackType6"))
+        {
+            _attackTime += Time.deltaTime;
+            _timer += Time.deltaTime;
+
+            if (_timer < _circleInterval * 0.5f)
+            {
+                // 攻撃ターゲットをプレイヤーの位置に更新
+                _attackTarget = _player.transform.position;
+            }
+
+            if (_timer > _circleInterval)
+            {
+                _timer = 0f;
+                EnemyTargetAttackCreate(_attackTarget, _enemyData.attackPrefab[5]);
+            }
+        }
+
+        if (_attackTime > 5.0f)
+        {
+            // 攻撃中のアニメーションを終了
+            animator.SetBool("UnderAttackType6", false);
+            _isAnim = false;
+            _attackTime = 0.0f;
+            _isCreateAttack = false;
+            _isStateChange = true;
+        }
+
+        //敵のアニメーションが終わったらIdleStateに遷移
+        if (_isStateChange)
+        {
+            _isStateChange = false;
+            ChangeState(new BossIdleState(this));
+        }
+    }
 
 }
