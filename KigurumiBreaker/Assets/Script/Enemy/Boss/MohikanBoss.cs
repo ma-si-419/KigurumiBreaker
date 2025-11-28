@@ -62,12 +62,15 @@ public class MohikanBoss : BossEnemy
             //敵のアニメーション状態を取得
             if (stateInfo.normalizedTime >= 0.8f)
             {
-
-
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
                 _isStateChange = true;
             }
+        }
+        else
+        {
+            // 攻撃オブジェクトを破棄
+            Destroy(_attackObj);
         }
 
         if (_isStateChange)
@@ -110,18 +113,6 @@ public class MohikanBoss : BossEnemy
             {
                 _isCreateAttack = true;
                 EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
-            }
-
-            if(!_isWallHit)
-            {
-                Vector3 dir = transform.forward.normalized;
-                Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
-                _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
-            }
-            else
-            {
-                Vector3 nextPos = _rigidbody.position;
-                _rigidbody.MovePosition(nextPos);
             }
 
         }
@@ -199,7 +190,7 @@ public class MohikanBoss : BossEnemy
                                     0,
                                     Mathf.Sin(_angle * Mathf.Deg2Rad));
 
-                Shoot();
+                EnemyShootAttackCreate(_dir);
             }
         }
 
@@ -425,7 +416,7 @@ public class MohikanBoss : BossEnemy
             if (_timer > _circleInterval)
             {
                 _timer = 0f;
-                MohikanCreateAttack(_attackTarget, _enemyData.attackPrefab[5]);
+                EnemyTargetAttackCreate(_attackTarget, _enemyData.attackPrefab[5]);
             }
         }
 
@@ -445,26 +436,5 @@ public class MohikanBoss : BossEnemy
             _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
-    }
-
-    //弾の生成
-    private void Shoot()
-    {
-        Vector3 spawnPos = this.transform.position + _dir;
-
-        //弾を生成
-        GameObject attackObject = Instantiate(_enemyData.attackPrefab[1], spawnPos + this.transform.up * 0.8f, Quaternion.LookRotation(_dir));
-
-        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
-    }
-
-    private void MohikanCreateAttack(Vector3 pos, GameObject attackPrefab)
-    {
-        // ゲームオブジェクト生成
-        _attackObj = Instantiate(attackPrefab);
-        _attackObj.transform.position = pos;
-
-        // 攻撃オブジェクトにバトルマネージャーをセット
-        _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 }

@@ -323,4 +323,26 @@ public class EnemyBase : MonoBehaviour
         _attackObj.transform.position = this.transform.position + this.transform.forward * distance + this.transform.up * up;
         _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
     }
+
+    // プレイヤーをターゲットにした敵の攻撃オブジェクトを生成する関数
+    public void EnemyTargetAttackCreate(Vector3 pos, GameObject attackPrefab)
+    {
+        // ゲームオブジェクト生成
+        _attackObj = Instantiate(attackPrefab);
+        _attackObj.transform.position = pos;
+
+        // 攻撃オブジェクトにバトルマネージャーをセット
+        _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
+    }
+
+    public void EnemyShootAttackCreate(Vector3 dir)
+    {
+        Vector3 spawnPos = this.transform.position + dir;
+
+        //弾を生成
+        GameObject attackObject = Instantiate(_enemyData.attackPrefab[1], spawnPos + this.transform.up * 0.8f, Quaternion.LookRotation(dir));
+
+        attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
+    }
+
 }
