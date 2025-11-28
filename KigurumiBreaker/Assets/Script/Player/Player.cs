@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -24,6 +25,14 @@ public class Player<T> : MonoBehaviour where T : Player<T>
 
     // 回避を行った回数
     protected int _dodgeCount;
+
+    // Stateの更新を止めるフラグ
+    protected bool _isStopStateUpdate = false;
+
+    private void Start()
+    {
+        _isStopStateUpdate = false;
+    }
 
     /// <summary>
     /// 状態を変更する関数
@@ -67,7 +76,7 @@ public class Player<T> : MonoBehaviour where T : Player<T>
         //       Debug.Log((_currentState != null ? _currentState.GetType().Name : "None"));
 
         //現在の状態があれば更新処理
-        if (_currentState != null)
+        if (_currentState != null && !_isStopStateUpdate)
         { 
             //更新処理を行う
             _currentState.OnUpdate();

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder;
 
 public class PlayerState : Player<PlayerState>
 {
@@ -211,7 +213,6 @@ public class PlayerState : Player<PlayerState>
         _input.Player.Move.canceled += Move;
         _input.Player.Dodge.performed += Dodge;
         _input.Player.MeleeAttack.started += LowAttack;
-        _input.Player.RangedAttack.started += RangedAttack;
         _input.Player.ChargeAttack.started += NormalCharge;
         _input.Player.ChargeAttack.canceled += ChargeAttack;
         _input.Player.SpecialAttack.started += SpecialAttack;
@@ -264,8 +265,10 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             if (state._isStop) return;
-
-            state._specialChargeNum = state.DEBUG_SpecialAttackGauge;
+            if (state.DEBUG_SpecialAttackGauge > 0)
+            {
+                state._specialChargeNum = state.DEBUG_SpecialAttackGauge;
+            }
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
@@ -1038,9 +1041,6 @@ public class PlayerState : Player<PlayerState>
 
             _stateTime++;
 
-            // 移動ベクトルをリセット
-            state._rigidbody.velocity = Vector3.zero;
-
             state._normalChargeTime++;
 
             // 攻撃を出すことができる時に
@@ -1223,8 +1223,6 @@ public class PlayerState : Player<PlayerState>
 
             _currentFrame++;
 
-            // 移動ベクトルをリセット
-            state._rigidbody.velocity = Vector3.zero;
 
             // 攻撃オブジェクトを生成するフレームに達したら攻撃オブジェクトを生成
             if (_currentFrame == _currentAttackData.startFrame)
@@ -1233,9 +1231,33 @@ public class PlayerState : Player<PlayerState>
                 // チャージ時間をリセット
                 state._normalChargeTime = 0;
             }
+            // 攻撃を出している間
+            else if (_currentFrame > _currentAttackData.startFrame &&
+                _currentFrame <= _currentAttackData.stunFrame)
+            {
+                // 前に進む
+                Vector3 attackVelocity = state._currentDirection * _currentAttackData.moveSpeed;
+                state._rigidbody.velocity = attackVelocity;
+
+                // 攻撃の座標を更新
+                Vector3 attackPos = state.GetAttackPosition(_currentAttackData.attackPartKind);
+
+                // ずらす分を加算
+                Vector3 shiftVec = state.transform.forward * _currentAttackData.shiftPosZ;
+
+                // Y座標を計算に入れない
+                shiftVec.y = 0;
+                attackPos += shiftVec;
+
+                state._currentAttack.transform.position = attackPos;
+            }
             // 攻撃の硬直のあと
             else if (_currentFrame > _currentAttackData.stunFrame)
             {
+                // 移動ベクトルをlerpで徐々に減速させる
+                float speed = Mathf.Lerp(_currentAttackData.moveSpeed, 0.0f, ((float)_currentFrame - (float)_currentAttackData.stunFrame) / ((float)_currentAttackData.totalFrame - (float)_currentAttackData.stunFrame));
+
+                state._rigidbody.velocity = state._currentDirection * speed;
 
                 /// 攻撃部位の縮小処理 ///
 
@@ -1256,20 +1278,19 @@ public class PlayerState : Player<PlayerState>
                     }
 
                     // 大きさの計算
-                    float scale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].scale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    float scale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].scale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.stunFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.stunFrame), 0.0f, 1.0f));
                     part.scale = scale;
 
                     // 攻撃する部位を小さくする
                     part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
 
                     // 少しずつずらす
-                    float shiftScale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].range, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    float shiftScale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].range, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.stunFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.stunFrame), 0.0f, 1.0f));
 
                     // 攻撃座標の位置をずらす
                     part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
                 }
             }
-
 
             // 攻撃のキャンセルフレームに達したときに回避でキャンセルできるようにする
             if (_currentFrame >= _currentAttackData.cancelFrame)
@@ -2277,9 +2298,11 @@ public class PlayerState : Player<PlayerState>
         _isAbleToSpecialAttack = _playerStateDataList.StateDataList[(int)stateKind].ableToSpecialAttack;
     }
 
-    public void SetIsItemRange(bool flag)
+
+    public void SetStateUpdateFlag(bool flag)
     {
-        _isInItemRange = flag;
+        Debug.Log("SetStateUpdateFlag: " + flag);
+        _isStopStateUpdate = flag;
     }
 
     public void StopAnimation()
@@ -2428,7 +2451,7 @@ public class PlayerState : Player<PlayerState>
 
 
             // 回避率を計算して回避できたらダメージを受けない
-            int randNum = Random.Range(0, 100);
+            int randNum = UnityEngine.Random.Range(0, 100);
             if (randNum < _passiveStatus.dodgeRateAddRate)
             {
 
@@ -2558,7 +2581,7 @@ public class PlayerState : Player<PlayerState>
                 if (_stateKind == StateKind.DAMAGE) return;
 
                 // 回避率を計算して回避できたらダメージを受けない
-                int randNum = Random.Range(0, 100);
+                int randNum = UnityEngine.Random.Range(0, 100);
                 if (randNum < _passiveStatus.dodgeRateAddRate)
                 {
                     foreach (PassiveGameObject obj in _passiveStatus.passiveGameObjects)

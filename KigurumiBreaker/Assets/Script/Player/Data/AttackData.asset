@@ -100,14 +100,14 @@ MonoBehaviour:
     ScaleAttackParts: []
   - AttackName: LowChargeAttack
     Damage: 20
-    StartFrame: 12
-    StunFrame: 18
-    CancelFrame: 23
-    TotalFrame: 33
-    MoveSpeed: 0
-    Scale: 4
-    ShiftPosZ: 0
-    AttackLifeTime: 8
+    StartFrame: 15
+    StunFrame: 25
+    CancelFrame: 25
+    TotalFrame: 40
+    MoveSpeed: 10
+    Scale: 3
+    ShiftPosZ: 1.75
+    AttackLifeTime: 15
     NextAttackName: None
     AttackPart: 4
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
@@ -116,17 +116,20 @@ MonoBehaviour:
     AttackKind: 2
     CameraShakeKind: 2
     HitStopFrame: 7
-    ScaleAttackParts: []
+    ScaleAttackParts:
+    - attackPartKind: 2
+      scale: 10
+      range: 3
   - AttackName: ChargeAttack
     Damage: 80
-    StartFrame: 10
-    StunFrame: 18
-    CancelFrame: 23
-    TotalFrame: 33
-    MoveSpeed: 0
-    Scale: 6.3
-    ShiftPosZ: 0
-    AttackLifeTime: 8
+    StartFrame: 15
+    StunFrame: 30
+    CancelFrame: 30
+    TotalFrame: 40
+    MoveSpeed: 25
+    Scale: 4
+    ShiftPosZ: 2.15
+    AttackLifeTime: 15
     NextAttackName: None
     AttackPart: 4
     AttackEffect: {fileID: 854650272385017219, guid: 9db73b27b173c234ba1a388616beaa5d, type: 3}
@@ -135,7 +138,10 @@ MonoBehaviour:
     AttackKind: 2
     CameraShakeKind: 3
     HitStopFrame: 12
-    ScaleAttackParts: []
+    ScaleAttackParts:
+    - attackPartKind: 2
+      scale: 20
+      range: 5.25
   - AttackName: SpecialAttack1
     Damage: 50
     StartFrame: 110

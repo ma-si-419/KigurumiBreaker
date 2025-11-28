@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
 
@@ -19,6 +18,7 @@ public class SkillSelectManager : MonoBehaviour
     [SerializeField] private GameObject _skillSelectPanel;                      // スキル選択用のパネル
     [SerializeField] private GameObject _skillGetObject;                        // 取得したらスキル選択を開始するオブジェクト
     [SerializeField] private GameObject _skillSelectCursor;                     // スキル選択カーソル(後々消す予定)
+    [SerializeField] private GameObject _player;                                // プレイヤーのオブジェクト
 
     private PlayerSkillManager _playerSkillManager;                             // PlayerSkillManagerのスクリプト
 
@@ -106,8 +106,6 @@ public class SkillSelectManager : MonoBehaviour
             _isMoveCursor = false;
         }
 
-        Debug.Log("Cursor Index: " + _cursorIndex);
-
         // カーソル位置が変わっていたらカーソルの位置を更新する
         if (lastCursorIndex != _cursorIndex)
         {
@@ -130,6 +128,9 @@ public class SkillSelectManager : MonoBehaviour
 
             // スキル選択を終了する
             _isSkillSelect = false;
+
+            // プレイヤーのStateの更新を再開する
+            _player.GetComponent<PlayerState>().SetStateUpdateFlag(false);
 
             // WaveSpawnerがセットされていれば終了通知を送る
             if (_waveSpawner != null)
@@ -282,10 +283,28 @@ public class SkillSelectManager : MonoBehaviour
 
             SelectSkill selectSkill = new SelectSkill();
 
+            int loopCount = 0;
+
             while (!isSelectSkill)
             {
+
+                loopCount++;
+
+                Debug.Log("スキル選択ループ回数: " + loopCount);
+
+                // 無限ループ防止
+                if (loopCount > 3000)
+                {
+                    Debug.LogError("スキルの選択に失敗しました。");
+                    Debug.Break();
+                    break;
+                }
+
                 // スキルのカテゴリを選択する
                 int skillCategory = Random.Range(0, (int)SkillData.SkillCategory.CategoryNum);
+
+                // 既に持っているスキルカテゴリは選択しない
+                if (_playerSkillManager.IsHaveSkillCategory((SkillData.SkillCategory)skillCategory)) continue;
 
                 switch (skillCategory)
                 {

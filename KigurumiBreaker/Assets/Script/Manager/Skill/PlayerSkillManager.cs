@@ -139,6 +139,27 @@ public class PlayerSkillManager : MonoBehaviour
 
     }
 
+    public bool IsHaveSkillCategory(SkillData.SkillCategory category)
+    {
+        switch (category)
+        {
+            case SkillData.SkillCategory.LowAttack:
+                return _lowAttackSkillName != "empty";
+            case SkillData.SkillCategory.ChargeAttack:
+                return _chargeAttackSkillName != "empty";
+            case SkillData.SkillCategory.SpecialCharge:
+                return _specialChargeSkillName != "empty";
+            case SkillData.SkillCategory.RangedAttack:
+                return _rangedAttackSkillName != "empty";
+            case SkillData.SkillCategory.Dash:
+                return _dashSkillName != "empty";
+            case SkillData.SkillCategory.Passive:
+                // パッシブスキルは複数個持てるため例外
+                return false;
+            default:
+                return false;
+        }
+    }
     public void AddPassiveSkill(string skillName)
     {
         // 同じ名前のパッシブスキルがすでにある場合は追加しない
