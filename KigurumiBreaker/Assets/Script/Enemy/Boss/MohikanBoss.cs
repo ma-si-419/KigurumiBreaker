@@ -39,6 +39,11 @@ public class MohikanBoss : BossEnemy
 
     private int _tackleCount = 0;
 
+    protected override void DirectionUpdate()
+    {
+
+    }
+
     public override void PhaseChange()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -190,7 +195,7 @@ public class MohikanBoss : BossEnemy
                                     0,
                                     Mathf.Sin(_angle * Mathf.Deg2Rad));
 
-                EnemyShootAttackCreate(_dir);
+                EnemyShootAttackCreate(_dir, _enemyData.attackPrefab[1]);
             }
         }
 

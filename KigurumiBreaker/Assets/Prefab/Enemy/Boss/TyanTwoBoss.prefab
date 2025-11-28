@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
       propertyPath: m_LocalPosition.x
@@ -64,6 +64,18 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -5047368470670671337, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5047368470670671337, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: cdc87c5fa0a0688438dc84f94cc26d2d, type: 2}
+    - target: {fileID: -5047368470670671337, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: fa70e5041eceb6b4aa73d36c4bf5d921, type: 2}
     - target: {fileID: 919132149155446097, guid: 567373add70a6b04cb472e4edf2a2792, type: 3}
       propertyPath: m_Name
       value: TyanTwoBoss
@@ -200,4 +212,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 2b1ce4dfc39e73f48b04af604a3bbe87, type: 2}
   _enemyCommonData: {fileID: 11400000, guid: 4de280dc11522ed4d9934284009b4a01, type: 2}
-  _attackData: {fileID: 11400000, guid: 1150dbd83c3f94842a9646515190d5d4, type: 2}
+  _attackData: {fileID: 11400000, guid: 1c0e598970dd21143bb3c649b07bd57d, type: 2}

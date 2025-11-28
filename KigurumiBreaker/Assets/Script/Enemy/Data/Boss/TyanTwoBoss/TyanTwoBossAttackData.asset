@@ -13,23 +13,51 @@ MonoBehaviour:
   m_Name: TyanTwoBossAttackData
   m_EditorClassIdentifier: 
   bossAttackDataList:
-  - AttackName: "\u7A81\u9032\u653B\u6483"
+  - AttackName: "\u8FFD\u5C3E\u653B\u6483(\u30D5\u30A7\u30FC\u30BA1)"
     BossAttackType: 0
-    RangeSqr: 50
+    BossPhase: 0
+    RangeSqr: 90
     Cooldown: 10
-    Weight: 1
-  - AttackName: "\u7BC4\u56F2\u653B\u6483"
+    Weight: 5
+  - AttackName: "\u30C7\u30AB\u7389\u5358\u767A(\u30D5\u30A7\u30FC\u30BA1)"
     BossAttackType: 1
-    RangeSqr: 10
-    Cooldown: 10
-    Weight: 3
-  - AttackName: "\u30B9\u30BF\u30F3\u30D7\u653B\u6483"
+    BossPhase: 0
+    RangeSqr: 140
+    Cooldown: 5
+    Weight: 5
+  - AttackName: "\u30EC\u30FC\u30B6\u30FC\u516D\u9762\u653B\u6483(\u30D5\u30A7\u30FC\u30BA1)"
     BossAttackType: 2
-    RangeSqr: 30
+    BossPhase: 0
+    RangeSqr: 40
+    Cooldown: 10
+    Weight: 8
+  - AttackName: "\u30D3\u30FC\u30E0\u653B\u6483(\u30D5\u30A7\u30FC\u30BA1)"
+    BossAttackType: 3
+    BossPhase: 0
+    RangeSqr: 160
+    Cooldown: 40
+    Weight: 4
+  - AttackName: "\u7A81\u9032\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 0
+    BossPhase: 1
+    RangeSqr: 100
+    Cooldown: 5
+    Weight: 6
+  - AttackName: "\u4E71\u308C\u6483\u3061\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 1
+    BossPhase: 1
+    RangeSqr: 140
     Cooldown: 10
     Weight: 3
-  - AttackName: "\u30D3\u30FC\u30E0\u653B\u6483"
-    BossAttackType: 3
+  - AttackName: "\u30EC\u30FC\u30B6\u30FC\u516D\u9762\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 2
+    BossPhase: 1
     RangeSqr: 30
-    Cooldown: 10
+    Cooldown: 5
+    Weight: 8
+  - AttackName: "\u30D3\u30FC\u30E0\u653B\u6483(\u30D5\u30A7\u30FC\u30BA2)"
+    BossAttackType: 3
+    BossPhase: 1
+    RangeSqr: 200
+    Cooldown: 40
     Weight: 3
