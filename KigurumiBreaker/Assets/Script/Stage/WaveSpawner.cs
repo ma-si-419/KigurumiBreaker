@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -92,8 +91,6 @@ public class WaveSpawner : MonoBehaviour
     private int _groupsClearedCount = 0;
     private Vector3 _lastDeadEnemyPos;
 
-    private Image fadeImage;  // 自動生成 or 既存のImageを使用
-    private Coroutine fadeRoutine;
 
 
     private void OnValidate()
@@ -373,74 +370,9 @@ public class WaveSpawner : MonoBehaviour
             }
         }
     }
-    // フェード呼び出し用
-    public void Fade(float duration, float targetAlpha, Color? color = null)
-    {
-        if (fadeImage == null) SetupFadeImage();
+    
 
-        Color c = color ?? Color.black;
-        fadeImage.color = new Color(c.r, c.g, c.b, fadeImage.color.a);
 
-        if (fadeRoutine != null) StopCoroutine(fadeRoutine);
-        fadeRoutine = StartCoroutine(FadeRoutine(duration, targetAlpha));
-    }
-
-    // 実際のフェード処理
-    private IEnumerator FadeRoutine(float duration, float targetAlpha)
-    {
-        float startAlpha = fadeImage.color.a;
-        float time = 0f;
-
-        while (time < duration)
-        {
-            float a = Mathf.Lerp(startAlpha, targetAlpha, time / duration);
-            fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, a);
-
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, targetAlpha);
-    }
-
-    // フェード用の Canvas + Image を自動生成
-    private void SetupFadeImage()
-    {
-        // Canvas
-        GameObject canvasObj = new GameObject("FadeCanvas");
-        Canvas canvas = canvasObj.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 9999;
-        DontDestroyOnLoad(canvasObj);
-
-        // Image
-        GameObject imgObj = new GameObject("FadeImage");
-        imgObj.transform.SetParent(canvasObj.transform, false);
-        fadeImage = imgObj.AddComponent<Image>();
-        fadeImage.color = new Color(0, 0, 0, 0);
-
-        RectTransform rt = fadeImage.rectTransform;
-        rt.anchorMin = Vector2.zero;
-        rt.anchorMax = Vector2.one;
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
-    }
-
-    // -------------------------
-    // ★使い方：どこでも呼ぶだけ
-    // -------------------------
-
-    // フェードアウト（黒）
-    public void FadeOut(float duration) => Fade(duration, 1f);
-
-    // フェードイン（黒）
-    public void FadeIn(float duration) => Fade(duration, 0f);
-
-    // 好きな色でフェードアウト
-    public void FadeOut(float duration, Color color) => Fade(duration, 1f, color);
-
-    // 好きな色でフェードイン
-    public void FadeIn(float duration, float targetAlpha, Color color) => Fade(duration, targetAlpha, color);
 public void SetBattleManager(BattleManager manager)
     {
         _battleManager = manager;
