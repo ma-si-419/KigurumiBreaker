@@ -24,7 +24,9 @@ public enum EnemyKind
     ArmorBeast,
     ArmorBlueDragon,
     ArmorSpider,
-    MohikanBoss
+    MohikanBoss,
+    TyanTwo,
+    TheBlue
 }
 
 [System.Serializable]
