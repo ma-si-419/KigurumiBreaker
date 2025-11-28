@@ -67,7 +67,6 @@ public class BossEnemy : EnemyBase
 
     protected override void FixedUpdate()
     {
-
         float a = _enemyCommonData.shakeMagnitude;
 
         if (_isStop)
@@ -104,7 +103,7 @@ public class BossEnemy : EnemyBase
 
         DebugLine();
 
-        Debug.Log("うんちフラグ" + _isWallHit);
+        DirectionUpdate();
 
         Debug.Log(_currentState);
     }
@@ -448,6 +447,13 @@ public class BossEnemy : EnemyBase
                 Gizmos.DrawWireSphere(transform.position, detectRadius);
             }
         }
+    }
+
+    protected virtual void DirectionUpdate()
+    {
+        //ここにボス個別のエフェクト演出とか入れる
+        //例：フェーズが切り替わったら、エフェクトをまとわせる
+        //例：チャンツーの手に呪術回線みたいなエフェクトをまとわせる
     }
 }
 

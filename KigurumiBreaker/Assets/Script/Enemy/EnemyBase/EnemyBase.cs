@@ -335,12 +335,13 @@ public class EnemyBase : MonoBehaviour
         _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 
-    public void EnemyShootAttackCreate(Vector3 dir)
+    public void EnemyShootAttackCreate(Vector3 dir, GameObject shootPrefab)
     {
+        // ê∂ê¨à íuÇåvéZ
         Vector3 spawnPos = this.transform.position + dir;
 
         //íeÇê∂ê¨
-        GameObject attackObject = Instantiate(_enemyData.attackPrefab[1], spawnPos + this.transform.up * 0.8f, Quaternion.LookRotation(dir));
+        GameObject attackObject = Instantiate(shootPrefab, spawnPos + this.transform.up * 0.8f, Quaternion.LookRotation(dir));
 
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }

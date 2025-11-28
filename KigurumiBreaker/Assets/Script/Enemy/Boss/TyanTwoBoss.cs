@@ -8,6 +8,7 @@ public class TyanTwoBoss : BossEnemy
     private bool _isCreateAttack = false;
 
     private float CHARGE_SPEED = 0.75f; // 突進速度
+
     private float CHARGE_TIME = 0.2f; // 突進時間
 
     private bool _isCharge = false;    // 突進中かどうかのフラグ
@@ -15,10 +16,13 @@ public class TyanTwoBoss : BossEnemy
 
     /* 定数 */
     private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
+    
     private const float ATTACK_DISTANCE = 3.0f; // 攻撃判定の距離
 
     // 突進速度
     private float _tackleSpeed = 0.8f;
+
+    private int _attackCount = 0;
 
     // 弾の生成位置
     private Transform _bulletSpawnPoint;
@@ -29,17 +33,20 @@ public class TyanTwoBoss : BossEnemy
 
     private float _rotSpeed = 480.0f;
 
-    private float _angle = 0.0f;
-
     private float _timer = 0.0f;
 
     private float _attackTime = 0.0f;
 
-    private Vector3 _dir;
-
     private int _tackleCount = 0;
 
     private bool _isAnim;
+
+    private Vector3[] _dir = new Vector3[7];
+
+    private float[] _angle = { 0, 45, 90, 135, 180, 225, 270, 315 };
+
+    private bool _isAttackCount;
+
 
     public override void PhaseChange()
     {
@@ -85,71 +92,37 @@ public class TyanTwoBoss : BossEnemy
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-
-
         //攻撃開始
         if (stateInfo.IsName("AttackType1"))
         {
-            if (stateInfo.normalizedTime >= 0.5f)
-            {
-                animator.ResetTrigger("AttackType1");
-
-                animator.SetBool("UnderAttackType1", true);
-            }
-
             LookAtPlayer();
 
-        }
-
-        if (stateInfo.IsName("UnderAttackType1"))
-        {
-            _attackTime += Time.deltaTime;
-
-            //攻撃判定を一つ生成させる
-            if (!_isCreateAttack)
+            if (stateInfo.normalizedTime <= 0.3f)
             {
-                _isCreateAttack = true;
-                EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
+                // 攻撃ターゲットをプレイヤーの位置に更新
+                _attackTarget = _player.transform.position;
             }
 
-            if (!_isWallHit)
+            if (stateInfo.normalizedTime >= 0.5f)
             {
-                Vector3 dir = transform.forward.normalized;
-                Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
-                _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
-            }
-            else
-            {
-                Vector3 nextPos = _rigidbody.position;
-                _rigidbody.MovePosition(nextPos);
+                if(!_isCreateAttack)
+                {
+                    _isCreateAttack = true;
+                    EnemyTargetAttackCreate(_attackTarget, _enemyData.attackPrefab[0]);
+                }
             }
 
-        }
+            if(stateInfo.normalizedTime >= 0.8f)
+            {
+                _isStateChange = true;
+            }
 
-        if (_attackTime > 0.5f)
-        {
-            StopMovement();
-
-            // 攻撃オブジェクトを破棄
-            Destroy(_attackObj);
-
-            _isCreateAttack = false;
-            // 攻撃中のアニメーションを終了
-            animator.SetBool("UnderAttackType1", false);
-            _isAnim = false;
-            _attackTime = 0.0f;
-            ChangeState(new BossIdleState(this));
-        }
-
-        if (_attackObj != null)
-        {
-            // 破棄されていない場合のみ位置を更新
-            _attackObj.transform.position = this.transform.position;
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
         if (_isStateChange)
         {
+            _isCreateAttack = false;
             _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
@@ -159,64 +132,50 @@ public class TyanTwoBoss : BossEnemy
     // 乱れ撃ち攻撃
     public override void AttackType2()
     {
-
-
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("AttackType2"))
         {
             LookAtPlayer();
 
-            //敵のアニメーション状態を取得
-            if (stateInfo.normalizedTime >= 1.0f)
+            if (stateInfo.normalizedTime <= 0.2f)
             {
-                // 攻撃合図のアニメーションが終わったらフラグ
-                if (!_isAnim)
+                // 向き（dirベクトル）を計算
+                Vector3 dir = player.transform.position - this.transform.position;
+                Vector3 dirNorm = dir.normalized;
+                _dir[0] = dirNorm;
+            }
+
+            if (stateInfo.normalizedTime >= 0.3f)
+            {
+                //攻撃判定を一つ生成させる
+                if (!_isCreateAttack)
                 {
-                    _isAnim = true;
-
-                    animator.ResetTrigger("AttackType2");
-
-                    animator.SetBool("UnderAttackType2", true);
+                    _isCreateAttack = true;
+                    EnemyShootAttackCreate(_dir[0], _enemyData.attackPrefab[1]);
                 }
             }
-        }
 
-        if (stateInfo.IsName("UnderAttackType2"))
-        {
-            _timer += Time.deltaTime;
-            _attackTime += Time.deltaTime;
-
-            if (_timer > _shotInterval)
+            //敵のアニメーション状態を取得
+            if (stateInfo.normalizedTime >= 0.8f)
             {
-                _timer = 0f;
 
-                // 発射方向の角度を計算
-                _angle += _rotSpeed * _shotInterval;
-
-                // 角度を方向ベクトルに変換
-                _dir = new Vector3(Mathf.Cos(_angle * Mathf.Deg2Rad),
-                                    0,
-                                    Mathf.Sin(_angle * Mathf.Deg2Rad));
-
-                //Shoot();
+                //攻撃フラグをリセット
+                _isCreateAttack = false;
+                _isStateChange = true;
             }
         }
 
-        if (_attackTime > 5.0f)
+        if (_isStateChange)
         {
-            // 攻撃中のアニメーションを終了
-            animator.SetBool("UnderAttackType2", false);
+            Destroy(_attackObj);
 
-            _isAnim = false;
-
-            _attackTime = 0.0f;
-
+            _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
     }
 
-    // スタンプ攻撃
+    // 六面レーザー攻撃
     public override void AttackType3()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -229,7 +188,18 @@ public class TyanTwoBoss : BossEnemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[2]);
+
+                    //ここに6方面の弾を撃つ処理を追加したい                    
+                    foreach (var angle in _angle)
+                    {
+                        // 向き（dirベクトル）を計算
+                        Quaternion rot = Quaternion.Euler(0f, angle, 0f);
+
+                        Vector3 dir = rot * Vector3.forward; // forward を角度で回転させて方向を作る
+
+                        // 弾生成関数を呼ぶ（あなたの関数）
+                        EnemyShootAttackCreate(dir, _enemyData.attackPrefab[2]);
+                    }
                 }
             }
 
@@ -259,13 +229,8 @@ public class TyanTwoBoss : BossEnemy
 
         if (stateInfo.IsName("AttackType4"))
         {
-            // プレイヤーの方を向く
-            if (stateInfo.normalizedTime <= 0.2f)
-            {
-                LookAtPlayer();
-            }
 
-            if (stateInfo.normalizedTime >= 0.5f)
+            if (stateInfo.normalizedTime >= 0.4f)
             {
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)
@@ -273,6 +238,10 @@ public class TyanTwoBoss : BossEnemy
                     _isCreateAttack = true;
                     EnemyAttackCreate(9.5f, 1.5f, _enemyData.attackPrefab[3]);
                 }
+            }
+            else
+            {
+                LookAtPlayer();
             }
 
             if (stateInfo.normalizedTime >= 0.7f)
