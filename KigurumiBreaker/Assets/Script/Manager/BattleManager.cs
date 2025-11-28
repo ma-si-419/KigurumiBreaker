@@ -83,7 +83,10 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-
+    public void OnMoveStage()
+    {
+        
+    }
     public void AddEnemy(GameObject enemy)
     {
         _enemies.Add(enemy);
