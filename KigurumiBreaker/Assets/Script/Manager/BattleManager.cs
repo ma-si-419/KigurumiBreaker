@@ -85,7 +85,25 @@ public class BattleManager : MonoBehaviour
 
     public void OnMoveStage()
     {
+        // ステージ移動時に残っている敵の攻撃とプレイヤーの攻撃をすべて削除する
+        foreach (GameObject enemyAttack in _enemyAttacks)
+        {
+            Destroy(enemyAttack);
+        }
+
+        _enemyAttacks.Clear();
+
+        foreach (GameObject playerAttack in _playerAttacks)
+        {
+            Destroy(playerAttack);
+        }
+
+        _playerAttacks.Clear();
+
+        // エフェクトをすべて削除する
         
+
+
     }
     public void AddEnemy(GameObject enemy)
     {
