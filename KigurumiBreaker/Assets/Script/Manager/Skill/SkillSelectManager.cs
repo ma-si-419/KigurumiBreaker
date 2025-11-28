@@ -287,6 +287,9 @@ public class SkillSelectManager : MonoBehaviour
                 // スキルのカテゴリを選択する
                 int skillCategory = Random.Range(0, (int)SkillData.SkillCategory.CategoryNum);
 
+                // 既に持っているスキルカテゴリは選択しない
+                if (_playerSkillManager.IsHaveSkillCategory((SkillData.SkillCategory)skillCategory)) continue;
+
                 switch (skillCategory)
                 {
                     case (int)SkillData.SkillCategory.LowAttack:
