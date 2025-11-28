@@ -506,7 +506,7 @@ CapsuleCollider:
   m_Radius: 1.8
   m_Height: 7
   m_Direction: 1
-  m_Center: {x: 0, y: 1.5, z: 0}
+  m_Center: {x: 0, y: 3.25, z: 0}
 --- !u!54 &9125476697725880163
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -515,7 +515,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5920302078338793605}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -543,7 +543,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5920302078338793605}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2
+  m_Radius: 3
   m_Speed: 0
   m_Acceleration: 8
   avoidancePriority: 50
@@ -570,7 +570,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 39f86d7b6f55d524fad6ae47a6903031, type: 2}
   _enemyCommonData: {fileID: 11400000, guid: 4de280dc11522ed4d9934284009b4a01, type: 2}
-  _isWeakAttack: 1
   _armorSkinedMeshRenderer: []
   _outlineSkinedMeshRenderer:
   - {fileID: 6807837744681503005}
