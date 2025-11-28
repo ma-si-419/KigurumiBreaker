@@ -1494,8 +1494,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436235538ee6c9d40b16626d4f2fed19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _fadeCanvas: {fileID: 1487189214}
   _shakeCamera: {fileID: 1347106162}
+  _titleCameraMove: {fileID: 678120960}
   _breakBlock: {fileID: 1361716259}
+  _fadeSpeed: 0.8
 --- !u!4 &653399814
 Transform:
   m_ObjectHideFlags: 0
@@ -3551,6 +3554,11 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!225 &1487189214 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 548172941955543396, guid: 835c9a612da260b458f790cfebe285ee, type: 3}
+  m_PrefabInstance: {fileID: 4617419393821348463}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1512274807 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3380080921822813343, guid: 746b9eaf27805a6419903660279ae3dd, type: 3}
