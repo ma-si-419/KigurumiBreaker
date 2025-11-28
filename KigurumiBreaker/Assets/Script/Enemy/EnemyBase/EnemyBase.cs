@@ -246,6 +246,7 @@ public class EnemyBase : MonoBehaviour
     {
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
+
     }
 
     // Getterƒƒ\ƒbƒh

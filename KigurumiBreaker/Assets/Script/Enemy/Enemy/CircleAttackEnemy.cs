@@ -6,6 +6,7 @@ public class CircleAttackEnemy : Enemy
 {
     public override void AttackType1()
     {
+        
         StopMovement();
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -38,5 +39,9 @@ public class CircleAttackEnemy : Enemy
                 ChangeState(new IdleState(this));
             }
         }
+
+        Debug.Log("True");
+        _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
+
     }
 }
