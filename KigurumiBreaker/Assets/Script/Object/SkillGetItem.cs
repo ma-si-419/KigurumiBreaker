@@ -24,40 +24,21 @@ public class SkillGetItem : MonoBehaviour
 
 
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            PlayerState playerState = other.gameObject.GetComponent<PlayerState>();
-            playerState.SetIsItemRange(true);
-        }
-
-        _isStayPlayer = true;
-    }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            // Yボタンが押されたらスキル選択画面へ
+            // RBボタンが押されたらスキル選択画面へ
             if (_isButtonDown)
             {
+                // プレイヤーのStateの更新を止める
+                other.GetComponent<PlayerState>().SetStateUpdateFlag(true);
                 _skillSelectManager.GetComponent<SkillSelectManager>().StartSkillSelect(_skillElement);
                 inputActions.Disable();
                 Destroy(gameObject);
             }
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            PlayerState playerState = other.gameObject.GetComponent<PlayerState>();
-            playerState.SetIsItemRange(false);
-        }
-
-        _isStayPlayer = false;
     }
 
     public void SetSkillElement(SkillData.SkillElement element)
@@ -72,8 +53,6 @@ public class SkillGetItem : MonoBehaviour
 
     private void GetItem(InputAction.CallbackContext constext)
     {
-        if (!_isStayPlayer) return;
-
         _isButtonDown = true;
     }
 }

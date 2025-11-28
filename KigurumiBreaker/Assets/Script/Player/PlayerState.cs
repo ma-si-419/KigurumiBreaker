@@ -211,7 +211,6 @@ public class PlayerState : Player<PlayerState>
         _input.Player.Move.canceled += Move;
         _input.Player.Dodge.performed += Dodge;
         _input.Player.MeleeAttack.started += LowAttack;
-        _input.Player.RangedAttack.started += RangedAttack;
         _input.Player.ChargeAttack.started += NormalCharge;
         _input.Player.ChargeAttack.canceled += ChargeAttack;
         _input.Player.SpecialAttack.started += SpecialAttack;
@@ -264,8 +263,10 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             if (state._isStop) return;
-
-            state._specialChargeNum = state.DEBUG_SpecialAttackGauge;
+            if (state.DEBUG_SpecialAttackGauge > 0)
+            {
+                state._specialChargeNum = state.DEBUG_SpecialAttackGauge;
+            }
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
@@ -1256,14 +1257,14 @@ public class PlayerState : Player<PlayerState>
                     }
 
                     // 大きさの計算
-                    float scale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].scale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    float scale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].scale, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.stunFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.stunFrame), 0.0f, 1.0f));
                     part.scale = scale;
 
                     // 攻撃する部位を小さくする
                     part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
 
                     // 少しずつずらす
-                    float shiftScale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].range, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.startFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.startFrame), 0.0f, 1.0f));
+                    float shiftScale = Mathf.Lerp(_currentAttackData.scaleAttackParts[i].range, 1.0f, Mathf.Clamp((float)(_currentFrame - _currentAttackData.stunFrame) / (float)(_currentAttackData.totalFrame - _currentAttackData.stunFrame), 0.0f, 1.0f));
 
                     // 攻撃座標の位置をずらす
                     part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
@@ -2277,9 +2278,11 @@ public class PlayerState : Player<PlayerState>
         _isAbleToSpecialAttack = _playerStateDataList.StateDataList[(int)stateKind].ableToSpecialAttack;
     }
 
-    public void SetIsItemRange(bool flag)
+
+    public void SetStateUpdateFlag(bool flag)
     {
-        _isInItemRange = flag;
+        Debug.Log("SetStateUpdateFlag: " + flag);
+        _isStopStateUpdate = flag;
     }
 
     public void StopAnimation()

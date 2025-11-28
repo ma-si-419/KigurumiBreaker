@@ -154,7 +154,8 @@ public class PlayerSkillManager : MonoBehaviour
             case SkillData.SkillCategory.Dash:
                 return _dashSkillName != "empty";
             case SkillData.SkillCategory.Passive:
-                return _passiveSkillNameList.Count > 0;
+                // パッシブスキルは複数個持てるため例外
+                return false;
             default:
                 return false;
         }

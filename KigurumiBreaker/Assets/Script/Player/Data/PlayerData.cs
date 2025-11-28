@@ -30,7 +30,7 @@ public class PlayerData : ScriptableObject
     [Header("“ÁêUŒ‚‚Ì’iŠK”")]
     [SerializeField] private int SpecialAttackMaxLevel;
     [Header("“G‚Ìƒ_ƒ[ƒW‚Ì‰½Š„‚ğ“ÁêUŒ‚‚ÌƒQ[ƒW‚É‰ÁZ‚·‚é‚©")]
-    [SerializeField, Range(0.0f, 1.0f)] private float SpecialAttackChargeRate;
+    [SerializeField, Range(0.0f, 2.0f)] private float SpecialAttackChargeRate;
     [Header("‘O•ûŒü‚Æ‚·‚éŠp“x")]
     [SerializeField] private float ForwardAngle;
     [Header("‘O•ûŒü‚Ì“G‚ğ”F’m‚·‚é‹——£")]
