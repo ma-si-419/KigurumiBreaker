@@ -1,9 +1,11 @@
-using UnityEngine;
-using UnityEngine.AI;
+using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
-using JetBrains.Annotations;
+using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class StageSet
@@ -64,6 +66,10 @@ public class StageSpawner : MonoBehaviour
     private int _waveStageIndex = 0;
     private StageSet.StageKind _previousStageKind;
 
+    private Image fadeImage;  // 自動生成 or 既存のImageを使用
+    private Coroutine fadeRoutine;
+    private static bool isFirstLoad = true;
+
     //過去に選ばれたPrefabのインデックスリスト
     private Dictionary<int, HashSet<int>> _usedPrefabs = new Dictionary<int, HashSet<int>>();
 
@@ -106,8 +112,28 @@ public class StageSpawner : MonoBehaviour
     {
         if (index < 0 || index >= _stageSets.Length) return;
 
+        if (isFirstLoad)
+        {
+            // 初回はフェードをスキップ
+            isFirstLoad = false;
+            SpawnStageInternal(index);
+        }
+        else
+        {
+            // 2回目以降はフェードアウト → ステージ切り替え → フェードイン
+            FadeOut(1.0f, () =>
+            {
+                SpawnStageInternal(index);
+                FadeIn(1.0f);
+            });
+        }
 
+        _currentStageIndex = index;
+    }
 
+    // 実際のステージ生成処理
+    private void SpawnStageInternal(int index)
+    {
         // === 前ステージの削除 ===
         if (_currentStageInstance != null)
         {
@@ -122,37 +148,24 @@ public class StageSpawner : MonoBehaviour
         // === 新ステージ生成 ===
         StageSet stageSet = _stageSets[index];
 
-        // ★ StageKind が変わったら必ずリセット
         if (stageSet.stageKind != _previousStageKind)
-        {
             _waveStageIndex = 0;
-        }
         else
-        {
             _waveStageIndex++;
-        }
 
-        // 次回の比較用にセット
         _previousStageKind = stageSet.stageKind;
 
-        // 過去に選ばれたPrefabの管理
         if (!_usedPrefabs.ContainsKey(index))
             _usedPrefabs[index] = new HashSet<int>();
 
         HashSet<int> used = _usedPrefabs[index];
-
-        // 使用可能なPrefabをリスト化
         List<int> availableIndexes = new List<int>();
-        for (int i = 0; i < stageSet.stagePrefabs.Length; i++)
-        {
-            if (!used.Contains(i))
-                availableIndexes.Add(i);
-        }
 
-        // すべて使い切った場合はリセット（任意）
+        for (int i = 0; i < stageSet.stagePrefabs.Length; i++)
+            if (!used.Contains(i)) availableIndexes.Add(i);
+
         if (availableIndexes.Count == 0)
         {
-        
             used.Clear();
             for (int i = 0; i < stageSet.stagePrefabs.Length; i++)
                 availableIndexes.Add(i);
@@ -163,7 +176,6 @@ public class StageSpawner : MonoBehaviour
 
         _currentStageInstance = Instantiate(stageSet.stagePrefabs[prefabIndex]);
 
-        // === NavMesh 再生成 ===
         var newSurfaces = _currentStageInstance.GetComponentsInChildren<NavMeshSurface>();
         foreach (var surface in newSurfaces)
         {
@@ -171,7 +183,6 @@ public class StageSpawner : MonoBehaviour
             surface.BuildNavMesh();
         }
 
-        // Player初期位置設定
         Transform spawnPoint = _currentStageInstance.transform.Find("SpawnPoint");
         if (spawnPoint != null && _player != null)
         {
@@ -179,7 +190,6 @@ public class StageSpawner : MonoBehaviour
             _player.rotation = spawnPoint.rotation;
         }
 
-        // WaveSpawner に SkillSelectManager とスキル情報をセット
         WaveSpawner[] waveSpawners = _currentStageInstance.GetComponentsInChildren<WaveSpawner>();
         foreach (var waveSpawner in waveSpawners)
         {
@@ -187,13 +197,10 @@ public class StageSpawner : MonoBehaviour
             waveSpawner.SetBattleManager(_battleManager);
 
             if (!string.IsNullOrEmpty(_beforeSkill))
-                waveSpawner.SetBeforeSkill(_beforeSkill); // 
-
+                waveSpawner.SetBeforeSkill(_beforeSkill);
 
             waveSpawner.SetStageSpawner(this);
         }
-
-        _currentStageIndex = index;
     }
 
     /// <summary>
@@ -237,6 +244,69 @@ public class StageSpawner : MonoBehaviour
     {
         _beforeSkill = selectedSkill.ToString();
     }
+    // フェード用の Canvas + Image を自動生成
+    private void SetupFadeImage()
+    {
+        // Canvas
+        GameObject canvasObj = new GameObject("FadeCanvas");
+        Canvas canvas = canvasObj.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 9999;
+        DontDestroyOnLoad(canvasObj);
+
+        // Image
+        GameObject imgObj = new GameObject("FadeImage");
+        imgObj.transform.SetParent(canvasObj.transform, false);
+        fadeImage = imgObj.AddComponent<Image>();
+        fadeImage.color = new Color(0, 0, 0, 0);
+
+        RectTransform rt = fadeImage.rectTransform;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+    }
+    public void FadeOut(float duration, System.Action onComplete = null)
+    {
+        Fade(duration, 1f, null, onComplete);
+    }
+
+    public void FadeIn(float duration, System.Action onComplete = null)
+    {
+        Fade(duration, 0f, null, onComplete);
+    }
+
+    // コールバックを受け取るFade
+    private void Fade(float duration, float targetAlpha, Color? color, System.Action onComplete)
+    {
+        if (fadeImage == null) SetupFadeImage();
+
+        Color c = color ?? Color.black;
+        fadeImage.color = new Color(c.r, c.g, c.b, fadeImage.color.a);
+
+        if (fadeRoutine != null) StopCoroutine(fadeRoutine);
+        fadeRoutine = StartCoroutine(FadeRoutine(duration, targetAlpha, onComplete));
+    }
+
+    // フェード完了時に onComplete を呼ぶ
+    private IEnumerator FadeRoutine(float duration, float targetAlpha, System.Action onComplete)
+    {
+        float startAlpha = fadeImage.color.a;
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            float a = Mathf.Lerp(startAlpha, targetAlpha, timer / duration);
+            fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, a);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, targetAlpha);
+        onComplete?.Invoke();
+    }
+
 
     /// <summary>
     /// WaveSpawner からスキル会得通知
