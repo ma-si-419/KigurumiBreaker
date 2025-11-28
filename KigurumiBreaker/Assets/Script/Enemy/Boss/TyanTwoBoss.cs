@@ -199,7 +199,7 @@ public class TyanTwoBoss : BossEnemy
                                     0,
                                     Mathf.Sin(_angle * Mathf.Deg2Rad));
 
-                Shoot();
+                //Shoot();
             }
         }
 
