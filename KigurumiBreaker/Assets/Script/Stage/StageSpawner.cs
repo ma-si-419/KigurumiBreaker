@@ -116,7 +116,7 @@ public class StageSpawner : MonoBehaviour
                 s.RemoveData();
 
             Destroy(_currentStageInstance);
-            
+            _battleManager.OnMoveStage();
         }
 
         // === 新ステージ生成 ===
