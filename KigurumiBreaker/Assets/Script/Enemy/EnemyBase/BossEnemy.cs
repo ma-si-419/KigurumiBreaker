@@ -37,6 +37,9 @@ public class BossEnemy : EnemyBase
 
     protected bool _isWallHit;
 
+    // 攻撃中に壁に当たったかどうかのフラグ
+    protected bool _isAttackWallHit;   
+
     protected float _maxHp;
 
 
@@ -105,6 +108,9 @@ public class BossEnemy : EnemyBase
 
         DirectionUpdate();
 
+        Debug.Log("_isAttackWallHit" + _isAttackWallHit);
+        Debug.Log("_isWallHit" + _isWallHit);
+
         Debug.Log(_currentState);
     }
 
@@ -145,7 +151,14 @@ public class BossEnemy : EnemyBase
 
         if (other.gameObject.CompareTag("Wall"))
         {
-            _isWallHit = true;
+            if(_isAttackWallHit)
+            {
+                _isWallHit = false;
+            }
+            else
+            {
+                _isWallHit = true;
+            }
         }
 
         if (other.CompareTag("PlayerAttack"))
@@ -265,23 +278,6 @@ public class BossEnemy : EnemyBase
 
 
 
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Wall"))
-        {
-            StopMovement();
-            _isWallHit = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Wall"))
-        {
-            _isWallHit = false;
-        }
     }
 
     //デバッグ用に線を引く

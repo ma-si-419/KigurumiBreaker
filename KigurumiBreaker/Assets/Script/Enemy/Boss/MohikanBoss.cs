@@ -120,6 +120,15 @@ public class MohikanBoss : BossEnemy
                 EnemyAttackCreate(0.0f, 0.0f, _enemyData.attackPrefab[0]);
             }
 
+            if (!_isWallHit)
+            {
+                Vector3 dir = transform.forward.normalized;
+                Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
+                _rigidbody.MovePosition(nextPos); // transform.positionの代わりにこれを使う！
+            }
+            else
+            {
+            }
         }
 
         if (_attackTime > 0.5f)
@@ -134,7 +143,7 @@ public class MohikanBoss : BossEnemy
             animator.SetBool("UnderAttackType1", false);
             _isAnim = false;
             _attackTime = 0.0f;
-            ChangeState(new BossIdleState(this));
+            _isStateChange = true;
         }
 
         if (_attackObj != null)
@@ -146,9 +155,11 @@ public class MohikanBoss : BossEnemy
         //敵のアニメーションが終わったらIdleStateに遷移
         if(_isStateChange)
         {
+            _isAttackWallHit = false;
             _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
+
 
     }
 
@@ -383,8 +394,13 @@ public class MohikanBoss : BossEnemy
             animator.ResetTrigger("UnderAttackType5_1");
             animator.SetBool("UnderAttackType5_2", false);
 
+            _isAttackWallHit = false;
             _isStateChange = false;
             ChangeState(new BossIdleState(this));
+        }
+        else
+        {
+            _isAttackWallHit = true;
         }
 
     }
