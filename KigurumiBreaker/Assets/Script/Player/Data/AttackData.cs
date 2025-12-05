@@ -36,9 +36,6 @@ public class Attack
         public float range;
     }
 
-
-
-
     [Header("名前")]
     [SerializeField] private string AttackName;
     [Header("ダメージ係数")]

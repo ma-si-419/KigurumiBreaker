@@ -16,6 +16,16 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private GameObject _camera;
 
+    [SerializeField] private List<Sprite>_damageNumberSprite;
+
+    [SerializeField] private int _damageUiMargin; // ダメージUIの桁数の間隔
+
+    [SerializeField] private Canvas _uiCanvas;
+
+    [SerializeField] private GameObject _damageUiPrefab;
+
+    [SerializeField] private DamageUiData _damageUiData;
+
     private PlayerState _playerState;
 
     private CameraMove _cameraMove;
@@ -82,7 +92,6 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-
     public void OnMoveStage()
     {
         // ステージ移動時に残っている敵の攻撃とプレイヤーの攻撃をすべて削除する
@@ -102,9 +111,8 @@ public class BattleManager : MonoBehaviour
 
         // エフェクトをすべて削除する
         
-
-
     }
+
     public void AddEnemy(GameObject enemy)
     {
         _enemies.Add(enemy);
@@ -144,6 +152,62 @@ public class BattleManager : MonoBehaviour
         _isSlow = true;
 
         Time.timeScale = timeScale;
+    }
+
+    public void CreateDamageUi(Vector3 pos,int damage)
+    {
+        // 桁数ごとに分解
+        List<int> digits = new List<int>();
+        if (damage == 0)
+        {
+            digits.Add(0);
+        }
+        else
+        {
+            while (damage > 0)
+            {
+                digits.Add(damage % 10);
+                damage /= 10;
+            }
+        }
+        digits.Reverse();
+
+        // ダメージUIの生成
+
+        // 数字をまとめるオブジェクトの生成
+        GameObject damageUis = new GameObject();
+
+        // ダメージUIコントローラーの追加
+        DamageUiController sc = damageUis.AddComponent<DamageUiController>();
+
+        // データの設定
+        DamageUiController.DamageUiData data = new DamageUiController.DamageUiData();
+        data.lifeTime = _damageUiData.lifeTime;
+        data.startScale = _damageUiData.startScale;
+        data.endScale = _damageUiData.endScale;
+
+        sc.SetData(data);
+
+        // 桁数の数だけダメージUIを生成
+        for (int i = 0; i < digits.Count; i++)
+        {
+            GameObject damageUi = Instantiate(_damageUiPrefab);
+            damageUi.transform.SetParent(damageUis.transform, false);
+            // スプライトの設定
+            UnityEngine.UI.Image image = damageUi.GetComponent<UnityEngine.UI.Image>();
+            image.sprite = _damageNumberSprite[digits[i]];
+            image.SetNativeSize();
+            // 位置の設定
+            RectTransform rectTransform = damageUi.GetComponent<RectTransform>();
+            // スクリーン座標からキャンバス座標に変換
+            Vector2 canvasPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_uiCanvas.GetComponent<RectTransform>(), Camera.main.WorldToScreenPoint(pos), null, out canvasPos);
+            rectTransform.anchoredPosition = new Vector2(canvasPos.x + i * _damageUiMargin, canvasPos.y);
+        }
+
+        // ダメージUIをまとめたものをキャンバスの子にする
+        damageUis.transform.SetParent(_uiCanvas.transform, false);
+
     }
 
     public void SetHitStop(int time)
