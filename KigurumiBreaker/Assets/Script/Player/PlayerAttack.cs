@@ -35,6 +35,10 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 _moveVec = Vector3.zero;
 
+    private Sprite _damageNumberSprite;
+
+    private int _damageNumberScale;
+
     [SerializeField] private BattleManager _battleManager;
 
     [SerializeField] private float effectShiftScale = 0.5f;
@@ -92,6 +96,13 @@ public class PlayerAttack : MonoBehaviour
         _damage = _attackData.damage;
     }
 
+    public void SetDamageNumberSprite(Sprite sprite,int scale)
+    {
+        _damageNumberSprite = sprite;
+        _damageNumberScale = scale;
+    }
+
+
     public float GetDamage()
     {
         return _attackData.damage;
@@ -140,6 +151,12 @@ public class PlayerAttack : MonoBehaviour
 
                 cameraMove.SetShakeData(_attackData.shakeKind);
             }
+
+            // 敵とぶつかった地点にダメージ数字を出す
+            Vector3 damageNumberPos = other.ClosestPoint(this.transform.position);
+            _battleManager.CreateDamageUi(damageNumberPos, (int)_attackData.damage);
+
+
         }
         else if (other.CompareTag("EnemyRangedAttack"))
         {
