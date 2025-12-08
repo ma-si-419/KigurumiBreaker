@@ -7,31 +7,10 @@ public class TyanTwoBoss : BossEnemy
     //攻撃オブジェクトを一度だけ生成するフラグ
     private bool _isCreateAttack = false;
 
-    private float CHARGE_SPEED = 0.75f; // 突進速度
-
-    private float CHARGE_TIME = 0.2f; // 突進時間
-
-    private bool _isCharge = false;    // 突進中かどうかのフラグ
-    private GameObject _attackObject;  // 攻撃オブジェクト
-
-    /* 定数 */
-    private const float TACKLE_COUNTDOWN = 1.0f; // タックル攻撃のクールダウン時間
-    
-    private const float ATTACK_DISTANCE = 3.0f; // 攻撃判定の距離
-
     // 突進速度
     private float _tackleSpeed = 0.8f;
 
-    private int _attackCount = 0;
-
-    // 弾の生成位置
-    private Transform _bulletSpawnPoint;
-
     private float _circleInterval = 0.75f;
-
-    private float _shotInterval = 0.025f;
-
-    private float _rotSpeed = 480.0f;
 
     private float _timer = 0.0f;
 
@@ -39,13 +18,9 @@ public class TyanTwoBoss : BossEnemy
 
     private int _tackleCount = 0;
 
-    private bool _isAnim;
-
     private Vector3[] _dir = new Vector3[7];
 
     private float[] _angle = { 0, 45, 90, 135, 180, 225, 270, 315 };
-
-    private bool _isAttackCount;
 
 
     public override void PhaseChange()
@@ -333,7 +308,6 @@ public class TyanTwoBoss : BossEnemy
             // 攻撃中のアニメーションを終了
             animator.SetBool("UnderAttackType5_2", false);
             animator.SetTrigger("UnderAttackType5_1");
-            _isAnim = false;
             _attackTime = 0.0f;
             _tackleCount += 1;
         }
@@ -402,7 +376,6 @@ public class TyanTwoBoss : BossEnemy
         {
             // 攻撃中のアニメーションを終了
             animator.SetBool("UnderAttackType6", false);
-            _isAnim = false;
             _attackTime = 0.0f;
             _isCreateAttack = false;
             _isStateChange = true;
