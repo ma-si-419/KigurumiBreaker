@@ -108,7 +108,6 @@ public class BossEnemy : EnemyBase
 
         DirectionUpdate();
 
-        Debug.Log("_isAttackWallHit" + _isAttackWallHit);
         Debug.Log("_isWallHit" + _isWallHit);
 
         Debug.Log(_currentState);
@@ -148,17 +147,9 @@ public class BossEnemy : EnemyBase
     // 攻撃判定に触れたときの処理
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.gameObject.CompareTag("Wall"))
         {
-            if(_isAttackWallHit)
-            {
-                _isWallHit = false;
-            }
-            else
-            {
-                _isWallHit = true;
-            }
+            _isWallHit = true;
         }
 
         if (other.CompareTag("PlayerAttack"))
@@ -276,8 +267,14 @@ public class BossEnemy : EnemyBase
 
         }
 
+    }
 
-
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            _isWallHit = false;
+        }
     }
 
     //デバッグ用に線を引く
