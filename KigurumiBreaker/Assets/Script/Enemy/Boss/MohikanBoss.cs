@@ -128,6 +128,11 @@ public class MohikanBoss : BossEnemy
             }
             else
             {
+                // ­‚µ‚¾‚¯Œã‚ë‚É–ß‚·i‚ß‚èž‚Ý–hŽ~j
+                Vector3 backDir = -transform.forward.normalized;
+                Vector3 backPos = _rigidbody.position + backDir * 0.4f;
+
+                _rigidbody.MovePosition(backPos);
             }
         }
 
@@ -144,6 +149,7 @@ public class MohikanBoss : BossEnemy
             _isAnim = false;
             _attackTime = 0.0f;
             _isStateChange = true;
+            _isWallHit = false;
         }
 
         if (_attackObj != null)
@@ -155,7 +161,6 @@ public class MohikanBoss : BossEnemy
         //“G‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ªI‚í‚Á‚½‚çIdleState‚É‘JˆÚ
         if(_isStateChange)
         {
-            _isAttackWallHit = false;
             _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }
@@ -333,7 +338,7 @@ public class MohikanBoss : BossEnemy
             }
 
             LookAtPlayer();
-
+            _isWallHit = false;
         }
 
         if (stateInfo.IsName("UnderAttackType5_2"))
@@ -349,14 +354,19 @@ public class MohikanBoss : BossEnemy
 
             if (!_isWallHit)
             {
+                _tackleSpeed = 0.8f;
+
                 Vector3 dir = transform.forward.normalized;
                 Vector3 nextPos = _rigidbody.position + dir * _tackleSpeed;
                 _rigidbody.MovePosition(nextPos); // transform.position‚Ì‘ã‚í‚è‚É‚±‚ê‚ðŽg‚¤I
             }
             else
             {
-                _tackleSpeed = 0.0f;
-                StopMovement();
+                // ­‚µ‚¾‚¯Œã‚ë‚É–ß‚·i‚ß‚èž‚Ý–hŽ~j
+                Vector3 backDir = -transform.forward.normalized;
+                Vector3 backPos = _rigidbody.position + backDir * 0.4f;
+
+                _rigidbody.MovePosition(backPos);
             }
         }
 
@@ -374,6 +384,7 @@ public class MohikanBoss : BossEnemy
             _isAnim = false;
             _attackTime = 0.0f;
             _tackleCount += 1;
+            _isWallHit = false;
         }
 
         if(_tackleCount >= 3)
@@ -393,16 +404,11 @@ public class MohikanBoss : BossEnemy
         {
             animator.ResetTrigger("UnderAttackType5_1");
             animator.SetBool("UnderAttackType5_2", false);
-
-            _isAttackWallHit = false;
             _isStateChange = false;
+            _isWallHit = false;
+            _tackleSpeed = 0.8f;
             ChangeState(new BossIdleState(this));
         }
-        else
-        {
-            _isAttackWallHit = true;
-        }
-
     }
 
     public override void AttackType6()
