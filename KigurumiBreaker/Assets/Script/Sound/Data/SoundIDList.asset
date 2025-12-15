@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SoundIDList
   m_EditorClassIdentifier: 
   soundDatas:
+  - Name: None
+    Clip: {fileID: 8300000, guid: ff59298d88b714941b0a3ee918661fdb, type: 3}
+    Volume: 0
   - Name: ChargeAttackSE
     Clip: {fileID: 8300000, guid: 9640952cda03cea42aef47ac1adcf2d4, type: 3}
     Volume: 0.61
@@ -31,3 +34,30 @@ MonoBehaviour:
   - Name: Death
     Clip: {fileID: 8300000, guid: 5475c7fc541518d44baed47b99b175c4, type: 3}
     Volume: 0.61
+  - Name: LowAttackHit
+    Clip: {fileID: 8300000, guid: a94134a31d0f8f847b5b90210e36bfd6, type: 3}
+    Volume: 1
+  - Name: MiddleAttackHit
+    Clip: {fileID: 8300000, guid: ce584f14e99c3f941a82f37533d4a256, type: 3}
+    Volume: 1
+  - Name: HighAttackHit
+    Clip: {fileID: 8300000, guid: d19c4bd8ed52b9f4fb4b021f18cab72b, type: 3}
+    Volume: 1
+  - Name: LowAttackMiss
+    Clip: {fileID: 8300000, guid: 17c6c789aadb1474b8bf3d6f415daa6f, type: 3}
+    Volume: 1
+  - Name: MiddleAttackMiss
+    Clip: {fileID: 8300000, guid: f62ffd1865d50ef4498fbcc7fa181d08, type: 3}
+    Volume: 1
+  - Name: Charge
+    Clip: {fileID: 8300000, guid: 0849f8d04b3b44741add2cdd09f2d3c4, type: 3}
+    Volume: 1
+  - Name: HighChargeAttack
+    Clip: {fileID: 8300000, guid: 4e33a98d40cf4934ca30b8051ce634f0, type: 3}
+    Volume: 1
+  - Name: LowChargeAttack
+    Clip: {fileID: 8300000, guid: 64b001bb0deb68d4384cc657e71f1c5d, type: 3}
+    Volume: 1
+  - Name: Dash
+    Clip: {fileID: 8300000, guid: ff59298d88b714941b0a3ee918661fdb, type: 3}
+    Volume: 1

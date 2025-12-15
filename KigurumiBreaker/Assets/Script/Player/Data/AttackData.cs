@@ -74,6 +74,13 @@ public class Attack
     [SerializeField] private int HitStopFrame;
     [Header("Šg‘å‚ğs‚¤•”ˆÊ")]
     [SerializeField] private List<ScaleAttackPart> ScaleAttackParts;
+    [Header("UŒ‚‚ğo‚µ‚½‚Æ‚«‚Ì‰¹")]
+    [SerializeField] private SoundID AttackSoundID;
+    [Header("UŒ‚‚ªƒqƒbƒg‚µ‚½‚Æ‚«‚Ì‰¹")]
+    [SerializeField] private SoundID HitSoundID;
+    [Header("UŒ‚‚ª‹óU‚è‚µ‚½‚Æ‚«‚Ì‰¹")]
+    [SerializeField] private SoundID MissSoundID;
+
 
     // “Ç‚İæ‚èê—pƒvƒƒpƒeƒB
 
@@ -96,4 +103,7 @@ public class Attack
     public CameraMove.ShakeKind cameraShakeKind => CameraShakeKind;
     public int hitStopFrame => HitStopFrame;
     public List<ScaleAttackPart> scaleAttackParts => ScaleAttackParts;
+    public SoundID attackSoundID => AttackSoundID;
+    public SoundID hitSoundID => HitSoundID;
+    public SoundID missSoundID => MissSoundID;
 }

@@ -1,9 +1,19 @@
 ﻿public enum SoundID
 {
+    None,
     ChargeAttackSE,
     ChargeSE,
     FirstAttack,
     SecondAttack,
     ThirdAttack,
     Death,
+    LowAttackHit,
+    MiddleAttackHit,
+    HighAttackHit,
+    LowAttackMiss,
+    MiddleAttackMiss,
+    Charge,
+    HighChargeAttack,
+    LowChargeAttack,
+    Dash,
 }
