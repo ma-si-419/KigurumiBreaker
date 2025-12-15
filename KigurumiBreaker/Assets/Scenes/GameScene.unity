@@ -978,6 +978,7 @@ GameObject:
   - component: {fileID: 904377484}
   - component: {fileID: 904377483}
   - component: {fileID: 904377482}
+  - component: {fileID: 904377485}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -1115,6 +1116,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &904377485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904377481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e171e7776960f4a934323a3848632f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: 0e4189f5342fb334a8b15bad931e1494, type: 2}
+  bgmSource: {fileID: 904377483}
+  seSource: {fileID: 904377483}
+  audioDatabase: {fileID: 11400000, guid: 3f79781d0fae33242b3cc0989647e8bc, type: 2}
+  masterSlider: {fileID: 0}
+  bgmSlider: {fileID: 0}
+  seSlider: {fileID: 0}
 --- !u!1001 &925037286
 PrefabInstance:
   m_ObjectHideFlags: 0

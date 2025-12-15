@@ -157,6 +157,7 @@ public class PlayerAttack : MonoBehaviour
 
             // Œø‰Ê‰¹‚ğÄ¶‚·‚é
             AudioManager.Instance.PlaySE(_attackData.hitSoundID);
+            _isHitEnemy = true;
 
 
         }
