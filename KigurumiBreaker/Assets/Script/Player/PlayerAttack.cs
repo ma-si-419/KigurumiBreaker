@@ -25,6 +25,8 @@ public class PlayerAttack : MonoBehaviour
         public int hitStopFrame;
         public bool isWeakAttack;
         public bool isHitDelete;
+        public SoundID hitSoundID;
+        public SoundID missSoundID;
     }
 
     private GameObject _camera; // カメラオブジェクトの参照
@@ -35,9 +37,7 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 _moveVec = Vector3.zero;
 
-    private Sprite _damageNumberSprite;
-
-    private int _damageNumberScale;
+    private bool _isHitEnemy = false;
 
     [SerializeField] private BattleManager _battleManager;
 
@@ -64,6 +64,12 @@ public class PlayerAttack : MonoBehaviour
         if (_attackLifeTime <= 0)
         {
             _battleManager.GetComponent<BattleManager>().RemovePlayerAttack(this.gameObject);
+
+            // もし敵に当たっていなかったらミス音を鳴らす
+            if (!_isHitEnemy && _attackData.missSoundID != SoundID.None)
+            {
+                AudioManager.Instance.PlaySE(_attackData.missSoundID);
+            }
 
             //攻撃判定の寿命が来たら消す
             Destroy(this.gameObject);
@@ -95,13 +101,6 @@ public class PlayerAttack : MonoBehaviour
         _attackLifeTime = _attackData.attackLifeTime;
         _damage = _attackData.damage;
     }
-
-    public void SetDamageNumberSprite(Sprite sprite,int scale)
-    {
-        _damageNumberSprite = sprite;
-        _damageNumberScale = scale;
-    }
-
 
     public float GetDamage()
     {
@@ -155,6 +154,9 @@ public class PlayerAttack : MonoBehaviour
             // 敵とぶつかった地点にダメージ数字を出す
             Vector3 damageNumberPos = other.ClosestPoint(this.transform.position);
             _battleManager.CreateDamageUi(damageNumberPos, (int)_attackData.damage);
+
+            // 効果音を再生する
+            AudioManager.Instance.PlaySE(_attackData.hitSoundID);
 
 
         }

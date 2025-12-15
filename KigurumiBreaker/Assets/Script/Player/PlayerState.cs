@@ -412,6 +412,9 @@ public class PlayerState : Player<PlayerState>
                     Debug.Log("スキル発動" + _followSkillAttack);
                 }
             }
+
+            // 効果音を再生する
+            AudioManager.Instance.PlaySE(SoundID.Dash);
         }
         public override void OnUpdate()
         {
@@ -908,7 +911,7 @@ public class PlayerState : Player<PlayerState>
         {
             // Stateの情報を設定
             state.SetStateKind(PlayerState.StateKind.RANGEDATTACK);
-            // 攻撃する方向をジョイスティックの方向に設定
+            // 攻撃する方向をジョイスティックの方向に設定W
             if (state._moveInput.magnitude > state._playerData.moveInputLength)
             {
                 Vector3 attackDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
@@ -1031,6 +1034,9 @@ public class PlayerState : Player<PlayerState>
             state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
 
             _stateTime = 0;
+
+            // 効果音を再生する
+//            AudioManager.Instance.PlaySE(SoundID.Charge);
         }
         public override void OnUpdate()
         {
@@ -1180,6 +1186,9 @@ public class PlayerState : Player<PlayerState>
                 Destroy(_attackArea);
                 _attackArea = null;
             }
+
+            // 効果音を停止する
+//          AudioManager.Instance.StopSE(SoundID.Charge);
         }
     }
 
@@ -2129,6 +2138,10 @@ public class PlayerState : Player<PlayerState>
         // 攻撃がぶつかっても消えないかどうかを設定
         attackData.isHitDelete = false;
 
+        // 効果音を設定
+        attackData.hitSoundID = data.hitSoundID;
+        attackData.missSoundID = data.missSoundID;
+
         // もし弱攻撃ならば
         if (data.attackKind == Attack.AttackType.WeakAttack)
         {
@@ -2159,6 +2172,12 @@ public class PlayerState : Player<PlayerState>
 
         // 攻撃の向きを設定
         attackObject.transform.forward = transform.forward;
+
+        // 攻撃を出すときの効果音があれば再生
+        if (data.attackSoundID != SoundID.None)
+        {
+            AudioManager.Instance.PlaySE(data.attackSoundID);
+        }
 
         // 攻撃オブジェクトをバトルマネージャーに登録
         _battleManager.AddPlayerAttack(attackObject);
