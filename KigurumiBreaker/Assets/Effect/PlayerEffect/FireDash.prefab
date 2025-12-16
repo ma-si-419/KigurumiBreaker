@@ -31549,6 +31549,7 @@ GameObject:
   - component: {fileID: 4028046617385228427}
   - component: {fileID: -3927376083901649043}
   - component: {fileID: 6948041134982475431}
+  - component: {fileID: -8658006151797003421}
   m_Layer: 0
   m_Name: FireDash
   m_TagString: Untagged
@@ -36668,6 +36669,21 @@ MonoBehaviour:
   _effect: {fileID: 0}
   _isEffectPop: 0
 --- !u!114 &6948041134982475431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9042584859056320878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed48504e32f70aa48a2c6a549de9f5ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lifeTime: 99999
+  _effect: {fileID: 0}
+  _isEffectPop: 0
+--- !u!114 &-8658006151797003421
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

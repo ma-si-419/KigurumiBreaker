@@ -43,6 +43,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float DeathSlowTime;
     [Header("死亡時のスローのタイムスケール")]
     [SerializeField] private float DeathTimeScale;
+    [Header("死亡時のエフェクト")]
+    [SerializeField] private GameObject DeathEffectPrefab;
 
     // 読み取り専用
     public float moveInputLength => MoveInputLength;
@@ -64,5 +66,5 @@ public class PlayerData : ScriptableObject
     public float chargeAttackPartScaleDownRatePerFrame => ChargeAttackPartScaleDownRatePerFrame;
     public float deathSlowTime => DeathSlowTime;
     public float deathTimeScale => DeathTimeScale;
-
+    public GameObject deathEffectPrefab => DeathEffectPrefab;
 }
