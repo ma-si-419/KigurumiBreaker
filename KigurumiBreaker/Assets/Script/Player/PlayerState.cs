@@ -1036,7 +1036,7 @@ public class PlayerState : Player<PlayerState>
             _stateTime = 0;
 
             // Œø‰Ê‰¹‚ğÄ¶‚·‚é
-//            AudioManager.Instance.PlaySE(SoundID.Charge);
+            //            AudioManager.Instance.PlaySE(SoundID.Charge);
         }
         public override void OnUpdate()
         {
@@ -1188,7 +1188,7 @@ public class PlayerState : Player<PlayerState>
             }
 
             // Œø‰Ê‰¹‚ğ’â~‚·‚é
-//          AudioManager.Instance.StopSE(SoundID.Charge);
+            //          AudioManager.Instance.StopSE(SoundID.Charge);
         }
     }
 
@@ -1258,7 +1258,10 @@ public class PlayerState : Player<PlayerState>
                 shiftVec.y = 0;
                 attackPos += shiftVec;
 
-                state._currentAttack.transform.position = attackPos;
+                if (state._currentAttack)
+                {
+                    state._currentAttack.transform.position = attackPos;
+                }
             }
             // UŒ‚‚Ìd’¼‚Ì‚ ‚Æ
             else if (_currentFrame > _currentAttackData.stunFrame)
