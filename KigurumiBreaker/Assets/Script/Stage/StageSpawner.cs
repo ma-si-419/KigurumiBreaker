@@ -61,6 +61,10 @@ public class StageSpawner : MonoBehaviour
     [Header("バトルマネージャー")]
     [SerializeField] private BattleManager _battleManager;
 
+    [Header("ムービーマネージャー")]
+    [SerializeField] private MovieManager _movieManager;
+
+
     private int _currentStageIndex = 0;
     private GameObject _currentStageInstance;
     private int _waveStageIndex = 0;
@@ -112,24 +116,41 @@ public class StageSpawner : MonoBehaviour
     {
         if (index < 0 || index >= _stageSets.Length) return;
 
+        StageSet nextStage = _stageSets[index];
+        bool isBossStage = IsBossStage(nextStage.stageKind);
+
         if (isFirstLoad)
         {
-            // 初回はフェードをスキップ
             isFirstLoad = false;
-            SpawnStageInternal(index);
+
+            if (isBossStage)
+            {
+                PlayBossMovieThenSpawn(index);
+            }
+            else
+            {
+                SpawnStageInternal(index);
+            }
         }
         else
         {
-            // 2回目以降はフェードアウト → ステージ切り替え → フェードイン
             FadeOut(1.0f, () =>
             {
-                SpawnStageInternal(index);
-                FadeIn(1.0f);
+                if (isBossStage)
+                {
+                    PlayBossMovieThenSpawn(index);
+                }
+                else
+                {
+                    SpawnStageInternal(index);
+                    FadeIn(1.0f);
+                }
             });
         }
 
         _currentStageIndex = index;
     }
+
 
     // 実際のステージ生成処理
     private void SpawnStageInternal(int index)
@@ -305,6 +326,40 @@ public class StageSpawner : MonoBehaviour
 
         fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, targetAlpha);
         onComplete?.Invoke();
+    }
+
+    private bool IsBossStage(StageSet.StageKind kind)
+    {
+        return kind == StageSet.StageKind.Forest_Boss
+            || kind == StageSet.StageKind.Cave_Boss;
+    }
+    private string GetBossMovieKey(StageSet.StageKind kind)
+    {
+        switch (kind)
+        {
+            case StageSet.StageKind.Forest_Boss:
+                return "ForestBossMovie";
+
+            case StageSet.StageKind.Cave_Boss:
+                return "CaveBossMovie";
+
+            default:
+                return string.Empty;
+        }
+    }
+    private void PlayBossMovieThenSpawn(int index)
+    {
+        StageSet stage = _stageSets[index];
+        string movieKey = GetBossMovieKey(stage.stageKind);
+
+        _movieManager.PlayMovie(movieKey);
+
+        // ムービー終了後に呼ばれる
+        _movieManager.OnMovieFinished = () =>
+        {
+            SpawnStageInternal(index);
+            FadeIn(1.0f);
+        };
     }
 
 
