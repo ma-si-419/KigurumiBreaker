@@ -8,6 +8,10 @@ public class SoundData
     public AudioClip Clip; // 再生する AudioClip
     [Range(0f, 1f)] public float Volume = 1f; // 個別音量
 
+    [Header("再生時間（秒）")]
+    [Tooltip("0以下なら最後まで再生")]
+    public float PlayTime = 0f;          
+
     // 読み取り専用プロパティ
     public string name => Name;
     public AudioClip clip => Clip;
