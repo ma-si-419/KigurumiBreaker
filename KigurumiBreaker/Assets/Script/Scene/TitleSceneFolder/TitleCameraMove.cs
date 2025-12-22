@@ -64,7 +64,7 @@ public class TitleCameraMove : MonoBehaviour
 
 
             //‰ñ“]”‚ª–‚½‚È‚¢‚ÍˆÚ“®‚³‚¹‚é
-            if (_stopCount != 1)
+            if (_stopCount != 2)
             {
                 //ƒvƒŒƒCƒ„[‚É‹ß‚Ã‚­‚Ü‚ÅˆÚ“®‚³‚¹‚é
                 transform.position = Vector3.MoveTowards(transform.position, lookAt + transform.forward * _titleCameraData.distance, _cameraMoveSpeed);
@@ -114,6 +114,6 @@ public class TitleCameraMove : MonoBehaviour
             _isCountFrag = true;
         }
 
-        //Debug.Log(_stopCount);
+        Debug.Log(isStop);
     }
 }

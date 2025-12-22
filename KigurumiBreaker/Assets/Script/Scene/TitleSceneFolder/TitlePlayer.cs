@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TitlePlayer : MonoBehaviour
 {
-    //TitleCameraMove cameramove;
+    TitleCameraMove cameramove;
     [SerializeField] private TitleCameraMove _cameraMove;
     [SerializeField] private float _moveSpped = 0.02f;
     private Animator _anim = null;
@@ -14,9 +14,9 @@ public class TitlePlayer : MonoBehaviour
     {
         _anim = GetComponent<Animator>();
         //Idle状態を解除
-        //_anim.SetBool("Idle", false);
+        _anim.SetBool("Idle", false);
 
-        //cameramove = GetComponent<TitleCameraMove>();
+        cameramove = GetComponent<TitleCameraMove>();
 
         //アニメーションスピード設定
         _anim.SetFloat("Speed", _moveSpped);
@@ -30,7 +30,7 @@ public class TitlePlayer : MonoBehaviour
             //アニメーションを戻す
             _anim.SetFloat("Speed", 1.0f);
 
-            Debug.Log("アニメーションが戻る");
+            //Debug.Log("アニメーションが戻る");
         }
     }
 }
