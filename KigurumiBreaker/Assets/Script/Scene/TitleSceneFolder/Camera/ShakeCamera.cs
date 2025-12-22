@@ -15,7 +15,7 @@ public class ShakeCamera : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
 
-            Debug.Log(duration);
+            //Debug.Log(duration);
         }
 
         transform.position = originalPosition;

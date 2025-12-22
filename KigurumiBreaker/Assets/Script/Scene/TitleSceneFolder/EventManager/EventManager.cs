@@ -20,47 +20,47 @@ public class EventManager : MonoBehaviour
             //カメラを揺らす
             StartCoroutine(_shakeCamera.MyShake(0.5f, 0.2f));
            
-            Debug.Log("シェイク");
+            //Debug.Log("シェイク");
         }
 
         //なんでもボタンを押したら
         //if()
         //壁にヒビが入る前にボタンを押すとムービーを飛ばせる
-        if(!_breakBlock.breakMoment)
-        {
-            //ムービーを飛ばすコルーチンを呼ぶ
-            StartCoroutine(FadeCoroutine());
-        }
+        //if(!_breakBlock.breakMoment)
+        //{
+        //    //ムービーを飛ばすコルーチンを呼ぶ
+        //    StartCoroutine(FadeCoroutine());
+        //}
     }
 
     //フェードのコルーチン
-    private IEnumerator FadeCoroutine()
-    {
-        //フェードアウト
-        yield return StartCoroutine(MyFade(1f));
+    //private IEnumerator FadeCoroutine()
+    //{
+    //    //フェードアウト
+    //    yield return StartCoroutine(MyFade(1f));
 
-        _titleCameraMove.isStop = true;
+    //    _titleCameraMove.isStop = true;
 
-        //フェードイン
-        if (_fadeCanvas == null)
-        {
-            yield return StartCoroutine(MyFade(0f));
-        }
-    }
+    //    //フェードイン
+    //    if (_fadeCanvas == null)
+    //    {
+    //        yield return StartCoroutine(MyFade(0f));
+    //    }
+    //}
 
-    private IEnumerator MyFade(float targetAlpha)
-    {
-        //現在のアルファ値
-        float startAlpha = _fadeCanvas.alpha;    //アルファ値を取得
-        float time = 0f;
+    //private IEnumerator MyFade(float targetAlpha)
+    //{
+    //    //現在のアルファ値
+    //    float startAlpha = _fadeCanvas.alpha;    //アルファ値を取得
+    //    float time = 0f;
 
-        while(time < _fadeSpeed)
-        {
-            time += Time.unscaledDeltaTime;
-            _fadeCanvas.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / _fadeSpeed);
-            yield return null;
-        }
+    //    while(time < _fadeSpeed)
+    //    {
+    //        time += Time.unscaledDeltaTime;
+    //        _fadeCanvas.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / _fadeSpeed);
+    //        yield return null;
+    //    }
 
-        _fadeCanvas.alpha = targetAlpha; 
-    }
+    //    _fadeCanvas.alpha = targetAlpha; 
+    //}
 }
