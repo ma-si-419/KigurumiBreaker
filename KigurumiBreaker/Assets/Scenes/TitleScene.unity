@@ -1059,7 +1059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraMove: {fileID: 678120960}
-  _moveSpped: 0.1
+  _moveSpped: 0.15
 --- !u!1 &402054209 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7749953497632866695, guid: 746b9eaf27805a6419903660279ae3dd, type: 3}
@@ -1639,7 +1639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 372610900}
   _titleCameraData: {fileID: 11400000, guid: b4ef6ee62f3156b49a0316bf3c667856, type: 2}
-  _stopRotation: 2
+  _stopRotation: 1
   isStop: 0
   _gravityScale: 20
 --- !u!1001 &834679196
@@ -1672,11 +1672,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 746b9eaf27805a6419903660279ae3dd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 496.0809
+      value: 496.081
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 746b9eaf27805a6419903660279ae3dd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 440.09747
+      value: 439.947
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 746b9eaf27805a6419903660279ae3dd, type: 3}
       propertyPath: m_LocalRotation.w
