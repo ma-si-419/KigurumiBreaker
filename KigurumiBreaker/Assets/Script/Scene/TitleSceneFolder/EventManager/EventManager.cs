@@ -11,6 +11,8 @@ public class EventManager : MonoBehaviour
     [SerializeField] private BreakBlock _breakBlock;
 
     [SerializeField] private float _fadeSpeed = 0.8f;
+
+    private bool _oneButton = false;        //ボタンを一回反応させる
     // Update is called once per frame
     void Update()
     {
@@ -24,43 +26,58 @@ public class EventManager : MonoBehaviour
         }
 
         //なんでもボタンを押したら
-        //if()
-        //壁にヒビが入る前にボタンを押すとムービーを飛ばせる
-        //if(!_breakBlock.breakMoment)
-        //{
-        //    //ムービーを飛ばすコルーチンを呼ぶ
-        //    StartCoroutine(FadeCoroutine());
-        //}
+        if(!_oneButton)
+        {
+            if(Input.GetButton("Submit"))
+            {
+                //壁にヒビが入る前にボタンを押すとムービーを飛ばせる
+                if (!_breakBlock.breakMoment)
+                {
+                    //ムービーを飛ばすコルーチンを呼ぶ
+                    StartCoroutine(FadeCoroutine());
+                }
+                //一回だけ押す
+                _oneButton = true;
+            }
+            
+        }
+        
     }
 
     //フェードのコルーチン
-    //private IEnumerator FadeCoroutine()
-    //{
-    //    //フェードアウト
-    //    yield return StartCoroutine(MyFade(1f));
+    private IEnumerator FadeCoroutine()
+    {
+        //フェードアウト
+        yield return StartCoroutine(MyFade(1f));
 
-    //    _titleCameraMove.isStop = true;
+        _titleCameraMove.isStop = true;
 
-    //    //フェードイン
-    //    if (_fadeCanvas == null)
-    //    {
-    //        yield return StartCoroutine(MyFade(0f));
-    //    }
-    //}
+        //fadeCanvasを再取得
+        if(_fadeCanvas == null)
+        {
+            _fadeCanvas = FindObjectOfType<CanvasGroup>();
+        }
 
-    //private IEnumerator MyFade(float targetAlpha)
-    //{
-    //    //現在のアルファ値
-    //    float startAlpha = _fadeCanvas.alpha;    //アルファ値を取得
-    //    float time = 0f;
+        //フェードイン
+        if (_fadeCanvas != null)
+        {
+            yield return StartCoroutine(MyFade(0f));
+        }
+    }
 
-    //    while(time < _fadeSpeed)
-    //    {
-    //        time += Time.unscaledDeltaTime;
-    //        _fadeCanvas.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / _fadeSpeed);
-    //        yield return null;
-    //    }
+    private IEnumerator MyFade(float targetAlpha)
+    {
+        //現在のアルファ値
+        float startAlpha = _fadeCanvas.alpha;    //アルファ値を取得
+        float time = 0f;
 
-    //    _fadeCanvas.alpha = targetAlpha; 
-    //}
+        while (time < _fadeSpeed)
+        {
+            time += Time.unscaledDeltaTime;
+            _fadeCanvas.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / _fadeSpeed);
+            yield return null;
+        }
+
+        _fadeCanvas.alpha = targetAlpha; //目標のアルファ値にする
+    }
 }

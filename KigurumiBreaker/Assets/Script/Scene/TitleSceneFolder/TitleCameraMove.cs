@@ -103,11 +103,11 @@ public class TitleCameraMove : MonoBehaviour
                 _isCountFrag = false;
             }
             //‰ñ“]”‚ª1‰ñ‚Ì‚ÌƒJƒƒ‰‘¬“x’²®
-            if (_stopCount == 1)
-            {
-                _cameraRotateSpeed = 1.5f;
-                _cameraMoveSpeed = 1.0f;
-            }
+            //if (_stopCount == 1)
+            //{
+            //    _cameraRotateSpeed = 1.5f;
+            //    _cameraMoveSpeed = 1.0f;
+            //}
         }
         else
         {
