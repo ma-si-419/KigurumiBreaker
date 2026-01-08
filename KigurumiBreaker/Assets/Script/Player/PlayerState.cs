@@ -2042,7 +2042,7 @@ public class PlayerState : Player<PlayerState>
         PlayerAttack.PlayerAttackData attackData = new PlayerAttack.PlayerAttackData();
 
         // ダメージの値を設定
-        attackData.damage = data.damage * _playerStatus.attackPower * _passiveStatus.attackPowerAddRate;
+        attackData.damage = data.damage * _playerStatus.attackPower * (1 + _passiveStatus.attackPowerAddRate);
 
         // 攻撃の大きさを設定
         attackObject.transform.localScale = new Vector3(scale, scale, scale);
