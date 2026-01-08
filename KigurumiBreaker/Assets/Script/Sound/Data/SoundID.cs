@@ -32,4 +32,5 @@
     Beam,
     SphereShot,
     敵が攻撃するときの風切り,
+    Title,
 }
