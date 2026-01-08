@@ -12,7 +12,10 @@ public class EventManager : MonoBehaviour
 
     [SerializeField] private float _fadeSpeed = 0.8f;
 
-    private bool _oneButton = false;        //ボタンを一回反応させる
+    private bool _oneButton = false;        //ボタンを一回反応させる    
+
+    public bool EventButton = false;               //イベント完了変数
+
     // Update is called once per frame
     void Update()
     {
@@ -21,14 +24,15 @@ public class EventManager : MonoBehaviour
         {
             //カメラを揺らす
             StartCoroutine(_shakeCamera.MyShake(0.5f, 0.2f));
-           
-            //Debug.Log("シェイク");
+
+            //BGMを鳴らす
+            AudioManager.Instance.PlaySE(SoundID.Title);
         }
 
         //なんでもボタンを押したら
         if(!_oneButton)
         {
-            if(Input.GetButton("Submit"))
+            if(Input.GetButton("Submit") || Input.GetKey(KeyCode.A))
             {
                 //壁にヒビが入る前にボタンを押すとムービーを飛ばせる
                 if (!_breakBlock.breakMoment)
@@ -51,6 +55,7 @@ public class EventManager : MonoBehaviour
         yield return StartCoroutine(MyFade(1f));
 
         _titleCameraMove.isStop = true;
+        _breakBlock.breakMoment = true;
 
         //fadeCanvasを再取得
         if(_fadeCanvas == null)
@@ -61,6 +66,10 @@ public class EventManager : MonoBehaviour
         //フェードイン
         if (_fadeCanvas != null)
         {
+            //イベント完了にする
+            EventButton = true;
+
+            //ムービースキップ後のフェードイン
             yield return StartCoroutine(MyFade(0f));
         }
     }

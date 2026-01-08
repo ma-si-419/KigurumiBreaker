@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class TitleSceneController : MonoBehaviour
 {
+    [SerializeField] private EventManager _eventManager;    //イベントマネージャー
+
     private bool _oneBotton;      //ボタンを一回だけ
 
     //最初に呼ばれる
@@ -20,11 +22,11 @@ public class TitleSceneController : MonoBehaviour
     public void OnStartGame()
     {
 
-        if (!_oneBotton)
+        if (!_oneBotton && _eventManager.EventButton)
         {
             //ゲームシーンへ
-            //BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.SelectScene);
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
+            //BaseSceneController.instance.ChangeSceneWithFade(SceneType.SelectScene);
 
             Debug.Log(_oneBotton);
 
