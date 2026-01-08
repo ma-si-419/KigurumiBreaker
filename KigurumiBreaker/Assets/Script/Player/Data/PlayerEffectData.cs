@@ -9,8 +9,11 @@ public class PlayerEffectData : ScriptableObject
     [SerializeField] private GameObject SpecialAttackChargeEffectPrefab;
     [Header("特殊攻撃のエフェクト")]
     [SerializeField] private GameObject SpecialAttackEffectPrefab;
+    [Header("ダッシュのエフェクト")]
+    [SerializeField] private GameObject DashEffectPrefab;
 
     // 読み取り専用
     public GameObject specialAttackChargeEffectPrefab => SpecialAttackChargeEffectPrefab;
     public GameObject specialAttackEffectPrefab => SpecialAttackEffectPrefab;
+    public GameObject dashEffectPrefab => DashEffectPrefab;
 }
