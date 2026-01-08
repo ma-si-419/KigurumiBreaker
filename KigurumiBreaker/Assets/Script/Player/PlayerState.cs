@@ -55,14 +55,8 @@ public class PlayerState : Player<PlayerState>
 
         // 最大体力上昇値
         public int maxHpAddNum;
-        // 通常攻撃のダメージ上昇率(%)
-        public float lowAttackDamageAddRate;
-        // チャージ攻撃のダメージ上昇率(%)
-        public float chargeAttackDamageAddRate;
-        // 遠距離攻撃のダメージ上昇率(%)
-        public float rangedAttackDamageAddRate;
-        // 遠距離攻撃の弾数増加数(個)
-        public int rangedAttackBulletAddNum;
+        // 攻撃力上昇値
+        public float attackPowerAddRate;
         // 移動速度上昇率(%)
         public float moveSpeedAddRate;
         // 回避可能回数増加数(回)
@@ -2047,81 +2041,8 @@ public class PlayerState : Player<PlayerState>
         // 攻撃のデータ
         PlayerAttack.PlayerAttackData attackData = new PlayerAttack.PlayerAttackData();
 
-        // 攻撃にスキルの効果を乗せる
-        switch (data.attackKind)
-        {
-            case Attack.AttackType.LowAttack:
-                if (_playerSkill.lowAttackSkillData != null)
-                {
-                    // ダメージにスキルのダメージ加算率を加算
-                    attackData.damage = data.damage + (int)(data.damage * (_playerSkill.lowAttackSkillData.damageAddRate / 100));
-
-                    // ノックバックを追加
-                    attackData.knockBackPower = _playerSkill.lowAttackSkillData.addKnockBackPower;
-
-                    // 当たり判定のサイズを変更
-                    scale = data.scale + data.scale * (_playerSkill.lowAttackSkillData.attackRangeAddRate / 100);
-
-                    // デバフを追加
-                    attackData.debuffType = _playerSkill.lowAttackSkillData.debuffType;
-
-                    // 追撃を追加
-                    attackData.chaseAttack = _playerSkill.lowAttackSkillData.chaseAttack;
-                }
-                // ない場合は通常攻撃のデータをそのまま使用
-                else
-                {
-                    attackData.damage = data.damage;
-                }
-
-                // パッシブスキル分の効果を追加
-
-                // 通常攻撃ダメージ増加率分の効果を追加
-                attackData.damage = attackData.damage + (int)(data.damage * (_passiveStatus.lowAttackDamageAddRate / 100));
-
-                break;
-
-            case Attack.AttackType.ChargeAttack:
-                if (_playerSkill.chargeAttackSkillData != null)
-                {
-                    // ダメージにスキルのダメージ加算率を加算
-                    attackData.damage = data.damage + (data.damage * (_playerSkill.chargeAttackSkillData.damageAddRate / 100));
-
-                    // ノックバックを追加
-                    attackData.knockBackPower = _playerSkill.chargeAttackSkillData.addKnockBackPower;
-
-                    // 当たり判定のサイズを変更
-                    scale = data.scale + data.scale * (_playerSkill.chargeAttackSkillData.attackRangeAddRate / 100);
-
-                    // デバフを追加
-                    attackData.debuffType = _playerSkill.chargeAttackSkillData.debuffType;
-
-                    // 追撃を追加
-                    attackData.chaseAttack = _playerSkill.chargeAttackSkillData.chaseAttack;
-
-                    // 跳ね返すかどうかを追加
-                    attackData.isReflect = _playerSkill.chargeAttackSkillData.isReflect;
-                }
-                // ない場合は通常の攻撃のデータをそのまま使用
-                else
-                {
-                    attackData.damage = data.damage;
-                }
-
-                // パッシブスキル分の効果を追加
-
-                // チャージ攻撃ダメージ増加率分の効果を追加
-                attackData.damage = attackData.damage + (int)(data.damage * (_passiveStatus.chargeAttackDamageAddRate / 100));
-
-                break;
-
-            case Attack.AttackType.SpecialAttack:
-                // 特殊攻撃はスキルの効果を乗せない
-                attackData.damage = data.damage;
-                break;
-        }
-        // ステータスの値を設定
-        attackData.damage = attackData.damage * _playerStatus.attackPower;
+        // ダメージの値を設定
+        attackData.damage = data.damage * _playerStatus.attackPower * _passiveStatus.attackPowerAddRate;
 
         // 攻撃の大きさを設定
         attackObject.transform.localScale = new Vector3(scale, scale, scale);
@@ -2225,11 +2146,6 @@ public class PlayerState : Player<PlayerState>
             attackData.damage = data.damage;
             attackData.speedRate = 1.0f;
         }
-
-        // パッシブスキル分の効果を追加
-
-        // 遠距離攻撃ダメージ増加率分の効果を追加
-        attackData.damage = attackData.damage + (int)(data.damage * (_passiveStatus.rangedAttackDamageAddRate / 100));
 
         // ステータスの値を設定
         attackData.damage = (int)((float)attackData.damage * _playerStatus.attackPower);
@@ -2384,25 +2300,13 @@ public class PlayerState : Player<PlayerState>
                         case PassiveSkillData.PassiveStatusKind.MaxHp:
                             _passiveStatus.maxHpAddNum += (int)status.addNum;
                             break;
-                        // 通常攻撃ダメージ
-                        case PassiveSkillData.PassiveStatusKind.LowAttackDamage:
-                            _passiveStatus.lowAttackDamageAddRate += status.addNum;
-                            break;
-                        // チャージ攻撃ダメージ
-                        case PassiveSkillData.PassiveStatusKind.ChargeAttackDamage:
-                            _passiveStatus.chargeAttackDamageAddRate += status.addNum;
-                            break;
-                        // 遠距離攻撃ダメージ
-                        case PassiveSkillData.PassiveStatusKind.RangedAttackDamage:
-                            _passiveStatus.rangedAttackDamageAddRate += status.addNum;
+                        // 攻撃力
+                        case PassiveSkillData.PassiveStatusKind.AttackPower:
+                            _passiveStatus.attackPowerAddRate += status.addNum;
                             break;
                         // 被ダメージカット率
                         case PassiveSkillData.PassiveStatusKind.DamageCutRate:
                             _passiveStatus.damageCutRateAddRate += status.addNum;
-                            break;
-                        // 弾数
-                        case PassiveSkillData.PassiveStatusKind.RangedAttackBullet:
-                            _passiveStatus.rangedAttackBulletAddNum += (int)status.addNum;
                             break;
                         // ダッシュ回数
                         case PassiveSkillData.PassiveStatusKind.DashCount:
@@ -2438,17 +2342,6 @@ public class PlayerState : Player<PlayerState>
         if (_passiveStatus.maxHpAddNum > _lastPassiveStatus.maxHpAddNum)
         {
             _nowHp = _nowHp + (_passiveStatus.maxHpAddNum - _lastPassiveStatus.maxHpAddNum);
-        }
-
-        // 弾数の最大値が増えていたらその分弾を補充する
-        if (_passiveStatus.rangedAttackBulletAddNum > _lastPassiveStatus.rangedAttackBulletAddNum)
-        {
-            _nowBulletNum = _nowBulletNum + (_passiveStatus.rangedAttackBulletAddNum - _lastPassiveStatus.rangedAttackBulletAddNum);
-            // 最大値を超えないようにする
-            if (_nowBulletNum > GetMaxBulletNum())
-            {
-                _nowBulletNum = GetMaxBulletNum();
-            }
         }
 
         _lastPassiveStatus = _passiveStatus;

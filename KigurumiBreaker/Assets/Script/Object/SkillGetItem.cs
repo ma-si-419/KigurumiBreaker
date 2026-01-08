@@ -29,6 +29,8 @@ public class SkillGetItem : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            _isStayPlayer = true;
+
             // RBボタンが押されたらスキル選択画面へ
             if (_isButtonDown)
             {
@@ -38,6 +40,14 @@ public class SkillGetItem : MonoBehaviour
                 inputActions.Disable();
                 Destroy(gameObject);
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            _isStayPlayer = false;
         }
     }
 
@@ -53,6 +63,6 @@ public class SkillGetItem : MonoBehaviour
 
     private void GetItem(InputAction.CallbackContext constext)
     {
-        _isButtonDown = true;
+        if (_isStayPlayer) _isButtonDown = true;
     }
 }

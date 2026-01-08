@@ -13,10 +13,7 @@ public class PassiveSkillData
     public enum PassiveStatusKind
     {
         MaxHp,
-        LowAttackDamage,
-        ChargeAttackDamage,
-        RangedAttackDamage,
-        RangedAttackBullet,
+        AttackPower,
         MoveSpeed,
         DashCount,
         DamageCutRate,
