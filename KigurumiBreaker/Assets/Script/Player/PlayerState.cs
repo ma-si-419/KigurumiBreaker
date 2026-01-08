@@ -364,8 +364,11 @@ public class PlayerState : Player<PlayerState>
         // 回避方向
         private Vector3 _dodgeDirection;
 
-        // 回避中追随するスキルオブジェクト
-        private GameObject _followSkillAttack;
+        // 追随するエフェクトオブジェクト
+        private GameObject _effect;
+
+        // 回避速度
+        private float _dodgeSpeed;
 
         public DodgeState(PlayerState next) : base(next)
         {
@@ -391,24 +394,20 @@ public class PlayerState : Player<PlayerState>
                 _dodgeDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
                 _dodgeDirection = state.CalculateMoveDirection(_dodgeDirection);
             }
-            if (state._playerSkill.dashSkillData != null)
-            {
-                if (state._playerSkill.dashSkillData.startAttack != null)
-                {
-                    // ダッシュ開始時に出すスキルを出す
-                    state.CreateSkillAttack(state._playerSkill.dashSkillData.startAttack);
-                }
 
-                // 回避中に追随するスキルがあれば出す
-                if (state._playerSkill.dashSkillData.followAttack != null)
-                {
-                    _followSkillAttack = state.CreateSkillAttack(state._playerSkill.dashSkillData.followAttack);
-                    Debug.Log("スキル発動" + _followSkillAttack);
-                }
+            if (state._playerEffectData.dashEffectPrefab != null)
+            {
+                _effect = GameObject.Instantiate(state._playerEffectData.dashEffectPrefab, state.transform.position, Quaternion.identity);
+                // 向いている方向に回転させる
+                _effect.transform.forward = _dodgeDirection;
+                _effect.transform.SetParent(state.transform);
             }
 
+            _dodgeSpeed = state._playerStatus.dodgeSpeed;
+            _dodgeSpeed *= (1.0f + state._passiveStatus.moveSpeedAddRate / 100.0f);
+
             // 効果音を再生する
-            AudioManager.Instance.PlaySE(SoundID.Dash);
+            //            AudioManager.Instance.PlaySE(SoundID.Dash);
         }
         public override void OnUpdate()
         {
@@ -427,7 +426,6 @@ public class PlayerState : Player<PlayerState>
                 if (part.scale > 1.0f)
                 {
                     float scale = part.scale;
-
 
                     scale -= state._playerData.chargeAttackPartScaleDownRatePerFrame;
 
@@ -457,45 +455,49 @@ public class PlayerState : Player<PlayerState>
                 return;
             }
 
-            // 移動処理
-            Vector3 dodgeVelocity = _dodgeDirection * state._playerStatus.dodgeSpeed;
-
-            // パッシブスキルによる移動速度上昇率を加算
-            dodgeVelocity *= (1.0f + state._passiveStatus.moveSpeedAddRate / 100.0f);
-
-            state._rigidbody.velocity = dodgeVelocity;
-
-            // スキル処理
-            if (state._playerSkill.dashSkillData != null)
+            // 最初の数フレームは回避入力を無効化
+            if (_dodgeTime == state._playerData.cancelDodgeCooldown)
             {
-                if (_dodgeTime % state._playerData.dodgeSkillInterval == 0)
+                state._isDodgeInput = false;
+            }
+
+            // エフェクトの位置と方向を更新
+            if (_effect != null)
+            {
+                _effect.transform.position = state.transform.position;
+
+                _effect.transform.forward = _dodgeDirection;
+            }
+
+            // 一定時間経過したら速度を減速させる
+            if (_dodgeTime >= state._playerData.dodgeTime - state._playerData.dodgeStopTime)
+            {
+                int leftTime = state._playerData.dodgeTime - _dodgeTime;
+                float speed = state._playerStatus.dodgeSpeed * ((float)leftTime / (float)state._playerData.dodgeStopTime);
+
+                _dodgeSpeed = speed;
+
+                // クランプ
+                _dodgeSpeed = Mathf.Max(_dodgeSpeed,state._playerStatus.moveSpeed);
+
+                // 回避入力があればこの時点でもう一度回避状態に遷移
+                if (state._isDodgeInput && state._dodgeCount < state._passiveStatus.dashCountAddNum)
                 {
-                    // 回避中に出すスキルを出す
-                    if (state._playerSkill.dashSkillData.onDashAttack != null)
-                    {
-                        state.CreateSkillAttack(state._playerSkill.dashSkillData.onDashAttack);
-                    }
+                    state._dodgeCount++;
+                    state._isDodgeInput = false;
+                    state.ChangeState(new DodgeState(state));
+                    return;
                 }
             }
 
-            // 追随するスキルオブジェクトがあれば位置を更新
-            if (_followSkillAttack != null)
-            {
-                _followSkillAttack.transform.position = state.transform.position;
-            }
+            // 移動処理
+            Vector3 dodgeVelocity = _dodgeDirection * _dodgeSpeed;
+
+            state._rigidbody.velocity = dodgeVelocity;
 
             // 一定時間経過したら待機状態に遷移
             if (_dodgeTime >= state._playerData.dodgeTime)
             {
-                if (state._playerSkill.dashSkillData != null)
-                {
-                    // 回避終了時に出すスキルを出す
-                    if (state._playerSkill.dashSkillData.endAttack != null)
-                    {
-                        state.CreateSkillAttack(state._playerSkill.dashSkillData.endAttack);
-                    }
-                }
-
                 // 回避入力があればもう一度回避状態に遷移
                 if (state._isDodgeInput && state._dodgeCount < state._passiveStatus.dashCountAddNum)
                 {
@@ -533,11 +535,10 @@ public class PlayerState : Player<PlayerState>
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
 
-            // 追随するスキルオブジェクトがあれば削除
-            if (_followSkillAttack != null)
+            // エフェクトを削除
+            if (_effect != null)
             {
-                state._battleManager.RemovePlayerAttack(_followSkillAttack);
-                GameObject.Destroy(_followSkillAttack);
+                GameObject.Destroy(_effect);
             }
 
             // 拡大している攻撃部位があれば元に戻す
@@ -2042,7 +2043,7 @@ public class PlayerState : Player<PlayerState>
         PlayerAttack.PlayerAttackData attackData = new PlayerAttack.PlayerAttackData();
 
         // ダメージの値を設定
-        attackData.damage = data.damage * _playerStatus.attackPower * (1 + _passiveStatus.attackPowerAddRate);
+        attackData.damage = data.damage * _playerStatus.attackPower * (1 + _passiveStatus.attackPowerAddRate / 100.0f);
 
         // 攻撃の大きさを設定
         attackObject.transform.localScale = new Vector3(scale, scale, scale);
