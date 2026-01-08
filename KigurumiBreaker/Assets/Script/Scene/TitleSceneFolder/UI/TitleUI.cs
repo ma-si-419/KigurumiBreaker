@@ -7,6 +7,8 @@ public class TitleUI : MonoBehaviour
 {
     [SerializeField] private GameObject _titleLogo;
     [SerializeField] private GameObject _titleButton;
+    [SerializeField] private GameObject _titleButtonRight;
+    [SerializeField] private GameObject _titleButtonLeft;
 
     [SerializeField] private BreakBlock _titleBreak;
 
@@ -22,6 +24,8 @@ public class TitleUI : MonoBehaviour
             //UIÇï\é¶Ç∑ÇÈ
             _titleLogo.SetActive(true);
             _titleButton.SetActive(true);
+            _titleButtonRight.SetActive(true);
+            _titleButtonLeft.SetActive(true);
 
             //ägëÂÇµÇΩèÛë‘Ç©ÇÁèkè¨Ç∑ÇÈ
             StartCoroutine(MyStartUI());
@@ -31,6 +35,8 @@ public class TitleUI : MonoBehaviour
             //UIÇîÒï\é¶Ç…Ç∑ÇÈ
             _titleLogo.SetActive(false);
             _titleButton.SetActive(false);
+            _titleButtonRight.SetActive(false);
+            _titleButtonLeft.SetActive(false);
         }
     }
 
