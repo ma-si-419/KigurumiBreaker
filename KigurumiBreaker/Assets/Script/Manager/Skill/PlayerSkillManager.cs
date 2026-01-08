@@ -162,12 +162,6 @@ public class PlayerSkillManager : MonoBehaviour
     }
     public void AddPassiveSkill(string skillName)
     {
-        // 同じ名前のパッシブスキルがすでにある場合は追加しない
-        if (_passiveSkillNameList.Contains(skillName))
-        {
-            return;
-        }
-
         // パッシブスキルを追加する
         _passiveSkillNameList.Add(skillName);
 

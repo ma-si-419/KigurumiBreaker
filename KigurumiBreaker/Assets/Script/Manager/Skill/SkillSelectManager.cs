@@ -290,8 +290,6 @@ public class SkillSelectManager : MonoBehaviour
 
                 loopCount++;
 
-                Debug.Log("スキル選択ループ回数: " + loopCount);
-
                 // 無限ループ防止
                 if (loopCount > 3000)
                 {
@@ -301,105 +299,105 @@ public class SkillSelectManager : MonoBehaviour
                 }
 
                 // スキルのカテゴリを選択する
-                int skillCategory = Random.Range(0, (int)SkillData.SkillCategory.CategoryNum);
+                // int skillCategory = Random.Range(0, (int)SkillData.SkillCategory.CategoryNum);
+
+                // パッシブスキルは同じ属性がいくつかあるので選択した属性のパッシブスキルをリストアップする
+                List<int> index = new List<int>();
+                for (int j = 0; j < _skillData.passiveSkill.passiveSkillDataList.Count; j++)
+                {
+                    if (_skillData.passiveSkill.passiveSkillDataList[j].skillElement == SkillData.SkillElement.Fire)
+                    {
+                        index.Add(j);
+                    }
+                }
 
                 // 既に持っているスキルカテゴリは選択しない
-                if (_playerSkillManager.IsHaveSkillCategory((SkillData.SkillCategory)skillCategory)) continue;
+                // if (_playerSkillManager.IsHaveSkillCategory((SkillData.SkillCategory)skillCategory)) continue;
 
-                switch (skillCategory)
-                {
-                    case (int)SkillData.SkillCategory.LowAttack:
+                //switch (skillCategory)
+                //{
+                //    case (int)SkillData.SkillCategory.LowAttack:
 
-                        // スキルの属性が一致するスキルを取得する
-                        foreach (var skill in _skillData.lowAttackSkill.lowAttackSkillDataList)
-                        {
-                            if (skill.skillElement == element)
-                            {
-                                selectSkill.skillName = skill.skillName;
-                                selectSkill.skillCategory = SkillData.SkillCategory.LowAttack;
-                                isSelectSkill = true;
-                                break;
-                            }
-                        }
+                //        // スキルの属性が一致するスキルを取得する
+                //        foreach (var skill in _skillData.lowAttackSkill.lowAttackSkillDataList)
+                //        {
+                //            if (skill.skillElement == element)
+                //            {
+                //                selectSkill.skillName = skill.skillName;
+                //                selectSkill.skillCategory = SkillData.SkillCategory.LowAttack;
+                //                isSelectSkill = true;
+                //                break;
+                //            }
+                //        }
 
-                        break;
-                    case (int)SkillData.SkillCategory.ChargeAttack:
+                //        break;
+                //    case (int)SkillData.SkillCategory.ChargeAttack:
 
-                        // スキルの属性が一致するスキルを取得する
-                        foreach (var skill in _skillData.chargeAttackSkill.chargeAttackSkillDataList)
-                        {
-                            if (skill.skillElement == element)
-                            {
-                                selectSkill.skillName = skill.skillName;
-                                selectSkill.skillCategory = SkillData.SkillCategory.ChargeAttack;
-                                isSelectSkill = true;
-                                break;
-                            }
-                        }
+                //        // スキルの属性が一致するスキルを取得する
+                //        foreach (var skill in _skillData.chargeAttackSkill.chargeAttackSkillDataList)
+                //        {
+                //            if (skill.skillElement == element)
+                //            {
+                //                selectSkill.skillName = skill.skillName;
+                //                selectSkill.skillCategory = SkillData.SkillCategory.ChargeAttack;
+                //                isSelectSkill = true;
+                //                break;
+                //            }
+                //        }
 
-                        break;
-                    case (int)SkillData.SkillCategory.SpecialCharge:
-                        // スキルの属性が一致するスキルを取得する
-                        foreach (var skill in _skillData.specialChargeSkill.specialChargeSkillDataList)
-                        {
-                            if (skill.skillElement == element)
-                            {
-                                selectSkill.skillName = skill.skillName;
-                                selectSkill.skillCategory = SkillData.SkillCategory.SpecialCharge;
-                                isSelectSkill = true;
-                                break;
-                            }
-                        }
-                        break;
-                    case (int)SkillData.SkillCategory.RangedAttack:
-                        // スキルの属性が一致するスキルを取得する
-                        foreach (var skill in _skillData.rangedAttackSkill.rangedAttackSkillDataList)
-                        {
-                            if (skill.skillElement == element)
-                            {
-                                selectSkill.skillName = skill.skillName;
-                                selectSkill.skillCategory = SkillData.SkillCategory.RangedAttack;
-                                isSelectSkill = true;
-                                break;
-                            }
-                        }
-                        break;
-                    case (int)SkillData.SkillCategory.Dash:
-                        // スキルの属性が一致するスキルを取得する
-                        foreach (var skill in _skillData.dashSkill.dashSkillDataList)
-                        {
-                            if (skill.skillElement == element)
-                            {
-                                selectSkill.skillName = skill.skillName;
-                                selectSkill.skillCategory = SkillData.SkillCategory.Dash;
-                                isSelectSkill = true;
-                                break;
-                            }
-                        }
-                        break;
-                    case (int)SkillData.SkillCategory.Passive:
+                //        break;
+                //    case (int)SkillData.SkillCategory.SpecialCharge:
+                //        // スキルの属性が一致するスキルを取得する
+                //        foreach (var skill in _skillData.specialChargeSkill.specialChargeSkillDataList)
+                //        {
+                //            if (skill.skillElement == element)
+                //            {
+                //                selectSkill.skillName = skill.skillName;
+                //                selectSkill.skillCategory = SkillData.SkillCategory.SpecialCharge;
+                //                isSelectSkill = true;
+                //                break;
+                //            }
+                //        }
+                //        break;
+                //    case (int)SkillData.SkillCategory.RangedAttack:
+                //        // スキルの属性が一致するスキルを取得する
+                //        foreach (var skill in _skillData.rangedAttackSkill.rangedAttackSkillDataList)
+                //        {
+                //            if (skill.skillElement == element)
+                //            {
+                //                selectSkill.skillName = skill.skillName;
+                //                selectSkill.skillCategory = SkillData.SkillCategory.RangedAttack;
+                //                isSelectSkill = true;
+                //                break;
+                //            }
+                //        }
+                //        break;
+                //    case (int)SkillData.SkillCategory.Dash:
+                //        // スキルの属性が一致するスキルを取得する
+                //        foreach (var skill in _skillData.dashSkill.dashSkillDataList)
+                //        {
+                //            if (skill.skillElement == element)
+                //            {
+                //                selectSkill.skillName = skill.skillName;
+                //                selectSkill.skillCategory = SkillData.SkillCategory.Dash;
+                //                isSelectSkill = true;
+                //                break;
+                //            }
+                //        }
+                //        break;
+                //    case (int)SkillData.SkillCategory.Passive:
 
-                        // パッシブスキルは同じ属性がいくつかあるので選択した属性のパッシブスキルをリストアップする
-                        List<int> index = new List<int>();
-                        for (int j = 0; j < _skillData.passiveSkill.passiveSkillDataList.Count; j++)
-                        {
-                            if (_skillData.passiveSkill.passiveSkillDataList[j].skillElement == element)
-                            {
-                                index.Add(j);
-                            }
-                        }
 
-                        // もし一つもなければもう一度スキルカテゴリを選択し直す
-                        if (index.Count == 0) break;
+                //}
 
-                        // 選択した属性のパッシブスキルの中からランダムに選択する
-                        int passiveIndex = index[Random.Range(0, index.Count)];
-                        selectSkill.skillName = _skillData.passiveSkill.passiveSkillDataList[passiveIndex].skillName;
-                        selectSkill.skillCategory = SkillData.SkillCategory.Passive;
-                        isSelectSkill = true;
+                // もし一つもなければもう一度スキルカテゴリを選択し直す
+                if (index.Count == 0) break;
 
-                        break;
-                }
+                // 選択した属性のパッシブスキルの中からランダムに選択する
+                int passiveIndex = index[Random.Range(0, index.Count)];
+                selectSkill.skillName = _skillData.passiveSkill.passiveSkillDataList[passiveIndex].skillName;
+                selectSkill.skillCategory = SkillData.SkillCategory.Passive;
+                isSelectSkill = true;
 
                 // スキルが選択されていなければもう一度スキルカテゴリを選択し直す
                 if (!isSelectSkill) continue;
