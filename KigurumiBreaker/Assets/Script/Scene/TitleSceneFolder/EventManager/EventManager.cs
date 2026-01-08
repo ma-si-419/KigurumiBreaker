@@ -25,6 +25,9 @@ public class EventManager : MonoBehaviour
             //カメラを揺らす
             StartCoroutine(_shakeCamera.MyShake(0.5f, 0.2f));
 
+            //イベント完了にする
+            EventButton = true;
+
             //BGMを鳴らす
             AudioManager.Instance.PlaySE(SoundID.Title);
         }
@@ -66,9 +69,6 @@ public class EventManager : MonoBehaviour
         //フェードイン
         if (_fadeCanvas != null)
         {
-            //イベント完了にする
-            EventButton = true;
-
             //ムービースキップ後のフェードイン
             yield return StartCoroutine(MyFade(0f));
         }
