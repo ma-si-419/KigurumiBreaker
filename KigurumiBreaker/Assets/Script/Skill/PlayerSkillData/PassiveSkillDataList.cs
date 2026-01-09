@@ -52,6 +52,10 @@ public class PassiveSkillData
     [SerializeField] private List<PassiveObject> passiveObjects;
     [Header("スキルの説明文")]
     [TextArea] [SerializeField] private string SkillContents;
+    [Header("UIの色")]
+    [SerializeField] private Color UiColor;
+    [Header("アイコンの画像")]
+    [SerializeField] private Sprite SkillIcon;
 
 
     public string skillName => SkillName;
@@ -59,4 +63,6 @@ public class PassiveSkillData
     public List<UpStatus> upStatuses => UpStatuses;
     public List<PassiveObject> PassiveObjects => passiveObjects;
     public string skillContents => SkillContents;
+    public Color uiColor => UiColor;
+    public Sprite skillIcon => SkillIcon;
 }

@@ -32,9 +32,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5815582154305899771}
+  - {fileID: 5527392536182684000}
   - {fileID: 6677155673503327301}
   - {fileID: 3245724245869985971}
-  - {fileID: 5527392536182684000}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -94,6 +94,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: {fileID: 6659869645969219500}
   _contents: {fileID: 753502479893431014}
+  _color: {r: 0, g: 0, b: 0, a: 0}
+  _icon: {fileID: 0}
 --- !u!1 &3783166970212157535
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +450,6 @@ GameObject:
   - component: {fileID: 5815582154305899771}
   - component: {fileID: 2136429631406291315}
   - component: {fileID: 5409696649881071933}
-  - component: {fileID: 6573036529054051152}
   m_Layer: 6
   m_Name: SkillPanel
   m_TagString: Untagged
@@ -513,17 +514,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6573036529054051152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8906539789097873923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d4434e2e79137041aca7a147eda195c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _name: {fileID: 0}
-  _contents: {fileID: 0}

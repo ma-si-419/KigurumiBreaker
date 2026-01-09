@@ -187,73 +187,73 @@ public class SkillSelectManager : MonoBehaviour
 
             string skillName = _selectSkills[i].skillName;
 
-            switch (_selectSkills[i].skillCategory)
+            //switch (_selectSkills[i].skillCategory)
+            //{
+            //case SkillData.SkillCategory.LowAttack:
+
+            //    foreach (var skill in _skillData.lowAttackSkill.lowAttackSkillDataList)
+            //    {
+            //        if (skill.skillName == skillName)
+            //        {
+            //            panelInfo.SetInfo(skillName, skill.skillContents);
+            //            break;
+            //        }
+            //    }
+
+            //    break;
+            //case SkillData.SkillCategory.ChargeAttack:
+
+            //    foreach (var skill in _skillData.chargeAttackSkill.chargeAttackSkillDataList)
+            //    {
+            //        if (skill.skillName == skillName)
+            //        {
+            //            panelInfo.SetInfo(skillName, skill.skillContents);
+            //            break;
+            //        }
+            //    }
+
+            //    break;
+            //case SkillData.SkillCategory.SpecialCharge:
+            //    foreach (var skill in _skillData.specialChargeSkill.specialChargeSkillDataList)
+            //    {
+            //        if (skill.skillName == skillName)
+            //        {
+            //            panelInfo.SetInfo(skillName, skill.skillContents);
+            //            break;
+            //        }
+            //    }
+            //    break;
+            //case SkillData.SkillCategory.RangedAttack:
+            //    foreach (var skill in _skillData.rangedAttackSkill.rangedAttackSkillDataList)
+            //    {
+            //        if (skill.skillName == skillName)
+            //        {
+            //            panelInfo.SetInfo(skillName, skill.skillContents);
+            //            break;
+            //        }
+            //    }
+            //    break;
+            //case SkillData.SkillCategory.Dash:
+            //    foreach (var skill in _skillData.dashSkill.dashSkillDataList)
+            //    {
+            //        if (skill.skillName == skillName)
+            //        {
+            //            panelInfo.SetInfo(skillName, skill.skillContents);
+            //            break;
+            //        }
+            //    }
+            //    break;
+            //case SkillData.SkillCategory.Passive:
+            foreach (var skill in _skillData.passiveSkill.passiveSkillDataList)
             {
-                case SkillData.SkillCategory.LowAttack:
-
-                    foreach (var skill in _skillData.lowAttackSkill.lowAttackSkillDataList)
-                    {
-                        if (skill.skillName == skillName)
-                        {
-                            panelInfo.SetInfo(skillName, skill.skillContents);
-                            break;
-                        }
-                    }
-
+                if (skill.skillName == skillName)
+                {
+                    panelInfo.SetInfo(skillName, skill.skillContents, skill.uiColor, skill.skillIcon);
                     break;
-                case SkillData.SkillCategory.ChargeAttack:
-
-                    foreach (var skill in _skillData.chargeAttackSkill.chargeAttackSkillDataList)
-                    {
-                        if (skill.skillName == skillName)
-                        {
-                            panelInfo.SetInfo(skillName, skill.skillContents);
-                            break;
-                        }
-                    }
-
-                    break;
-                case SkillData.SkillCategory.SpecialCharge:
-                    foreach (var skill in _skillData.specialChargeSkill.specialChargeSkillDataList)
-                    {
-                        if (skill.skillName == skillName)
-                        {
-                            panelInfo.SetInfo(skillName, skill.skillContents);
-                            break;
-                        }
-                    }
-                    break;
-                case SkillData.SkillCategory.RangedAttack:
-                    foreach (var skill in _skillData.rangedAttackSkill.rangedAttackSkillDataList)
-                    {
-                        if (skill.skillName == skillName)
-                        {
-                            panelInfo.SetInfo(skillName, skill.skillContents);
-                            break;
-                        }
-                    }
-                    break;
-                case SkillData.SkillCategory.Dash:
-                    foreach (var skill in _skillData.dashSkill.dashSkillDataList)
-                    {
-                        if (skill.skillName == skillName)
-                        {
-                            panelInfo.SetInfo(skillName, skill.skillContents);
-                            break;
-                        }
-                    }
-                    break;
-                case SkillData.SkillCategory.Passive:
-                    foreach (var skill in _skillData.passiveSkill.passiveSkillDataList)
-                    {
-                        if (skill.skillName == skillName)
-                        {
-                            panelInfo.SetInfo(skillName, skill.skillContents);
-                            break;
-                        }
-                    }
-                    break;
+                }
             }
+            //break;
+            //}
 
             // ÉpÉlÉãÇÃà íuÇí≤êÆÇ∑ÇÈ
             panel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i - 1) * SKILL_PANEL_DISTANCE);
