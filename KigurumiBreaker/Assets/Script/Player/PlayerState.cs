@@ -365,7 +365,10 @@ public class PlayerState : Player<PlayerState>
         private Vector3 _dodgeDirection;
 
         // 追随するエフェクトオブジェクト
-        private GameObject _effect;
+        private GameObject _dashEffect;
+
+        // 開始時のエフェクト
+        private GameObject _startDashEffect;
 
         // 回避速度
         private float _dodgeSpeed;
@@ -397,10 +400,16 @@ public class PlayerState : Player<PlayerState>
 
             if (state._playerEffectData.dashEffectPrefab != null)
             {
-                _effect = GameObject.Instantiate(state._playerEffectData.dashEffectPrefab, state.transform.position, Quaternion.identity);
+                _dashEffect = GameObject.Instantiate(state._playerEffectData.dashEffectPrefab, state.transform.position, Quaternion.identity);
                 // 向いている方向に回転させる
-                _effect.transform.forward = _dodgeDirection;
-                _effect.transform.SetParent(state.transform);
+                _dashEffect.transform.forward = _dodgeDirection;
+                _dashEffect.transform.SetParent(state.transform);
+            }
+
+            // 回避開始時のエフェクトを再生する
+            if (state._playerEffectData.startDashEffectPrefab != null)
+            {
+                _startDashEffect = GameObject.Instantiate(state._playerEffectData.startDashEffectPrefab, state.transform.position, Quaternion.identity);
             }
 
             _dodgeSpeed = state._playerStatus.dodgeSpeed;
@@ -462,11 +471,11 @@ public class PlayerState : Player<PlayerState>
             }
 
             // エフェクトの位置と方向を更新
-            if (_effect != null)
+            if (_dashEffect != null)
             {
-                _effect.transform.position = state.transform.position;
+                _dashEffect.transform.position = state.transform.position;
 
-                _effect.transform.forward = _dodgeDirection;
+                _dashEffect.transform.forward = _dodgeDirection;
             }
 
             // 一定時間経過したら速度を減速させる
@@ -536,10 +545,15 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             // エフェクトを削除
-            if (_effect != null)
+            if (_dashEffect != null)
             {
-                GameObject.Destroy(_effect);
+                GameObject.Destroy(_dashEffect);
             }
+            if(_startDashEffect != null)
+            {
+                GameObject.Destroy(_startDashEffect);
+            }
+
 
             // 拡大している攻撃部位があれば元に戻す
             for (int i = 0; i < state._scallingAttackParts.Count; i++)
