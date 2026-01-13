@@ -20,7 +20,7 @@ public class EventManager : MonoBehaviour
     void Update()
     {
         //•Ç‚É“úX‚ª“ü‚Á‚½uŠÔ‚É—h‚ç‚·
-        if (_breakBlock.breakMoment)
+        if (_breakBlock.breakMoment && EventButton == false)
         {
             //ƒJƒƒ‰‚ğ—h‚ç‚·
             StartCoroutine(_shakeCamera.MyShake(0.5f, 0.2f));
