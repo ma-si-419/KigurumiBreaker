@@ -7,7 +7,7 @@ Shader "Custom/PlayerDissolve"
 		_Mask("Mask To Dissolve", 2D) = "white" {}	// 分解用のマスク
 		_CutOff("CutOff Range", Range(0,1)) = 0		// 分解のしきい値
 		_Width("Width", Range(0,1)) = 0.001			// しきい値の幅
-		_ColorIntensity("Intensity", Float) = 1		// 燃え尽きる部分の明るさの強度（Bloom+HDRを使わない場合は不要）
+		_ColorIntensity("Intensity", Float) = 1     // 燃え尽きる部分の明るさの強度（Bloom+HDRを使わない場合は不要）
 		_Color("Line Color", Color) = (1,1,1,1)		// 燃え尽きる部分の色
 		_BumpMap("Normalmap", 2D) = "bump" {}		// モデルのバンプマッピング
     }
