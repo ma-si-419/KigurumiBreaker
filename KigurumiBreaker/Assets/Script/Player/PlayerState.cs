@@ -416,7 +416,7 @@ public class PlayerState : Player<PlayerState>
             _dodgeSpeed *= (1.0f + state._passiveStatus.moveSpeedAddRate / 100.0f);
 
             // Œø‰Ê‰¹‚ğÄ¶‚·‚é
-            //            AudioManager.Instance.PlaySE(SoundID.Dash);
+            AudioManager.Instance.PlaySE(SoundID.Dash);
         }
         public override void OnUpdate()
         {
