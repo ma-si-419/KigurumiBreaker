@@ -13,10 +13,13 @@ public class PlayerEffectData : ScriptableObject
     [SerializeField] private GameObject DashEffectPrefab;
     [Header("ダッシュの開始エフェクト")]
     [SerializeField] private GameObject StartDashEffectPrefab;
+    [Header("死亡時の爆発エフェクト")]
+    [SerializeField] private GameObject DeathEffectPrefab;
 
     // 読み取り専用
     public GameObject specialAttackChargeEffectPrefab => SpecialAttackChargeEffectPrefab;
     public GameObject specialAttackEffectPrefab => SpecialAttackEffectPrefab;
     public GameObject dashEffectPrefab => DashEffectPrefab;
     public GameObject startDashEffectPrefab => StartDashEffectPrefab;
+    public GameObject deathEffectPrefab => DeathEffectPrefab;
 }
