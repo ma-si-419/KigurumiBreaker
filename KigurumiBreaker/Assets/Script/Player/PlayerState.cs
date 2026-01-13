@@ -487,7 +487,7 @@ public class PlayerState : Player<PlayerState>
                 _dodgeSpeed = speed;
 
                 // クランプ
-                _dodgeSpeed = Mathf.Max(_dodgeSpeed,state._playerStatus.moveSpeed);
+                _dodgeSpeed = Mathf.Max(_dodgeSpeed, state._playerStatus.moveSpeed);
 
                 // 回避入力があればこの時点でもう一度回避状態に遷移
                 if (state._isDodgeInput && state._dodgeCount < state._passiveStatus.dashCountAddNum)
@@ -549,7 +549,7 @@ public class PlayerState : Player<PlayerState>
             {
                 GameObject.Destroy(_dashEffect);
             }
-            if(_startDashEffect != null)
+            if (_startDashEffect != null)
             {
                 GameObject.Destroy(_startDashEffect);
             }
@@ -727,7 +727,7 @@ public class PlayerState : Player<PlayerState>
                 // 硬直フレームの間は回避不可
                 if (_currentFrame <= _currentAttackData.stunFrame)
                 {
-                    state._isAbleToDodge = false;
+                    //   state._isAbleToDodge = false;
                 }
                 else
                 {
@@ -1018,6 +1018,8 @@ public class PlayerState : Player<PlayerState>
 
         float _attackScale;
 
+        float _lowChargeAttackScale;
+
         GameObject _chargeEffect;
 
         Attack _currentAttackData;
@@ -1116,17 +1118,19 @@ public class PlayerState : Player<PlayerState>
                                 part = state._scallingAttackParts[j];
                                 break;
                             }
-                        }
+                        }                        
+
 
                         // 大きさの計算
-                        float scale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].scale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
+                        
+                        // 目標の大きさ
+                        float targetScale = _currentAttackData.scaleAttackParts[i].scale - _lowChargeAttackScale;
 
-                        // 弱チャージ攻撃の拡大率よりも小さくならないようにする
-                        scale = Mathf.Clamp(scale, part.scale, _currentAttackData.scaleAttackParts[i].scale);
+                        float scale = Mathf.Lerp(1.0f, targetScale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
                         // 攻撃する部位を大きくする
-                        part.scale = scale;
-                        part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
+                        part.scale = scale + _lowChargeAttackScale;
+                        part.attackObj.transform.localScale = new Vector3(scale + _lowChargeAttackScale, scale + _lowChargeAttackScale, scale + _lowChargeAttackScale);
 
                         // 少しずつずらす
                         float shiftScale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].range, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
@@ -1163,6 +1167,8 @@ public class PlayerState : Player<PlayerState>
                         float scale = Mathf.Lerp(1.0f, _currentAttackData.scaleAttackParts[i].scale, Mathf.Clamp(frame / (float)state._playerData.chargeAttackPartScaleUpTime, 0.0f, 1.0f));
 
                         part.scale = scale;
+
+                        _lowChargeAttackScale = scale;
 
                         // 攻撃する部位を大きくする
                         part.attackObj.transform.localScale = new Vector3(scale, scale, scale);
@@ -1740,6 +1746,8 @@ public class PlayerState : Player<PlayerState>
     {
         bool _changeMaterial = false;
 
+        int _deadTime = 0;
+
         public DeadState(PlayerState next) : base(next)
         {
         }
@@ -1776,6 +1784,13 @@ public class PlayerState : Player<PlayerState>
 
                     _changeMaterial = true;
                 }
+            }
+            _deadTime++;
+
+            if(_deadTime == state._playerData.deathEffectTime)
+            {
+                // 死亡エフェクトを再生
+                Instantiate(state._playerEffectData.deathEffectPrefab, state.transform.position, Quaternion.identity);
             }
 
             // 移動ベクトルをリセットし続ける

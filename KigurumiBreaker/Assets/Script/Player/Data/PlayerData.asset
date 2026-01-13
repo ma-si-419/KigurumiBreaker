@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveInputLength: 0.1
   RotateAngle: 22
-  DodgeStartTime: 0
+  DodgeStartTime: 2
   DodgeTime: 20
   DodgeStopTime: 6
   DodgeCoolTime: 15
@@ -28,8 +28,8 @@ MonoBehaviour:
   SpecialAttackChargeRate: 0.8
   ForwardAngle: 40
   ForwardDistance: 15
-  ChargeAttackPartScaleUpTime: 4
-  ChargeAttackPartScaleDownRatePerFrame: 0.3
+  ChargeAttackPartScaleUpTime: 10
+  ChargeAttackPartScaleDownRatePerFrame: 0.75
   DeathSlowTime: 50
   DeathTimeScale: 0.2
-  DeathEffectPrefab: {fileID: 0}
+  DeathEffectTime: 90
