@@ -38,7 +38,7 @@ Shader "Custom/PlayerStencilShader"
         [Enum(UV0,0,UV1,1)] _UVSec ("UV Set for secondary textures", Float) = 0
 
 
-        // Blending state
+        //Blendingstate
         [HideInInspector] _Mode ("__mode", Float) = 0.0
         [HideInInspector] _SrcBlend ("__src", Float) = 1.0
         [HideInInspector] _DstBlend ("__dst", Float) = 0.0
@@ -75,7 +75,7 @@ Shader "Custom/PlayerStencilShader"
             CGPROGRAM
             #pragma target 3.0
 
-            // -------------------------------------
+       
 
             #pragma shader_feature _NORMALMAP
             #pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
@@ -90,7 +90,6 @@ Shader "Custom/PlayerStencilShader"
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
-            // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
             //#pragma multi_compile _ LOD_FADE_CROSSFADE
 
             #pragma vertex vertBase
@@ -99,8 +98,8 @@ Shader "Custom/PlayerStencilShader"
 
             ENDCG
         }
-        // ------------------------------------------------------------------
-        //  Additive forward pass (one light per pass)
+       
+        //Additiveforwardpass (onelightperpass)
         Pass
         {
             Name "FORWARD_DELTA"
@@ -113,7 +112,7 @@ Shader "Custom/PlayerStencilShader"
             CGPROGRAM
             #pragma target 3.0
 
-            // -------------------------------------
+            
 
 
             #pragma shader_feature _NORMALMAP
@@ -126,7 +125,6 @@ Shader "Custom/PlayerStencilShader"
 
             #pragma multi_compile_fwdadd_fullshadows
             #pragma multi_compile_fog
-            // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
             //#pragma multi_compile _ LOD_FADE_CROSSFADE
 
             #pragma vertex vertAdd
@@ -135,7 +133,7 @@ Shader "Custom/PlayerStencilShader"
 
             ENDCG
         }
-        // ------------------------------------------------------------------
+   
         //  Shadow rendering pass
         Pass {
             Name "ShadowCaster"
@@ -146,7 +144,7 @@ Shader "Custom/PlayerStencilShader"
             CGPROGRAM
             #pragma target 3.0
 
-            // -------------------------------------
+            
 
 
             #pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
@@ -154,7 +152,6 @@ Shader "Custom/PlayerStencilShader"
             #pragma shader_feature _PARALLAXMAP
             #pragma multi_compile_shadowcaster
             #pragma multi_compile_instancing
-            // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
             //#pragma multi_compile _ LOD_FADE_CROSSFADE
 
             #pragma vertex vertShadowCaster
@@ -164,7 +161,7 @@ Shader "Custom/PlayerStencilShader"
 
             ENDCG
         }
-        // ------------------------------------------------------------------
+
         //  Deferred pass
         Pass
         {
@@ -176,7 +173,7 @@ Shader "Custom/PlayerStencilShader"
             #pragma exclude_renderers nomrt
 
 
-            // -------------------------------------
+            
 
             #pragma shader_feature _NORMALMAP
             #pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
@@ -189,7 +186,6 @@ Shader "Custom/PlayerStencilShader"
 
             #pragma multi_compile_prepassfinal
             #pragma multi_compile_instancing
-            // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
             //#pragma multi_compile _ LOD_FADE_CROSSFADE
 
             #pragma vertex vertDeferred
@@ -200,7 +196,7 @@ Shader "Custom/PlayerStencilShader"
             ENDCG
         }
 
-        // ------------------------------------------------------------------
+        
         // Extracts information for lightmapping, GI (emission, albedo, ...)
         // This pass it not used during regular rendering.
         Pass
@@ -230,7 +226,7 @@ Shader "Custom/PlayerStencilShader"
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 150
 
-        // ------------------------------------------------------------------
+       
         //  Base forward pass (directional light, emission, lightmaps, ...)
         Pass
         {
@@ -264,7 +260,7 @@ Shader "Custom/PlayerStencilShader"
 
             ENDCG
         }
-        // ------------------------------------------------------------------
+        
         //  Additive forward pass (one light per pass)
         Pass
         {
@@ -296,7 +292,7 @@ Shader "Custom/PlayerStencilShader"
 
             ENDCG
         }
-        // ------------------------------------------------------------------
+        
         //  Shadow rendering pass
         Pass {
             Name "ShadowCaster"
@@ -320,7 +316,7 @@ Shader "Custom/PlayerStencilShader"
             ENDCG
         }
 
-        // ------------------------------------------------------------------
+        
         // Extracts information for lightmapping, GI (emission, albedo, ...)
         // This pass it not used during regular rendering.
         Pass
