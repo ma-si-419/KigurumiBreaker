@@ -33,6 +33,8 @@ public class AudioManager : MonoBehaviour
     //ステージのBGM
     private StageSet.StageKind? currentStageKind = null;
     private Coroutine bgmFadeCoroutine;
+    private bool isBGMStopped = false;
+
     // ===== 追加：制御可能SE(ID管理) =====
     private Dictionary<SoundID, AudioSource> seById = new Dictionary<SoundID, AudioSource>();
 
@@ -224,22 +226,22 @@ public class AudioManager : MonoBehaviour
         switch (kind)
         {
             case StageSet.StageKind.Home:
-                return SoundID.Title;
+                return SoundID.Home;
 
             case StageSet.StageKind.Tutorial:
-                return SoundID.Title;
+                return SoundID.Forest;
 
             case StageSet.StageKind.Forest:
-                return SoundID.Title;
+                return SoundID.Forest;
 
             case StageSet.StageKind.Forest_Boss:
-                return SoundID.Title;
+                return SoundID.Boss1;
 
             case StageSet.StageKind.Cave:
-                return SoundID.Title;
+                return SoundID.Cave;
 
             case StageSet.StageKind.Cave_Boss:
-                return SoundID.Title;
+                return SoundID.Boss2;
             default:
                 return SoundID.None;
         }
@@ -296,4 +298,26 @@ public class AudioManager : MonoBehaviour
         yield return FadeOutRoutine(duration);
         ChangeBGMByStageKind(nextKind);
     }
+    // ============================================================
+    // フェードなしBGM停止
+    // ============================================================
+    public void StopBGM()
+    {
+        Debug.Log("StopBGM CALLED");
+
+        // 全AudioSourceを取得
+        AudioSource[] allSources = FindObjectsOfType<AudioSource>();
+
+        Debug.Log("AudioSource count = " + allSources.Length);
+
+        foreach (var src in allSources)
+        {
+            Debug.Log($"Stop -> {src.gameObject.name}, playing={src.isPlaying}, clip={src.clip}");
+            src.Stop();
+        }
+    }
+
+
+
+
 }
