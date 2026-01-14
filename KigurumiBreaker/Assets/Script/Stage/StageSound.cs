@@ -11,6 +11,7 @@ public class StageSound : MonoBehaviour
 
     private StageSet.StageKind? currentKind = null; // 今流れているステージ
 
+
     void Awake()
     {
         instance = this;

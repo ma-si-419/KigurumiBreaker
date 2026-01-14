@@ -231,30 +231,27 @@ public class StageSpawner : MonoBehaviour
     {
         int nextIndex = _currentStageIndex + 1;
 
-        // 配列の範囲外なら → シーン遷移
         if (nextIndex >= _stageSets.Length)
         {
-            //SceneManager.LoadScene("ResultScene"); // 
-            // 今後Fade関係の処理を呼ぶ予定(安田が追加してるっぽい。)
+            AudioManager.Instance.FadeOutBGM(1.0f);
             BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
             return;
         }
 
-        // まだステージが残っているなら次を生成
         SpawnStage(nextIndex);
 
-        //　ここでStageSetを取得
         StageSet nextStage = _stageSets[nextIndex];
-        //StageKindに応じてBGMを変更
-        StageSound.instance.ChangeBGM_ByStageKind(nextStage.stageKind);
+        AudioManager.Instance.FadeOutAndChangeBGM(nextStage.stageKind, 1.0f);
     }
+
+
 
     private void Start()
     {
         _waveStageIndex = -1;  // 初期値を-1に
         SpawnStage(0);
         StageSet nextStage = _stageSets[0];
-        StageSound.instance.ChangeBGM_ByStageKind(nextStage.stageKind);
+        AudioManager.Instance.ChangeBGMByStageKind(nextStage.stageKind);
     }
 
     /// <summary>
