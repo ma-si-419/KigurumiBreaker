@@ -34,4 +34,10 @@
     EnemyAttackMiss,
     Title,
     PlayerMove,
+    Boss1,
+    Boss2,
+    Cave,
+    Clear,
+    Forest,
+    Home,
 }
