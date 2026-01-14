@@ -16,6 +16,8 @@ public class EnemyBar : MonoBehaviour
     [SerializeField] private Image _currentTrunkImg;
     // 遅れて減る赤バー
     [SerializeField] private Image _currentTrunkDelayedImg;
+    // 耐久力のアイコン
+    [SerializeField] private Image _trunkIconImg;
 
     // 敵の参照
     private Enemy _enemy;
@@ -52,6 +54,7 @@ public class EnemyBar : MonoBehaviour
             // アーマー装備していない場合はTrunkBarを非表示にする
             _currentTrunkImg.gameObject.SetActive(false);
             _currentTrunkDelayedImg.gameObject.SetActive(false);
+            _trunkIconImg.gameObject.SetActive(false);
             return;
         }
 
@@ -107,6 +110,11 @@ public class EnemyBar : MonoBehaviour
                 // 遅延バーの減少を開始
                 _trunkCoroutine = StartCoroutine(TrunkDelayDecrease(targetTrunkRatio));
             }
+        }
+        else
+        {
+            // アーマー装備していない場合はTrunkIconを非表示にする
+            _trunkIconImg.gameObject.SetActive(false);
         }
 
         /* 位置・向きを更新 */
