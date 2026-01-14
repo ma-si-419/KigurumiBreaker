@@ -17,6 +17,9 @@ public class PlayerDissolve : MonoBehaviour
     private float _Duration = 0.0f;   //残り時間
     private float _HalfTime = 0.0f;   //再生時間の半分
 
+    private float _Intensity = 0.0f;  //発光の強さ調整
+    private float _Alpha = 0.0f;      //アウトラインのアルファ値調整
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +36,7 @@ public class PlayerDissolve : MonoBehaviour
             _Material.SetFloat(_ColorIntensity, 0.0f);
             _OutLineMaterial.SetFloat(_OutLineAlpha, 1.0f);
         }
-        _HalfTime = _Time / 4.0f * 3.0f;   //見た目調整
+        _HalfTime = _Time / 2.0f * 3.0f;   //見た目調整
         _Duration = _Time;
     }
 
@@ -44,9 +47,21 @@ public class PlayerDissolve : MonoBehaviour
 
         //待ち時間
         _WaitTime -= delta;
-        if (_WaitTime > 0.0f) return;
+        if (_WaitTime > 0.0f)
+        {
+            //初期化する
+            _Intensity = 0.0f;
+            _Alpha = 1.0f;
 
-        _Duration -= delta;
+            return;
+        }
+        else
+        {
+            if(_Intensity < 1.0f) _Intensity += 0.001f;
+            if (_Alpha > 0.0f) _Alpha -= 0.001f;
+        }
+
+            _Duration -= delta;
         if (_Duration < 0.0f) _Duration = 0.0f;
 
         //しきい値のアニメーション(再生時間の上半分の時間で1～0に推移)
@@ -65,8 +80,8 @@ public class PlayerDissolve : MonoBehaviour
         {
             _Material.SetFloat(_Cutoff, cutoff);
             _Material.SetFloat(_Width, width);
-            _Material.SetFloat(_ColorIntensity, width);
-            _OutLineMaterial.SetFloat(_OutLineAlpha, cutoff);
+            _Material.SetFloat(_ColorIntensity, _Intensity);
+            _OutLineMaterial.SetFloat(_OutLineAlpha, _Alpha);
         }
 
     }
