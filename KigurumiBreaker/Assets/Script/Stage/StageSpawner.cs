@@ -73,6 +73,8 @@ public class StageSpawner : MonoBehaviour
     private Image fadeImage;  // 自動生成 or 既存のImageを使用
     private Coroutine fadeRoutine;
     private static bool isFirstLoad = true;
+    private StageSet.StageKind? _currentStageKind = null;
+
 
     //過去に選ばれたPrefabのインデックスリスト
     private Dictionary<int, HashSet<int>> _usedPrefabs = new Dictionary<int, HashSet<int>>();
@@ -238,20 +240,29 @@ public class StageSpawner : MonoBehaviour
             return;
         }
 
-        SpawnStage(nextIndex);
-
         StageSet nextStage = _stageSets[nextIndex];
-        AudioManager.Instance.FadeOutAndChangeBGM(nextStage.stageKind, 1.0f);
+
+        // StageKindが変わったときだけBGM切り替え
+        if (!_currentStageKind.HasValue || _currentStageKind.Value != nextStage.stageKind)
+        {
+            AudioManager.Instance.FadeOutAndChangeBGM(nextStage.stageKind, 1.0f);
+            _currentStageKind = nextStage.stageKind;
+        }
+
+        SpawnStage(nextIndex);
     }
+
 
 
 
     private void Start()
     {
-        _waveStageIndex = -1;  // 初期値を-1に
+        _waveStageIndex = -1; //初期化を兼ねて-1に設定 
         SpawnStage(0);
-        StageSet nextStage = _stageSets[0];
-        AudioManager.Instance.ChangeBGMByStageKind(nextStage.stageKind);
+
+        StageSet firstStage = _stageSets[0];
+        _currentStageKind = firstStage.stageKind;
+        AudioManager.Instance.ChangeBGMByStageKind(firstStage.stageKind);
     }
 
     /// <summary>
