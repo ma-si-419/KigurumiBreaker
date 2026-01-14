@@ -178,7 +178,10 @@ MonoBehaviour:
     AttackKind: 4
     CameraShakeKind: 1
     HitStopFrame: 6
-    ScaleAttackParts: []
+    ScaleAttackParts:
+    - attackPartKind: 0
+      scale: 2
+      range: 2
     AttackSoundID: 0
     HitSoundID: 8
     MissSoundID: 0

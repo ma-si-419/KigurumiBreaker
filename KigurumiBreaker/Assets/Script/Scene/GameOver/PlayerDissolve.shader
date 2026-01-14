@@ -16,8 +16,12 @@ Shader "Custom/PlayerDissolve"
         Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
 		LOD 300
 
+		// 透明や加算発光を有効化
+        Blend SrcAlpha OneMinusSrcAlpha
+
 		// モデルの描画順がおかしくなる問題の対処
-		Pass{
+		Pass
+		{
 			ZWrite On
 			ColorMask 0
 		}
@@ -36,12 +40,14 @@ Shader "Custom/PlayerDissolve"
 		fixed _Width;
 		fixed _ColorIntensity;
 
-		struct Input {
+		struct Input
+		{
 			float2 uv_MainTex;
 			float2 uv_BumpMap;
 		};
 
-		void surf(Input IN, inout SurfaceOutput o) {
+		void surf(Input IN, inout SurfaceOutput o)
+		{
 			
 			// テクスチャの色を取得
 			o.Albedo = tex2D(_MainTex, IN.uv_MainTex) * _MainColor;
@@ -61,5 +67,7 @@ Shader "Custom/PlayerDissolve"
 		}
 		ENDCG
 	}
+
+
 	Fallback "Diffuse"
 }

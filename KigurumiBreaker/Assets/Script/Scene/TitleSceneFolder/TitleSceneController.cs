@@ -24,6 +24,7 @@ public class TitleSceneController : MonoBehaviour
 
         if (!_oneBotton && _eventManager.EventButton)
         {
+            AudioManager.Instance.StopBGM();
             //ÉQÅ[ÉÄÉVÅ[ÉìÇ÷
             BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
             //BaseSceneController.instance.ChangeSceneWithFade(SceneType.SelectScene);

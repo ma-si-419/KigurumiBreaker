@@ -1,6 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+
+
 
 public class AudioManager : MonoBehaviour
 {
@@ -25,6 +29,14 @@ public class AudioManager : MonoBehaviour
     private const string MASTER_PARAM = "Master";
     private const string BGM_PARAM = "BGM";
     private const string SE_PARAM = "SE";
+
+    //ステージのBGM
+    private StageSet.StageKind? currentStageKind = null;
+    private Coroutine bgmFadeCoroutine;
+    private bool isBGMStopped = false;
+
+    // ===== 追加：制御可能SE(ID管理) =====
+    private Dictionary<SoundID, AudioSource> seById = new Dictionary<SoundID, AudioSource>();
 
     private void Awake()
     {
@@ -57,6 +69,18 @@ public class AudioManager : MonoBehaviour
 
         ApplyVolumes();
     }
+    // ===== 追加：制御可能SE(ID管理) =====
+    public void RegisterSE(SoundID id)
+    {
+        if (seById.ContainsKey(id)) return;
+
+        AudioSource source = gameObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.outputAudioMixerGroup = seSource.outputAudioMixerGroup;
+
+        seById.Add(id, source);
+    }
+
 
     // ============================================================
     // 再生処理
@@ -85,19 +109,24 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySE(SoundID id)
     {
-        if (audioDatabase == null)
-        {
-            return;
-        }
+        if (audioDatabase == null) return;
 
         var entry = audioDatabase.SoundFind(id);
-        if (entry == null || entry.clip == null)
+        if (entry == null || entry.clip == null) return;
+
+        if (!seById.TryGetValue(id, out var source))
         {
-            return;
+            // 念のため自動登録
+            RegisterSE(id);
+            source = seById[id];
         }
 
-        seSource.PlayOneShot(entry.clip, entry.volume);
+        source.clip = entry.clip;
+        source.volume = entry.volume;
+        source.loop = false;
+        source.Play();
     }
+
 
     // ============================================================
     // 音量制御
@@ -161,4 +190,134 @@ public class AudioManager : MonoBehaviour
     {
         PlayerPrefs.Save();
     }
+    public void StopSE(SoundID id)
+    {
+        if (!seById.TryGetValue(id, out var source))
+            return;
+
+        source.Stop();
+        Destroy(source);
+        seById.Remove(id);
+    }
+
+    // ============================================================
+    // BGMステージ切り替え処理
+    // ============================================================
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="kind"></param>
+    public void ChangeBGMByStageKind(StageSet.StageKind kind)
+    {
+        // 前回と同じステージなら何もしない
+        if (currentStageKind.HasValue && currentStageKind.Value == kind)
+            return;
+
+        currentStageKind = kind;
+
+        SoundID bgmID = ConvertStageKindToSoundID(kind);
+        if (bgmID == SoundID.None) return;
+
+        PlayBGM(bgmID);
+    }
+
+    private SoundID ConvertStageKindToSoundID(StageSet.StageKind kind)
+    {
+        switch (kind)
+        {
+            case StageSet.StageKind.Home:
+                return SoundID.Home;
+
+            case StageSet.StageKind.Tutorial:
+                return SoundID.Forest;
+
+            case StageSet.StageKind.Forest:
+                return SoundID.Forest;
+
+            case StageSet.StageKind.Forest_Boss:
+                return SoundID.Boss1;
+
+            case StageSet.StageKind.Cave:
+                return SoundID.Cave;
+
+            case StageSet.StageKind.Cave_Boss:
+                return SoundID.Boss2;
+            default:
+                return SoundID.None;
+        }
+    }
+
+    public void FadeOutBGM(float duration = 1.0f)
+    {
+        if (bgmSource == null || !bgmSource.isPlaying)
+            return;
+
+        if (bgmFadeCoroutine != null)
+            StopCoroutine(bgmFadeCoroutine);
+
+        bgmFadeCoroutine = StartCoroutine(FadeOutRoutine(duration));
+    }
+
+
+    private IEnumerator FadeOutBGMRoutine(float duration)
+    {
+        if (bgmFadeCoroutine != null)
+            StopCoroutine(bgmFadeCoroutine);
+
+        bgmFadeCoroutine = StartCoroutine(FadeOutRoutine(duration));
+        yield return bgmFadeCoroutine;
+    }
+
+    private IEnumerator FadeOutRoutine(float duration)
+    {
+        float startVolume = bgmSource.volume;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            bgmSource.volume = Mathf.Lerp(startVolume, 0f, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        bgmSource.Stop();
+        bgmSource.volume = startVolume;
+        bgmSource.clip = null;
+        currentStageKind = null;
+    }
+    public void FadeOutAndChangeBGM(StageSet.StageKind nextKind, float duration = 1f)
+    {
+        if (bgmFadeCoroutine != null)
+            StopCoroutine(bgmFadeCoroutine);
+
+        bgmFadeCoroutine = StartCoroutine(FadeOutAndChangeRoutine(nextKind, duration));
+    }
+
+    private IEnumerator FadeOutAndChangeRoutine(StageSet.StageKind nextKind, float duration)
+    {
+        yield return FadeOutRoutine(duration);
+        ChangeBGMByStageKind(nextKind);
+    }
+    // ============================================================
+    // フェードなしBGM停止
+    // ============================================================
+    public void StopBGM()
+    {
+        Debug.Log("StopBGM CALLED");
+
+        // 全AudioSourceを取得
+        AudioSource[] allSources = FindObjectsOfType<AudioSource>();
+
+        Debug.Log("AudioSource count = " + allSources.Length);
+
+        foreach (var src in allSources)
+        {
+            Debug.Log($"Stop -> {src.gameObject.name}, playing={src.isPlaying}, clip={src.clip}");
+            src.Stop();
+        }
+    }
+
+
+
+
 }
