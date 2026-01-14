@@ -39,6 +39,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private float ForwardAngle;
     [Header("前方向の敵を認知する距離")]
     [SerializeField] private float ForwardDistance;
+    [Header("チャージエフェクトを出すときどのくらいカメラに近づけるか")]
+    [SerializeField] private float ChargeEffectShiftScale;
     [Header("チャージ攻撃で攻撃する部位を拡大するときにかける時間")]
     [SerializeField] private float ChargeAttackPartScaleUpTime;
     [Header("回避や被弾時等に拡大していた部位を1フレームで縮小する大きさ")]
@@ -68,6 +70,7 @@ public class PlayerData : ScriptableObject
     public float maxSpecialChargeNum => MaxSpecialChargeGauge;
     public float forwardAngle => ForwardAngle;
     public float forwardDistance => ForwardDistance;
+    public float chargeEffectShiftScale => ChargeEffectShiftScale;
     public float chargeAttackPartScaleUpTime => ChargeAttackPartScaleUpTime;
     public float chargeAttackPartScaleDownRatePerFrame => ChargeAttackPartScaleDownRatePerFrame;
     public float deathSlowTime => DeathSlowTime;

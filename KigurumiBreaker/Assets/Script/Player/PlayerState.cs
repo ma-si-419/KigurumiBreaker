@@ -1060,7 +1060,15 @@ public class PlayerState : Player<PlayerState>
             _stateTime = 0;
 
             // 効果音を再生する
-            //            AudioManager.Instance.PlaySE(SoundID.Charge);
+            AudioManager.Instance.PlaySE(SoundID.Charge);
+
+            // チャージエフェクトをだす座標を計算
+            Vector3 effectPos = state.transform.position;
+            Vector3 toCameraVec = (state._camera.transform.position - state.transform.position).normalized;
+            effectPos += toCameraVec * state._playerData.chargeEffectShiftScale;
+
+            // チャージエフェクトを出す
+            _chargeEffect = Instantiate(state._playerEffectData.chargeEffectPrefab, effectPos, Quaternion.identity);
         }
         public override void OnUpdate()
         {
@@ -1215,8 +1223,15 @@ public class PlayerState : Player<PlayerState>
                 _attackArea = null;
             }
 
+            // チャージエフェクトを削除
+            if (_chargeEffect)
+            {
+                Destroy(_chargeEffect);
+                _chargeEffect = null;
+            }
+
             // 効果音を停止する
-            //          AudioManager.Instance.StopSE(SoundID.Charge);
+            AudioManager.Instance.StopSE(SoundID.Charge);
         }
     }
 
