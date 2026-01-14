@@ -1060,7 +1060,7 @@ public class PlayerState : Player<PlayerState>
             _stateTime = 0;
 
             // Œø‰Ê‰¹‚ğÄ¶‚·‚é
-            //            AudioManager.Instance.PlaySE(SoundID.Charge);
+            AudioManager.Instance.PlaySE(SoundID.Charge);
         }
         public override void OnUpdate()
         {
@@ -1216,7 +1216,7 @@ public class PlayerState : Player<PlayerState>
             }
 
             // Œø‰Ê‰¹‚ğ’â~‚·‚é
-            //          AudioManager.Instance.StopSE(SoundID.Charge);
+            AudioManager.Instance.StopSE(SoundID.Charge);
         }
     }
 
