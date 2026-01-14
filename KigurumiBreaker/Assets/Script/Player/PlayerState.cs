@@ -293,6 +293,7 @@ public class PlayerState : Player<PlayerState>
     // 移動状態
     public class MoveState : StateBase<PlayerState>
     {
+        int _stateTime;
         public MoveState(PlayerState next) : base(next)
         {
         }
@@ -302,6 +303,9 @@ public class PlayerState : Player<PlayerState>
             state.SetStateKind(PlayerState.StateKind.MOVE);
             // 移動アニメーションを再生
             state._animator.SetBool("Move", true);
+            // 移動サウンドを再生
+            AudioManager.Instance.PlaySE(SoundID.PlayerMove);
+
         }
         public override void OnUpdate()
         {
@@ -309,6 +313,15 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             if (state._isStop) return;
+
+            _stateTime++;
+
+            // 移動時のサウンド再生
+            if (_stateTime % state._playerData.moveSoundInterval == 0)
+            {
+                AudioManager.Instance.PlaySE(SoundID.PlayerMove);
+            }
+
             // 移動方向の計算
             Vector3 direction = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
             Vector3 moveDirection = state.CalculateMoveDirection(direction);
@@ -920,7 +933,7 @@ public class PlayerState : Player<PlayerState>
         {
             // Stateの情報を設定
             state.SetStateKind(PlayerState.StateKind.RANGEDATTACK);
-            // 攻撃する方向をジョイスティックの方向に設定W
+            // 攻撃する方向をジョイスティックの方向に設定
             if (state._moveInput.magnitude > state._playerData.moveInputLength)
             {
                 Vector3 attackDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
@@ -1118,11 +1131,11 @@ public class PlayerState : Player<PlayerState>
                                 part = state._scallingAttackParts[j];
                                 break;
                             }
-                        }                        
+                        }
 
 
                         // 大きさの計算
-                        
+
                         // 目標の大きさ
                         float targetScale = _currentAttackData.scaleAttackParts[i].scale - _lowChargeAttackScale;
 
@@ -1787,7 +1800,7 @@ public class PlayerState : Player<PlayerState>
             }
             _deadTime++;
 
-            if(_deadTime == state._playerData.deathEffectTime)
+            if (_deadTime == state._playerData.deathEffectTime)
             {
                 // 死亡エフェクトを再生
                 Instantiate(state._playerEffectData.deathEffectPrefab, state.transform.position, Quaternion.identity);
@@ -2399,7 +2412,6 @@ public class PlayerState : Player<PlayerState>
             int randNum = UnityEngine.Random.Range(0, 100);
             if (randNum < _passiveStatus.dodgeRateAddRate)
             {
-
                 foreach (PassiveGameObject obj in _passiveStatus.passiveGameObjects)
                 {
                     if (obj.popTiming == PassiveSkillData.GameObjectPopTiming.Dodge)
@@ -2407,7 +2419,6 @@ public class PlayerState : Player<PlayerState>
                         Instantiate(obj.gameObject, transform.position, Quaternion.identity);
                     }
                 }
-
                 return;
             }
 
@@ -2464,9 +2475,19 @@ public class PlayerState : Player<PlayerState>
             // ダメージマテリアルに変更
             _playerMeshRenderer.material.color = Color.red;
 
-
             // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
             Vector3 hitPosition = other.ClosestPoint(transform.position);
+
+            // ダメージの種類に応じたサウンドを鳴らす
+            switch (_damageKind)
+            {
+                case DamageKind.HIGH:
+                    AudioManager.Instance.PlaySE(SoundID.HighAttackHit);
+                    break;
+                case DamageKind.MIDDLE:
+                    AudioManager.Instance.PlaySE(SoundID.MiddleAttackHit);
+                    break;
+            }
 
             // ダメージエフェクトを生成
             Instantiate(other.gameObject.GetComponent<EnemyAttackCol>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
@@ -2492,15 +2513,15 @@ public class PlayerState : Player<PlayerState>
 
         }
 
-        // ドロップした弾にあたったら弾を補充
-        if (other.gameObject.CompareTag("DropBullet"))
-        {
-            // 弾を補充
-            _nowBulletNum++;
+        //// ドロップした弾にあたったら弾を補充
+        //if (other.gameObject.CompareTag("DropBullet"))
+        //{
+        //    // 弾を補充
+        //    _nowBulletNum++;
 
-            // アイテムを親ごと消す
-            Destroy(other.transform.parent.gameObject);
-        }
+        //    // アイテムを親ごと消す
+        //    Destroy(other.transform.parent.gameObject);
+        //}
 
     }
 
@@ -2565,6 +2586,8 @@ public class PlayerState : Player<PlayerState>
                 // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
                 Vector3 hitPosition = other.ClosestPoint(transform.position);
 
+                // ダメージサウンドを鳴らす
+                AudioManager.Instance.PlaySE(SoundID.LowAttackHit);
                 // ダメージエフェクトを生成
                 Instantiate(other.gameObject.GetComponent<EnemyAttackCol>().GetHitEffectPrefab(), hitPosition, Quaternion.identity);
 

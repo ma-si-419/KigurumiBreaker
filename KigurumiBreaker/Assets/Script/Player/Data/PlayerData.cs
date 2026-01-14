@@ -7,6 +7,8 @@ public class PlayerData : ScriptableObject
 {
     [Header("移動入力感知の閾値")]
     [SerializeField] private float MoveInputLength;
+    [Header("移動時のサウンドを鳴らす間隔")]
+    [SerializeField] private int MoveSoundInterval;
     [Header("1フレームで回転することができる角度")]
     [SerializeField] private float RotateAngle;
     [Header("回避で移動し始めるまでの時間")]
@@ -50,6 +52,7 @@ public class PlayerData : ScriptableObject
 
     // 読み取り専用
     public float moveInputLength => MoveInputLength;
+    public int moveSoundInterval => MoveSoundInterval;
     public float rotateAngle => RotateAngle;
     public float dodgeStartTime => DodgeStartTime;
     public int dodgeTime => DodgeTime;
