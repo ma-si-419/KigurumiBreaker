@@ -58,7 +58,7 @@ public class PlayerDissolve : MonoBehaviour
         else
         {
             if(_Intensity < 1.0f) _Intensity += 0.001f;
-            if (_Alpha > 0.0f) _Alpha -= 0.001f;
+            if (_Alpha > 0.0f) _Alpha -= 0.002f;
         }
 
             _Duration -= delta;
