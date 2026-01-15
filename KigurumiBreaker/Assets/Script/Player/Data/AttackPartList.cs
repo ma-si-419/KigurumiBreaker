@@ -61,7 +61,11 @@ public class AttackPart
         [InspectorName("¶‹r")]
         LeftLeg,
         [InspectorName("‰E‹r")]
-        RightLeg
+        RightLeg,
+        [InspectorName("ñ")]
+        Neck,
+        [InspectorName("ã‚Ì‚Ù‚¤‚Ì”wœ")]
+        UpperSpine,
     }
     [Header("UŒ‚•”ˆÊ‚Ìí—Ş")]
     [SerializeField] private AttackPartKind AttackPartType;

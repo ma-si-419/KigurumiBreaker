@@ -8,22 +8,16 @@ using UnityEngine;
 [System.Serializable]
 public class SpecialAttackCameraMoveData : ScriptableObject
 {
-    [System.Serializable]
-    public class MoveData
-    {
-        [Header("どのフレームまで動くか")]
-        [SerializeField] public int MoveFrame;
-        [Header("プレイヤーとの距離")]
-        [SerializeField] public float PlayerDistance;
-    }
-
-    [Header("必殺技中のカメラ移動データ")]
-    [SerializeField] private List<MoveData> SpecialMoveDatas;
+    [Header("何フレームまでに距離を離すか")]
+    [SerializeField] public int MoveFrame;
+    [Header("プレイヤーとの距離リスト")]
+    [SerializeField] public List<float> PlayerDistance;
 
     [Header("必殺技終了後の元の位置に戻るまでのフレーム数")]
     [SerializeField] private int ReturnFrame; // 必殺技終了後の元の位置に戻るまでのフレーム数
 
-    public List<MoveData> specialMoveDatas => SpecialMoveDatas;
+    public int moveFrame => MoveFrame;
+    public List<float> playerDistance => PlayerDistance;
     public int returnFrame => ReturnFrame;
 
 }

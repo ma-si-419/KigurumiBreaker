@@ -113,7 +113,7 @@ public class PlayerState : Player<PlayerState>
     PassiveStatus _lastPassiveStatus;
 
     // デバッグ用：特殊攻撃のチャージ量
-    public float DEBUG_SpecialAttackGauge;
+    [Range(0.0f,100.0f)]public float DEBUG_SpecialAttackGauge;
 
     // 入力情報
     private GameInputs _input;
@@ -1417,23 +1417,14 @@ public class PlayerState : Player<PlayerState>
             int chargeLevel = state.GetSpecialChargeLevel();
 
             // チャージ時間に応じて攻撃名を設定
-            //            _currentAttackName = "SpecialAttack" + chargeLevel.ToString();
-
-            _currentAttackName = "SpecialAttack";
+            _currentAttackName = "SpecialAttack" + chargeLevel.ToString();
 
             // 特殊攻撃アニメーションを再生
-            state._animator.SetTrigger(_currentAttackName);
+            state._animator.SetTrigger("SpecialAttack");
 
-            // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
-            if (chargeLevel == state._playerData.specialAttackMaxLevel)
-            {
-                // カメラの特殊攻撃中フラグを設定
-                _cameraMove = state._camera.GetComponent<CameraMove>();
-                _cameraMove.SetSpecialAttack(true);
-            }
-
-            // 特殊攻撃のレベルを攻撃名に追加
-            _currentAttackName = _currentAttackName + chargeLevel.ToString();
+            // カメラの特殊攻撃中フラグを設定
+            _cameraMove = state._camera.GetComponent<CameraMove>();
+            _cameraMove.StartSpecialAttack(chargeLevel, state.GetAttackPart(AttackPart.AttackPartKind.UpperSpine));
 
             // 攻撃の情報を設定
             _currentAttackData = state.SearchAttackData(_currentAttackName);
@@ -1566,7 +1557,7 @@ public class PlayerState : Player<PlayerState>
             if (_cameraMove != null)
             {
                 // カメラの特殊攻撃中フラグを解除
-                _cameraMove.SetSpecialAttack(false);
+                _cameraMove.EndSpecialAttack();
             }
 
             // エフェクトを削除
@@ -2419,6 +2410,9 @@ public class PlayerState : Player<PlayerState>
             if (_stateKind == StateKind.DODGE) return;
             // 被弾中はダメージを受けない
             if (_stateKind == StateKind.DAMAGE) return;
+            // 特殊攻撃発動中はダメージを受けない
+            if (_stateKind == StateKind.SPECIALATTACK) return;
+
             // ダメージの種類が弱ならば何もしない
             if (other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind() == DamageKind.LOW) return;
 
@@ -2560,6 +2554,8 @@ public class PlayerState : Player<PlayerState>
                 if (_stateKind == StateKind.DODGE) return;
                 // 被弾中はダメージを受けない
                 if (_stateKind == StateKind.DAMAGE) return;
+                // 特殊攻撃発動中はダメージを受けない
+                if (_stateKind == StateKind.SPECIALATTACK) return;
 
                 // 回避率を計算して回避できたらダメージを受けない
                 int randNum = UnityEngine.Random.Range(0, 100);
