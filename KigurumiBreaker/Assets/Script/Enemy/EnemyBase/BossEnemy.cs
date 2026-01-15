@@ -26,6 +26,9 @@ public class BossEnemy : EnemyBase
     // ボスの全攻撃データ
     [SerializeField] protected BossAttackData _attackData;
 
+    // ボスの情報
+    [SerializeField] protected BossData _bossData;
+
     // ランタイム用のクールダウン管理クラスのリスト
     private List<BossAttackRuntime> _runtimesAttacks = new();
 
@@ -41,6 +44,9 @@ public class BossEnemy : EnemyBase
     protected bool _isAttackWallHit;   
 
     protected float _maxHp;
+
+    public BossAttackData attackData => _attackData;
+    public BossData bossData => _bossData;
 
 
     protected override void Start()

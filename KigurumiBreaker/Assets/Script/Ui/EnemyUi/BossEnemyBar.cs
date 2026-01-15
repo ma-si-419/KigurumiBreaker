@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class BossEnemyBar : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class BossEnemyBar : MonoBehaviour
     [SerializeField] private Image _currentHpImg;
     // 遅れて減る赤バー
     [SerializeField] private Image _currentHpDelayedImg;
+
+    // ボス名画像
+    [SerializeField] private TextMeshProUGUI _bossNameText;
 
     // ボスの参照
     private BossEnemy _bossEnemy;
@@ -23,6 +27,9 @@ public class BossEnemyBar : MonoBehaviour
     // コルーチン管理用
     private Coroutine _hpCoroutine;
 
+    private BossNameType _bossName;
+
+
     public void SetTarget(BossEnemy bossEnemy)
     {
         // 敵の参照
@@ -32,6 +39,18 @@ public class BossEnemyBar : MonoBehaviour
         _delayRigidityTime = _bossEnemy.enemyCommonData.delayRigidityTime;
         // 補間速度を設定
         _lerpSpeed = _bossEnemy.enemyCommonData.lerpSpeed;
+
+        _bossName = _bossEnemy.bossData.bossName;
+
+        // ボス名画像の切り替え
+        if (_bossName == BossNameType.Mohikan)
+        {
+            _bossNameText.text = "リー・ゼン";
+        }
+        else if (_bossName == BossNameType.TyanTwo)
+        {
+            _bossNameText.text = "ラス・ボース";
+        }
 
         // 初期表示
         _currentHpImg.fillAmount = _bossEnemy.GetCurrentHp() / _bossEnemy.enemyData.maxHp;

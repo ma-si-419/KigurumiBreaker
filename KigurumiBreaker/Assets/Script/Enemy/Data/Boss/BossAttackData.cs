@@ -40,6 +40,7 @@ public class BossAttack
     [Header("抽選")]
     [SerializeField] private float Weight;         // 抽選の重み
 
+
     // 読み取り専用
     public string attackName => AttackName;
     public BossAttackType bossAttackType => BossAttackType;
@@ -47,6 +48,5 @@ public class BossAttack
     public float rangeSqr => RangeSqr;
     public float cooldown => Cooldown;
     public float weight => Weight;
-
 }
 

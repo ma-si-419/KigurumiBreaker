@@ -28,9 +28,8 @@ public class EnemyBar : MonoBehaviour
     private float _delayRigidityTime;
     // 補間速度
     private float _lerpSpeed;
-    // 表示比率
-    private float _displayHpRatio;
-    private float _displayTrunkRatio;
+
+    private bool _isArmor; 
 
     // コルーチン管理用
     private Coroutine _hpCoroutine;
@@ -47,6 +46,8 @@ public class EnemyBar : MonoBehaviour
         _delayRigidityTime = _enemy.enemyCommonData.delayRigidityTime;
         // 補間速度を設定
         _lerpSpeed = _enemy.enemyCommonData.lerpSpeed;
+
+        _isArmor = _enemy.enemyData.isArmor;
 
         // アーマー装備していない場合の処理
         if (!_enemy.enemyData.isArmor)
@@ -92,6 +93,10 @@ public class EnemyBar : MonoBehaviour
         }
 
         /* TrunkBar処理 */
+        if(_enemy.GetCurrentTrunk() <= 0f)
+        {
+            _isArmor = false;
+        }
 
         // アーマー装備時の処理
         if (_enemy.enemyData.isArmor)
@@ -111,7 +116,8 @@ public class EnemyBar : MonoBehaviour
                 _trunkCoroutine = StartCoroutine(TrunkDelayDecrease(targetTrunkRatio));
             }
         }
-        else
+
+        if(!_isArmor)
         {
             // アーマー装備していない場合はTrunkIconを非表示にする
             _trunkIconImg.gameObject.SetActive(false);
