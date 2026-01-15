@@ -10,6 +10,7 @@ public enum SceneType
     TitleScene,         //タイトル
     SelectScene,        //セレクト
     GameScene,          //ゲーム画面
+    GameOverScene,      //ゲームオーバー
     SkillSelectScene,   //スキル選択
     ResultScene,        //リザルト
     PauseScene,         //ポーズ
