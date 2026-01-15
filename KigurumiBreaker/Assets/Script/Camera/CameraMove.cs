@@ -35,9 +35,11 @@ public class CameraMove : MonoBehaviour
 
     private bool _isStop = false;                                   // カメラ移動を停止するかどうかを保存する変数
 
-    private bool _isSwingCamera = false;                                // カメラがスイングしているかどうかを保存する変数
+    private bool _isSwingCamera = false;                            // カメラがスイングしているかどうかを保存する変数
 
-    private SpecialAttackCameraMoveData.MoveData _currentMoveData;  // 現在の必殺技中のカメラ移動データを保存する変数
+    private float _specialAttackDistance;                           // 特殊攻撃中のプレイヤーとカメラの距離を保存する変数
+
+    private GameObject _specialAttackObject;                        // 必殺技を行っているオブジェクトを保存する変数
 
     private Vector3 _frameMoveVec = Vector3.zero;                   // 一フレームに移動するベクトルを保存する変数
     private Vector3 _specialAttackShiftVec = Vector3.zero;          // 必殺技中に移動したベクトルの合計を保存する変数
@@ -84,8 +86,6 @@ public class CameraMove : MonoBehaviour
         // 関数が呼ばれている間だけスイングカメラを有効にする
         _isSwingCamera = false;
 
-
-
         // プレイヤーの位置にオフセットを加えた位置にカメラを移動
         transform.position = _player.transform.position + _cameraData.cameraPosition;
 
@@ -101,30 +101,13 @@ public class CameraMove : MonoBehaviour
             // 必殺技を行っているフレーム数
             _specialAttackFrame++;
 
-            // データを参照して、次に移動するフレームと距離を取得
-            foreach (var data in _specialAttackCameraMoveData.specialMoveDatas)
-            {
-                // 必殺技を行っているフレームより前のフレームのデータを参照
-                if (_specialAttackFrame < data.MoveFrame)
-                {
-                    // 前回と同じデータなら何もしない
-                    if (_currentMoveData == data) break;
+            Vector3 targetPos = _specialAttackObject.transform.position + _cameraData.cameraPosition;
+            Vector3 dir = (targetPos - transform.position).normalized;
+            targetPos += dir * _specialAttackDistance;
 
-                    _currentMoveData = data;
+            Vector3 moveDir = (targetPos - transform.position).normalized;
 
-                    // 一フレームに移動する距離を計算
-                    Vector3 playerToCameraDir = (transform.position - _player.transform.position).normalized;
-                    Vector3 targetPos = _player.transform.position + playerToCameraDir * data.PlayerDistance;
-                    _frameMoveVec = (targetPos - (transform.position + _specialAttackShiftVec)) / (data.MoveFrame - _specialAttackFrame);
 
-                    break;
-                }
-            }
-            if (_currentMoveData.MoveFrame != 0)
-            {
-                _specialAttackShiftVec += _frameMoveVec;
-                transform.position += _specialAttackShiftVec;
-            }
         }
         else
         {
@@ -179,11 +162,19 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    public void SetSpecialAttack(bool flag)
+    public void StartSpecialAttack(float distance, GameObject attackObj)
     {
-        _isSpecialAttack = flag;
+        _isSpecialAttack = true;
+        _specialAttackDistance = distance;
+        _specialAttackObject = attackObj;
+
         // セットするたびにフレーム数をリセット
         _specialAttackFrame = 0;
+    }
+
+    public void EndSpecialAttack()
+    {
+        _isSpecialAttack = false;
         _returnFrame = 0;
     }
 

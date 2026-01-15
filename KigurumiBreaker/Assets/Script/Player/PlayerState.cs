@@ -1417,12 +1417,10 @@ public class PlayerState : Player<PlayerState>
             int chargeLevel = state.GetSpecialChargeLevel();
 
             // チャージ時間に応じて攻撃名を設定
-            //            _currentAttackName = "SpecialAttack" + chargeLevel.ToString();
-
-            _currentAttackName = "SpecialAttack";
+            _currentAttackName = "SpecialAttack" + chargeLevel.ToString();
 
             // 特殊攻撃アニメーションを再生
-            state._animator.SetTrigger(_currentAttackName);
+            state._animator.SetTrigger("SpecialAttack");
 
             // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
             if (chargeLevel == state._playerData.specialAttackMaxLevel)
@@ -2419,6 +2417,9 @@ public class PlayerState : Player<PlayerState>
             if (_stateKind == StateKind.DODGE) return;
             // 被弾中はダメージを受けない
             if (_stateKind == StateKind.DAMAGE) return;
+            // 特殊攻撃発動中はダメージを受けない
+            if (_stateKind == StateKind.SPECIALATTACK) return;
+
             // ダメージの種類が弱ならば何もしない
             if (other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind() == DamageKind.LOW) return;
 
@@ -2560,6 +2561,8 @@ public class PlayerState : Player<PlayerState>
                 if (_stateKind == StateKind.DODGE) return;
                 // 被弾中はダメージを受けない
                 if (_stateKind == StateKind.DAMAGE) return;
+                // 特殊攻撃発動中はダメージを受けない
+                if (_stateKind == StateKind.SPECIALATTACK) return;
 
                 // 回避率を計算して回避できたらダメージを受けない
                 int randNum = UnityEngine.Random.Range(0, 100);
