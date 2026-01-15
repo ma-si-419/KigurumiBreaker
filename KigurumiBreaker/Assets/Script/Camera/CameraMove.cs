@@ -142,6 +142,11 @@ public class CameraMove : MonoBehaviour
 
     }
 
+    public void SetMoveArea(CapsuleCollider col)
+    {
+        _moveArea = col;
+    }
+
     public void SetShakeData(int time, float power)
     {
         _shakeTime = time;
