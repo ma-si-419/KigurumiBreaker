@@ -101,13 +101,23 @@ public class CameraMove : MonoBehaviour
             // 必殺技を行っているフレーム数
             _specialAttackFrame++;
 
+            // 必殺技中のカメラ移動処理
             Vector3 targetPos = _specialAttackObject.transform.position + _cameraData.cameraPosition;
             Vector3 dir = (targetPos - transform.position).normalized;
             targetPos += dir * _specialAttackDistance;
 
+            // 移動方向
             Vector3 moveDir = (targetPos - transform.position).normalized;
 
+            // 移動距離
+            float moveScale = (float)_specialAttackFrame / (float)_specialAttackCameraMoveData.moveFrame;
+            if (moveScale > 1.0f) moveScale = 1.0f;
 
+            moveScale *= _specialAttackDistance;
+
+            transform.position = _specialAttackObject.transform.position + _cameraData.cameraPosition + moveDir * moveScale;
+
+            _specialAttackShiftVec = transform.position - (_player.transform.position + _cameraData.cameraPosition);
         }
         else
         {
@@ -162,10 +172,10 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    public void StartSpecialAttack(float distance, GameObject attackObj)
+    public void StartSpecialAttack(int level, GameObject attackObj)
     {
         _isSpecialAttack = true;
-        _specialAttackDistance = distance;
+        _specialAttackDistance = _specialAttackCameraMoveData.PlayerDistance[level - 1];
         _specialAttackObject = attackObj;
 
         // セットするたびにフレーム数をリセット

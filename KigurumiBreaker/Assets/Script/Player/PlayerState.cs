@@ -113,7 +113,7 @@ public class PlayerState : Player<PlayerState>
     PassiveStatus _lastPassiveStatus;
 
     // デバッグ用：特殊攻撃のチャージ量
-    public float DEBUG_SpecialAttackGauge;
+    [Range(0.0f,100.0f)]public float DEBUG_SpecialAttackGauge;
 
     // 入力情報
     private GameInputs _input;
@@ -1422,16 +1422,9 @@ public class PlayerState : Player<PlayerState>
             // 特殊攻撃アニメーションを再生
             state._animator.SetTrigger("SpecialAttack");
 
-            // チャージ時間が最大なら強特殊攻撃、そうでなければ弱特殊攻撃に設定
-            if (chargeLevel == state._playerData.specialAttackMaxLevel)
-            {
-                // カメラの特殊攻撃中フラグを設定
-                _cameraMove = state._camera.GetComponent<CameraMove>();
-                _cameraMove.SetSpecialAttack(true);
-            }
-
-            // 特殊攻撃のレベルを攻撃名に追加
-            _currentAttackName = _currentAttackName + chargeLevel.ToString();
+            // カメラの特殊攻撃中フラグを設定
+            _cameraMove = state._camera.GetComponent<CameraMove>();
+            _cameraMove.StartSpecialAttack(chargeLevel, state.GetAttackPart(AttackPart.AttackPartKind.UpperSpine));
 
             // 攻撃の情報を設定
             _currentAttackData = state.SearchAttackData(_currentAttackName);
@@ -1564,7 +1557,7 @@ public class PlayerState : Player<PlayerState>
             if (_cameraMove != null)
             {
                 // カメラの特殊攻撃中フラグを解除
-                _cameraMove.SetSpecialAttack(false);
+                _cameraMove.EndSpecialAttack();
             }
 
             // エフェクトを削除
