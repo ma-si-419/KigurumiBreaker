@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1470152279}
-  m_IndirectSpecularColor: {r: 0.16788375, g: 0.21073635, b: 0.28994125, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -740,6 +739,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 967671006}
     m_Modifications:
+    - target: {fileID: 485970497329932894, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7fd9558895b67494eb2f7f39156609d4, type: 2}
     - target: {fileID: 6126188424833946103, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
       propertyPath: m_Name
       value: Debuff
@@ -791,6 +794,10 @@ PrefabInstance:
     - target: {fileID: 6423666203348373026, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551388611195229131, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
+      propertyPath: lengthInSec
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2422,6 +2429,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 967671006}
     m_Modifications:
+    - target: {fileID: 3627856772980114984, guid: 354b6251e950209409c75ab984acf000, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5c184c7f794e828478bf18e1215d5c22, type: 2}
+    - target: {fileID: 5586974675011609263, guid: 354b6251e950209409c75ab984acf000, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6642199199589531581, guid: 354b6251e950209409c75ab984acf000, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7023657490877130156, guid: 354b6251e950209409c75ab984acf000, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7053385775836331393, guid: 354b6251e950209409c75ab984acf000, type: 3}
       propertyPath: m_Name
       value: Star aura
@@ -3614,7 +3637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!220 &2070696575
 LightProbeGroup:
   m_ObjectHideFlags: 0

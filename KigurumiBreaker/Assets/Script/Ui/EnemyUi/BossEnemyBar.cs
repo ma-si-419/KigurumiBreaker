@@ -26,9 +26,8 @@ public class BossEnemyBar : MonoBehaviour
     private float _displayHpRatio;
     // コルーチン管理用
     private Coroutine _hpCoroutine;
-
+    
     private BossNameType _bossName;
-
 
     public void SetTarget(BossEnemy bossEnemy)
     {

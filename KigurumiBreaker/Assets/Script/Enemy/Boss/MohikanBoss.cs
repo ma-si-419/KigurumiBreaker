@@ -25,9 +25,9 @@ public class MohikanBoss : BossEnemy
 
     private float _circleInterval = 0.75f;
 
-    private float _shotInterval = 0.025f;
+    private float _shotInterval = 0.015f;
 
-    private float _rotSpeed = 480.0f;
+    private float _rotSpeed = 720.0f;
 
     private float _angle = 0.0f;
 
