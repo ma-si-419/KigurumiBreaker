@@ -89,7 +89,6 @@ public class EnemyBar : MonoBehaviour
 
             // 遅延バーの減少を開始
             _hpCoroutine = StartCoroutine(HpDelayDecrease(targetHpRatio));
-
         }
 
         /* TrunkBar処理 */
