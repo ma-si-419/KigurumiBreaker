@@ -111,7 +111,8 @@ Shader "Custom/Blur"
                 float2 direction = (center - i.uv) * _BlurRadius * _scaleFactor;
                 fixed4 resultColor = fixed4(0,0,0,0);
                 float2 uv = i.uv;
-                for(int index = 0; index < _Count; ++index)
+
+                for(int index = 0; index < _Count; index++)
                 {
                     fixed4 color = tex2D(_MainTex, uv);
                     #if defined(USE_ATLAS)
