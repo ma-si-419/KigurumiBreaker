@@ -68,6 +68,15 @@ public class BlueDragonEnemy : Enemy
         {
             AttackSign(stateInfo.normalizedTime, 0.5f - ATTACK_SIGN_DECREASE);
 
+            if (stateInfo.normalizedTime >= 0.3f)
+            {
+                if (!_isCreateEffect)
+                {
+                    _isCreateEffect = true;
+                    EffectCreate(_attackTarget, _enemyData.effectPrefab[0]);
+                }
+            }
+
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= 0.4f)
             {
@@ -84,8 +93,10 @@ public class BlueDragonEnemy : Enemy
             {
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
+                Destroy(_effectObj);
 
                 //攻撃フラグをリセット
+                _isCreateEffect = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }

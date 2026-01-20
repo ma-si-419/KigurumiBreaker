@@ -23,6 +23,9 @@ public class BossEnemy : EnemyBase
     protected float _meleeAttackRangeSqr;
     protected float _specialAttackRangeSqr;
 
+    // フェーズエフェクトオブジェクト
+    protected GameObject _phaseObj;
+
     // ボスの全攻撃データ
     [SerializeField] protected BossAttackData _attackData;
 
@@ -44,6 +47,8 @@ public class BossEnemy : EnemyBase
     protected bool _isAttackWallHit;   
 
     protected float _maxHp;
+
+    protected bool _isPhaseEffect;
 
     public BossAttackData attackData => _attackData;
     public BossData bossData => _bossData;
@@ -112,11 +117,10 @@ public class BossEnemy : EnemyBase
 
         DebugLine();
 
-        DirectionUpdate();
-
-        Debug.Log("_isWallHit" + _isWallHit);
-
-        Debug.Log(_currentState);
+        if(_isPhase)
+        {
+            DirectionUpdate();
+        }
     }
 
 
@@ -453,6 +457,7 @@ public class BossEnemy : EnemyBase
         //ここにボス個別のエフェクト演出とか入れる
         //例：フェーズが切り替わったら、エフェクトをまとわせる
         //例：チャンツーの手に呪術回線みたいなエフェクトをまとわせる
+
     }
 }
 

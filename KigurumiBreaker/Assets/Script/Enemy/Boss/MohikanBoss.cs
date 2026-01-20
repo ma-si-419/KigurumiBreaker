@@ -41,7 +41,13 @@ public class MohikanBoss : BossEnemy
 
     protected override void DirectionUpdate()
     {
+        if (!_isPhaseEffect)
+        {
+            _isPhaseEffect = true;
+            EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
+        }
 
+        _effectObj.transform.position = this.transform.position;
     }
 
     public override void PhaseChange()

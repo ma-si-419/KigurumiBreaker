@@ -35,6 +35,8 @@ public class EnemyData : ScriptableObject
     [SerializeField] private float BarYPosition;
     [Header("攻撃タイププレハブ")]
     [SerializeField] private GameObject[] AttackPrefab;
+    [Header("エフェクトプレハブ")]
+    [SerializeField] private GameObject[] EffectPrefab;
 
     // 読み取り専用
     public float maxHp => MaxHp;
@@ -52,4 +54,5 @@ public class EnemyData : ScriptableObject
     public float maxAttackTime => MaxAttackTime;
     public float attackSwitchRange => AttackSwitchRange;
     public GameObject[] attackPrefab => AttackPrefab;
+    public GameObject[] effectPrefab => EffectPrefab;
 }
