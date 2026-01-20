@@ -22,6 +22,9 @@ public class Enemy : EnemyBase
     // 攻撃オブジェクトを生成したかどうかのフラグ
     protected bool _isCreateAttack = false;
 
+    // エフェクトオブジェクトを生成したかどうかのフラグ
+    protected bool _isCreateEffect = false;
+
     // プレイヤーを一度でも検知したかどうかのフラグ
     protected bool _isSearched = false;
 
@@ -43,7 +46,7 @@ public class Enemy : EnemyBase
     // 敵がビックリマークを生成したかどうかのフラグ
     private bool _isDetectionMark;
 
-
+    // ダメージエフェクトのプレハブ
 
     // ヒットストップ用の揺れベクトル
     protected float _idleTime;

@@ -28,6 +28,12 @@ public class TackleEnemy : Enemy
                     EnemyAttackCreate(1.0f, 0.5f, _enemyData.attackPrefab[0]);
                 }
 
+                if (!_isCreateEffect)
+                {
+                    _isCreateEffect = true;
+                    EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
+                }
+
                 if (!_isCharge)
                 {
                     StartCoroutine(DoCharge());
@@ -39,9 +45,11 @@ public class TackleEnemy : Enemy
             {
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
+                Destroy(_effectObj);
 
                 StopMovement();
                 _isCreateAttack = false;
+                _isCreateEffect = false;
                 _isCharge = false;
                 ChangeState(new IdleState(this));
             }

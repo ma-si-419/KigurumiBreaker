@@ -92,6 +92,9 @@ public class EnemyBase : MonoBehaviour
     // 敵の攻撃オブジェクト変数
     protected GameObject _attackObj;
 
+    // 敵のエフェクトオブジェクト変数
+    protected GameObject _effectObj;
+
     // 状態遷移フラグ
     protected bool _isStateChange = false;
 
@@ -345,6 +348,12 @@ public class EnemyBase : MonoBehaviour
         GameObject attackObject = Instantiate(shootPrefab, spawnPos + this.transform.up * 0.8f, Quaternion.LookRotation(dir));
 
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
+    }
+
+    public void EffectCreate(Vector3 pos, GameObject EffectPrefab)
+    {
+        // エフェクト生成
+        _effectObj = Instantiate(EffectPrefab, pos, Quaternion.identity);
     }
 
 }
