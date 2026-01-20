@@ -14,9 +14,6 @@ public class MohikanBoss : BossEnemy
 
     private bool _isAnim = false;      // アニメーション開始フラグ
 
-    //攻撃オブジェクトを一度だけ生成するフラグ
-    private bool _isCreateAttack = false;
-
     // 突進速度
     private float _tackleSpeed = 0.8f;
 
@@ -241,6 +238,13 @@ public class MohikanBoss : BossEnemy
 
         if (stateInfo.IsName("AttackType3"))
         {
+            if (!_isCreateEffect)
+            {
+                _isCreateEffect = true;
+                EffectCreate(this.transform.position, _enemyData.effectPrefab[1]);
+            }
+
+
             if (stateInfo.normalizedTime >= 0.6f)
             {
                 //攻撃判定を一つ生成させる
@@ -256,9 +260,11 @@ public class MohikanBoss : BossEnemy
             {
                 // 攻撃オブジェクトを破棄
                 Destroy(_attackObj);
+                Destroy(_effectObj);
 
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
+                _isCreateEffect = false;
                 _isStateChange = true;
             }
         }

@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class TheBlueBoss : BossEnemy
 {
-    //攻撃オブジェクトを一度だけ生成するフラグ
-    private bool _isCreateAttack = false;
-
     private float CHARGE_SPEED = 0.75f; // 突進速度
     private float CHARGE_TIME = 0.2f; // 突進時間
 
