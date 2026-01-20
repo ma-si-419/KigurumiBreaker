@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class TyanTwoBoss : BossEnemy
 {
-    //攻撃オブジェクトを一度だけ生成するフラグ
-    private bool _isCreateAttack = false;
-
     // 突進速度
     private float _tackleSpeed = 0.8f;
 

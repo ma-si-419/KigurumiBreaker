@@ -98,6 +98,12 @@ public class EnemyBase : MonoBehaviour
     // 状態遷移フラグ
     protected bool _isStateChange = false;
 
+    // 攻撃オブジェクトを生成したかどうかのフラグ
+    protected bool _isCreateAttack = false;
+
+    // エフェクトオブジェクトを生成したかどうかのフラグ
+    protected bool _isCreateEffect = false;
+
     // プレイヤーの前座標
     protected Vector3 _attackTarget;
 

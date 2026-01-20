@@ -19,12 +19,6 @@ public class Enemy : EnemyBase
     // プレイヤーを検知したかどうかのフラグ
     protected bool _isAttack = false;
 
-    // 攻撃オブジェクトを生成したかどうかのフラグ
-    protected bool _isCreateAttack = false;
-
-    // エフェクトオブジェクトを生成したかどうかのフラグ
-    protected bool _isCreateEffect = false;
-
     // プレイヤーを一度でも検知したかどうかのフラグ
     protected bool _isSearched = false;
 
