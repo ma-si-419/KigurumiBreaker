@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1203243310253934420}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.37957087, y: -0.22081488, z: 0.058842324, w: 0.89649564}
+  m_LocalRotation: {x: 0.37957025, y: -0.22081308, z: 0.05883803, w: 0.8964966}
   m_LocalPosition: {x: 3.1, y: 6, z: -4.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -105,6 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ece06cf6efc39c4ab43fba131d03b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _offset: {x: 3.1, y: 6, z: -4.6}
+  _player: {fileID: 0}
   _moveArea: {fileID: 0}
-  _shakeData: {fileID: 0}
+  _shakeData: {fileID: 11400000, guid: 722412d69f4260c43b98b89ea406160e, type: 2}
+  _cameraData: {fileID: 11400000, guid: 99f0a453e2b679644bd336b9fb544b22, type: 2}
+  _specialAttackCameraMoveData: {fileID: 11400000, guid: 1cee8eb2ac57d35458a07510251454f1, type: 2}
