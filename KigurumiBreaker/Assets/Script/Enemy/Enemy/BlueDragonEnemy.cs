@@ -73,7 +73,7 @@ public class BlueDragonEnemy : Enemy
                 if (!_isCreateEffect)
                 {
                     _isCreateEffect = true;
-                    EffectCreate(_attackTarget, _enemyData.effectPrefab[0]);
+                    _effectObj[0] = EffectCreate(_attackTarget, _enemyData.effectPrefab[0]);
                 }
             }
 
@@ -93,7 +93,7 @@ public class BlueDragonEnemy : Enemy
             {
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
-                Destroy(_effectObj);
+                Destroy(_effectObj[0]);
 
                 //攻撃フラグをリセット
                 _isCreateEffect = false;

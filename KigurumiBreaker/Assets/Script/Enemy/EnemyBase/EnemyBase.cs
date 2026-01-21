@@ -93,7 +93,7 @@ public class EnemyBase : MonoBehaviour
     protected GameObject _attackObj;
 
     // 敵のエフェクトオブジェクト変数
-    protected GameObject _effectObj;
+    protected GameObject[] _effectObj;
 
     // 状態遷移フラグ
     protected bool _isStateChange = false;
@@ -106,6 +106,9 @@ public class EnemyBase : MonoBehaviour
 
     // プレイヤーの前座標
     protected Vector3 _attackTarget;
+
+    // エフェクトの基準回転
+    protected Quaternion _effectBaseRot;
 
     //敵のデバフ状態
     public enum EnemyDebuff
@@ -157,6 +160,9 @@ public class EnemyBase : MonoBehaviour
         // ドロップする弾のリストを初期化する
         _dropBullets = new List<int>();
 
+        // エフェクトオブジェクト配列を初期化
+        _effectObj = new GameObject[enemyData.effectPrefab.Length];
+
         // EnemyUiManagerの参照を取得
         _enemyUiManager = FindObjectOfType<EnemyBarManager>();
 
@@ -186,6 +192,8 @@ public class EnemyBase : MonoBehaviour
     {
         // 現在のステートのUpdateメソッドを呼び出す
         _currentState?.Update();
+
+        Debug.Log(_effectObj.Length);
 
         // 弾をドロップする
         for (int i = 0; i < _dropBullets.Count; i++)
@@ -356,10 +364,25 @@ public class EnemyBase : MonoBehaviour
         attackObject.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
     }
 
-    public void EffectCreate(Vector3 pos, GameObject EffectPrefab)
+    // 通常のエフェクト生成関数
+    public GameObject EffectCreate(Vector3 pos, GameObject effectPrefab)
     {
         // エフェクト生成
-        _effectObj = Instantiate(EffectPrefab, pos, Quaternion.identity);
+        return Instantiate(effectPrefab, pos, Quaternion.identity);
+    }
+
+    // エフェクトの向きをそのまま使いたい場合のエフェクト生成関数
+    public GameObject RotationEffectCreate(Vector3 pos, GameObject effectPrefab)
+    {
+        _effectBaseRot = effectPrefab.transform.rotation;
+
+        Vector3 dir = (player.transform.position - transform.position).normalized;
+        Quaternion lookRot = Quaternion.LookRotation(dir);
+
+        Quaternion finalRot = lookRot * effectPrefab.transform.rotation;
+
+        // エフェクト生成
+        return Instantiate(effectPrefab, pos, finalRot);
     }
 
 }

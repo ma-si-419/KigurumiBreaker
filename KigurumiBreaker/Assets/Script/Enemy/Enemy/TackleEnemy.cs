@@ -31,7 +31,7 @@ public class TackleEnemy : Enemy
                 if (!_isCreateEffect)
                 {
                     _isCreateEffect = true;
-                    EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
+                    _effectObj[0] = EffectCreate(this.transform.position,_enemyData.effectPrefab[0]);
                 }
 
                 if (!_isCharge)
@@ -45,7 +45,7 @@ public class TackleEnemy : Enemy
             {
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
-                Destroy(_effectObj);
+                Destroy(_effectObj[0]);
 
                 StopMovement();
                 _isCreateAttack = false;
