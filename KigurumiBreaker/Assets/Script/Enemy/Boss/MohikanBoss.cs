@@ -36,15 +36,16 @@ public class MohikanBoss : BossEnemy
 
     private int _tackleCount = 0;
 
+
     protected override void DirectionUpdate()
     {
         if (!_isPhaseEffect)
         {
             _isPhaseEffect = true;
-            EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
+            _phaseEffectObj = EffectCreate(this.transform.position, bossData.phaseEffect);
         }
 
-        _effectObj.transform.position = this.transform.position;
+        _phaseEffectObj.transform.position = this.transform.position;
     }
 
     public override void PhaseChange()
@@ -95,8 +96,11 @@ public class MohikanBoss : BossEnemy
     {
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-
+       
+        if(_effectObj[2] != null)
+        {
+            _effectObj[2].transform.position = transform.position;
+        }
 
         //攻撃開始
         if (stateInfo.IsName("AttackType1"))
@@ -110,6 +114,21 @@ public class MohikanBoss : BossEnemy
 
             LookAtPlayer();
 
+            if (stateInfo.normalizedTime >= 0.2f)
+            {
+                if (!_isCreateEffect)
+                {
+                    _isCreateEffect = true;
+                    _effectObj[2] = RotationEffectCreate(this.transform.position, enemyData.effectPrefab[2]);
+                }
+
+                // 回転処理
+                Vector3 effectDir = player.transform.position - transform.position;
+                effectDir.y = 0f; // 必要ならY固定
+
+                Quaternion lookRot = Quaternion.LookRotation(effectDir);
+                _effectObj[2].transform.rotation = lookRot * _effectBaseRot;
+            }
         }
 
         if (stateInfo.IsName("UnderAttackType1"))
@@ -145,7 +164,9 @@ public class MohikanBoss : BossEnemy
 
             // 攻撃オブジェクトを破棄
             Destroy(_attackObj);
+            Destroy(_effectObj[2]);
 
+            _isCreateEffect = false;
             _isCreateAttack = false;
             // 攻撃中のアニメーションを終了
             animator.SetBool("UnderAttackType1", false);
@@ -241,7 +262,7 @@ public class MohikanBoss : BossEnemy
             if (!_isCreateEffect)
             {
                 _isCreateEffect = true;
-                EffectCreate(this.transform.position, _enemyData.effectPrefab[1]);
+                _effectObj[0] = EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
             }
 
 
@@ -260,7 +281,7 @@ public class MohikanBoss : BossEnemy
             {
                 // 攻撃オブジェクトを破棄
                 Destroy(_attackObj);
-                Destroy(_effectObj);
+                Destroy(_effectObj[0]);
 
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
@@ -349,6 +370,22 @@ public class MohikanBoss : BossEnemy
                 animator.SetBool("UnderAttackType5_2", true);
             }
 
+            if (stateInfo.normalizedTime >= 0.2f)
+            {
+                if (!_isCreateEffect)
+                {
+                    _isCreateEffect = true;
+                    _effectObj[2] = RotationEffectCreate(this.transform.position, enemyData.effectPrefab[2]);
+                }
+
+                // 回転処理
+                Vector3 effectDir = player.transform.position - transform.position;
+                effectDir.y = 0f; // 必要ならY固定
+
+                Quaternion lookRot = Quaternion.LookRotation(effectDir);
+                _effectObj[2].transform.rotation = lookRot * _effectBaseRot;
+            }
+
             LookAtPlayer();
             _isWallHit = false;
         }
@@ -388,7 +425,8 @@ public class MohikanBoss : BossEnemy
 
             // 攻撃オブジェクトを破棄
             Destroy(_attackObj);
-
+            Destroy(_effectObj[2]);
+            _isCreateEffect = false;
             _isCreateAttack = false;
             // 攻撃中のアニメーションを終了
             animator.SetBool("UnderAttackType5_2", false);
@@ -409,6 +447,11 @@ public class MohikanBoss : BossEnemy
         {
             // 破棄されていない場合のみ位置を更新
             _attackObj.transform.position = this.transform.position;
+        }
+
+        if (_effectObj[2] != null)
+        {
+            _effectObj[2].transform.position = transform.position;
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
@@ -454,7 +497,14 @@ public class MohikanBoss : BossEnemy
 
             if (_timer > _circleInterval)
             {
+                if (!_isCreateEffect)
+                {
+                    _isCreateEffect = true;
+                    _effectObj[1] = EffectCreate(_attackTarget,_enemyData.effectPrefab[1]);
+                }
+
                 _timer = 0f;
+                _isCreateEffect = false;
                 EnemyTargetAttackCreate(_attackTarget, _enemyData.attackPrefab[5]);
             }
         }
@@ -465,6 +515,7 @@ public class MohikanBoss : BossEnemy
             animator.SetBool("UnderAttackType6", false);
             _isAnim = false;
             _attackTime = 0.0f;
+            _isCreateEffect = false;
             _isCreateAttack = false;
             _isStateChange = true;
         }

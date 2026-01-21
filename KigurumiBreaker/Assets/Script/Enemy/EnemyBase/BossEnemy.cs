@@ -38,6 +38,8 @@ public class BossEnemy : EnemyBase
     protected float testRange;
     protected float testRangeSqr;
 
+    protected GameObject _phaseEffectObj;
+
     public float meleeAttackRangeSqr => _meleeAttackRangeSqr;
     public float specialAttackRangeSqr => _specialAttackRangeSqr;
 
@@ -58,6 +60,8 @@ public class BossEnemy : EnemyBase
     {
         // 親クラスのStart()を呼び出す
         base.Start();
+
+        _phaseEffectObj = bossData.phaseEffect;
 
         _maxHp = _currentHp;
 
@@ -117,7 +121,7 @@ public class BossEnemy : EnemyBase
 
         DebugLine();
 
-        if(_isPhase)
+        if (_isPhase)
         {
             DirectionUpdate();
         }
@@ -459,6 +463,7 @@ public class BossEnemy : EnemyBase
         //例：チャンツーの手に呪術回線みたいなエフェクトをまとわせる
 
     }
+
 }
 
 // 

@@ -18,6 +18,7 @@ public class BossPhaseState : IState
         _boss.agent.enabled = false;
         //攻撃アニメーション開始
         _boss.animator.SetTrigger("Phase");
+
     }
 
     public void Update()

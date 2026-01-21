@@ -14,8 +14,10 @@ public class BossData : ScriptableObject
 {
     [Header("ボスの名前")]
     [SerializeField] private BossNameType BossName;         // ボスの名前
+    [Header("ボスのフェーズエフェクト")]
+    [SerializeField] private GameObject PhaseEffect;      // ボスのフェーズエフェクト
 
     // 読み取り専用
     public BossNameType bossName => BossName;
-
+    public GameObject phaseEffect => PhaseEffect;
 }
