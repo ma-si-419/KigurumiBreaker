@@ -64,8 +64,8 @@ public class AttackPart
         RightLeg,
         [InspectorName("ñ")]
         Neck,
-        [InspectorName("ã‚Ì‚Ù‚¤‚Ì”wœ")]
-        UpperSpine,
+        [InspectorName("“ÁêUŒ‚‚ÅƒJƒƒ‰‚ª’Ç‚¤•”ˆÊ")]
+        SpecialAttackCameraPos,
     }
     [Header("UŒ‚•”ˆÊ‚Ìí—Ş")]
     [SerializeField] private AttackPartKind AttackPartType;
