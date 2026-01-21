@@ -15,6 +15,16 @@ public class BombEnemy : Enemy
             // 攻撃サインの表示
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
+            if(stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.3f)
+            {
+                if (!_isCreateEffect)
+                {
+                    _isCreateEffect = true;
+                    //エフェクト生成
+                    _effectObj[0] = EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
+                }
+            }
+
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 //攻撃判定を一つ生成させる
@@ -25,14 +35,19 @@ public class BombEnemy : Enemy
                 }
 
                 _isStateChange = true;
-                //攻撃フラグをリセット
-                _isCreateAttack = false;
+
             }
         }
 
         //状態遷移
         if (_isStateChange)
         {
+            //攻撃フラグをリセット
+            _isCreateAttack = false;
+            _isCreateEffect = false;
+
+            Destroy(_effectObj[0]);
+
             _isStateChange = false;
             _currentHp = 0; // 自分の体力を0にする
             _currentTrunk = 0; // 自分の耐久力を0にする
