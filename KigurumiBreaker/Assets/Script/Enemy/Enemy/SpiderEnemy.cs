@@ -8,8 +8,8 @@ public class SpiderEnemy : Enemy
 
     /* 定数 */
     private const float ATTACK_DISTANCE = 2.0f; // 攻撃判定の距離
-    private float CHARGE_SPEED = 8.0f; // 突進速度
-    private float CHARGE_TIME = 2.0f; // 突進時間
+    private float CHARGE_SPEED = 23.0f; // 突進速度
+    private float CHARGE_TIME = 0.3f; // 突進時間
 
     public override void AttackType1()
     {

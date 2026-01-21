@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -7929374266063402794}
   - component: {fileID: -4026319492056262419}
   m_Layer: 0
-  m_Name: EnemyShootAttackCol
+  m_Name: EnemyBigShootAttackCol
   m_TagString: EnemyRangedAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 5.709999, y: 1.6500015, z: 21.45}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55f0b08aba0e81c40b9054d55d293ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shootSpeed: 5
+  _shootSpeed: 10
   _shotLifeTime: 300
   _damage: 15
   _damageKind: 1

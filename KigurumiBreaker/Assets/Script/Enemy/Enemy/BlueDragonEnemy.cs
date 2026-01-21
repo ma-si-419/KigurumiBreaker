@@ -27,7 +27,7 @@ public class BlueDragonEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(3.0f, 1.0f, _enemyData.attackPrefab[0]);
+                    EnemyAttackCreate(9.0f, 1.0f, _enemyData.attackPrefab[0]);
                 }
             }
 
@@ -38,6 +38,7 @@ public class BlueDragonEnemy : Enemy
                 Destroy(_attackObj);
 
                 //攻撃フラグをリセット
+                _isCreateEffect = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }
@@ -45,7 +46,7 @@ public class BlueDragonEnemy : Enemy
 
         if(_attackObj != null)
         {
-            _attackObj.transform.position = _headPos.transform.position + _headPos.transform.forward * 2.0f;
+            _attackObj.transform.position = _headPos.transform.position + _headPos.transform.forward * 3.0f;
             _attackObj.transform.rotation = _headPos.transform.rotation * Quaternion.Euler(90, 0, 0);
         }
         
