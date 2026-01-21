@@ -1424,7 +1424,7 @@ public class PlayerState : Player<PlayerState>
 
             // ƒJƒƒ‰‚Ì“ÁêUŒ‚’†ƒtƒ‰ƒO‚ğİ’è
             _cameraMove = state._camera.GetComponent<CameraMove>();
-            _cameraMove.StartSpecialAttack(chargeLevel, state.GetAttackPart(AttackPart.AttackPartKind.Neck));
+            _cameraMove.StartSpecialAttack(chargeLevel, state.GetAttackPart(AttackPart.AttackPartKind.SpecialAttackCameraPos));
 
             // UŒ‚‚Ìî•ñ‚ğİ’è
             _currentAttackData = state.SearchAttackData(_currentAttackName);
