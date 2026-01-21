@@ -199,6 +199,17 @@ public class StageSpawner : MonoBehaviour
 
         _currentStageInstance = Instantiate(stageSet.stagePrefabs[prefabIndex]);
 
+        var cameraMoveArea =
+    _currentStageInstance.GetComponentInChildren<CapsuleCollider>();
+
+        if (cameraMoveArea != null)
+        {
+            Camera.main
+                .GetComponent<CameraMove>()
+                .SetMoveArea(cameraMoveArea);
+        }
+
+
         var newSurfaces = _currentStageInstance.GetComponentsInChildren<NavMeshSurface>();
         foreach (var surface in newSurfaces)
         {
