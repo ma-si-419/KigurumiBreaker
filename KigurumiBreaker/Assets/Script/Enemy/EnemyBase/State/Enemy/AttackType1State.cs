@@ -18,6 +18,7 @@ public class AttackType1State : IState
         _enemy.agent.enabled = false;
         //攻撃アニメーション開始
         _enemy.animator.SetTrigger("AttackType1");
+
     }
 
     public void Update()

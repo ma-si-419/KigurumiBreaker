@@ -11,9 +11,30 @@ public class TackleEnemy : Enemy
     private float CHARGE_SPEED = 10.0f; // 突進速度
     private float CHARGE_TIME = 1.5f; // 突進時間
 
+    //public override void EffectBaseRotationInit()
+    //{
+    //    _effectBaseRot = _effectObj[0].transform.rotation;
+
+    //    Vector3 dir = (player.transform.position - transform.position).normalized;
+    //    Quaternion lookRot = Quaternion.LookRotation(dir);
+
+    //    _effectfinalRot = lookRot * _effectObj[0].transform.rotation;
+    //}
+
     public override void AttackType1()
     {
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (_effectObj[0] != null)
+        {
+            _effectObj[0].transform.position = transform.position;
+
+            if (!_isBaseRotInit)
+            {
+                _isBaseRotInit = true;
+                BaseRotation(_effectObj[0]);
+            }
+        }
 
         //攻撃開始
         if (stateInfo.IsName("AttackType1"))
@@ -28,10 +49,10 @@ public class TackleEnemy : Enemy
                     EnemyAttackCreate(1.0f, 0.5f, _enemyData.attackPrefab[0]);
                 }
 
-                if (!_isCreateEffect)
+                if (!_isCreateEffect[0])
                 {
-                    _isCreateEffect = true;
-                    _effectObj[0] = EffectCreate(this.transform.position,_enemyData.effectPrefab[0]);
+                    _isCreateEffect[0] = true;
+                    _effectObj[0] = RotationEffectCreate(this.transform.position, enemyData.effectPrefab[0]);
                 }
 
                 if (!_isCharge)
@@ -39,6 +60,8 @@ public class TackleEnemy : Enemy
                     StartCoroutine(DoCharge());
                 }
             }
+
+
 
             //敵のアニメーションが終わったらIdleStateに遷移
             if (stateInfo.normalizedTime >= 0.6f)
@@ -48,8 +71,9 @@ public class TackleEnemy : Enemy
                 Destroy(_effectObj[0]);
 
                 StopMovement();
+                _isBaseRotInit = false;
                 _isCreateAttack = false;
-                _isCreateEffect = false;
+                _isCreateEffect[0] = false;
                 _isCharge = false;
                 ChangeState(new IdleState(this));
             }

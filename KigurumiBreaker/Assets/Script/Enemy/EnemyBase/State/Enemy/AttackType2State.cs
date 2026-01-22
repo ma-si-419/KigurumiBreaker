@@ -22,6 +22,7 @@ public class AttackType2State : IState
 
         //攻撃アニメーション開始
         _enemy.animator.SetTrigger("AttackType2");
+
     }
 
     public void Update()

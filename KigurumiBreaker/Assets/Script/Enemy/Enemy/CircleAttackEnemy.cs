@@ -18,9 +18,9 @@ public class CircleAttackEnemy : Enemy
 
             if(stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.25f)
             {
-                if(!_isCreateEffect)
+                if(!_isCreateEffect[0])
                 {
-                    _isCreateEffect = true;
+                    _isCreateEffect[0] = true;
                     //エフェクト生成
                     _effectObj[0] = EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
                 }
@@ -45,7 +45,7 @@ public class CircleAttackEnemy : Enemy
 
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
-                _isCreateEffect = false;
+                _isCreateEffect[0] = false;
 
                 //攻撃アニメーションが終了したらIdleStateに遷移
                 ChangeState(new IdleState(this));

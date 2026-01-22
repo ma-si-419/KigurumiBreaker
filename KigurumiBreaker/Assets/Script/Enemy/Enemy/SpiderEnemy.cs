@@ -20,6 +20,15 @@ public class SpiderEnemy : Enemy
         {
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.1f)
+            {
+                if (!_isCreateEffect[0])
+                {
+                    _isCreateEffect[0] = true;
+                    _effectObj[0] = RotationEffectCreate(this.transform.position + this.transform.forward * 0.7f, enemyData.effectPrefab[0]);
+                }
+            }
+
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
@@ -41,11 +50,13 @@ public class SpiderEnemy : Enemy
             {
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
+                Destroy(_effectObj[0]);
 
                 //攻撃フラグをリセット
                 StopMovement();
                 _isCharge = false;
                 _isCreateAttack = false;
+                _isCreateEffect[0] = false;
                 _isStateChange = true;
             }
         }
@@ -54,6 +65,11 @@ public class SpiderEnemy : Enemy
         {
             _isStateChange = false;
             ChangeState(new IdleState(this));
+        }
+
+        if (_effectObj[0] != null)
+        {
+            _effectObj[0].transform.position = this.transform.position + this.transform.forward * 0.7f;
         }
 
         if (_attackObj != null)
