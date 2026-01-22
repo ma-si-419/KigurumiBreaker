@@ -24,6 +24,26 @@ public class BeastEnemy : Enemy
         {
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.2f)
+            {
+                if (!_isCreateEffect[0])
+                {
+                    _isCreateEffect[0] = true;
+                    //エフェクト生成
+                    _effectObj[0] = EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
+                }
+            }
+
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.1f)
+            {
+                if (!_isCreateEffect[1])
+                {
+                    _isCreateEffect[1] = true;
+                    //エフェクト生成
+                    _effectObj[1] = EffectCreate(this.transform.position, _enemyData.effectPrefab[1]);
+                }
+            }
+
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
@@ -40,6 +60,10 @@ public class BeastEnemy : Enemy
             {
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
+                Destroy(_effectObj[1]);
+
+                _isCreateEffect[0] = false;
+                _isCreateEffect[1] = false;
 
                 //攻撃フラグをリセット
                 _isCreateAttack = false;

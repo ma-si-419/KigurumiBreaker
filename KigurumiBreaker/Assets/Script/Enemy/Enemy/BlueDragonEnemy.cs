@@ -38,7 +38,6 @@ public class BlueDragonEnemy : Enemy
                 Destroy(_attackObj);
 
                 //攻撃フラグをリセット
-                _isCreateEffect = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }
@@ -69,11 +68,21 @@ public class BlueDragonEnemy : Enemy
         {
             AttackSign(stateInfo.normalizedTime, 0.5f - ATTACK_SIGN_DECREASE);
 
+            if (stateInfo.normalizedTime >= 0.1f)
+            {
+                if (!_isCreateEffect[1])
+                {
+                    _isCreateEffect[1] = true;
+                    //エフェクト生成
+                    _effectObj[1] = EffectCreate(_attackTarget, _enemyData.effectPrefab[1]);
+                }
+            }
+
             if (stateInfo.normalizedTime >= 0.3f)
             {
-                if (!_isCreateEffect)
+                if (!_isCreateEffect[0])
                 {
-                    _isCreateEffect = true;
+                    _isCreateEffect[0] = true;
                     _effectObj[0] = EffectCreate(_attackTarget, _enemyData.effectPrefab[0]);
                 }
             }
@@ -95,9 +104,11 @@ public class BlueDragonEnemy : Enemy
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
                 Destroy(_effectObj[0]);
+                Destroy(_effectObj[1]);
 
                 //攻撃フラグをリセット
-                _isCreateEffect = false;
+                _isCreateEffect[0] = false;
+                _isCreateEffect[1] = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }

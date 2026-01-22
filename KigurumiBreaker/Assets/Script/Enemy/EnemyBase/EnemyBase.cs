@@ -102,13 +102,15 @@ public class EnemyBase : MonoBehaviour
     protected bool _isCreateAttack = false;
 
     // エフェクトオブジェクトを生成したかどうかのフラグ
-    protected bool _isCreateEffect = false;
+    protected bool[] _isCreateEffect;
 
     // プレイヤーの前座標
     protected Vector3 _attackTarget;
 
     // エフェクトの基準回転
     protected Quaternion _effectBaseRot;
+
+    protected bool _isBaseRotInit = false;
 
     //敵のデバフ状態
     public enum EnemyDebuff
@@ -159,6 +161,9 @@ public class EnemyBase : MonoBehaviour
 
         // ドロップする弾のリストを初期化する
         _dropBullets = new List<int>();
+
+        // エフェクト生成フラグ配列を初期化
+        _isCreateEffect = new bool[enemyData.effectPrefab.Length];
 
         // エフェクトオブジェクト配列を初期化
         _effectObj = new GameObject[enemyData.effectPrefab.Length];
@@ -374,7 +379,7 @@ public class EnemyBase : MonoBehaviour
     // エフェクトの向きをそのまま使いたい場合のエフェクト生成関数
     public GameObject RotationEffectCreate(Vector3 pos, GameObject effectPrefab)
     {
-        _effectBaseRot = effectPrefab.transform.rotation;
+        //_effectBaseRot = effectPrefab.transform.rotation;
 
         Vector3 dir = (player.transform.position - transform.position).normalized;
         Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -385,4 +390,8 @@ public class EnemyBase : MonoBehaviour
         return Instantiate(effectPrefab, pos, finalRot);
     }
 
+    public void BaseRotation(GameObject effectPrefab)
+    {
+        _effectBaseRot = effectPrefab.transform.rotation;
+    }
 }
