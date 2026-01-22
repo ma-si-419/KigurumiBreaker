@@ -8,7 +8,10 @@ public class SpecialGaugeController : MonoBehaviour
 {
     [SerializeField] private GameObject _player;                 //プレイヤーオブジェクト
 
-    [SerializeField] private Image _specialGaugeImage;           //ゲージ画像
+    [SerializeField] private Image _gauge1;                      //ゲージ画像1
+    [SerializeField] private Image _gauge2;                      //ゲージ画像2
+    [SerializeField] private Image _gauge3;                      //ゲージ画像3
+    [SerializeField] private Image _gauge4;                      //ゲージ画像4
     [SerializeField] private Image _auraImage;                   //オーラの画像
     [SerializeField] private Image _auraImage2;                  //オーラの画像
 
@@ -26,6 +29,7 @@ public class SpecialGaugeController : MonoBehaviour
         _currentGauge = _playerState.GetNowSpecialChargeNum();
         _maxGauge = _playerState.GetMaxSpecialChargeNum();
 
+
         _auraImage.gameObject.SetActive(false); //オーラを非表示
         _auraImage2.gameObject.SetActive(false); //オーラを非表示
     }
@@ -38,29 +42,79 @@ public class SpecialGaugeController : MonoBehaviour
 
         //ゲージの割合を計算
         float fillAmount = Mathf.Clamp01(_currentGauge / _maxGauge);
-        _specialGaugeImage.fillAmount = fillAmount;
-        //ゲージの色を変更
-        _specialGaugeImage.color = Color.Lerp(_specialGaugeUiData.normalColor, _specialGaugeUiData.maxColor, fillAmount);
-        //ゲージが最大値に達した場合、オーラを表示して点滅させる
-        if (_currentGauge >= _maxGauge)
+
+        // 25%ごとに埋める画像を変更
+        if (fillAmount <= 0.25f)
         {
-            _auraImage.gameObject.SetActive(true);
-            _auraImage2.gameObject.SetActive(true);
+            _gauge1.fillAmount = fillAmount / 0.25f;
+            _gauge2.fillAmount = 0f;
+            _gauge3.fillAmount = 0f;
+            _gauge4.fillAmount = 0f;
 
-            //色を設定
-            float flash = (Mathf.Sin(Time.time * _specialGaugeUiData.flashSpeed) + 1f) / 2f; // 0~1の点滅値
-            _specialGaugeImage.color = Color.Lerp(_specialGaugeUiData.maxColor, Color.white, flash); // 点滅
+            // ゲージの色を変更
+            _gauge1.color = _specialGaugeUiData.normalColor;
+            _gauge2.color = _specialGaugeUiData.normalColor;
+            _gauge3.color = _specialGaugeUiData.normalColor;
+            _gauge4.color = _specialGaugeUiData.normalColor;
+        }
+        else if (fillAmount <= 0.5f)
+        {
+            _gauge1.fillAmount = 1f;
+            _gauge2.fillAmount = (fillAmount - 0.25f) / 0.25f;
+            _gauge3.fillAmount = 0f;
+            _gauge4.fillAmount = 0f;
 
-            //オーラを回転させる
-            _auraImage.transform.Rotate(0f, 0f, _specialGaugeUiData.auraRotateSpeed * Time.deltaTime);
-            _auraImage2.transform.Rotate(0f, 0f, -_specialGaugeUiData.auraRotateSpeed * Time.deltaTime); //逆回転
+            // ゲージの色を変更
+            _gauge1.color = _specialGaugeUiData.maxColor;
+        }
+        else if (fillAmount <= 0.75f)
+        {
+            _gauge1.fillAmount = 1f;
+            _gauge2.fillAmount = 1f;
+            _gauge3.fillAmount = (fillAmount - 0.5f) / 0.25f;
+            _gauge4.fillAmount = 0f;
+
+            // ゲージの色を変更
+            _gauge1.color = _specialGaugeUiData.maxColor;
+            _gauge2.color = _specialGaugeUiData.maxColor;
         }
         else
         {
-            //ゲージが最大値に達していない場合、オーラを非表示にする
-            _auraImage.gameObject.SetActive(false);
-            _auraImage2.gameObject.SetActive(false);
+            _gauge1.fillAmount = 1f;
+            _gauge2.fillAmount = 1f;
+            _gauge3.fillAmount = 1f;
+            _gauge4.fillAmount = (fillAmount - 0.75f) / 0.25f;
+
+            // ゲージの色を変更
+            _gauge1.color = _specialGaugeUiData.maxColor;
+            _gauge2.color = _specialGaugeUiData.maxColor;
+            _gauge3.color = _specialGaugeUiData.maxColor;
+
+            if (fillAmount == 1.0f) _gauge4.color = _specialGaugeUiData.maxColor;
+
         }
+
+
+
+        /*
+                //ゲージが最大値に達した場合、オーラを表示して点滅させる
+                if (_currentGauge >= _maxGauge)
+                {
+                    _auraImage.gameObject.SetActive(true);
+                    _auraImage2.gameObject.SetActive(true);
+
+                    //オーラを回転させる
+                    _auraImage.transform.Rotate(0f, 0f, _specialGaugeUiData.auraRotateSpeed * Time.deltaTime);
+                    _auraImage2.transform.Rotate(0f, 0f, -_specialGaugeUiData.auraRotateSpeed * Time.deltaTime); //逆回転
+                }
+                else
+                {
+                    //ゲージが最大値に達していない場合、オーラを非表示にする
+                    _auraImage.gameObject.SetActive(false);
+                    _auraImage2.gameObject.SetActive(false);
+                }
+        */
     }
+
 
 }
