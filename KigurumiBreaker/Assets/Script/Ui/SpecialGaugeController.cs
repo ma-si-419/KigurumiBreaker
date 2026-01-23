@@ -13,7 +13,6 @@ public class SpecialGaugeController : MonoBehaviour
     [SerializeField] private Image _gauge3;                      //ゲージ画像3
     [SerializeField] private Image _gauge4;                      //ゲージ画像4
     [SerializeField] private Image _auraImage;                   //オーラの画像
-    [SerializeField] private Image _auraImage2;                  //オーラの画像
 
     [SerializeField] private SpecialGaugeUiData _specialGaugeUiData; //ゲージUIデータ
 
@@ -28,10 +27,6 @@ public class SpecialGaugeController : MonoBehaviour
 
         _currentGauge = _playerState.GetNowSpecialChargeNum();
         _maxGauge = _playerState.GetMaxSpecialChargeNum();
-
-
-        _auraImage.gameObject.SetActive(false); //オーラを非表示
-        _auraImage2.gameObject.SetActive(false); //オーラを非表示
     }
 
     // Update is called once per frame
@@ -89,11 +84,18 @@ public class SpecialGaugeController : MonoBehaviour
             _gauge1.color = _specialGaugeUiData.maxColor;
             _gauge2.color = _specialGaugeUiData.maxColor;
             _gauge3.color = _specialGaugeUiData.maxColor;
-
-            if (fillAmount == 1.0f) _gauge4.color = _specialGaugeUiData.maxColor;
-
         }
 
+        if (fillAmount == 1.0f)
+        {
+            _gauge4.color = _specialGaugeUiData.maxColor;
+
+            _auraImage.color = _specialGaugeUiData.auraMaxColor;
+        }
+        else
+        {
+            _auraImage.color = _specialGaugeUiData.auraNormalColor;
+        }
 
 
         /*
