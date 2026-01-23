@@ -379,15 +379,10 @@ public class EnemyBase : MonoBehaviour
     // エフェクトの向きをそのまま使いたい場合のエフェクト生成関数
     public GameObject RotationEffectCreate(Vector3 pos, GameObject effectPrefab)
     {
-        //_effectBaseRot = effectPrefab.transform.rotation;
+        Quaternion spawnRot = Quaternion.LookRotation(transform.forward);
 
-        Vector3 dir = (player.transform.position - transform.position).normalized;
-        Quaternion lookRot = Quaternion.LookRotation(dir);
-
-        Quaternion finalRot = lookRot * effectPrefab.transform.rotation;
-
-        // エフェクト生成
-        return Instantiate(effectPrefab, pos, finalRot);
+        // 敵の真正面にエフェクト生成
+        return Instantiate(effectPrefab, pos, spawnRot);
     }
 
     public void BaseRotation(GameObject effectPrefab)
