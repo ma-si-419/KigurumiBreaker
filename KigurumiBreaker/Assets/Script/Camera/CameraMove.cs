@@ -24,6 +24,7 @@ public class CameraMove : MonoBehaviour
         SMALL,
         MIDDLE,
         LARGE,
+        SPECIALATTACK,
         TYPENUM
     }
 
@@ -174,6 +175,9 @@ public class CameraMove : MonoBehaviour
                 break;
             case ShakeKind.LARGE:
                 SetShakeData(_shakeData.highTime, _shakeData.highPower);
+                break;
+            case ShakeKind.SPECIALATTACK:
+                SetShakeData(_shakeData.specialTime, _shakeData.specialPower);
                 break;
         }
     }

@@ -1515,6 +1515,9 @@ public class PlayerState : Player<PlayerState>
             {
                 state.CreateAttack(_currentAttackData);
 
+                // 画面を揺らす
+                _cameraMove.SetShakeData(_currentAttackData.cameraShakeKind);
+
                 _attackEffect = Instantiate(state._playerEffectData.specialAttackEffectPrefab, state.transform.position, Quaternion.identity);
 
                 // エフェクトの向きをプレイヤーの向きに合わせる
