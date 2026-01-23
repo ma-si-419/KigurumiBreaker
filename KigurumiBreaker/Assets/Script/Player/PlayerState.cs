@@ -398,8 +398,6 @@ public class PlayerState : Player<PlayerState>
             // ‰ñ”ğŠÔ‚ğİ’è
             _dodgeTime = 0;
 
-            // ˆÚ“®•ûŒü‚ÌŒvZ
-
             // ˆÚ“®•ûŒü‚ª‚È‚¢ê‡‚ÍŒ»İ‚ÌŒü‚«‚ğg—p
             if (state._moveInput.magnitude < state._playerData.moveInputLength)
             {
