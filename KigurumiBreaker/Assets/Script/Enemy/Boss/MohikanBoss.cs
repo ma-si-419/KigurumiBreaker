@@ -38,16 +38,6 @@ public class MohikanBoss : BossEnemy
 
     private int _effectCount = 0;
 
-    //public override void EffectBaseRotationInit()
-    //{
-    //    _effectBaseRot = _effectObj[2].transform.rotation;
-
-    //    Vector3 dir = (player.transform.position - transform.position).normalized;
-    //    Quaternion lookRot = Quaternion.LookRotation(dir);
-
-    //    _effectfinalRot = lookRot * _effectObj[0].transform.rotation;
-    //}
-
     protected override void DirectionUpdate()
     {
         if (!_isPhaseEffect)
@@ -127,8 +117,10 @@ public class MohikanBoss : BossEnemy
 
                 animator.SetBool("UnderAttackType1", true);
             }
-
-            LookAtPlayer();
+            else
+            {
+                LookAtPlayer();
+            }
 
             if (stateInfo.normalizedTime >= 0.2f)
             {
@@ -137,13 +129,6 @@ public class MohikanBoss : BossEnemy
                     _isCreateEffect[2] = true;
                     _effectObj[2] = RotationEffectCreate(this.transform.position, enemyData.effectPrefab[2]);
                 }
-
-                // 回転処理
-                Vector3 effectDir = player.transform.position - transform.position;
-                effectDir.y = 0f; // 必要ならY固定
-
-                Quaternion lookRot = Quaternion.LookRotation(effectDir);
-                _effectObj[2].transform.rotation = lookRot * _effectBaseRot;
             }
         }
 
@@ -385,6 +370,10 @@ public class MohikanBoss : BossEnemy
 
                 animator.SetBool("UnderAttackType5_2", true);
             }
+            else
+            {
+                LookAtPlayer();
+            }
 
             if (stateInfo.normalizedTime >= 0.2f)
             {
@@ -393,16 +382,8 @@ public class MohikanBoss : BossEnemy
                     _isCreateEffect[2] = true;
                     _effectObj[2] = RotationEffectCreate(this.transform.position, enemyData.effectPrefab[2]);
                 }
-
-                // 回転処理
-                Vector3 effectDir = player.transform.position - transform.position;
-                effectDir.y = 0f; // 必要ならY固定
-
-                Quaternion lookRot = Quaternion.LookRotation(effectDir);
-                _effectObj[2].transform.rotation = lookRot * _effectBaseRot;
             }
 
-            LookAtPlayer();
             _isWallHit = false;
         }
 
@@ -494,9 +475,10 @@ public class MohikanBoss : BossEnemy
                 animator.ResetTrigger("AttackType6");
                 animator.SetBool("UnderAttackType6", true);
             }
-
-            LookAtPlayer();
-
+            else
+            {
+                LookAtPlayer();
+            }
         }
 
         if (stateInfo.IsName("UnderAttackType6"))
