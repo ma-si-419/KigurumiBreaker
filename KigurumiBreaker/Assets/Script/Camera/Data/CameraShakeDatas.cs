@@ -19,6 +19,10 @@ public class CameraShakeData : ScriptableObject
     [SerializeField] private int HighTime;
     [Header("‹­—h‚ê‚Ì‘å‚«‚³")]
     [SerializeField] private float HighPower;
+    [Header("“ÁŽêUŒ‚‚Ì—h‚ê‚ÌŽžŠÔ")]
+    [SerializeField] private int SpecialTime;
+    [Header("“ÁŽêUŒ‚‚Ì—h‚ê‚Ì‘å‚«‚³")]
+    [SerializeField] private float SpecialPower;
 
 
     public int lowTime => LowTime;
@@ -27,4 +31,7 @@ public class CameraShakeData : ScriptableObject
     public float middlePower => MiddlePower;
     public int highTime => HighTime;
     public float highPower => HighPower;
+    public int specialTime => SpecialTime;
+    public float specialPower => SpecialPower;
+
 }
