@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Processors;
 
 public class LaserEnemy : Enemy
 {
     private float _laserTimer = 0.0f;   // タイマー
     private bool _isAnim = false;      // アニメーション開始フラグ
 
+    //[SerializeField] private GameObject _laserPrefab; // レーザープレハブ
+    private TestLaser _test; // レーザー処理クラス
 
     public override void AttackType1()
     {
@@ -26,7 +29,9 @@ public class LaserEnemy : Enemy
                 if (!_isCreateAttack)
                 {
                     _isCreateAttack = true;
-                    EnemyAttackCreate(2.0f, 1.5f, _enemyData.attackPrefab[0]);
+                    _attackObj = EnemyAttackLaserCreate(_enemyData.attackPrefab[0]);
+                    _test = _attackObj.GetComponent<TestLaser>();
+                    _attackObj.GetComponent<EnemyAttackCol>().SetBattleManager(_battleManager);
                 }
             }
 
@@ -67,9 +72,9 @@ public class LaserEnemy : Enemy
         // レーザー攻撃中の処理
         if (_attackObj != null)
         {
-            // レーザー攻撃オブジェクトの位置と回転を更新
-            _attackObj.transform.position = this.transform.position + this.transform.forward * 3.5f + this.transform.up * 1.5f;
-            _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
+            //// レーザー攻撃オブジェクトの位置と回転を更新
+            //_attackObj.transform.position = this.transform.position + _test.ScaleProcessor();
+            //_attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
 
         }
 
