@@ -344,7 +344,13 @@ public class EnemyBase : MonoBehaviour
 
         // 攻撃オブジェクトの位置を調整
         _attackObj.transform.position = this.transform.position + this.transform.forward * distance + this.transform.up * up;
-        _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0); ; ;
+        _attackObj.transform.rotation = this.transform.rotation * Quaternion.Euler(90, 0, 0);
+    }
+
+    // レーザー用の攻撃オブジェクトのデータを返す関数
+    public GameObject EnemyAttackLaserCreate(GameObject attackPrefab)
+    {
+        return Instantiate(attackPrefab);
     }
 
     // プレイヤーをターゲットにした敵の攻撃オブジェクトを生成する関数

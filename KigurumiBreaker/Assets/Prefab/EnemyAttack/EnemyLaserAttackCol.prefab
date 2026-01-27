@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 858687733290082878}
   - component: {fileID: -1747156925736065934}
   - component: {fileID: -8938108541468608952}
+  - component: {fileID: 3870481456683189638}
   m_Layer: 0
   m_Name: EnemyLaserAttackCol
   m_TagString: EnemyAttack
@@ -31,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 2.5, z: 0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6397490429816697451}
@@ -155,6 +156,22 @@ MonoBehaviour:
   _damageKind: 0
   _hitEffectPrefab: {fileID: 1368958316424924904, guid: c441043a92fff5444b26788cdd821f49, type: 3}
   _lifeTime: 300
+--- !u!114 &3870481456683189638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621494178838673121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb5f610da48b744688dfbc654ad0db8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _laserRange: 10
+  _scallingTime: 10
+  _laserScaleX: 0.5
+  _laserScaleZ: 0.5
 --- !u!1001 &1347680880481062979
 PrefabInstance:
   m_ObjectHideFlags: 0
