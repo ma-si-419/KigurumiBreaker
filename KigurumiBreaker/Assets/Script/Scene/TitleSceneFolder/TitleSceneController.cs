@@ -21,6 +21,14 @@ public class TitleSceneController : MonoBehaviour
 
     public void OnStartGame()
     {
+
+
+    }
+
+    private void Update()
+    {
+        //普通に時間が来たらボタンを押せるようにする
+        //フェード完了時間を代入
         if (Input.GetButton("Submit") || Input.GetKey(KeyCode.A))
         {
             if (!_oneBotton && _eventManager.EventButton)
@@ -34,21 +42,5 @@ public class TitleSceneController : MonoBehaviour
                 _oneBotton = true;
             }
         }
-
-    }
-
-    private void Update()
-    {
-        //普通に時間が来たらボタンを押せるようにする
-        //フェード完了時間を代入
-
-        OnClick();
-    }
-
-    
-
-    private void OnClick()
-    {
-
     }
 }
