@@ -26,6 +26,8 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private DamageUiData _damageUiData;
 
+    [SerializeField] private FadeOut _fadeOut;
+
     private PlayerState _playerState;
 
     private CameraMove _cameraMove;
@@ -208,6 +210,11 @@ public class BattleManager : MonoBehaviour
         // ダメージUIをまとめたものをキャンバスの子にする
         damageUis.transform.SetParent(_uiCanvas.transform, false);
 
+    }
+
+    public void StartFadeOut()
+    {
+        _fadeOut.StartFadeOut();
     }
 
     public void SetHitStop(int time)

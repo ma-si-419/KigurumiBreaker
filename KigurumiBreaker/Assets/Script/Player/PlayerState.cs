@@ -113,7 +113,7 @@ public class PlayerState : Player<PlayerState>
     PassiveStatus _lastPassiveStatus;
 
     // デバッグ用：特殊攻撃のチャージ量
-    [Range(0.0f,100.0f)]public float DEBUG_SpecialAttackGauge;
+ //   [Range(0.0f,100.0f)]public float DEBUG_SpecialAttackGauge;
 
     // 入力情報
     private GameInputs _input;
@@ -259,10 +259,10 @@ public class PlayerState : Player<PlayerState>
         public override void OnUpdate()
         {
             if (state._isStop) return;
-            if (state.DEBUG_SpecialAttackGauge > 0)
-            {
-                state._specialChargeNum = state.DEBUG_SpecialAttackGauge;
-            }
+            //if (state.DEBUG_SpecialAttackGauge > 0)
+            //{
+            //    state._specialChargeNum = state.DEBUG_SpecialAttackGauge;
+            //}
 
             // 移動ベクトルをリセット
             state._rigidbody.velocity = Vector3.zero;
@@ -1811,6 +1811,8 @@ public class PlayerState : Player<PlayerState>
             {
                 // 死亡エフェクトを再生
                 Instantiate(state._playerEffectData.deathEffectPrefab, state.transform.position, Quaternion.identity);
+
+                state._battleManager.StartFadeOut();
             }
 
             // 移動ベクトルをリセットし続ける
