@@ -4,39 +4,42 @@ using UnityEngine;
 
 public class GameSceneController : MonoBehaviour
 {
-    [SerializeField] private int _maxTime; //制限時間
-    private int _time; //制限時間
+    [Header("プレイヤーのゲームオブジェクト")]
+    [SerializeField] private PlayerState _player;
 
-    // Start is called before the first frame update
+    private bool _isGameOver = false;
+
     void Start()
     {
-        
+        // プレイヤー参照が空なら自動で探す
+        if (_player == null)
+        {
+            Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        _time++;
+        ////ポーズ中は操作できないようにする
+        //if (BaseSceneController.instance.isPaused) return;
+        ////スキル選択中は操作できないようにする
+        //if(BaseSceneController.instance.isSkillSelect) return;
 
-        //ポーズ中は操作できないようにする
-        if (BaseSceneController.instance.isPaused) return;
-        //スキル選択中は操作できないようにする
-        if(BaseSceneController.instance.isSkillSelect) return;
+        //// スタートボタンでポーズ
+        //if (Input.GetButtonDown("Start"))
+        //{
+        //    BaseSceneController.instance.TogglePause();
+        //}
 
-        if(_time > _maxTime)
+        // プレイヤーのHPが0以下ならゲームオーバーへ
+        if (_player.GetNowHp() <= 0 && !_isGameOver)
         {
-            //決定(Aボタン)
-            //if (Input.GetButtonDown("Submit"))
-            //{
-            //    BaseSceneController.instance.ChangeSceneWithFade(SceneType.ResultScene);
-            //    Debug.Log("Aボタンが押されました");
-            //}
+            // ゲームオーバーシーンへ
+            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameOverScene);
+            _isGameOver = true;
         }
 
-        if(Input.GetButtonDown("Start"))
-        {
-            BaseSceneController.instance.TogglePause();
-        }
     }
 
 }

@@ -31,10 +31,10 @@ public class FadeOut : MonoBehaviour
                 _isFadeOut = false;
 
                 // ƒV[ƒ“ˆÚ“®
-                UnityEngine.SceneManagement.SceneManager.LoadScene("GameOverScene");
+                //UnityEngine.SceneManagement.SceneManager.LoadScene("GameOverScene");
 
+                
 
-                //               BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameOverScene);
 
             }
         }
