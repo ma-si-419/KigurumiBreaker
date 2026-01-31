@@ -23,6 +23,8 @@ public class EnemyCommonData : ScriptableObject
     [SerializeField] private float _dropBulletForce;
     [Header("ドロップする弾の時間")]
     [SerializeField] private int _dropBulletTime;
+    [Header("死亡字のエフェクト")]
+    [SerializeField] private GameObject _deadEffectPrefab;
 
     // 読み取り専用
     public float shakeMagnitude => ShakeMagnitude;
@@ -34,4 +36,5 @@ public class EnemyCommonData : ScriptableObject
     public float dropPosShiftY => _dropPosShiftY;
     public float dropBulletForce => _dropBulletForce;
     public int dropBulletTime => _dropBulletTime;
+    public GameObject deadEffectPrefab => _deadEffectPrefab;
 }

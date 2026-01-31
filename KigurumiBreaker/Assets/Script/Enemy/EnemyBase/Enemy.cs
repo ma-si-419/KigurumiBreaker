@@ -41,9 +41,12 @@ public class Enemy : EnemyBase
     private bool _isDetectionMark;
 
     // ダメージエフェクトのプレハブ
+    protected bool _isDeadEffect;
 
     // ヒットストップ用の揺れベクトル
     protected float _idleTime;
+
+    protected GameObject _deadEffectObj;
 
     // 定数
     protected const float ATTACK_SIGN_DECREASE = 0.1f;
@@ -63,6 +66,8 @@ public class Enemy : EnemyBase
     [SerializeField] protected SkinnedMeshRenderer[] _attackSignSkinedMeshRenderer;
 
     public bool isChasetoIdle => _isChasetoIdle;
+
+    public GameObject deadEffectObj => _deadEffectObj;
 
     protected override void Start()
     {
@@ -205,6 +210,8 @@ public class Enemy : EnemyBase
             //プレイヤー発見したら一度だけ呼ばれる
             if (!_isSearched)
             {
+                AudioManager.Instance.PlaySE(SoundID.PlayerDiscovery);
+
                 // 敵の検知マークを生成
                 OnPlayerDetected();
             }
@@ -510,6 +517,16 @@ public class Enemy : EnemyBase
         //今のステート状態のアニメーションにダメージアニメーションを重ねる
         _animator.CrossFade("Damage", 0.0f);
 
+    }
+
+    public void OnDeadEffect()
+    {
+        if (_isDeadEffect) return;
+
+        // 死亡エフェクトを生成する
+        _deadEffectObj = EffectCreate(this.transform.position + this.transform.up * 1.0f, _enemyCommonData.deadEffectPrefab);
+
+        _isDeadEffect = true;
     }
 
     //デバッグ用に線を引く
