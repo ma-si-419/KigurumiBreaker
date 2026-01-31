@@ -22,6 +22,9 @@ public class EventManager : MonoBehaviour
         //•Ç‚É“úX‚ª“ü‚Á‚½uŠÔ‚É—h‚ç‚·
         if (_breakBlock.breakMoment && EventButton == false)
         {
+            //Se‚ğ–Â‚ç‚·
+            AudioManager.Instance.PlaySE(SoundID.WallBreak);
+
             //ƒJƒƒ‰‚ğ—h‚ç‚·
             StartCoroutine(_shakeCamera.MyShake(0.5f, 0.2f));
 

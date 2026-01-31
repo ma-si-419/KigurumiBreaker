@@ -8,6 +8,7 @@ public class TitlePlayer : MonoBehaviour
     [SerializeField] private TitleCameraMove _cameraMove;
     [SerializeField] private float _moveSpped = 0.02f;
     private Animator _anim = null;
+    private bool _oneSe = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,8 @@ public class TitlePlayer : MonoBehaviour
 
         //アニメーションスピード設定
         _anim.SetFloat("Speed", _moveSpped);
+
+        _oneSe = false;
     }
 
     // Update is called once per frame
@@ -29,6 +32,14 @@ public class TitlePlayer : MonoBehaviour
         {
             //アニメーションを戻す
             _anim.SetFloat("Speed", 1.0f);
+
+            if(!_oneSe)
+            {
+                //Seを鳴らす
+                //AudioManager.Instance.PlaySE(SoundID.);
+
+                _oneSe = true;
+            }
 
             //Debug.Log("アニメーションが戻る");
         }
