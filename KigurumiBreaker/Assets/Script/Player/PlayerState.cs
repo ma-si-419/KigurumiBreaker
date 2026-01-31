@@ -1817,6 +1817,7 @@ public class PlayerState : Player<PlayerState>
 
             // 移動ベクトルをリセットし続ける
             state._rigidbody.velocity = Vector3.zero;
+            AudioManager.Instance.StopBGM();
         }
         public override void OnExitState()
         {
