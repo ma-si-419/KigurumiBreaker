@@ -21,17 +21,18 @@ public class TitleSceneController : MonoBehaviour
 
     public void OnStartGame()
     {
-
-        if (!_oneBotton && _eventManager.EventButton)
+        if (Input.GetButton("Submit") || Input.GetKey(KeyCode.A))
         {
-            AudioManager.Instance.StopBGM();
-            //ゲームシーンへ
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
-            //BaseSceneController.instance.ChangeSceneWithFade(SceneType.SelectScene);
+            if (!_oneBotton && _eventManager.EventButton)
+            {
+                AudioManager.Instance.StopBGM();
+                //ゲームシーンへ
+                BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
 
-            Debug.Log(_oneBotton);
+                Debug.Log(_oneBotton);
 
-            _oneBotton = true;
+                _oneBotton = true;
+            }
         }
 
     }
