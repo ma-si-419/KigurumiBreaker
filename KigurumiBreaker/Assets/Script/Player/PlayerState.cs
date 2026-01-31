@@ -1025,7 +1025,7 @@ public class PlayerState : Player<PlayerState>
 
         bool _isHighChargeAttack = false;
 
-        GameObject _attackArea;
+       // GameObject _attackArea;
 
         float _attackScale;
 
@@ -1094,9 +1094,9 @@ public class PlayerState : Player<PlayerState>
 
                     AreaPos += shift;
 
-                    _attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
+                    //_attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
 
-                    _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
+                    //_attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
 
                     _isShowAttackRange = true;
                 }
@@ -1109,7 +1109,7 @@ public class PlayerState : Player<PlayerState>
                     {
                         _attackScale = state.SearchAttackData("ChargeAttack").scale;
 
-                        _attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
+                        //_attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
 
                         _isHighChargeAttack = true;
 
@@ -1215,11 +1215,11 @@ public class PlayerState : Player<PlayerState>
             state._animator.ResetTrigger("NormalCharge");
 
             // 攻撃範囲オブジェクトを削除
-            if (_attackArea)
-            {
-                Destroy(_attackArea);
-                _attackArea = null;
-            }
+            //if (_attackArea)
+            //{
+            //    Destroy(_attackArea);
+            //    _attackArea = null;
+            //}
 
             // チャージエフェクトを削除
             if (_chargeEffect)
