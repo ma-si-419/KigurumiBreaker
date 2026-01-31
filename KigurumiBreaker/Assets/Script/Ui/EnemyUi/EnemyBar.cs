@@ -74,58 +74,60 @@ public class EnemyBar : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        /* HpBar処理 */
-        float targetHpRatio = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
-
-        // 現在のHpが目標値と異なる場合
-        if (_currentHpImg.fillAmount != targetHpRatio)
+        else
         {
-            // 即座に減らす
-            _currentHpImg.fillAmount = targetHpRatio;
-
-            // 遅延バーの減少をストップ
-            if (_hpCoroutine != null) StopCoroutine(_hpCoroutine);
-
-            // 遅延バーの減少を開始
-            _hpCoroutine = StartCoroutine(HpDelayDecrease(targetHpRatio));
-        }
-
-        /* TrunkBar処理 */
-        if(_enemy.GetCurrentTrunk() <= 0f)
-        {
-            _isArmor = false;
-        }
-
-        // アーマー装備時の処理
-        if (_enemy.enemyData.isArmor)
-        {
-            float targetTrunkRatio = _enemy.GetCurrentTrunk() / _enemy.enemyData.maxTrunk;
+            /* HpBar処理 */
+            float targetHpRatio = _enemy.GetCurrentHp() / _enemy.enemyData.maxHp;
 
             // 現在のHpが目標値と異なる場合
-            if (_currentTrunkImg.fillAmount != targetTrunkRatio)
+            if (_currentHpImg.fillAmount != targetHpRatio)
             {
                 // 即座に減らす
-                _currentTrunkImg.fillAmount = targetTrunkRatio;
+                _currentHpImg.fillAmount = targetHpRatio;
 
                 // 遅延バーの減少をストップ
-                if (_trunkCoroutine != null) StopCoroutine(_trunkCoroutine);
+                if (_hpCoroutine != null) StopCoroutine(_hpCoroutine);
 
                 // 遅延バーの減少を開始
-                _trunkCoroutine = StartCoroutine(TrunkDelayDecrease(targetTrunkRatio));
+                _hpCoroutine = StartCoroutine(HpDelayDecrease(targetHpRatio));
             }
+
+            /* TrunkBar処理 */
+            if (_enemy.GetCurrentTrunk() <= 0f)
+            {
+                _isArmor = false;
+            }
+
+            // アーマー装備時の処理
+            if (_enemy.enemyData.isArmor)
+            {
+                float targetTrunkRatio = _enemy.GetCurrentTrunk() / _enemy.enemyData.maxTrunk;
+
+                // 現在のHpが目標値と異なる場合
+                if (_currentTrunkImg.fillAmount != targetTrunkRatio)
+                {
+                    // 即座に減らす
+                    _currentTrunkImg.fillAmount = targetTrunkRatio;
+
+                    // 遅延バーの減少をストップ
+                    if (_trunkCoroutine != null) StopCoroutine(_trunkCoroutine);
+
+                    // 遅延バーの減少を開始
+                    _trunkCoroutine = StartCoroutine(TrunkDelayDecrease(targetTrunkRatio));
+                }
+            }
+
+            if (!_isArmor)
+            {
+                // アーマー装備していない場合はTrunkIconを非表示にする
+                _trunkIconImg.gameObject.SetActive(false);
+            }
+
+            /* 位置・向きを更新 */
+            transform.position = _enemy.transform.position + _offset;
+            transform.forward = Camera.main.transform.forward;
+
         }
-
-        if(!_isArmor)
-        {
-            // アーマー装備していない場合はTrunkIconを非表示にする
-            _trunkIconImg.gameObject.SetActive(false);
-        }
-
-        /* 位置・向きを更新 */
-        transform.position = _enemy.transform.position + _offset;
-        transform.forward = Camera.main.transform.forward;
-
     }
 
     // Hp用コルーチン

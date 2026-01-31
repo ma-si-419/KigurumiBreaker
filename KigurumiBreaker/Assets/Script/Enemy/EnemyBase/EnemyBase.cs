@@ -199,8 +199,6 @@ public class EnemyBase : MonoBehaviour
         // 現在のステートのUpdateメソッドを呼び出す
         _currentState?.Update();
 
-        Debug.Log(_effectObj.Length);
-
         // 弾をドロップする
         for (int i = 0; i < _dropBullets.Count; i++)
         {

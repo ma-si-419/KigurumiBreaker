@@ -64,23 +64,27 @@ public class BossEnemyBar : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        /* HpBar処理 */
-        float targetHpRatio = _bossEnemy.GetCurrentHp() / _bossEnemy.enemyData.maxHp;
-
-        // 現在のHpが目標値と異なる場合
-        if (_currentHpImg.fillAmount != targetHpRatio)
+        else
         {
-            // 即座に減らす
-            _currentHpImg.fillAmount = targetHpRatio;
+            /* HpBar処理 */
+            float targetHpRatio = _bossEnemy.GetCurrentHp() / _bossEnemy.enemyData.maxHp;
 
-            // 遅延バーの減少をストップ
-            if (_hpCoroutine != null) StopCoroutine(_hpCoroutine);
+            // 現在のHpが目標値と異なる場合
+            if (_currentHpImg.fillAmount != targetHpRatio)
+            {
+                // 即座に減らす
+                _currentHpImg.fillAmount = targetHpRatio;
 
-            // 遅延バーの減少を開始
-            _hpCoroutine = StartCoroutine(HpDelayDecrease(targetHpRatio));
+                // 遅延バーの減少をストップ
+                if (_hpCoroutine != null) StopCoroutine(_hpCoroutine);
 
+                // 遅延バーの減少を開始
+                _hpCoroutine = StartCoroutine(HpDelayDecrease(targetHpRatio));
+
+            }
         }
+
+
     }
 
     // Hp用コルーチン

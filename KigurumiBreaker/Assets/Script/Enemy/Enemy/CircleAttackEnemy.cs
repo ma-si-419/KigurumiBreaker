@@ -52,7 +52,6 @@ public class CircleAttackEnemy : Enemy
             }
         }
 
-        Debug.Log("True");
         _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
 
     }

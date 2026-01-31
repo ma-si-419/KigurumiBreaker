@@ -68,31 +68,19 @@ public class BaseSceneController : MonoBehaviour
         yield return null;
 
         //fadeCanvasを再取得
-        if(fadeCanvas == null)
-        {
-            fadeCanvas = FindObjectOfType<CanvasGroup>();
-        }
+        //if(fadeCanvas == null)
+        //{
+        //    fadeCanvas = FindObjectOfType<CanvasGroup>();
+        //}
+
+        fadeCanvas = FindObjectOfType<CanvasGroup>();
 
         //フェードイン
-        if(fadeCanvas != null)
+        if (fadeCanvas != null)
         {
             yield return StartCoroutine(Fade(0f));
         }
     }
-
-    //ロード画面付きの切り替え
-    //public void ChangeSceneWithLoading(SceneType nextScene)
-    //{
-    //    //StartCoroutine();
-    //}
-
-    //private IEnumerator LoadSceneCoroutine(SceneType nextType)
-    //{
-
-
-
-    //}
-
 
     //共通フェード処理
     private IEnumerator Fade(float targetAlpha)

@@ -1812,7 +1812,7 @@ public class PlayerState : Player<PlayerState>
                 // 死亡エフェクトを再生
                 Instantiate(state._playerEffectData.deathEffectPrefab, state.transform.position, Quaternion.identity);
 
-                state._battleManager.StartFadeOut();
+                //state._battleManager.StartFadeOut();
             }
 
             // 移動ベクトルをリセットし続ける
