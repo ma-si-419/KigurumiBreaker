@@ -5,6 +5,7 @@ using UnityEngine;
 public class ResultAnim : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 0.1f;
+    [SerializeField] private float _moveTime = 0.0f;
     private Animator _anim = null;
 
     private float _stopTime = 0.0f;
@@ -19,6 +20,8 @@ public class ResultAnim : MonoBehaviour
 
         //アニメーションスピード設定
         _anim.SetFloat("Speed", _moveSpeed);
+
+        _anim.Play("Low1", 1, _moveTime);
     }
 
     // Update is called once per frame
@@ -26,9 +29,7 @@ public class ResultAnim : MonoBehaviour
     {
         _anim.SetBool("Low1", true);
 
-       
-
-        if (_stopTime >= 1.0f)
+        if (_stopTime >= _moveTime)
         {
             //一時停止する
             _anim.speed = 0.0f;
