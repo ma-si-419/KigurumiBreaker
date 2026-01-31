@@ -19,6 +19,21 @@ public class TyanTwoBoss : BossEnemy
 
     private float[] _angle = { 0, 45, 90, 135, 180, 225, 270, 315 };
 
+    protected override void DirectionUpdate()
+    {
+        if (!_isPhaseEffect)
+        {
+            _isPhaseEffect = true;
+            _phaseEffectObj = EffectCreate(this.transform.position, bossData.phaseEffect);
+
+            for (int i = 0; i < _effectObj.Length; i++)
+            {
+                Destroy(_effectObj[i]);
+            }
+        }
+
+        _phaseEffectObj.transform.position = this.transform.position;
+    }
 
     public override void PhaseChange()
     {
@@ -69,11 +84,23 @@ public class TyanTwoBoss : BossEnemy
         {
             LookAtPlayer();
 
-            if (stateInfo.normalizedTime <= 0.3f)
+            if (stateInfo.normalizedTime < 0.2f)
             {
                 // 攻撃ターゲットをプレイヤーの位置に更新
                 _attackTarget = _player.transform.position;
+
+
             }
+
+            if (stateInfo.normalizedTime >= 0.3f)
+            {
+                if (!_isCreateEffect[0])
+                {
+                    _isCreateEffect[0] = true;
+                    _effectObj[0] = EffectCreate(_attackTarget, _enemyData.effectPrefab[0]);
+                }
+            }
+
 
             if (stateInfo.normalizedTime >= 0.5f)
             {
@@ -94,7 +121,9 @@ public class TyanTwoBoss : BossEnemy
         //敵のアニメーションが終わったらIdleStateに遷移
         if (_isStateChange)
         {
+            Destroy(_effectObj[0]);
             _isCreateAttack = false;
+            _isCreateEffect[0] = false;
             _isStateChange = false;
             ChangeState(new BossIdleState(this));
         }

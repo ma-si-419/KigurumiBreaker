@@ -135,6 +135,7 @@ public class EnemyBase : MonoBehaviour
     public IState previousState => _previousState;
     public float attackRangeSqr => _attackRangeSqr;
     public GameObject attackObj => _attackObj;
+    public GameObject[] effectObj => _effectObj;
     public Vector3 attackTarget => _attackTarget;
 
     protected virtual void Start()

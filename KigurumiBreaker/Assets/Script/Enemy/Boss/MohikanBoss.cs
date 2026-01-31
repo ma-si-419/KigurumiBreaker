@@ -44,10 +44,10 @@ public class MohikanBoss : BossEnemy
             _isPhaseEffect = true;
             _phaseEffectObj = EffectCreate(this.transform.position, bossData.phaseEffect);
 
-            Destroy(_effectObj[0]);
-            Destroy(_effectObj[1]);
-            Destroy(_effectObj[2]);
-            Destroy(_effectObj[3]);
+            for (int i = 0; i < _effectObj.Length; i++)
+            {
+                Destroy(_effectObj[i]);
+            }
         }
 
         _phaseEffectObj.transform.position = this.transform.position;
