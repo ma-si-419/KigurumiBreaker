@@ -13,13 +13,12 @@ public class Scene : MonoBehaviour
         _One = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         float delta = Time.deltaTime;
         _Time -= delta;
 
-        if(0.0f >= _Time && !_One)
+        if (0.0f >= _Time && !_One)
         {
             //安田オリジナル移動でシーン移動
             BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
@@ -27,6 +26,5 @@ public class Scene : MonoBehaviour
             //一回だけ反応させる
             _One = true;
         }
-        
     }
 }
