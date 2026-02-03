@@ -39,6 +39,13 @@ public class BattleManager : MonoBehaviour
     private bool _isSlow = false;
 
     private float _slowFrame;
+    public enum UiKind
+    {
+        EnemyDamage,
+        PlayerDamage,
+        Heal,
+        KindNum
+    }
 
     private void Start()
     {
@@ -84,8 +91,6 @@ public class BattleManager : MonoBehaviour
 
                 if (_enemyAttacks.Count > 0)
                 {
-                    Debug.Log("êî" + _enemyAttacks.Count);
-
                     foreach (GameObject enemyAttack in _enemyAttacks)
                     {
                         enemyAttack.GetComponent<EnemyAttackCol>().SetStop(false);
