@@ -16,6 +16,14 @@ public class EventManager : MonoBehaviour
 
     public bool EventButton = false;               //ƒCƒxƒ“ƒgŠ®—¹•Ï”
 
+
+    private void Start()
+    {
+        //‰Šú‰»
+        EventButton = false;
+        _oneButton = false;
+    }
+
     // Update is called once per frame
     void Update()
     {

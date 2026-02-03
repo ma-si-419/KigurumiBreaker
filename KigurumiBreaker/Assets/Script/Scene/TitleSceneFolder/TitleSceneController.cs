@@ -10,6 +10,8 @@ public class TitleSceneController : MonoBehaviour
 
     private bool _oneBotton;      //ボタンを一回だけ
 
+    private float _timer = 0.0f;    //タイマー
+
     //最初に呼ばれる
     public void Start()
     {
@@ -17,6 +19,7 @@ public class TitleSceneController : MonoBehaviour
         //EventSystem.current.SetSelectedGameObject(_firstSelected.gameObject);
 
         _oneBotton = false;
+        _timer = 0.0f;
     }
 
     public void OnStartGame()
@@ -27,20 +30,29 @@ public class TitleSceneController : MonoBehaviour
 
     private void Update()
     {
-        //普通に時間が来たらボタンを押せるようにする
-        //フェード完了時間を代入
-        if (Input.GetButton("Submit") || Input.GetKey(KeyCode.A))
+
+
+        _timer += 0.1f;
+
+
+        if(_timer >=  25.0f)
         {
-            if (!_oneBotton && _eventManager.EventButton)
+            //普通に時間が来たらボタンを押せるようにする
+            //フェード完了時間を代入
+            if (Input.GetButton("Submit") || Input.GetKey(KeyCode.A))
             {
-                AudioManager.Instance.StopBGM();
-                //ゲームシーンへ
-                BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
+                if (!_oneBotton && _eventManager.EventButton)
+                {
+                    AudioManager.Instance.StopBGM();
+                    //ゲームシーンへ
+                    BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameScene);
 
-                Debug.Log(_oneBotton);
+                    Debug.Log(_oneBotton);
 
-                _oneBotton = true;
+                    _oneBotton = true;
+                }
             }
         }
+        
     }
 }
