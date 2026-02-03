@@ -153,7 +153,7 @@ public class PlayerAttack : MonoBehaviour
 
             // 敵とぶつかった地点にダメージ数字を出す
             Vector3 damageNumberPos = other.ClosestPoint(this.transform.position);
-            _battleManager.CreateDamageUi(damageNumberPos, (int)_attackData.damage);
+            _battleManager.CreateDamageUi(damageNumberPos, (int)_attackData.damage,BattleManager.DamageUiKind.PlayerDamage);
 
             // 効果音を再生する
             AudioManager.Instance.PlaySE(_attackData.hitSoundID);

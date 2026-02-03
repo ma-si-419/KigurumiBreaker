@@ -2485,6 +2485,10 @@ public class PlayerState : Player<PlayerState>
             // HPを減らす
             _nowHp -= damage;
 
+            // 敵とぶつかった地点にダメージ数字を出す
+            Vector3 damageNumberPos = other.ClosestPoint(this.transform.position);
+            _battleManager.CreateDamageUi(damageNumberPos, damage, BattleManager.DamageUiKind.EnemyDamage);
+
             // ダメージの一定割合を特殊ゲージに加算
             float specialGaugeAddNum = damage * _playerData.specialAttackChargeRate;
 
