@@ -16,7 +16,9 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private GameObject _camera;
 
-    [SerializeField] private List<Sprite>_damageNumberSprite;
+    [SerializeField] private List<Sprite> _enemyDamageNumberSprite;
+
+    [SerializeField] private List<Sprite> _playerDamageNumberSprite;
 
     [SerializeField] private int _damageUiMargin; // ダメージUIの桁数の間隔
 
@@ -39,7 +41,7 @@ public class BattleManager : MonoBehaviour
     private bool _isSlow = false;
 
     private float _slowFrame;
-    public enum UiKind
+    public enum DamageUiKind
     {
         EnemyDamage,
         PlayerDamage,
@@ -117,7 +119,7 @@ public class BattleManager : MonoBehaviour
         _playerAttacks.Clear();
 
         // エフェクトをすべて削除する
-        
+
     }
 
     public void AddEnemy(GameObject enemy)
@@ -161,7 +163,7 @@ public class BattleManager : MonoBehaviour
         Time.timeScale = timeScale;
     }
 
-    public void CreateDamageUi(Vector3 pos,int damage)
+    public void CreateDamageUi(Vector3 pos, int damage, DamageUiKind kind)
     {
         // 桁数ごとに分解
         List<int> digits = new List<int>();
@@ -202,7 +204,16 @@ public class BattleManager : MonoBehaviour
             damageUi.transform.SetParent(damageUis.transform, false);
             // スプライトの設定
             UnityEngine.UI.Image image = damageUi.GetComponent<UnityEngine.UI.Image>();
-            image.sprite = _damageNumberSprite[digits[i]];
+
+            if (kind == DamageUiKind.PlayerDamage)
+            {
+                image.sprite = _playerDamageNumberSprite[digits[i]];
+            }
+            else if (kind == DamageUiKind.EnemyDamage)
+            {
+                image.sprite = _enemyDamageNumberSprite[digits[i]];
+            }
+
             image.SetNativeSize();
             // 位置の設定
             RectTransform rectTransform = damageUi.GetComponent<RectTransform>();

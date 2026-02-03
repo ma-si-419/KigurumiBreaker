@@ -11,14 +11,6 @@ public class DamageUiController : MonoBehaviour
         public float endScale;
     }
 
-    public enum UiKind
-    {
-        EnemyDamage,
-        PlayerDamage,
-        Heal,
-        KindNum
-    }
-
     private List<RectTransform> _uis = new List<RectTransform>();
 
     private DamageUiData _damageUiData;
