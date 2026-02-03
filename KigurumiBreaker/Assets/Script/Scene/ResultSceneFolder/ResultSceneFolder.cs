@@ -5,20 +5,26 @@ using UnityEngine;
 public class ResultSceneFolder : MonoBehaviour
 {
     private bool _oneButton = false;
-    private float _timer = 100.0f;
+    private float _time = 0.0f;
+    private float _timer = 50.0f;
 
     // Start is called before the first frame update
     void Start()
     {
+        //初期化
+        _time = 0.0f;
         _oneButton = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButton("Submit") || Input.GetKey(KeyCode.A))
+
+        _time += 0.1f;
+
+        if (Input.GetButton("Submit") || Input.GetKey(KeyCode.A))
         {
-            if (!_oneButton)
+            if (!_oneButton && _timer / 3.0f <= _time)
             {
                 //BGM停止
                 AudioManager.Instance.StopBGM();
@@ -30,30 +36,18 @@ public class ResultSceneFolder : MonoBehaviour
             }
         }
 
-        float time = Time.time;
+
 
         //自動でタイトルへ戻る
-        if(_timer <= time)
+        if (_timer <= _time && !_oneButton)
         {
             //BGM停止
             AudioManager.Instance.StopBGM();
 
             //タイトルシーンへ
             BaseSceneController.instance.ChangeSceneWithFade(SceneType.TitleScene);
+
+            _oneButton = true;
         }
-
-       
-
-        ////決定(Aボタン)
-        //if (Input.GetButtonDown("Submit"))
-        //{
-        //    //BaseSceneController.instance.ChangeSceneWithFade(SceneType.TitleScene);
-        //    Debug.Log("Aボタンが押されました");
-        //}
-
-        //if (Input.GetButtonDown("Start"))
-        //{
-        //    BaseSceneController.instance.TogglePause();
-        //}
     }
 }
