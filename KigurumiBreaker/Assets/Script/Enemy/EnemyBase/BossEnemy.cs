@@ -54,7 +54,7 @@ public class BossEnemy : EnemyBase
 
     public BossAttackData attackData => _attackData;
     public BossData bossData => _bossData;
-
+    public GameObject phaseEffectObj => _phaseEffectObj;
 
     protected override void Start()
     {
