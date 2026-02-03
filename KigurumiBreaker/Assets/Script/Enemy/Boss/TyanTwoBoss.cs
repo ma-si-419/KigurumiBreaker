@@ -32,7 +32,10 @@ public class TyanTwoBoss : BossEnemy
             }
         }
 
-        _phaseEffectObj.transform.position = this.transform.position;
+        if (_phaseEffectObj != null)
+        {
+            _phaseEffectObj.transform.position = this.transform.position;
+        }
     }
 
     public override void PhaseChange()
