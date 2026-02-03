@@ -49,8 +49,11 @@ public class MohikanBoss : BossEnemy
                 Destroy(_effectObj[i]);
             }
         }
-
-        _phaseEffectObj.transform.position = this.transform.position;
+        
+        if(_phaseEffectObj != null)
+        {
+            _phaseEffectObj.transform.position = this.transform.position;
+        }
     }
 
     public override void PhaseChange()
@@ -527,6 +530,9 @@ public class MohikanBoss : BossEnemy
             _isCreateEffect[3] = false;
             _isCreateAttack = false;
             _isStateChange = true;
+
+            Destroy(_effectObj[1]);
+            Destroy(_effectObj[3]);
         }
 
         //敵のアニメーションが終わったらIdleStateに遷移
