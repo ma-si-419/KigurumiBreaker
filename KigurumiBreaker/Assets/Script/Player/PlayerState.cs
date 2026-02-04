@@ -1025,7 +1025,7 @@ public class PlayerState : Player<PlayerState>
 
         bool _isHighChargeAttack = false;
 
-       // GameObject _attackArea;
+        // GameObject _attackArea;
 
         float _attackScale;
 
@@ -2329,7 +2329,7 @@ public class PlayerState : Player<PlayerState>
             count++;
         }
 
-        if(count > _playerData.specialAttackMaxLevel)
+        if (count > _playerData.specialAttackMaxLevel)
         {
             count = _playerData.specialAttackMaxLevel;
         }
@@ -2377,6 +2377,12 @@ public class PlayerState : Player<PlayerState>
                         // ‰ñ”ð—¦
                         case PassiveSkillData.PassiveStatusKind.DodgeRate:
                             _passiveStatus.dodgeRateAddRate += (int)status.addNum;
+                            break;
+                        case PassiveSkillData.PassiveStatusKind.Heal:
+                            _nowHp = (int)status.addNum;
+                            _nowHp = Mathf.Min(_nowHp, GetMaxHp());
+
+                            Debug.Log("‘Ì—Í‰ñ•œ");
                             break;
                     }
                 }
