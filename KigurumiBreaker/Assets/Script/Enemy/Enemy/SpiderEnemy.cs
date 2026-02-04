@@ -20,6 +20,15 @@ public class SpiderEnemy : Enemy
         {
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
+            if(stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.2f)
+            {
+                if (!_isCreateEffect[1])
+                {
+                    _isCreateEffect[1] = true;
+                    _effectObj[1] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[1]);
+                }
+            }
+
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.1f)
             {
                 if (!_isCreateEffect[0])
@@ -51,12 +60,13 @@ public class SpiderEnemy : Enemy
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
                 Destroy(_effectObj[0]);
+                Destroy(_effectObj[1]);
 
                 //攻撃フラグをリセット
                 StopMovement();
                 _isCharge = false;
                 _isCreateAttack = false;
-                _isCreateEffect[0] = false;
+
                 _isStateChange = true;
             }
         }
@@ -64,6 +74,8 @@ public class SpiderEnemy : Enemy
         if (_isStateChange)
         {
             _isStateChange = false;
+            _isCreateEffect[0] = false;
+            _isCreateEffect[1] = false;
             ChangeState(new IdleState(this));
         }
 
@@ -90,7 +102,16 @@ public class SpiderEnemy : Enemy
             // 攻撃サインの表示
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
+            if (stateInfo.normalizedTime <= _enemyData.maxAttackTime - 0.2f)
+            {
+                if (!_isCreateEffect[1])
+                {
+                    _isCreateEffect[1] = true;
+                    _effectObj[1] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[1]);
+                }
+            }
+
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.1f)
             {
                 //攻撃判定を一つ生成させる
                 if (!_isCreateAttack)
@@ -98,16 +119,21 @@ public class SpiderEnemy : Enemy
                     _isCreateAttack = true;
                     Shoot();
                 }
+            }
 
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
+            {
                 _isStateChange = true;
-                //攻撃フラグをリセット
-                _isCreateAttack = false;
             }
         }
 
         if (_isStateChange)
         {
+            Destroy(_effectObj[1]);
+            _isCreateEffect[1] = false;
             _isStateChange = false;
+            //攻撃フラグをリセット
+            _isCreateAttack = false;
             ChangeState(new IdleState(this));
         }
     }

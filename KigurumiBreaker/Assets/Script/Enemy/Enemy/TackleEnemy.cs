@@ -41,6 +41,15 @@ public class TackleEnemy : Enemy
         {
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.2f)
+            {
+                if (!_isCreateEffect[1])
+                {
+                    _isCreateEffect[1] = true;
+                    _effectObj[1] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[1]);
+                }
+            }
+
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 if (!_isCreateAttack)
@@ -69,11 +78,13 @@ public class TackleEnemy : Enemy
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
                 Destroy(_effectObj[0]);
+                Destroy(_effectObj[1]);
 
                 StopMovement();
                 _isBaseRotInit = false;
                 _isCreateAttack = false;
                 _isCreateEffect[0] = false;
+                _isCreateEffect[1] = false;
                 _isCharge = false;
                 ChangeState(new IdleState(this));
             }
