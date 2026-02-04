@@ -112,6 +112,25 @@ public class PlayerSkillManager : MonoBehaviour
                 }
             }
             _playerState.SetPassiveSkills(passiveSkillDataList);
+
+            // ここでヒール系のパッシブスキルを削除する
+            PassiveSkillData healSkill = null;
+
+            foreach (PassiveSkillData skill in passiveSkillDataList)
+            {
+                if (skill.upStatuses[0].statusKind == PassiveSkillData.PassiveStatusKind.Heal)
+                {
+                    healSkill = skill;
+                }
+            }
+
+            if (healSkill != null)
+            {
+                passiveSkillDataList.Remove(healSkill);
+                _playerState.SetPassiveSkills(passiveSkillDataList);
+            }
+
+
             // パッシブスキルの数が変更されたことを保存する
             _isChangePassiveSkill = false;
 

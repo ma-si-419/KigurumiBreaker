@@ -17,7 +17,8 @@ public class PassiveSkillData
         MoveSpeed,
         DashCount,
         DamageCutRate,
-        DodgeRate
+        DodgeRate,
+        Heal
     }
 
     public enum GameObjectPopTiming
