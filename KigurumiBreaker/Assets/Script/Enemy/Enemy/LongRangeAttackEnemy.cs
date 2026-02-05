@@ -98,6 +98,15 @@ public class LongRangeAttackEnemy : Enemy
             // UŒ‚ƒTƒCƒ“‚Ì•\¦
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.2f)
+            {
+                if (!_isCreateEffect[0])
+                {
+                    _isCreateEffect[0] = true;
+                    _effectObj[0] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[0]);
+                }
+            }
+
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
                 //UŒ‚”»’è‚ğˆê‚Â¶¬‚³‚¹‚é
@@ -115,6 +124,9 @@ public class LongRangeAttackEnemy : Enemy
 
         if (_isStateChange)
         {
+            Destroy(_effectObj[0]);
+            _isCreateEffect[0] = false;
+
             _isStateChange = false;
             ChangeState(new IdleState(this));
         }

@@ -20,6 +20,16 @@ public class BlueDragonEnemy : Enemy
         {
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
+            // 攻撃サイン時のエフェクト生成
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.2f)
+            {
+                if (!_isCreateEffect[2])
+                {
+                    _isCreateEffect[2] = true;
+                    _effectObj[2] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[2]);
+                }
+            }
+
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime)
             {
@@ -87,6 +97,16 @@ public class BlueDragonEnemy : Enemy
                 }
             }
 
+            // 攻撃サイン時のエフェクト生成
+            if (stateInfo.normalizedTime >= 0.5f - 0.2f)
+            {
+                if (!_isCreateEffect[2])
+                {
+                    _isCreateEffect[2] = true;
+                    _effectObj[2] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[2]);
+                }
+            }
+
             // 攻撃判定生成タイミング
             if (stateInfo.normalizedTime >= 0.4f)
             {
@@ -105,10 +125,12 @@ public class BlueDragonEnemy : Enemy
                 Destroy(_attackObj);
                 Destroy(_effectObj[0]);
                 Destroy(_effectObj[1]);
+                Destroy(_effectObj[2]);
 
                 //攻撃フラグをリセット
                 _isCreateEffect[0] = false;
                 _isCreateEffect[1] = false;
+                _isCreateEffect[2] = false;
                 _isCreateAttack = false;
                 _isStateChange = true;
             }

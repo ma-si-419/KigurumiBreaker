@@ -32,6 +32,12 @@ public class BeastEnemy : Enemy
                     //エフェクト生成
                     _effectObj[0] = EffectCreate(this.transform.position, _enemyData.effectPrefab[0]);
                 }
+
+                if (!_isCreateEffect[3])
+                {
+                    _isCreateEffect[3] = true;
+                    _effectObj[3] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[3]);
+                }
             }
 
             if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.1f)
@@ -61,9 +67,11 @@ public class BeastEnemy : Enemy
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
                 Destroy(_effectObj[1]);
+                Destroy(_effectObj[3]);
 
                 _isCreateEffect[0] = false;
                 _isCreateEffect[1] = false;
+                _isCreateEffect[3] = false;
 
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
@@ -95,6 +103,12 @@ public class BeastEnemy : Enemy
 
             if (stateInfo.normalizedTime >= 0.3f)
             {
+                if (!_isCreateEffect[3])
+                {
+                    _isCreateEffect[3] = true;
+                    _effectObj[3] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[3]);
+                }
+
                 if (!_isCharge)
                 {
                     StartCoroutine(DoCharge());
@@ -135,6 +149,10 @@ public class BeastEnemy : Enemy
 
         if (_isStateChange)
         {
+            Destroy(_effectObj[3]);
+            _isCreateEffect[3] = false;
+
+
             //攻撃終了
             _isStateChange = false;
             ChangeState(new IdleState(this));

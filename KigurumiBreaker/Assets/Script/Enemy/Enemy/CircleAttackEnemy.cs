@@ -16,7 +16,16 @@ public class CircleAttackEnemy : Enemy
             // 攻撃サインの表示
             AttackSign(stateInfo.normalizedTime, _enemyData.maxAttackTime - ATTACK_SIGN_DECREASE);
 
-            if(stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.25f)
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.2f)
+            {
+                if (!_isCreateEffect[1])
+                {
+                    _isCreateEffect[1] = true;
+                    _effectObj[1] = RotationEffectCreate(this.transform.position + this.transform.up * 0.5f, enemyData.effectPrefab[1]);
+                }
+            }
+
+            if (stateInfo.normalizedTime >= _enemyData.maxAttackTime - 0.25f)
             {
                 if(!_isCreateEffect[0])
                 {
@@ -42,10 +51,12 @@ public class CircleAttackEnemy : Enemy
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
                 Destroy(_effectObj[0]);
+                Destroy(_effectObj[1]);
 
                 //攻撃フラグをリセット
                 _isCreateAttack = false;
                 _isCreateEffect[0] = false;
+                _isCreateEffect[1] = false;
 
                 //攻撃アニメーションが終了したらIdleStateに遷移
                 ChangeState(new IdleState(this));
