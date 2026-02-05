@@ -1082,25 +1082,6 @@ public class PlayerState : Player<PlayerState>
             // 攻撃を出すことができる時に
             if (state._normalChargeTime > state._playerData.chargeAttackTime)
             {
-                // 攻撃範囲を表示していない場合、攻撃範囲を表示
-                if (!_isShowAttackRange)
-                {
-                    Vector3 AreaPos = state.transform.position;
-
-                    //　ずらす分のベクトル
-                    Vector3 shift = state._playerData.chargeAttackAreaShiftVector;
-                    // プレイヤーの向きに合わせてずらす分を回転させる
-                    shift = Quaternion.Euler(0, state.transform.eulerAngles.y, 0) * shift;
-
-                    AreaPos += shift;
-
-                    //_attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
-
-                    //_attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
-
-                    _isShowAttackRange = true;
-                }
-
                 // チャージ時間が50％以上なら強チャージ攻撃の攻撃範囲に変更
                 if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
                 {
@@ -1199,6 +1180,16 @@ public class PlayerState : Player<PlayerState>
                         part.attackObj.transform.localPosition = part.defaultPos * shiftScale;
                     }
                 }
+
+                if(state._moveInput.sqrMagnitude > 0.1f)
+                {
+                    // 左右キーで回転
+                    Vector3 inputDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+                    Vector3 moveDirection = state.CalculateMoveDirection(inputDirection);
+                    state.transform.forward = Vector3.Slerp(state.transform.forward, moveDirection, state._playerData.chargeTurnSpeed);
+                    state._currentDirection = state.transform.forward;
+                }
+
 
                 // 最大チャージ時間を超えたらチャージ攻撃に遷移
                 if (state._normalChargeTime >= state._playerData.maxChargeAttackTime)
