@@ -1019,15 +1019,11 @@ public class PlayerState : Player<PlayerState>
     // チャージ状態
     public class ChargeState : StateBase<PlayerState>
     {
-        int _stateTime;
-
-        bool _isShowAttackRange = false;
+        bool _isShowAttackArrow = false;
 
         bool _isHighChargeAttack = false;
 
-        // GameObject _attackArea;
-
-        float _attackScale;
+        GameObject _attackArea;
 
         float _lowChargeAttackScale;
 
@@ -1049,13 +1045,11 @@ public class PlayerState : Player<PlayerState>
             // 攻撃情報を設定
             _currentAttackData = state.SearchAttackData("LowChargeAttack");
 
-            // 攻撃範囲のスケールを弱チャージ攻撃のものに設定
-            _attackScale = _currentAttackData.scale;
-
             // 攻撃を行う部位を設定
             state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
 
-            _stateTime = 0;
+            // 攻撃方向の矢印を表示しているフラグをリセット
+            _isShowAttackArrow = false;
 
             // 効果音を再生する
             AudioManager.Instance.PlaySE(SoundID.Charge);
@@ -1075,31 +1069,23 @@ public class PlayerState : Player<PlayerState>
 
             if (state._isStop) return;
 
-            _stateTime++;
 
+            
             state._normalChargeTime++;
 
             // 攻撃を出すことができる時に
             if (state._normalChargeTime > state._playerData.chargeAttackTime)
             {
-                // 攻撃範囲を表示していない場合、攻撃範囲を表示
-                if (!_isShowAttackRange)
+                // 攻撃方向の矢印を表示していないなら表示する
+                if (!_isShowAttackArrow)
                 {
-                    Vector3 AreaPos = state.transform.position;
+                    _attackArea = GameObject.Instantiate(state._attackData.chargeAttackAreaGameObject, state.transform.position, Quaternion.identity);
 
-                    //　ずらす分のベクトル
-                    Vector3 shift = state._playerData.chargeAttackAreaShiftVector;
-                    // プレイヤーの向きに合わせてずらす分を回転させる
-                    shift = Quaternion.Euler(0, state.transform.eulerAngles.y, 0) * shift;
-
-                    AreaPos += shift;
-
-                    //_attackArea = Instantiate(state._attackData.chargeAttackAreaGameObject, AreaPos, Quaternion.identity);
-
-                    //_attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
-
-                    _isShowAttackRange = true;
+                    _attackArea.transform.forward = state.transform.forward;
+                    
+                    _isShowAttackArrow = true;
                 }
+
 
                 // チャージ時間が50％以上なら強チャージ攻撃の攻撃範囲に変更
                 if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
@@ -1107,10 +1093,6 @@ public class PlayerState : Player<PlayerState>
                     // 強チャージ攻撃の攻撃範囲に変更
                     if (!_isHighChargeAttack)
                     {
-                        _attackScale = state.SearchAttackData("ChargeAttack").scale;
-
-                        //_attackArea.transform.localScale = new Vector3(_attackScale, _attackArea.transform.localScale.y, _attackScale);
-
                         _isHighChargeAttack = true;
 
                         _currentAttackData = state.SearchAttackData("ChargeAttack");
@@ -1200,6 +1182,22 @@ public class PlayerState : Player<PlayerState>
                     }
                 }
 
+                if(state._moveInput.sqrMagnitude > 0.1f)
+                {
+                    // 左右キーで回転
+                    Vector3 inputDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
+                    Vector3 moveDirection = state.CalculateMoveDirection(inputDirection);
+                    state.transform.forward = Vector3.Slerp(state.transform.forward, moveDirection, state._playerData.chargeTurnSpeed);
+                    state._currentDirection = state.transform.forward;
+                }
+
+                if(_attackArea)
+                {
+                    _attackArea.transform.position = state.transform.position;
+                    _attackArea.transform.forward = state.transform.forward;
+                }
+
+
                 // 最大チャージ時間を超えたらチャージ攻撃に遷移
                 if (state._normalChargeTime >= state._playerData.maxChargeAttackTime)
                 {
@@ -1214,12 +1212,12 @@ public class PlayerState : Player<PlayerState>
         {
             state._animator.ResetTrigger("NormalCharge");
 
-            // 攻撃範囲オブジェクトを削除
-            //if (_attackArea)
-            //{
-            //    Destroy(_attackArea);
-            //    _attackArea = null;
-            //}
+            //攻撃範囲オブジェクトを削除
+            if (_attackArea)
+            {
+                Destroy(_attackArea);
+                _attackArea = null;
+            }
 
             // チャージエフェクトを削除
             if (_chargeEffect)
