@@ -378,7 +378,11 @@ public class EnemyBase : MonoBehaviour
     public GameObject EffectCreate(Vector3 pos, GameObject effectPrefab)
     {
         // エフェクト生成
-        return Instantiate(effectPrefab, pos, Quaternion.identity);
+        GameObject instance = Instantiate(effectPrefab, pos, Quaternion.identity);
+        ParticleSystem ps = instance.GetComponent<ParticleSystem>();
+        var psMain = ps.main;
+        psMain.stopAction = ParticleSystemStopAction.Destroy;
+        return instance;
     }
 
     // エフェクトの向きをそのまま使いたい場合のエフェクト生成関数

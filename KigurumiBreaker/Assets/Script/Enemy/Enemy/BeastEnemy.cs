@@ -66,6 +66,7 @@ public class BeastEnemy : Enemy
             {
                 // アニメーションが終わったら消す
                 Destroy(_attackObj);
+                Destroy(_effectObj[0]);
                 Destroy(_effectObj[1]);
                 Destroy(_effectObj[3]);
 
