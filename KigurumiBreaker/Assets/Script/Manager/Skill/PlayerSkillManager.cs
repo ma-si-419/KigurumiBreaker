@@ -127,6 +127,7 @@ public class PlayerSkillManager : MonoBehaviour
             if (healSkill != null)
             {
                 passiveSkillDataList.Remove(healSkill);
+                _passiveSkillNameList.Remove(healSkill.skillName);
                 _playerState.SetPassiveSkills(passiveSkillDataList);
             }
 
