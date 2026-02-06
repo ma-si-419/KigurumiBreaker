@@ -8,14 +8,13 @@ public class DetectionMark : MonoBehaviour
     // 敵の参照
     private Enemy _enemy;
     // ビックリマークのイメージコンポーネント
-    [SerializeField] private SpriteRenderer _image;
+    private SpriteRenderer _image;
 
     // ビックリマークの表示オフセット
     private Vector3 _detectionMarkOffset;
     // 経過時間
-    private float _time = 0.0f; 
-
-    private float _lifeTime = 2.0f;
+    [SerializeField] private float _time = 0.0f;
+    [SerializeField] private float _lifeTime = 0.5f;
 
     public void SetTarget(Enemy enemy)
     {

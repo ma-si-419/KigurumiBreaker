@@ -47,6 +47,9 @@ public class EnemyBase : MonoBehaviour
     // プレイヤーの参照
     protected GameObject _player;
 
+    // プレイヤーのステート参照
+    protected PlayerState _playerState;
+
     // アニメーターの参照
     protected Animator _animator;
 
@@ -192,6 +195,21 @@ public class EnemyBase : MonoBehaviour
                 Debug.LogWarning($"{name}: Playerがシーンに見つかりませんでした！");
             }
         }
+
+        // プレイヤーのステート参照を取得
+        if (_player != null)
+        {
+            _playerState = _player.GetComponent<PlayerState>();
+        }
+
+        if (_playerState == null)
+        {
+            Debug.LogWarning($"{name}: PlayerStateが見つかりませんでした！");
+        }
+        else
+        {
+            Debug.Log($"{name}: PlayerStateを取得しました。");
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -228,6 +246,15 @@ public class EnemyBase : MonoBehaviour
             {
                 _dropBullets[i]--;
             }
+        }
+
+        // プレイヤーが死んだら敵を消す
+        if (_playerState.GetNowHp() <= 0)
+        {
+            //
+            Debug.Log("プレイヤーが死んだ!!");
+
+            Destroy(this);
         }
     }
 
