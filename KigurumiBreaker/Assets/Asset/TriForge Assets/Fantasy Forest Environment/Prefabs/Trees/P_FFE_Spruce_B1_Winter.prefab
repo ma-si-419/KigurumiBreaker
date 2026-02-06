@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 205907432092875712}
   m_Layer: 0
   m_Name: P_FFE_Spruce_B1_Winter
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24,14 +24,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1079838528348358}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4001416800928078}
   - {fileID: 8853099360162775844}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &205907432092875712
 LODGroup:
@@ -82,12 +83,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1088216619546100}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4709391711228354}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &33541195618484004
 MeshFilter:
@@ -108,6 +110,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -147,8 +150,17 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1088216619546100}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.68
   m_Height: 9.377455
   m_Direction: 1
@@ -158,6 +170,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4709391711228354}
     m_Modifications:
     - target: {fileID: 6291242062273005085, guid: a361627ae261eb24892733889380c5ac, type: 3}
@@ -209,14 +222,17 @@ PrefabInstance:
       value: Spruce_b1_billboard_winter
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a361627ae261eb24892733889380c5ac, type: 3}
---- !u!4 &8853099360162775844 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6291242062273005085, guid: a361627ae261eb24892733889380c5ac, type: 3}
-  m_PrefabInstance: {fileID: 3283825225501427001}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &7680794791023638603 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 5117733556761181554, guid: a361627ae261eb24892733889380c5ac, type: 3}
+  m_PrefabInstance: {fileID: 3283825225501427001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8853099360162775844 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6291242062273005085, guid: a361627ae261eb24892733889380c5ac, type: 3}
   m_PrefabInstance: {fileID: 3283825225501427001}
   m_PrefabAsset: {fileID: 0}
