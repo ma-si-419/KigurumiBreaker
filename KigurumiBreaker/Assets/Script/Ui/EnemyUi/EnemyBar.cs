@@ -66,7 +66,7 @@ public class EnemyBar : MonoBehaviour
         _currentTrunkDelayedImg.fillAmount = _currentTrunkImg.fillAmount;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // “G‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍUI‚ğ”jŠü
         if (_enemy == null)
