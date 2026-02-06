@@ -6,6 +6,8 @@ public class GameSceneController : MonoBehaviour
 {
     [Header("プレイヤーのゲームオブジェクト")]
     [SerializeField] private PlayerState _player;
+    [SerializeField] private int _maxTime = 0;
+    private int _time = 0;
 
     private bool _isGameOver = false;
 
@@ -21,23 +23,19 @@ public class GameSceneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ////ポーズ中は操作できないようにする
-        //if (BaseSceneController.instance.isPaused) return;
-        ////スキル選択中は操作できないようにする
-        //if(BaseSceneController.instance.isSkillSelect) return;
-
-        //// スタートボタンでポーズ
-        //if (Input.GetButtonDown("Start"))
-        //{
-        //    BaseSceneController.instance.TogglePause();
-        //}
 
         // プレイヤーのHPが0以下ならゲームオーバーへ
         if (_player.GetNowHp() <= 0 && !_isGameOver)
         {
-            // ゲームオーバーシーンへ
-            BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameOverScene);
-            _isGameOver = true;
+            // カウントアップ
+            _time++;
+
+            if (_time > _maxTime)
+            {
+                // ゲームオーバーシーンへ
+                BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameOverScene);
+                _isGameOver = true;
+            }
 
             Debug.Log("Game Over");
         }

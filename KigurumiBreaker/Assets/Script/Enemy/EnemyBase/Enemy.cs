@@ -177,6 +177,20 @@ public class Enemy : EnemyBase
             }
         }
 
+        if (_playerState.GetNowHp() <= 0)
+        {
+            //
+            Debug.Log("プレイヤーが死んだ!!");
+
+            if(!(_currentState is DeadState))
+            {
+                ChangeState(new DeadState(this));
+            }
+
+            // 敵削除
+            //Object.Destroy(this.gameObject);
+        }
+
         // 親クラスのUpdate()を呼び出す
         base.FixedUpdate();
     }
