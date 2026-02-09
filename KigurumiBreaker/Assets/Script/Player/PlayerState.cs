@@ -1087,8 +1087,8 @@ public class PlayerState : Player<PlayerState>
                 }
 
 
-                // チャージ時間が50％以上なら強チャージ攻撃の攻撃範囲に変更
-                if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
+                // 強チャージ攻撃の攻撃範囲に変更
+                if (state._normalChargeTime >= state._playerData.highChargeAttackTime)
                 {
                     // 強チャージ攻撃の攻撃範囲に変更
                     if (!_isHighChargeAttack)
@@ -1104,7 +1104,7 @@ public class PlayerState : Player<PlayerState>
                     /// 攻撃部位の拡大処理 ///
 
                     // 強チャージ攻撃に入ってから何フレームたったか
-                    float frame = (float)(state._normalChargeTime - state._playerData.maxChargeAttackTime / 2);
+                    float frame = (float)(state._normalChargeTime - state._playerData.highChargeAttackTime);
 
                     for (int i = 0; i < _currentAttackData.scaleAttackParts.Count; i++)
                     {
@@ -1245,8 +1245,8 @@ public class PlayerState : Player<PlayerState>
             // Stateの情報を設定
             state.SetStateKind(PlayerState.StateKind.CHARGEATTACK);
 
-            // チャージ時間が50％以上なら強チャージ攻撃、そうでなければ弱チャージ攻撃に設定
-            if (state._normalChargeTime >= state._playerData.maxChargeAttackTime / 2)
+            // チャージ時間が一定以上なら強チャージ攻撃、そうでなければ弱チャージ攻撃に設定
+            if (state._normalChargeTime >= state._playerData.highChargeAttackTime)
             {
                 _currentAttackName = "ChargeAttack";
             }

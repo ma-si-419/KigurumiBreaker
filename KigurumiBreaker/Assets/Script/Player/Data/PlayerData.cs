@@ -23,6 +23,8 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int CancelDodgeCoolTime;
     [Header("‚½‚ßUŒ‚‚Ì”­“®‚Ü‚Å‚ÌŽžŠÔ")]
     [SerializeField] private int ChargeAttackTime;
+    [Header("‹­‚½‚ßUŒ‚‚ÉˆÚs‚·‚é‚Ü‚Å‚ÌŽžŠÔ")]
+    [SerializeField] private int HighChargeAttackTime;
     [Header("‚½‚ßUŒ‚‚ÌÅ‘å—­‚ßŽžŠÔ")]
     [SerializeField] private int MaxChargeAttackTime;
     [Header("‚½‚ßUŒ‚’†‚Ì‰ñ“]‘¬“x")]
@@ -62,6 +64,7 @@ public class PlayerData : ScriptableObject
     public int cancelDodgeCooldown => CancelDodgeCoolTime;
     public int dodgeCoolTime => DodgeCoolTime;
     public int chargeAttackTime => ChargeAttackTime;
+    public int highChargeAttackTime => HighChargeAttackTime;
     public int maxChargeAttackTime => MaxChargeAttackTime;
     public int specialAttackMaxLevel => SpecialAttackMaxLevel;
     public float specialAttackChargeRate => SpecialAttackChargeRate;
