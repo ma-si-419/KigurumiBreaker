@@ -115,6 +115,8 @@ public class EnemyBase : MonoBehaviour
 
     protected bool _isBaseRotInit = false;
 
+    protected bool _isGameOver = false;
+
     //敵のデバフ状態
     public enum EnemyDebuff
     {
@@ -249,13 +251,14 @@ public class EnemyBase : MonoBehaviour
         }
 
         // プレイヤーが死んだら敵を消す
-        if (_playerState.GetNowHp() <= 0)
-        {
-            //
-            Debug.Log("プレイヤーが死んだ!!");
+        //if (_playerState.GetNowHp() <= 0)
+        //{
+        //    //
+        //    Debug.Log("プレイヤーが死んだ!!");
 
-            Destroy(this);
-        }
+        //    // 敵削除
+        //    //Object.Destroy(this.gameObject);
+        //}
     }
 
     // ステートを変更するメソッド
