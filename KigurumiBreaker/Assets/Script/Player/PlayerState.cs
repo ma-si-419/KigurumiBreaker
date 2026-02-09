@@ -1031,6 +1031,9 @@ public class PlayerState : Player<PlayerState>
 
         Attack _currentAttackData;
 
+        Vector3 _shiftVec;
+
+        Vector3 _defaultPos;
         public ChargeState(PlayerState next) : base(next)
         {
         }
@@ -1061,6 +1064,11 @@ public class PlayerState : Player<PlayerState>
 
             // チャージエフェクトを出す
             _chargeEffect = Instantiate(state._playerEffectData.chargeEffectPrefab, effectPos, Quaternion.identity);
+
+            // 揺らすベクトルをゼロにする
+            _shiftVec = Vector3.zero;
+
+            _defaultPos = state.transform.position;
         }
         public override void OnUpdate()
         {
@@ -1087,7 +1095,7 @@ public class PlayerState : Player<PlayerState>
                 }
 
 
-                // 強チャージ攻撃の攻撃範囲に変更
+                // 強チャージ攻撃を出せる時間になったら
                 if (state._normalChargeTime >= state._playerData.highChargeAttackTime)
                 {
                     // 強チャージ攻撃の攻撃範囲に変更
@@ -1100,6 +1108,10 @@ public class PlayerState : Player<PlayerState>
                         // 攻撃する部位を変更
                         state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
                     }
+
+                    _shiftVec = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(0.0f,state._playerData.chargeShakeScale);
+
+                    state.transform.position = _defaultPos + _shiftVec;
 
                     /// 攻撃部位の拡大処理 ///
 
@@ -1225,6 +1237,8 @@ public class PlayerState : Player<PlayerState>
                 Destroy(_chargeEffect);
                 _chargeEffect = null;
             }
+
+            state.transform.position = _defaultPos;
 
             // 効果音を停止する
             AudioManager.Instance.StopSE(SoundID.Charge);
