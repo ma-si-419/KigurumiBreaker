@@ -27,6 +27,8 @@ public class BaseSceneController : MonoBehaviour
     public bool isOption = false;       //オプション中かどうか
     public bool isSkillSelect = false;  //スキル選択中かどうか
 
+    public bool isFadeing = false;      //フェード中かどうか
+
     //フェード情報
     [SerializeField] private CanvasGroup fadeCanvas;   //フェード用のUI
     [SerializeField] private float _fadeSpeed = 0.5f;   //フェードの速度
@@ -92,6 +94,12 @@ public class BaseSceneController : MonoBehaviour
         while (time < _fadeSpeed)
         {
             time += Time.unscaledDeltaTime;     //ポーズ中でも進める
+
+            if(time > _fadeSpeed * 0.5f)
+            {
+                isFadeing = true;    //フェード中フラグを立てる
+            }
+
             fadeCanvas.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / _fadeSpeed);
             yield return null;
         }

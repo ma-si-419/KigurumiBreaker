@@ -179,20 +179,18 @@ public class Enemy : EnemyBase
 
         if (_playerState.GetNowHp() <= 0)
         {
-            //
-            Debug.Log("プレイヤーが死んだ!!");
-
-            if(!(_currentState is DeadState))
+            if(!(_currentState is DestroyIdleState))
             {
-                ChangeState(new DeadState(this));
+                ChangeState(new DestroyIdleState(this));
             }
-
-            // 敵削除
-            //Object.Destroy(this.gameObject);
         }
+
+        //ゲームクリアしたら
 
         // 親クラスのUpdate()を呼び出す
         base.FixedUpdate();
+
+        
     }
 
     //基本待機処理(オーバーライドで変更可)

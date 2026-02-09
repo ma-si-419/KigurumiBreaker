@@ -121,6 +121,19 @@ public class BossEnemy : EnemyBase
 
         DebugLine();
 
+        // フェード中の時に敵を削除するステートに遷移
+        if (_playerState.GetNowHp() <= 0)
+        {
+            if (BaseSceneController.instance.isFadeing)
+            {
+                if (!(_currentState is BossDestoryState))
+                {
+                    ChangeState(new BossDestoryState(this));
+                }
+            }
+        }
+
+
         if (_isPhase)
         {
             DirectionUpdate();

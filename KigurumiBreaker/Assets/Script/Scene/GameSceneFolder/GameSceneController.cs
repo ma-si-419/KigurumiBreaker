@@ -36,8 +36,6 @@ public class GameSceneController : MonoBehaviour
                 BaseSceneController.instance.ChangeSceneWithFade(SceneType.GameOverScene);
                 _isGameOver = true;
             }
-
-            Debug.Log("Game Over");
         }
 
     }
