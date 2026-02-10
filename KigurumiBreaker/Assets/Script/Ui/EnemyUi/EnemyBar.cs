@@ -71,6 +71,7 @@ public class EnemyBar : MonoBehaviour
         // “G‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍUI‚ğ”jŠü
         if (_enemy == null)
         {
+            Debug.Log("UI”j‰óI");
             Destroy(gameObject);
             return;
         }
