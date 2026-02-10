@@ -2,15 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossDestoryState : IState
+public class BossDestroyState : IState
 {
     private BossEnemy _boss;   //ボス敵の参照
 
-    private float _stateTimer = 0.0f; //状態遷移用タイマー
-
-    //private float _idleToAttackDelay = 1.5f; //待機から攻撃への遅延時間
-
-    public BossDestoryState(BossEnemy boss)
+    public BossDestroyState(BossEnemy boss)
     {
         //コンストラクタでEnemyの参照を受け取る
         _boss = boss;
@@ -18,7 +14,6 @@ public class BossDestoryState : IState
 
     public void Init()
     {
-        _boss.AttackReset(); //攻撃フラグリセット
         _boss.agent.isStopped = true; // 追跡を停止
 
         //待機アニメーション開始
@@ -31,7 +26,7 @@ public class BossDestoryState : IState
         _boss.StopMovement();
 
         //オブジェクトを破棄
-        Object.Destroy(_boss.gameObject);
+        GameObject.Destroy(_boss.gameObject);
     }
 
     public void End()

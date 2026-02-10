@@ -95,7 +95,7 @@ public class BaseSceneController : MonoBehaviour
         {
             time += Time.unscaledDeltaTime;     //ポーズ中でも進める
 
-            if(time > _fadeSpeed * 0.5f)
+            if(time >= _fadeSpeed * 0.7f)
             {
                 isFadeing = true;    //フェード中フラグを立てる
             }

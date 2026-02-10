@@ -47,9 +47,6 @@ public class BossIdleState : IState
         //タイマーで追跡状態へ移行
         _stateTimer += Time.deltaTime;
 
-        // 攻撃を選択する処理
-        //_boss.AttackSelect();
-
         /* 追跡に遷移する処理 */
         if (diff.sqrMagnitude < _boss.enemyData.detectionRange || _stateTimer > _boss.enemyData.idleToChaseTime)
         {

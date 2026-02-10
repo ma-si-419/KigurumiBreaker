@@ -16,6 +16,8 @@ public class DestroyIdleState : IState
     {
         _enemy.agent.isStopped = true; // 追跡を停止
 
+        Debug.Log("敵を破壊する状態");
+
         //待機アニメーション開始
         _enemy.animator.SetBool("Idle", false);
     }

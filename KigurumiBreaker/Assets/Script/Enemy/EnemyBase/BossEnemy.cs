@@ -117,27 +117,30 @@ public class BossEnemy : EnemyBase
         _isDamage = false; // ダメージフラグをリセット
 
         // 親クラスのUpdate()を呼び出す
-        base.FixedUpdate();
 
         DebugLine();
 
-        // フェード中の時に敵を削除するステートに遷移
+        // プレイヤーが死んだら敵オブジェクトを破棄する
         if (_playerState.GetNowHp() <= 0)
         {
-            if (BaseSceneController.instance.isFadeing)
+            if (!(_currentState is BossDestroyState) && BaseSceneController.instance.isFadeing)
             {
-                if (!(_currentState is BossDestoryState))
-                {
-                    ChangeState(new BossDestoryState(this));
-                }
+                // フェード中に敵を破棄状態にする
+                BaseSceneController.instance.isFadeing = false;
+                ChangeState(new BossDestroyState(this));
+            }
+            else if (!(_currentState is BossDebugIdleState) && !BaseSceneController.instance.isFadeing)
+            {
+                ChangeState(new BossDebugIdleState(this));
             }
         }
-
 
         if (_isPhase)
         {
             DirectionUpdate();
         }
+
+        base.FixedUpdate();
     }
 
 
