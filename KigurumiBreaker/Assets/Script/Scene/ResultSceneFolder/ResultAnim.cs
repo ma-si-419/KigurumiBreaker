@@ -25,7 +25,7 @@ public class ResultAnim : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         _anim.SetBool("Low1", true);
 
