@@ -28,7 +28,7 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private DamageUiData _damageUiData;
 
-    [SerializeField] private FadeOut _fadeOut;
+    [SerializeField] private GameObject _skillGetUi;
 
     private PlayerState _playerState;
 
@@ -100,6 +100,9 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
+
+        _skillGetUi.SetActive(false);
+
     }
     public void OnMoveStage()
     {
@@ -228,9 +231,9 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    public void StartFadeOut()
+    public void ShowSkillGetUi()
     {
-        _fadeOut.StartFadeOut();
+        _skillGetUi.SetActive(true);
     }
 
     public void SetHitStop(int time)

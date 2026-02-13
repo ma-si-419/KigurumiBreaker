@@ -2648,6 +2648,10 @@ public class PlayerState : Player<PlayerState>
                 }
             }
         }
+        if(other.CompareTag("SkillObject"))
+        {
+            _battleManager.ShowSkillGetUi();
+        }
     }
 }
 
