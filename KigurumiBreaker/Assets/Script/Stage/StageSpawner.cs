@@ -397,7 +397,6 @@ public class StageSpawner : MonoBehaviour
 
     public string GetBeforeSkill()
     {
-
         return _beforeSkill;
     }
     public int GetCurrentStageIndex()
