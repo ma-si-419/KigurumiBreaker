@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class Player<T> : MonoBehaviour where T : Player<T>
 {
-
-
     //ひとつ前の状態
     private StateBase<T> _currentState;
 
@@ -29,6 +27,12 @@ public class Player<T> : MonoBehaviour where T : Player<T>
     // Stateの更新を止めるフラグ
     protected bool _isStopStateUpdate = false;
 
+    // プレイヤーのスキンメッシュレンダラー
+    protected SkinnedMeshRenderer _playerSkin;
+
+    // ダメージマテリアルであるフレーム数
+    protected float _damageMaterialFrameCount;
+
     private void Start()
     {
         _isStopStateUpdate = false;
@@ -45,6 +49,12 @@ public class Player<T> : MonoBehaviour where T : Player<T>
 
         _nextState = next;
         return true;
+    }
+
+    protected void ChangeDamageSkinColor(float time)
+    {
+        _playerSkin.material.color = Color.red;
+        _damageMaterialFrameCount = time * 5; // ←最後のあがき
     }
 
     //更新
@@ -80,6 +90,16 @@ public class Player<T> : MonoBehaviour where T : Player<T>
         { 
             //更新処理を行う
             _currentState.OnUpdate();
+
+            // ダメージマテリアルのフレーム数を減らしていく
+            if (_damageMaterialFrameCount > 0)
+            {
+                _damageMaterialFrameCount--;
+                if (_damageMaterialFrameCount <= 0)
+                {
+                    _playerSkin.material.color = Color.white;
+                }
+            }
 
             // 無敵時間を減らしていく
             _lowDamageInvincibleTime--;
