@@ -6,6 +6,10 @@ public class DestroyIdleState : IState
 {
     private Enemy _enemy;   //敵の参照
 
+    private int _time = 0; //状態遷移用タイマー
+    
+    [SerializeField] private int _maxTime = 0;
+
     public DestroyIdleState(Enemy enemy)
     {
         //コンストラクタでEnemyの参照を受け取る
@@ -26,8 +30,14 @@ public class DestroyIdleState : IState
     {
         _enemy.StopMovement(); //移動停止
 
-        //オブジェクトを破棄
-        GameObject.Destroy(_enemy.gameObject);
+        _time++;
+
+        if(_time > _maxTime)
+        {
+            _time = 0;
+            //オブジェクトを破棄
+            GameObject.Destroy(_enemy.gameObject);
+        }
     }
 
     public void End()
