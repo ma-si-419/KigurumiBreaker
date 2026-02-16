@@ -8,7 +8,7 @@ public class DestroyIdleState : IState
 
     private int _time = 0; //状態遷移用タイマー
     
-    [SerializeField] private int _maxTime = 0;
+    private int _maxTime = 150;
 
     public DestroyIdleState(Enemy enemy)
     {

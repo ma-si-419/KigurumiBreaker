@@ -180,18 +180,13 @@ public class Enemy : EnemyBase
         // プレイヤーが死んだら敵オブジェクトを破棄する
         if (_playerState.GetNowHp() <= 0)
         {
-            if(!(_currentState is DestroyIdleState) && BaseSceneController.instance.isFadeing)
+            if(!(_currentState is DestroyIdleState))
             {
                 Debug.Log("敵消滅遷移");
 
                 // フェード中に敵を破棄状態にする
                 BaseSceneController.instance.isFadeing = false;
                 ChangeState(new DestroyIdleState(this));
-            }
-            else if(!(_currentState is DebugIdleState) && !BaseSceneController.instance.isFadeing)
-            {
-                // プレイヤーが死んだら敵を破棄状態にする
-                ChangeState(new DebugIdleState(this));
             }
         }
 
