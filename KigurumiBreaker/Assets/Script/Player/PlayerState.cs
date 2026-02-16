@@ -178,12 +178,6 @@ public class PlayerState : Player<PlayerState>
     // アニメーションの速度を保存しておく
     private float _animationSpeed;
 
-    // プレイヤーメッシュレンダラー
-    private SkinnedMeshRenderer _playerMeshRenderer;
-
-    // プレイヤーのマテリアル
-    private Material _playerMaterial;
-
     // 攻撃時に拡大している攻撃部位
     private List<ScallingAttackPart> _scallingAttackParts = new List<ScallingAttackPart>();
 
@@ -223,14 +217,11 @@ public class PlayerState : Player<PlayerState>
         // 弾の数を最大弾数に設定
         _nowBulletNum = _playerStatus.maxBulletNum;
 
-        // プレイヤーメッシュレンダラーを取得
-        _playerMeshRenderer = transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
-
-        // プレイヤーのマテリアルを取得
-        _playerMaterial = _playerMeshRenderer.material;
-
         // ダミー変数の初期化
         _errorDeleterPart = new ScallingAttackPart();
+
+        // メッシュの情報を渡す
+        _playerSkin = transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
     }
 
     // 各Stateクラス
@@ -810,6 +801,13 @@ public class PlayerState : Player<PlayerState>
                         state._currentAttack = null;
                     }
 
+                    if (state._moveInput.sqrMagnitude > 0.1f)
+                    {
+                        state.transform.forward = state.CalculateMoveDirection(new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized);
+                        state._currentDirection = state.transform.forward;
+                    }
+
+
                     GameObject target = state.SearchTargetObject();
 
                     // ターゲットがいる場合はターゲットの方向に向ける
@@ -1078,7 +1076,7 @@ public class PlayerState : Player<PlayerState>
             if (state._isStop) return;
 
 
-            
+
             state._normalChargeTime++;
 
             // 攻撃を出すことができる時に
@@ -1090,7 +1088,7 @@ public class PlayerState : Player<PlayerState>
                     _attackArea = GameObject.Instantiate(state._attackData.chargeAttackAreaGameObject, state.transform.position, Quaternion.identity);
 
                     _attackArea.transform.forward = state.transform.forward;
-                    
+
                     _isShowAttackArrow = true;
                 }
 
@@ -1109,7 +1107,7 @@ public class PlayerState : Player<PlayerState>
                         state.SetScallingAttackPart(_currentAttackData.scaleAttackParts);
                     }
 
-                    _shiftVec = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(0.0f,state._playerData.chargeShakeScale);
+                    _shiftVec = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(0.0f, state._playerData.chargeShakeScale);
 
                     state.transform.position = _defaultPos + _shiftVec;
 
@@ -1194,7 +1192,7 @@ public class PlayerState : Player<PlayerState>
                     }
                 }
 
-                if(state._moveInput.sqrMagnitude > 0.1f)
+                if (state._moveInput.sqrMagnitude > 0.1f)
                 {
                     // 左右キーで回転
                     Vector3 inputDirection = new Vector3(state._moveInput.x, 0, state._moveInput.y).normalized;
@@ -1203,7 +1201,7 @@ public class PlayerState : Player<PlayerState>
                     state._currentDirection = state.transform.forward;
                 }
 
-                if(_attackArea)
+                if (_attackArea)
                 {
                     _attackArea.transform.position = state.transform.position;
                     _attackArea.transform.forward = state.transform.forward;
@@ -1590,8 +1588,6 @@ public class PlayerState : Player<PlayerState>
         private int _knockbackTime;
         private float _knockBackScale;
         private string _damageAnim;
-        private bool _changeMaterial = false;
-
         public DamageState(PlayerState next) : base(next)
         {
         }
@@ -1678,15 +1674,6 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             if (state._isStop) return;
-
-            // ヒットストップが終わってマテリアルが変更されたままだったら
-            if (!_changeMaterial)
-            {
-                // マテリアルを元に戻す
-                state._playerMeshRenderer.material.color = Color.white;
-
-                _changeMaterial = true;
-            }
 
             // 部位が拡大していたら少しずつ縮小する
 
@@ -1793,7 +1780,7 @@ public class PlayerState : Player<PlayerState>
             state._rigidbody.velocity = Vector3.zero;
 
             // マテリアルを赤色に変更する
-            state._playerMeshRenderer.material.color = Color.red;
+            state.ChangeDamageSkinColor(state._playerData.deathSlowTime / state._playerData.deathTimeScale);
 
             // 重めのヒットストップを行う
             state._battleManager.GetComponent<BattleManager>().SlowTime(state._playerData.deathSlowTime, state._playerData.deathTimeScale);
@@ -1806,17 +1793,6 @@ public class PlayerState : Player<PlayerState>
 
             if (state._isStop) return;
 
-            // スロー演出が終わってマテリアルが変更されたままだったら
-            if (!_changeMaterial)
-            {
-                if (Time.timeScale == 1.0f)
-                {
-                    // マテリアルを元に戻す
-                    state._playerMeshRenderer.material.color = Color.white;
-
-                    _changeMaterial = true;
-                }
-            }
             _deadTime++;
 
             if (_deadTime == state._playerData.deathEffectTime)
@@ -2512,20 +2488,29 @@ public class PlayerState : Player<PlayerState>
 
             AddSpecialGauge(specialGaugeAddNum);
 
-            // ダメージマテリアルに変更
-            _playerMeshRenderer.material.color = Color.red;
-
             // 当たり判定と攻撃の当たり判定が重なった位置にエフェクトを生成
             Vector3 hitPosition = other.ClosestPoint(transform.position);
 
-            // ダメージの種類に応じたサウンドを鳴らす
+            // ダメージの種類に応じた処理を行う
             switch (_damageKind)
             {
                 case DamageKind.HIGH:
+                    // 音声
                     AudioManager.Instance.PlaySE(SoundID.HighAttackHit);
+                    
+                    // 見た目
+                    ChangeDamageSkinColor(_damageData.highHitStop);
                     break;
                 case DamageKind.MIDDLE:
+                    // 音声
                     AudioManager.Instance.PlaySE(SoundID.MiddleAttackHit);
+
+                    // 見た目
+                    ChangeDamageSkinColor(_damageData.middleHitStop);
+                    break;
+                case DamageKind.LOW:
+                    // 音声
+                    ChangeDamageSkinColor(_damageData.lowHitStop);
                     break;
             }
 
@@ -2538,6 +2523,7 @@ public class PlayerState : Player<PlayerState>
             // 通常攻撃のチャージ時間をリセット
             _normalChargeTime = 0;
 
+
             // HPが0以下なら死亡状態に遷移
             if (_nowHp <= 0)
             {
@@ -2547,6 +2533,8 @@ public class PlayerState : Player<PlayerState>
             }
             else
             {
+                if (_stateKind == StateKind.CHARGEATTACK) return;
+
                 // ダメージ状態に遷移
                 ChangeState(new DamageState(this));
             }
@@ -2620,7 +2608,7 @@ public class PlayerState : Player<PlayerState>
                 AddSpecialGauge(specialGaugeAddNum);
 
                 // ダメージマテリアルに変更
-                _playerMeshRenderer.material.color = Color.red;
+                ChangeDamageSkinColor(_damageData.lowHitStop);
 
                 // ダメージの種類を取得
                 _damageKind = other.gameObject.GetComponent<EnemyAttackCol>().GetDamageKind();
@@ -2648,8 +2636,10 @@ public class PlayerState : Player<PlayerState>
                 }
             }
         }
-        if(other.CompareTag("SkillObject"))
+        if (other.CompareTag("SkillObject"))
         {
+            if (_stateKind == StateKind.DEAD) return;
+
             _battleManager.ShowSkillGetUi();
         }
     }
